@@ -11,7 +11,7 @@ Opening week  @kim  due:2026-12-09
   - Two counter staff  ^counter  due:2026-11-05
   - Morning rota  after:^counter  est:2h
 - Soft opening  due:2026-12-02
-  - Invite the street  #neighbours  est:3h
+  - Invite the street  #neighbours  start:2026-11-16  est:3h
   - Stock the shelves
     + [[groceries]]
 - Opening day  due:2026-12-09  !!

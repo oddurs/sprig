@@ -16,7 +16,7 @@ const MARKS = {'-':'todo','~':'doing','x':'done','/':'dropped','>':'later','?':'
 const LINE_RE = /^([-~x\/>?+#=])(?:\s+(.*))?$/;
 const TOKEN_RE = /[^\s"]*"[^"]*"\S*|\S+/g;
 const FIELD_RE = /^([a-z][\w-]*):(.+)$/i;
-const DATE_KEYS = new Set(['due','start','target']);
+const DATE_KEYS = new Set(['due','start']);
 const OPEN = new Set(['todo','doing','ask']);
 const SETTLING = new Set(['done','dropped','later']);
 const TICKABLE = '-~x/>?';
@@ -168,6 +168,7 @@ function buildDoc(name) {
   BUILDING.add(name);
   const doc = parse(files[name], name);
   graftAll(doc.root);
+  onceInTree(doc.root);
   BUILDING.delete(name);
   indexAnchors(doc.root, doc.anchors);
   roll(doc.root, null, doc.root.meta.who);
@@ -190,6 +191,7 @@ function graftAll(n) {
         else if (!t) c.error = `No file named ${lp.file} yet`;
         else if (!src) c.error = `No ^${lp.id} in ${lp.file}`;
         else {
+          c.graftKey = `${lp.file}:${lp.id ? src.line : -1}`;
           c.graftTitle = lp.id ? labelOf(src) : (t.title || lp.file);
           c.graftOwner = (src.who || [])[0] || null;
           c.graftNotes = src.notes;
@@ -200,6 +202,37 @@ function graftAll(n) {
     }
     graftAll(c);
   }
+}
+
+// Spec 8.8: within one tree an item appears once. Walking in document order, a
+// graft that would bring in anything already seen is refused, so progress never
+// counts an item twice.
+function onceInTree(root) {
+  const seen = new Set();
+  const within = (n, out) => {
+    out.push(`${n.file}:${n.line}`);
+    if (n.graftKey) out.push(n.graftKey);
+    for (const c of n.children) within(c, out);
+    return out;
+  };
+  (function walk(n) {
+    for (const c of n.children) {
+      if (c.cloned) continue;
+      seen.add(`${c.file}:${c.line}`);
+      if (c.graftKey) {
+        const incoming = [c.graftKey];
+        for (const k of c.children) if (k.cloned) within(k, incoming);
+        if (incoming.some(k => seen.has(k))) {
+          const name = c.targetId ? `${c.target.replace(/\.sprig$/, '')}^${c.targetId}` : c.target;
+          c.error = `${name} is already in this tree, so grafting it again would count it twice`;
+          c.children = c.children.filter(k => !k.cloned);
+          c.graftNotes = [];
+          c.graftAnswers = [];
+        } else for (const k of incoming) seen.add(k);
+      }
+      walk(c);
+    }
+  })(root);
 }
 
 function indexAnchors(n, map) {
@@ -258,8 +291,11 @@ function resolveRef(ref, from) {
 }
 
 function blockers(n) {
-  if (!OPEN.has(n.view) || !n.meta.after.length) return null;
+  if (!OPEN.has(n.view)) return null;
   const out = [];
+  // Spec 7.5: a start date after today blocks until that day.
+  const start = parseDate(n.meta.fields.start);
+  if (start && start > TODAY) out.push({label: fmtDate(start), date: true});
   for (const ref of n.meta.after) {
     const t = resolveRef(ref, n.file);
     if (!t.node) out.push({label: ref, unknown: true});
@@ -385,15 +421,17 @@ function chipsHTML(n, blk) {
   if (n.meta.prio) c.push(`<span class="chip prio" title="Priority ${n.meta.prio}">${'!'.repeat(n.meta.prio)}</span>`);
   for (const w of n.meta.who) c.push(`<span class="chip who">@${esc(w)}</span>`);
   if (n.state === 'graft' && !n.meta.who.length && n.graftOwner) c.push(`<span class="chip who soft">@${esc(n.graftOwner)}</span>`);
-  for (const k of ['start', 'due', 'target']) if (f[k]) c.push(dateChip(k, f[k], n.view));
+  // A start still ahead is shown once, as what the item waits for.
+  const waiting = blk && blk.some(b => b.date);
+  for (const k of ['start', 'due']) if (f[k] && !(k === 'start' && waiting)) c.push(dateChip(k, f[k], n.view));
   if (f.est && !n.children.length) c.push(`<span class="chip">${esc(f.est)}</span>`);
   if (f.every) c.push(`<span class="chip">every ${esc(f.every)}</span>`);
   for (const t of n.meta.tags) c.push(`<span class="chip tag">#${esc(t)}</span>`);
   for (const [k, v] of Object.entries(f)) {
-    if (!['start', 'due', 'target', 'est', 'every'].includes(k)) c.push(`<span class="chip kv">${esc(k)} ${esc(v)}</span>`);
+    if (!['start', 'due', 'est', 'every'].includes(k)) c.push(`<span class="chip kv">${esc(k)} ${esc(v)}</span>`);
   }
   if (blk) for (const b of blk) {
-    c.push(b.unknown ? `<span class="chip err">can't find ${esc(b.label)}</span>` : `<span class="chip block">waits on ${esc(b.label)}</span>`);
+    c.push(b.unknown ? `<span class="chip err">can't find ${esc(b.label)}</span>` : `<span class="chip block">waits ${b.date ? 'until' : 'on'} ${esc(b.label)}</span>`);
   }
   const s = n.stats;
   if (n.children.length && OPEN.has(n.state) && !n.inh && !n.answered && s.total && s.done === s.total) c.push('<span class="chip ready">all done · tick it</span>');

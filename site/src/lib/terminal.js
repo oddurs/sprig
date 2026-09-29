@@ -26,7 +26,8 @@ export function markOf(n) {
 	const st = n.inh && n.inh !== n.state ? n.inh : n.state;
 	return S(CH[st] || '-', `m-${st}`);
 }
-const dayMonth = (d) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+// The parser's own date style, so a screen and the playground agree.
+const dayMonth = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 const shortDate = (v) => {
 	const d = sprig.parseDate(v);
 	return d ? dayMonth(d) : v;
@@ -41,6 +42,13 @@ const bar = (done, total, w) => {
 	const f = total ? Math.round((done / total) * w) : 0;
 	return [S('█'.repeat(f), 'm-done'), S('░'.repeat(w - f), 't-dim')];
 };
+
+/** What an item waits for, in words: "waits on Design and until 16 Nov". */
+export function waitsText(bs) {
+	const on = bs.filter((b) => !b.date).map((b) => b.label);
+	const until = bs.filter((b) => b.date).map((b) => b.label);
+	return 'waits ' + [on.length ? `on ${on.join(', ')}` : '', until.length ? `until ${until.join(', ')}` : ''].filter(Boolean).join(' and ');
+}
 
 function load(files) {
 	sprig.useWorkspace(files);
@@ -92,7 +100,7 @@ function treeLines(doc, depth) {
 			if (c.state === 'graft') segs.push(S(`  ${c.target}`, 't-dim t-u'));
 			if (c.meta.prio) segs.push(S('  ' + '!'.repeat(c.meta.prio), 't-b'));
 			if (c.meta.fields.due && !settled) segs.push(S(`  ${shortDate(c.meta.fields.due)}`, 't-dim'));
-			if (own) segs.push(S(`  waits on ${own.map((b) => b.label).join(', ')}`, 't-dim'));
+			if (own) segs.push(S(`  ${waitsText(own)}`, 't-dim'));
 			if (c.children.length && c.stats.total) segs.push(S(`  ${c.stats.done}/${c.stats.total}`, 't-dim'));
 			lines.push(segs);
 			if (c.children.length && d < depth) walk(c, prefix + (last ? '   ' : '│  '), d + 1);
@@ -131,7 +139,9 @@ function why(files, file, text) {
 			if (seen.has(m)) return;
 			seen.add(m);
 			const inner = prefix + (last ? '   ' : '│  ');
+			const date = sprig.blockers(m)?.find((b) => b.date);
 			if (m.meta.after.length) chain(m, inner);
+			else if (date) lines.push([S(inner + '└─ ', 't-dim'), S(`starts ${date.label}`)]);
 			else {
 				const state = m.children.length ? `${m.stats.done} of ${m.stats.total} done, nothing blocks it` : m.view === 'doing' ? 'in progress, nothing blocks it' : 'ready to start';
 				lines.push([S(inner + '└─ ', 't-dim'), S(state)]);
@@ -162,7 +172,7 @@ function check(files) {
 	const lines = [prompt('sprig check')];
 	for (const o of found) lines.push([S(`${o.f}:${o.line}:${o.col}: `, 't-dim'), S('error', 't-b'), S(`: ${o.msg}`)]);
 	lines.push([]);
-	lines.push([S(`${found.length} errors in ${new Set(found.map((o) => o.f)).size} files · exit 1`, 't-dim')]);
+	lines.push([S(found.length ? `${found.length} errors in ${new Set(found.map((o) => o.f)).size} files · exit 1` : 'no errors · exit 0', 't-dim')]);
 	return lines;
 }
 

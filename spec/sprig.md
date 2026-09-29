@@ -1,4 +1,4 @@
-# Sprig specification, draft 0.3
+# Sprig specification, draft 0.4
 
 Sprig is a plain-text format for plans. A file is a tree of items, one per line;
 the first character of a line says what the line is, and indentation says where
@@ -11,9 +11,11 @@ implement it, copy it, or build on it, without asking.
 
 ## About this document
 
-**Status.** Draft 0.3. It formalises draft 0.2, the version described and
-implemented in `design/sprig-draft-0.2.html`, without changing its behaviour.
-Where this text and that page's parser disagree, the difference is listed in
+**Status.** Draft 0.4. It formalises draft 0.2, the version described and
+implemented in `design/sprig-draft-0.2.html`, and tightens three rules of it:
+`due` is the one deadline field (§9.1), a future `start:` blocks (§7.5), and
+grafted content appears once in a tree (§8.8). Where this text and that page's
+parser otherwise disagree, the difference is listed in
 [Appendix B](#appendix-b-known-ambiguities) rather than silently resolved.
 
 **Rules are numbered.** Each rule has a number such as §3.1, so conformance
@@ -49,7 +51,7 @@ the file, and its tokens (§4) apply to the whole file, the way an item's tokens
 apply to its children.
 
 ```sprig
-Open the bakery  @dana  target:2026-12-05  where:"41 Mill Street"
+Open the bakery  @dana  due:2026-12-05  where:"41 Mill Street"
 
 - Sign the lease
 ```
@@ -361,8 +363,7 @@ case-insensitive. A value in double quotes loses its quotes. A value starting
 with `//` is not a field, so URLs stay words. If a key appears twice, the last
 value wins, except for `after` (§4.7).
 
-The keys `due`, `start`, `target` (§9), `est` and `every` (§10) have defined
-meanings. Any other key is kept and shown.
+The keys `due`, `start` (§9), `est` and `every` (§10) have defined meanings. Any other key is kept and shown.
 
 ```sprig
 Fields
@@ -582,8 +583,8 @@ References
 ### 7.3 Blocked
 
 An open item is **blocked** when any of its own references is unfinished (not done
-by §5.7, or unknown), or when any ancestor is blocked. Blocking passes to every
-open descendant of a blocked item.
+by §5.7, or unknown), when its `start:` is after today (§7.5), or when any
+ancestor is blocked. Blocking passes to every open descendant of a blocked item.
 
 ```sprig
 Blocked
@@ -607,6 +608,23 @@ Computed
 - Permit  ^permit
 - Sign the lease  after:^permit
 ```
+
+### 7.5 Start dates
+
+An open item whose `start:` is after today is blocked until that day, and the date
+is what it waits on. On its start date it is no longer blocked by it. Like a
+reference, a start date blocks the item's open descendants (§7.3).
+
+```sprig
+Start dates
+
+- Book the removal van  start:2026-11-02
+- Winter tyres  start:2026-11-15
+  - Book the garage
+```
+
+Read on 2026-10-01, all three are blocked; *Book the garage* waits on its
+parent's date.
 
 ## 8. Grafts
 
@@ -689,8 +707,9 @@ Ticking a kitchen item seen here edits `kitchen.sprig`.
 ### 8.7 Anchors belong to their file
 
 An anchor belongs to the file that writes it. Anchors inside content a file
-grafts in are not anchors of the grafting file; refer to them in their own file
-with `[[file^anchor]]`.
+grafts in are not anchors of the grafting file, and `[[file^anchor]]` reaches
+only anchors that `file` writes itself; refer to an anchor through the file that
+writes it.
 
 ```sprig
 Anchors across files
@@ -699,12 +718,30 @@ Anchors across files
 - Supplier credit  after:[[lease^signed]]
 ```
 
+### 8.8 Grafted content appears once
+
+Within one tree an item appears at most once. A graft whose content is already in
+the tree, because it names the same file or branch as an earlier graft, a branch
+inside an earlier grafted file, or a file containing an earlier grafted branch, is
+an error reported on the later graft line in document order, and that graft has
+no grafted children. Progress therefore never counts an item twice.
+
+```sprig
+Once
+
++ [[kitchen]]
++ [[kitchen^oven]]
+```
+
+The second graft line reports that the oven branch is already in the tree.
+
 ## 9. Dates
 
 ### 9.1 Date fields
 
-`due`, `start` and `target` hold dates. `start` is when work can begin; `due` and
-`target` are when it should be finished.
+`due` and `start` hold dates. `due` is when an item should be finished; `start`
+is the first day work on it can begin (§7.5). Any other key is an ordinary field
+(§4.6), even when its value looks like a date.
 
 ```sprig
 Dates
@@ -867,8 +904,8 @@ neither says enough. Each needs a ruling and conformance examples before 1.0.
 6. **Recurring parents.** §5.3 excludes any item with `every:` from progress. The
    reference parser excludes only recurring leaves; a recurring parent's children
    still count.
-7. **Grafting a grafted branch.** By §8.7, `[[file^anchor]]` cannot reach an
-   anchor that `file` itself grafted in from elsewhere. Whether it should is open.
+7. **Grafting a grafted branch.** Resolved in draft 0.4: `[[file^anchor]]`
+   reaches only anchors `file` writes itself (§8.7).
 8. **File names with spaces.** Links (§4.8) cannot name a file containing spaces:
    tokens split on whitespace first (§4.1), so `[[my file]]` becomes two words.
 9. **Directories.** The reference parser has a flat namespace of file names, so

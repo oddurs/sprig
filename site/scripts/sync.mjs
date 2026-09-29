@@ -40,7 +40,7 @@ write(
 	page(
 		{
 			title: 'Specification',
-			description: 'The Sprig format, rule by rule. Draft 0.3, dedicated to the public domain.',
+			description: 'The Sprig format, rule by rule. Draft 0.4, dedicated to the public domain.',
 			editUrl: `${edit}/spec/sprig.md`,
 			tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 3 },
 		},

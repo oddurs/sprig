@@ -5,7 +5,7 @@ title: Grafts can mount one branch with [[file^id]]
 type: decision
 status: done
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-09-29
 priority: p2
 area: spec
 ---
@@ -29,3 +29,7 @@ If double counting causes real confusion; then `sprig check` should warn on it.
 ## Acceptance criteria
 
 - [x] The choice, its evidence and its consequences are recorded.
+
+## 2026-09-29
+
+Tightened by 0140: a repeated graft in one tree is now an error on the later graft line (§8.8), which settles the double counting this decision accepted.
