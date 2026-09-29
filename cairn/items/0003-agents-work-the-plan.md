@@ -15,7 +15,7 @@ due: 2027-04-02
 
 ## Ships
 
-`sprig mcp` lets a coding agent read a repository's `PLAN.sprig`, find ready work, tick, add and answer items, where every change is an ordinary file edit a person can review. Plans export to calendars and JSON, and existing checklists import.
+`sprig mcp` lets a coding agent read a repository's `PLAN.sprig`, find ready work, tick, add and answer items, where every change is an ordinary file edit a person can review. Plans export to calendars and JSON, and existing checklists import. From the shell, `mark`, `add`, `answer`, `find`, `agenda` and `graph` cover the everyday writes and questions, through the same edit API the agents use.
 
 ## Done when
 
@@ -27,3 +27,4 @@ due: 2027-04-02
 
 - Two-way sync with any tracker (later).
 - A hosted service of any kind (never, by the ecosystem plan).
+- The full-screen TUI (v0.4).

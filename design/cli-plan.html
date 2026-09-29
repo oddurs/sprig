@@ -1,0 +1,1113 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sprig(1)</title>
+<style>
+:root{
+  --surface:#fbfaf7; --raised:#f2f2ee; --border:#e5e5e1; --border-strong:#81807d; --text:#191816; --muted:#64635f;
+  --todo:#191816; --doing:#915200; --done:#137738; --dropped:#64635f; --later:#2863ab; --ask:#6f4fa1; --answer:#973f6e; --group:#00787a; --graft:#9f4325;
+  /* terminals are a screen, dark in both page themes */
+  --term-bg:#100f0d; --term-raised:#1a1917; --term-line:#2e2e2b; --term-text:#e8e8e5; --term-dim:#a5a5a1; --term-sel:#2a2926;
+  --t-todo:#e8e8e5; --t-doing:#e8a95c; --t-done:#7ccd8e; --t-dropped:#a5a5a1; --t-later:#82baff; --t-ask:#c3a5f9; --t-answer:#f197c2; --t-group:#3bcfcf; --t-graft:#f99b7e;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue','Noto Sans',Arial,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ color-scheme:dark;
+    --surface:#100f0d; --raised:#1a1917; --border:#2e2e2b; --border-strong:#6c6c69; --text:#e8e8e5; --muted:#a5a5a1;
+    --todo:#e8e8e5; --doing:#e8a95c; --done:#7ccd8e; --dropped:#a5a5a1; --later:#82baff; --ask:#c3a5f9; --answer:#f197c2; --group:#3bcfcf; --graft:#f99b7e;
+    --term-bg:#0b0a09; --term-raised:#151412; }
+}
+:root[data-theme="dark"]{ color-scheme:dark;
+  --surface:#100f0d; --raised:#1a1917; --border:#2e2e2b; --border-strong:#6c6c69; --text:#e8e8e5; --muted:#a5a5a1;
+  --todo:#e8e8e5; --doing:#e8a95c; --done:#7ccd8e; --dropped:#a5a5a1; --later:#82baff; --ask:#c3a5f9; --answer:#f197c2; --group:#3bcfcf; --graft:#f99b7e;
+  --term-bg:#0b0a09; --term-raised:#151412; }
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface);color:var(--text);font:16px/1.6 var(--sans);padding-inline:24px;padding-block:0 96px}
+.page{max-width:1120px;margin:0 auto}
+a{color:inherit;text-underline-offset:3px}
+code{font-family:var(--mono);font-size:.9em;background:var(--raised);border-radius:4px;padding:0 4px}
+:focus-visible{outline:2px solid var(--text);outline-offset:2px}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+.muted{color:var(--muted)}
+
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;min-height:56px;border-bottom:1px solid var(--border);font-size:14px}
+.top b{font-size:17px}
+.top nav{display:flex;gap:20px;flex-wrap:wrap}
+.top nav a{text-decoration:none;color:var(--muted)}
+.top nav a:hover{color:var(--text)}
+
+.hero{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);gap:48px;align-items:center;padding-block:96px 64px}
+.hero h1{font-size:56px;line-height:1.02;letter-spacing:-.03em;font-weight:650;margin-bottom:20px}
+.hero .lede{font-size:18px;line-height:1.55;color:var(--muted);max-width:40ch;margin-bottom:24px}
+.eyebrow{font-size:14px;color:var(--muted);margin-bottom:16px}
+.facts{font-size:14px;color:var(--muted)}
+
+section.s{padding-block:112px 0}
+.s-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px 48px;align-items:end;margin-bottom:40px}
+.s-head h2{font-size:28px;line-height:1.2;letter-spacing:-.02em;font-weight:650}
+.s-head p{color:var(--muted);font-size:18px;line-height:1.55;max-width:56ch}
+
+/* terminal window */
+.term{background:var(--term-bg);color:var(--term-text);border-radius:8px;border:1px solid var(--term-line);overflow:hidden;min-width:0}
+.term .bar{display:flex;justify-content:space-between;gap:12px;padding:8px 14px;border-bottom:1px solid var(--term-line);font:12px/1.4 var(--mono);color:var(--term-dim)}
+.term pre{margin:0;padding:14px 16px 16px;font:13px/1.6 var(--mono);overflow-x:auto;white-space:pre;tab-size:2}
+.t-dim{color:var(--term-dim)} .t-b{font-weight:600;color:var(--term-text)} .t-u{text-decoration:underline;text-underline-offset:3px}
+.m-todo{color:var(--t-todo)} .m-doing{color:var(--t-doing)} .m-done{color:var(--t-done)} .m-dropped{color:var(--t-dropped)} .m-later{color:var(--t-later)}
+.m-ask{color:var(--t-ask)} .m-answer{color:var(--t-answer)} .m-group{color:var(--t-group)} .m-graft{color:var(--t-graft)}
+.t-err{color:var(--t-graft)} .t-warn{color:var(--t-doing)} .t-ok{color:var(--t-done)}
+.mono .m-todo,.mono .m-doing,.mono .m-done,.mono .m-dropped,.mono .m-later,.mono .m-ask,.mono .m-answer,.mono .m-group,.mono .m-graft,.mono .t-err,.mono .t-warn,.mono .t-ok{color:var(--term-text)}
+.mono .t-dim{color:var(--term-dim)}
+
+.rules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px;list-style:none;margin:0;padding:0}
+.rules li{padding:20px 0;border-top:1px solid var(--border);display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px}
+.rules .g{font:500 18px/1.4 var(--mono)}
+.rules b{display:block;font-weight:650;margin-bottom:4px}
+.rules p{color:var(--muted);font-size:15px;line-height:1.55}
+
+table{border-collapse:collapse;width:100%}
+.tw{overflow-x:auto}
+th,td{text-align:left;padding:10px 12px 10px 0;border-bottom:1px solid var(--border);vertical-align:top;font-size:15px}
+th{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+td code{white-space:nowrap}
+.ms{font:500 12px/1 var(--mono);padding:3px 7px;border-radius:999px;border:1px solid var(--border-strong);white-space:nowrap;color:var(--text)}
+.ms.new{border-style:dashed}
+
+.group-h{display:flex;align-items:baseline;gap:12px;margin:56px 0 20px}
+.group-h h3{font-size:18px;font-weight:650}
+.group-h:first-of-type{margin-top:0}
+.cmds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px 32px}
+.cmd{display:flex;flex-direction:column;gap:12px;min-width:0}
+.cmd .sig{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.cmd .sig code{font-size:15px;background:none;padding:0;font-weight:600}
+.cmd p{color:var(--muted);font-size:15px;line-height:1.55}
+.cmd.wide{grid-column:1/-1}
+.small-cmds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 32px;list-style:none;margin:0;padding:0}
+.small-cmds li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:14px 0;border-top:1px solid var(--border)}
+.small-cmds code{background:none;padding:0;font-weight:600}
+.small-cmds .ms{align-self:start}
+.small-cmds p{grid-column:1/-1;color:var(--muted);font-size:15px}
+
+/* the TUI */
+.tui-wrap{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:32px;align-items:start}
+.tui{background:var(--term-bg);color:var(--term-text);border:1px solid var(--term-line);border-radius:8px;overflow:hidden;font:13px/1.55 var(--mono);position:relative;outline:none}
+.tui:focus-visible,.tui.focused{box-shadow:0 0 0 2px var(--text)}
+.tui .hdr,.tui .sts{display:flex;justify-content:space-between;gap:12px;padding:6px 14px;background:var(--term-raised);white-space:nowrap;overflow:hidden}
+.tui .hdr{border-bottom:1px solid var(--term-line)}
+.tui .sts{border-top:1px solid var(--term-line);color:var(--term-dim)}
+.tui .views span{margin-right:14px;color:var(--term-dim)}
+.tui .views span.on{color:var(--term-text);text-decoration:underline;text-underline-offset:4px}
+.tui .panes{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);height:420px}
+.tui .left{overflow:hidden;border-right:1px solid var(--term-line);padding:6px 0}
+.tui .right{overflow:hidden;padding:10px 14px}
+.tui .row{display:flex;gap:8px;padding:0 14px;white-space:pre;overflow:hidden}
+.tui .row .txt{flex:1;overflow:hidden;text-overflow:ellipsis}
+.tui .row .rt{color:var(--term-dim)}
+.tui .row.sel{background:var(--term-sel)}
+.tui .row.sel .txt{color:#fff}
+.tui .date{padding:6px 14px 2px;color:var(--term-dim)}
+.tui .right h4{margin:0 0 6px;font:600 14px/1.4 var(--mono);color:var(--term-text);white-space:normal}
+.tui .kv{color:var(--term-dim);white-space:normal;margin:0 0 2px}
+.tui .kv b{color:var(--term-text);font-weight:500}
+.tui .note{color:var(--term-dim);white-space:normal;margin:10px 0 0;font-family:var(--sans);font-size:13px;line-height:1.5}
+.tui .flash{color:var(--t-done)}
+.tui .prompt{color:var(--term-text)}
+.tui .overlay{position:absolute;inset:40px 40px auto 40px;background:var(--term-raised);border:1px solid var(--term-line);border-radius:6px;padding:14px 18px;white-space:pre;line-height:1.7}
+.tui .hint{position:absolute;inset:0;display:grid;place-items:center;background:rgba(11,10,9,.72);color:var(--term-text);font-family:var(--sans);font-size:15px;cursor:pointer}
+.keystrip{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.keystrip button{font:500 12px/1 var(--mono);padding:8px 10px;border-radius:6px;border:1px solid var(--border-strong);background:none;color:var(--text);cursor:pointer;min-width:34px}
+.keys{list-style:none;margin:0;padding:0}
+.keys li{display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px;padding:8px 0;border-top:1px solid var(--border);font-size:14px}
+.keys kbd{font:600 13px/1.5 var(--mono)}
+.keys span{color:var(--muted)}
+
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.cap{font-size:14px;color:var(--muted);margin-top:10px}
+
+.recipes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px}
+.recipe h3{font-size:16px;font-weight:650;margin-bottom:6px}
+.recipe p{color:var(--muted);font-size:15px;margin-bottom:12px}
+
+.nogo{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px}
+.nogo li{display:grid;grid-template-columns:28px minmax(0,1fr);padding:16px 0;border-top:1px solid var(--border)}
+.nogo li::before{content:"/";font:500 18px/1.4 var(--mono);color:var(--dropped)}
+.nogo b{font-weight:650}
+.nogo span{color:var(--muted)}
+
+footer{margin-top:112px;padding-top:24px;border-top:1px solid var(--border);font-size:13px;color:var(--muted);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (max-width:859px){
+  .hero,.s-head,.tui-wrap{grid-template-columns:minmax(0,1fr)}
+  .hero{padding-block:64px 32px;gap:32px}
+  .hero h1{font-size:40px}
+  .rules,.cmds,.small-cmds,.pair,.recipes,.nogo{grid-template-columns:minmax(0,1fr)}
+  section.s{padding-block:80px 0}
+  .tui .panes{grid-template-columns:minmax(0,1fr);height:380px}
+  .tui .right{display:none}
+  .tui .left{border-right:0}
+}
+@media (max-width:559px){ body{padding-inline:16px} .term pre{font-size:12px} .tui{font-size:12px} }
+@media (prefers-reduced-motion:reduce){ *{transition:none!important} }
+</style>
+
+<div class="page">
+  <header class="top">
+    <b>sprig(1)</b>
+    <nav aria-label="Sections">
+      <a href="#rules">Rules</a><a href="#refs">Refs</a><a href="#toolbelt">Toolbelt</a><a href="#screen">TUI</a><a href="#pipes">Pipes</a><a href="#roadmap">Roadmap</a>
+    </nav>
+    <span class="muted">Plan · September 2026</span>
+  </header>
+
+  <section class="hero" aria-labelledby="h1">
+    <div>
+      <p class="eyebrow">The Sprig command line</p>
+      <h1 id="h1">A toolbelt, not an app.</h1>
+      <p class="lede">One binary. Small verbs that read a folder of plans and answer one question each, in text a person can read and a pipe can parse. The TUI is the same verbs on one screen.</p>
+      <p class="facts">One binary · no daemon · no config · no network · a 30 ms budget</p>
+    </div>
+    <figure class="term" style="margin:0">
+      <div class="bar"><span>~/bakery</span><span>zsh</span></div>
+      <pre id="heroTerm"></pre>
+    </figure>
+  </section>
+
+  <section class="s" id="rules" aria-labelledby="rules-h">
+    <div class="s-head">
+      <h2 id="rules-h">The rules it lives by</h2>
+      <p>These decide every command below. Where a feature would break one, the feature loses.</p>
+    </div>
+    <ul class="rules">
+      <li><span class="g m-done" style="color:var(--done)">x</span><div><b>Every command is a verb</b><p>Nouns are files and refs. <code>sprig next</code>, <code>sprig why</code>, <code>sprig tick</code>. No subcommand trees, no modes to remember.</p></div></li>
+      <li><span class="g" style="color:var(--later)">&gt;</span><div><b>Three kinds of output</b><p>Readable on a terminal, stable tab-separated text with <code>--plain</code>, the full tree with <code>--json</code>. Output only changes shape when you ask it to.</p></div></li>
+      <li><span class="g" style="color:var(--doing)">~</span><div><b>Exit codes mean something</b><p><code>0</code> fine, <code>1</code> the answer is "no" (findings, nothing ready), <code>2</code> you asked wrong. Scripts branch on them.</p></div></li>
+      <li><span class="g" style="color:var(--graft)">+</span><div><b>A write touches one line</b><p><code>tick</code>, <code>add</code> and <code>answer</code> change the bytes they mean to and nothing else, so <code>git diff</code> shows exactly what happened.</p></div></li>
+      <li><span class="g" style="color:var(--group)">#</span><div><b>Colour is optional</b><p>The mark is the status, so <code>NO_COLOR</code> loses nothing. Colour follows the marks and nothing else.</p></div></li>
+      <li><span class="g" style="color:var(--ask)">?</span><div><b>Answers are reproducible</b><p><code>--today 2026-10-01</code> pins the date, so any output can be tested, diffed and filed in a bug report.</p></div></li>
+      <li><span class="g" style="color:var(--answer)">=</span><div><b>No prompts in a pipe</b><p>Interactive only when stdin and stdout are terminals. No pager unless <code>$PAGER</code> is asked for with <code>-p</code>.</p></div></li>
+      <li><span class="g" style="color:var(--dropped)">/</span><div><b>Nothing runs in the background</b><p>No daemon, no index, no cache to go stale. Parsing a hundred files is fast enough to do every time.</p></div></li>
+    </ul>
+  </section>
+
+  <section class="s" id="refs" aria-labelledby="refs-h">
+    <div class="s-head">
+      <h2 id="refs-h">Pointing at an item from the shell</h2>
+      <p>Every command that acts on one item takes a <em>ref</em>. The forms go from exact to forgiving, and an ambiguous ref lists its candidates and exits 2 instead of guessing.</p>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>Ref</th><th>Means</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td><code>^signed</code></td><td>An anchor, searched across the folder</td><td><code>sprig tick ^signed</code></td></tr>
+        <tr><td><code>lease^signed</code></td><td>An anchor in one file</td><td><code>sprig why lease^signed</code></td></tr>
+        <tr><td><code>lease.sprig:7</code></td><td>A line, the way compilers and editors say it</td><td><code>sprig tick lease.sprig:7</code></td></tr>
+        <tr><td><code>"grease trap"</code></td><td>Words from the item's text, if they match exactly one item</td><td><code>sprig answer "grease trap" "Landlord pays"</code></td></tr>
+        <tr><td><code>-</code></td><td>Refs on stdin, one per line, from another command</td><td><code>sprig next --plain | cut -f1 | sprig tick -</code></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="s" id="toolbelt" aria-labelledby="tb-h">
+    <div class="s-head">
+      <h2 id="tb-h">The toolbelt</h2>
+      <p>Every screen below is computed live from the example bakery plans by the draft reference parser, with dates relative to today. The <code>check</code> and <code>fmt</code> examples have mistakes planted in them. The diagnostic codes are placeholders.</p>
+    </div>
+
+    <div class="group-h"><h3>Read</h3><span class="muted">answer a question, change nothing</span></div>
+    <div class="cmds">
+      <div class="cmd"><div class="sig"><code>sprig next [@who] [--limit N]</code><span class="ms">v0.1</span></div><p>What can be done now: open, unblocked work, in progress first, then priority, then due date. The command you'll type most.</p><figure class="term" style="margin:0"><pre id="tNext"></pre></figure></div>
+      <div class="cmd"><div class="sig"><code>sprig status [--oneline]</code><span class="ms new">new</span></div><p>One screen for the whole folder: progress per file, what's waiting, what's late. <code>--oneline</code> is sized for a prompt or a tmux status bar.</p><figure class="term" style="margin:0"><pre id="tStatus"></pre></figure></div>
+      <div class="cmd wide"><div class="sig"><code>sprig tree [file] [--depth N] [--hide-done]</code><span class="ms">v0.2</span></div><p>The plan as Sprig reads it, grafts expanded, progress rolled up, with what each item waits on.</p><figure class="term" style="margin:0"><pre id="tTree"></pre></figure></div>
+      <div class="cmd"><div class="sig"><code>sprig why &lt;ref&gt;</code><span class="ms new">new</span></div><p>Why something is blocked, all the way down. The dependency chain, with the file and line of every link in it.</p><figure class="term" style="margin:0"><pre id="tWhy"></pre></figure></div>
+      <div class="cmd"><div class="sig"><code>sprig agenda [--days N]</code><span class="ms new">new</span></div><p>Dated work by day, across every file, recurring items included. The calendar view without a calendar.</p><figure class="term" style="margin:0"><pre id="tAgenda"></pre></figure></div>
+    </div>
+
+    <div class="group-h"><h3>Check</h3><span class="muted">fail loudly, fix nothing silently</span></div>
+    <div class="cmds">
+      <div class="cmd"><div class="sig"><code>sprig check [paths] [--strict]</code><span class="ms">v0.1</span></div><p>Broken links, loops and unknown anchors, as <code>file:line:col</code> so editors and CI jump straight there. Exits 1 on any error.</p><figure class="term" style="margin:0"><pre id="tCheck"></pre></figure></div>
+      <div class="cmd"><div class="sig"><code>sprig fmt [--check]</code><span class="ms">v0.2</span></div><p>Two spaces per level, typed dates expanded to ISO, trailing space gone. Idempotent; <code>--check</code> lists files that would change and exits 1.</p><figure class="term" style="margin:0"><pre id="tFmt"></pre></figure></div>
+    </div>
+
+    <div class="group-h"><h3>Write</h3><span class="muted">one line at a time</span></div>
+    <ul class="small-cmds">
+      <li><span><code>sprig tick &lt;ref&gt;…</code></span><span class="ms">v0.2</span><p>Mark done, or reopen if done. A recurring item moves its due date instead. Prints the changed line.</p></li>
+      <li><span><code>sprig mark &lt;ref&gt; &lt;- ~ x / &gt;&gt;</code></span><span class="ms new">new</span><p>Set any status. <code>sprig mark ^logo ~</code> says you've started.</p></li>
+      <li><span><code>sprig add "text" --under &lt;ref&gt;</code></span><span class="ms new">new</span><p>Append an item under a parent, indented correctly, with tokens parsed from the text.</p></li>
+      <li><span><code>sprig answer &lt;ref&gt; "text"</code></span><span class="ms new">new</span><p>Write the <code>=</code> line that settles a question, and show what it unblocked.</p></li>
+      <li><span><code>sprig edit &lt;ref&gt;</code></span><span class="ms new">new</span><p>Open <code>$EDITOR</code> at the item's line (<code>+7 lease.sprig</code>), for anything the verbs don't cover.</p></li>
+      <li><span><code>sprig find &lt;query&gt;</code></span><span class="ms new">new</span><p>Search by text and by <code>@who</code>, <code>#tag</code>, <code>is:blocked</code>, <code>is:ask</code>, <code>due:&lt;fri</code>. Read-only, but here because its output feeds the writers.</p></li>
+    </ul>
+
+    <div class="group-h"><h3>Connect</h3><span class="muted">other tools, other formats</span></div>
+    <ul class="small-cmds">
+      <li><span><code>sprig export --json | --ics | --csv</code></span><span class="ms">v0.3</span><p>The resolved tree as data, due dates as a calendar feed.</p></li>
+      <li><span><code>sprig import checklists.md</code></span><span class="ms">v0.3</span><p>Markdown checkboxes and todo.txt in, a Sprig file out.</p></li>
+      <li><span><code>sprig graph [--format dot|mermaid]</code></span><span class="ms new">new</span><p>The dependency graph, for Graphviz or a README.</p></li>
+      <li><span><code>sprig mcp</code> · <code>sprig agent</code></span><span class="ms">v0.3</span><p>Serve the plans to coding agents; print the instructions they need.</p></li>
+      <li><span><code>sprig completions &lt;shell&gt;</code> · <code>sprig man</code></span><span class="ms new">new</span><p>Completion that knows your anchors and people; a real man page.</p></li>
+      <li><span><code>sprig tui</code></span><span class="ms new">new</span><p>Everything above on one screen. Below.</p></li>
+    </ul>
+  </section>
+
+  <section class="s" id="screen" aria-labelledby="tui-h">
+    <div class="s-head">
+      <h2 id="tui-h">The TUI</h2>
+      <p>Three views of the same folder, vim keys, and writes that go through the same one-line edits as the verbs. It reloads when a file changes on disk, so an editor, an agent and the TUI can all be open at once. This one works: click it, then use the keys.</p>
+    </div>
+    <div class="tui-wrap">
+      <div>
+        <div class="tui" id="tui" tabindex="0" role="application" aria-label="Sprig TUI demo. Use j and k to move, x to tick, 1 2 3 to switch views, question mark for help."></div>
+        <div class="keystrip" aria-label="On-screen keys">
+          <button type="button" data-key="k">k ↑</button><button type="button" data-key="j">j ↓</button><button type="button" data-key="h">h ←</button><button type="button" data-key="l">l →</button><button type="button" data-key="x">x</button><button type="button" data-key="~">~</button><button type="button" data-key="1">1</button><button type="button" data-key="2">2</button><button type="button" data-key="3">3</button><button type="button" data-key="/">/</button><button type="button" data-key="?">?</button>
+        </div>
+      </div>
+      <ul class="keys" aria-label="Keys">
+        <li><kbd>j k</kbd><span>move down and up</span></li>
+        <li><kbd>h l</kbd><span>fold and unfold a branch</span></li>
+        <li><kbd>x</kbd><span>tick: done, or reopen</span></li>
+        <li><kbd>~</kbd><span>mark as doing</span></li>
+        <li><kbd>1 2 3</kbd><span>tree, next up, agenda</span></li>
+        <li><kbd>/</kbd><span>filter by text; Esc clears</span></li>
+        <li><kbd>e</kbd><span>open $EDITOR at the line</span></li>
+        <li><kbd>a A</kbd><span>add a sibling, add a child</span></li>
+        <li><kbd>u</kbd><span>undo this session's last write</span></li>
+        <li><kbd>?</kbd><span>help</span></li>
+        <li><kbd>q</kbd><span>quit</span></li>
+      </ul>
+    </div>
+    <p class="cap"><code>e</code>, <code>a</code>, <code>u</code> and <code>q</code> belong to the real thing; here they say what they'd do. Ticks change the demo's copy of the plans, not anything on disk.</p>
+  </section>
+
+  <section class="s" aria-labelledby="mono-h">
+    <div class="s-head">
+      <h2 id="mono-h">Colour is a courtesy</h2>
+      <p>The same <code>sprig tree</code>, with colour and with <code>NO_COLOR=1</code>. Nothing is lost, because in Sprig the character is the status. Colour only ever repeats what the mark already says.</p>
+    </div>
+    <div class="pair">
+      <figure class="term" style="margin:0"><div class="bar"><span>sprig tree lease.sprig</span><span>colour</span></div><pre id="tColour"></pre></figure>
+      <figure class="term mono" style="margin:0"><div class="bar"><span>NO_COLOR=1 sprig tree lease.sprig</span><span>none</span></div><pre id="tMono"></pre></figure>
+    </div>
+  </section>
+
+  <section class="s" id="pipes" aria-labelledby="pipes-h">
+    <div class="s-head">
+      <h2 id="pipes-h">Pipes</h2>
+      <p>The payoff of plain output and meaningful exit codes: Sprig composes with the tools already on the machine, and needs no plugin system.</p>
+    </div>
+    <div class="recipes">
+      <div class="recipe"><h3>Pick and tick with fzf</h3><p>Choose from what's ready; the first column of <code>--plain</code> is always a ref.</p><figure class="term" style="margin:0"><pre>sprig next --plain | fzf | cut -f1 | sprig tick -</pre></figure></div>
+      <div class="recipe"><h3>Your next task in the prompt</h3><p>A Starship custom module, or any prompt that runs a command.</p><figure class="term" style="margin:0"><pre>[custom.sprig]
+command = "sprig next @me --limit 1 --plain | cut -f2"
+when = "test -f PLAN.sprig"</pre></figure></div>
+      <div class="recipe"><h3>Gate a commit</h3><p>A pre-commit hook that blocks broken plans, and only reads the files that changed.</p><figure class="term" style="margin:0"><pre>git diff --cached --name-only -- '*.sprig' | xargs -r sprig check --strict</pre></figure></div>
+      <div class="recipe"><h3>What's everyone waiting on?</h3><p>The resolved tree as JSON, queried with jq.</p><figure class="term" style="margin:0"><pre>sprig find is:blocked --json | jq -r '.[] | "\(.text)\t\(.waitsOn | join(", "))"'</pre></figure></div>
+      <div class="recipe"><h3>Deadlines in any calendar</h3><p>Regenerate on a timer; calendars subscribe to the file.</p><figure class="term" style="margin:0"><pre>sprig export --ics > ~/Sync/plans.ics</pre></figure></div>
+      <div class="recipe"><h3>The graph as a picture</h3><p>Graphviz does the drawing.</p><figure class="term" style="margin:0"><pre>sprig graph | dot -Tsvg > plan.svg</pre></figure></div>
+    </div>
+  </section>
+
+  <section class="s" aria-labelledby="nogo-h">
+    <div class="s-head">
+      <h2 id="nogo-h">What it will not do</h2>
+      <p>Each of these was tempting. Each would make Sprig something you have to run, configure or trust, instead of a tool you pick up.</p>
+    </div>
+    <ul class="nogo">
+      <li><div><b>No daemon or index.</b> <span>Reading the files every time is fast enough, and nothing goes stale.</span></div></li>
+      <li><div><b>No config file.</b> <span>Flags and environment variables only. A plan should read the same on every machine.</span></div></li>
+      <li><div><b>No plugins.</b> <span>Pipes are the plugin system. JSON out covers the rest.</span></div></li>
+      <li><div><b>No network, no accounts, no telemetry.</b> <span>Sync is git's job, or Syncthing's.</span></div></li>
+      <li><div><b>No interactive wizards.</b> <span><code>sprig add</code> takes its text as an argument; the TUI is the interactive surface.</span></div></li>
+      <li><div><b>No second parser.</b> <span>The CLI, the TUI, the MCP server and the website all use the one Rust core.</span></div></li>
+    </ul>
+  </section>
+
+  <section class="s" id="roadmap" aria-labelledby="rm-h">
+    <div class="s-head">
+      <h2 id="rm-h">How it gets built, and when</h2>
+      <p>Commands marked <span class="ms">v0.x</span> are already items in the roadmap. Those marked <span class="ms new">new</span> are filed as items 0117 to 0135, with the TUI under a new v0.4 milestone (0116).</p>
+    </div>
+    <div class="tw"><table>
+      <thead><tr><th>Piece</th><th>How</th><th>Lands</th></tr></thead>
+      <tbody>
+        <tr><td>Argument parsing, completions, man page</td><td><code>clap</code> with derive, <code>clap_complete</code> and <code>clap_mangen</code>, as cairn does. Completion reads the folder to offer anchors and people.</td><td><span class="ms">v0.1</span> for next and check</td></tr>
+        <tr><td>Output modes</td><td>One renderer per command with three backends: terminal (colour from the mark tokens, respects <code>NO_COLOR</code> and widths), <code>--plain</code> (tab-separated, ref first, stable forever), <code>--json</code> (the tree schema).</td><td><span class="ms">v0.1</span></td></tr>
+        <tr><td>Refs</td><td>One resolver in sprig-core, shared by the CLI, TUI and MCP server, with the ambiguity rule and exit code 2.</td><td><span class="ms new">new</span> with tick in v0.2</td></tr>
+        <tr><td><code>status</code>, <code>why</code>, <code>find</code></td><td>Read-only views over the resolved tree; <code>why</code> walks the blocker graph and prints file and line for each link.</td><td><span class="ms new">new</span> v0.2</td></tr>
+        <tr><td><code>mark</code>, <code>add</code>, <code>answer</code>, <code>edit</code></td><td>Thin wrappers over the core's byte-preserving edit API (cairn 0037), the same one MCP uses.</td><td><span class="ms new">new</span> v0.3</td></tr>
+        <tr><td><code>agenda</code>, <code>graph</code></td><td>Views that share export's date and dependency walks.</td><td><span class="ms new">new</span> v0.3</td></tr>
+        <tr><td><code>sprig tui</code></td><td><code>ratatui</code> and <code>crossterm</code>, built the way harrow is: a pure core that returns actions, a thin shell that performs them, <code>--screenshot 100x30</code> to render a frame as text for snapshot tests and for the docs, and a file watcher for live reload.</td><td><span class="ms new">new</span> v0.4, before 1.0</td></tr>
+      </tbody>
+    </table></div>
+    <p class="cap">The TUI is proposed as its own milestone so 1.0 keeps its rule of no new surface, and because it's only worth building once the verbs it puts on one screen exist.</p>
+  </section>
+
+  <footer>
+    <span>sprig(1), a plan. Terminal screens computed by the draft 0.2 reference parser from the example bakery plans.</span>
+    <span>Filed in cairn as items 0116 to 0135.</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+'use strict';
+/* ---------- dates first: the samples are written relative to today ---------- */
+const TODAY = (() => { const d = new Date(); d.setHours(0,0,0,0); return d; })();
+const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const D = n => iso(addDays(TODAY, n));
+const FRI = iso(addDays(TODAY, ((5 - TODAY.getDay() + 7) % 7) || 7));
+
+
+/* ---------- sample workspace ---------- */
+const SAMPLES = {
+'bakery.sprig': `Open the bakery  @dana  target:${D(69)}  where:"41 Mill Street"
+
+Corner unit, 62 m². Sourdough, laminated pastry, good coffee.
+Open seven days, 7 till 3.
+
+// Each + line grafts another file in as a branch.
+// Its progress, estimates and blockers roll up into this one.
+
+# Money  #finance
+  Budget is 180k. Anything over 10k needs a second quote.
+  x Business plan v3
+  x Bank meeting  due:${D(-17)}
+  ~ Equipment loan paperwork  ^loan  due:${D(6)}  !!
+    The bank wants a signed lease first, see [[lease^signed]].
+  - Supplier credit line  @teo  after:[[lease^signed]]
+  - Weekly numbers to the bank  every:fri  due:${FRI}
+
++ [[lease]]
++ [[kitchen]]  @teo
++ [[launch]]   @kim
+
+? Kiln & Crumb, or Mill Street Bread?  ^name
+  Street poll so far: 31 to 24 for Kiln & Crumb.
+  // Settle it: add a line under here that starts with "= ".
+`,
+'lease.sprig': `Lease  @dana
+
+x Shortlist three spaces  est:2d
+  41 Mill Street won. Corner frontage, three-phase power already in,
+  and the landlord will split the cost of a new shopfront.
+~ Negotiate terms  ^terms  due:${D(4)}  !!!
+  x Eight weeks rent-free for the fit-out
+  ~ Break clause at year three
+  ? Who pays for the grease trap?
+    Landlord says us. Our lawyer says it's a fixture.
+- Change-of-use permit  ^permit  est:3w
+  Class E covers a bakery, but seating for more than 12 needs a variation.
+- Sign the lease  ^signed  after:^terms  after:^permit
+`,
+'kitchen.sprig': `Kitchen fit-out  @teo  budget:64k
+
+- Design  ^design
+  x Layout sketch
+  ~ Ventilation plan with the engineer  due:${D(11)}  est:2d
+    Extraction has to exit through the roof, not the back wall.
+    The neighbours at no. 43 have already asked.
+# Equipment  #finance
+  - Deck oven, three decks  ^oven  !!
+    Rondo quoted 14.2k, Mono 12.9k. Mono's lead time is ten weeks.
+    - Get a third quote  due:${FRI}  est:2h
+    - Place the order  after:[[bakery^loan]]
+  - Spiral mixer, 40 litres  est:1h
+  / Proofing cabinet
+    = Dropped. The walk-in cooler can double as a retarder.
+  > Espresso machine
+    After opening, once we know what the morning rush looks like.
+- Build  after:^design  after:[[lease^signed]]
+  - Strip out  est:3d
+  - Plumbing and drains  est:4d
+  - Three-phase electrics  est:2d
+  - Tiling  est:5d
+  - Install equipment  est:2d
+`,
+'launch.sprig': `Opening week  @kim  due:${D(69)}
+
+# Brand
+  ~ Logo, second round  ^logo  due:${D(13)}
+    Round one was too rustic. New brief: a kiln, drawn in one line.
+  - Window lettering  after:^logo  after:[[bakery^name]]  est:1d
+  - Menu boards  after:^logo  est:4h
+# Hiring
+  x Head baker  @dana
+    Priya Nair. Starts two weeks before the soft opening.
+  - Two counter staff  ^counter  due:${D(35)}
+  - Morning rota  after:^counter  est:2h
+- Soft opening  due:${D(62)}
+  - Invite the street  #neighbours  est:3h
+  - Stock the shelves
+    + [[groceries]]
+- Opening day  due:${D(69)}  !!
+  - Free loaf for the first 50 through the door
+  - Photos for the local paper  @dana
+`,
+'groceries.sprig': `Supply run  every:week  where:"Wholesale Foods, unit 9"
+
+# Flour
+  - Rye, 4 sacks
+  - Strong white, 6 sacks
+  x Spelt, 1 sack
+# Dairy
+  x Butter, 10 kg
+  - Whole milk, 12 L
+# Seeds
+  - Sesame
+  - Nigella
+  x Sunflower
+- Paper bags, 1000
+- Flaky sea salt  !
+`,
+'dana.sprig': `Dana, this week  @dana
+
+Everything on Dana's plate, grafted from the plans it lives in.
+Tick something here and the line changes in its own file.
+
++ [[lease^terms]]
++ [[bakery^loan]]
++ [[kitchen^oven]]  @dana
+- Call the insurer about public liability  due:${D(2)}
+`
+};
+const SAMPLE_ORDER = ['bakery.sprig','lease.sprig','kitchen.sprig','launch.sprig','groceries.sprig','dana.sprig'];
+
+
+/* ---------- language ---------- */
+const MARKS = {'-':'todo','~':'doing','x':'done','/':'dropped','>':'later','?':'ask','+':'graft','#':'group','=':'answer'};
+const LINE_RE = /^([-~x\/>?+#=])(?:\s+(.*))?$/;
+const TOKEN_RE = /[^\s"]*"[^"]*"\S*|\S+/g;
+const FIELD_RE = /^([a-z][\w-]*):(.+)$/i;
+const DATE_KEYS = new Set(['due','start','target']);
+const OPEN = new Set(['todo','doing','ask']);
+const SETTLING = new Set(['done','dropped','later']);
+const TICKABLE = '-~x/>?';
+const MONTHS = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+const DAYS = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const unquote = v => v.replace(/^"(.*)"$/, '$1');
+
+function monthIndex(v) {
+  v = String(v).toLowerCase();
+  if (v.length < 3 || !/^[a-z]+$/.test(v)) return -1;
+  return MONTHS.findIndex(m => m.startsWith(v));
+}
+function weekdayIndex(v) {
+  v = String(v).toLowerCase();
+  return v.length >= 3 ? DAYS.findIndex(d => d.startsWith(v)) : -1;
+}
+
+function parseDate(v) {
+  if (!v) return null;
+  v = String(v).toLowerCase().trim();
+  let m;
+  if ((m = v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/))) return new Date(+m[1], m[2] - 1, +m[3]);
+  if (v === 'today') return TODAY;
+  if (v === 'tomorrow') return addDays(TODAY, 1);
+  if ((m = v.match(/^\+(\d+)([dw])$/))) return addDays(TODAY, +m[1] * (m[2] === 'w' ? 7 : 1));
+  if ((m = v.match(/^q([1-4])$/))) {
+    let d = new Date(TODAY.getFullYear(), +m[1] * 3, 0);
+    if (d < TODAY) d = new Date(TODAY.getFullYear() + 1, +m[1] * 3, 0);
+    return d;
+  }
+  let mi = -1, day = 0;
+  if ((m = v.match(/^([a-z]+)-?(\d{1,2})$/))) { mi = monthIndex(m[1]); day = +m[2]; }
+  else if ((m = v.match(/^(\d{1,2})-?([a-z]+)$/))) { mi = monthIndex(m[2]); day = +m[1]; }
+  if (mi >= 0) {
+    const d = new Date(TODAY.getFullYear(), mi, day);
+    // A bare month-day more than four months back means next year.
+    if ((d - TODAY) / 864e5 < -120) d.setFullYear(d.getFullYear() + 1);
+    return d;
+  }
+  const wd = weekdayIndex(v);
+  return wd >= 0 ? addDays(TODAY, (wd - TODAY.getDay() + 7) % 7) : null;
+}
+
+function nextDue(base, every) {
+  every = String(every).toLowerCase();
+  let m;
+  if (/^(day|daily)$/.test(every)) return addDays(base, 1);
+  if (/^(week|weekly)$/.test(every)) return addDays(base, 7);
+  if (/^(month|monthly)$/.test(every)) return new Date(base.getFullYear(), base.getMonth() + 1, base.getDate());
+  if ((m = every.match(/^(\d+)([dw])$/))) return addDays(base, +m[1] * (m[2] === 'w' ? 7 : 1));
+  const wd = weekdayIndex(every);
+  return wd >= 0 ? addDays(base, ((wd - base.getDay() + 7) % 7) || 7) : null;
+}
+
+// Typed shortcuts become ISO so the file means the same thing tomorrow.
+function expandDates(line) {
+  return line.replace(/(^|\s)(due|start|target):([^\s"]+)/gi, (all, pre, k, v) => {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return all;
+    const d = parseDate(v);
+    return d ? `${pre}${k}:${iso(d)}` : all;
+  });
+}
+
+function estHours(v) {
+  const r = v && String(v).match(/^(\d+(?:\.\d+)?)([hdw])$/i);
+  return r ? +r[1] * ({h:1, d:8, w:40}[r[2].toLowerCase()]) : 0;
+}
+const fmtEst = h => h < 8 ? `${+h.toFixed(1)}h` : `${+(h / 8).toFixed(1)}d`;
+
+function parseInline(text) {
+  const m = {who:[], tags:[], prio:0, id:null, fields:{}, after:[], words:[]};
+  for (const t of text.match(TOKEN_RE) || []) {
+    let r;
+    if ((r = t.match(/^@([\w.\-]+)$/))) m.who.push(r[1]);
+    else if ((r = t.match(/^#([\w\-]+)$/))) m.tags.push(r[1]);
+    else if (/^!{1,3}$/.test(t)) m.prio = Math.max(m.prio, t.length);
+    else if ((r = t.match(/^\^([\w\-]+)$/))) m.id = r[1];
+    else if ((r = t.match(FIELD_RE)) && !r[2].startsWith('//')) {
+      const key = r[1].toLowerCase(), val = unquote(r[2]);
+      if (key === 'after') m.after.push(val); else m.fields[key] = val;
+    }
+    else m.words.push(t);
+  }
+  m.text = m.words.join(' ').replace(/\[\[([^\]]+)\]\]/g, '$1');
+  return m;
+}
+
+function mkNode(state, text, indent, line, file) {
+  return {state, meta: parseInline(text), children: [], notes: [], answers: [], indent, line, file};
+}
+
+function titleIndex(lines) {
+  let i = 0;
+  while (i < lines.length && (!lines[i].trim() || lines[i].trim().startsWith('//'))) i++;
+  return i < lines.length && !/^\s/.test(lines[i]) && !LINE_RE.test(lines[i]) ? i : -1;
+}
+
+function parse(src, file) {
+  const lines = src.replace(/\r/g, '').split('\n');
+  const root = mkNode('root', '', -1, -1, file);
+  const doc = {file, title: null, root, anchors: {}};
+  const ti = titleIndex(lines);
+  if (ti >= 0) { root.meta = parseInline(lines[ti].trim()); doc.title = root.meta.text || null; }
+  const stack = [root];
+  const top = () => stack[stack.length - 1];
+  let gap = false;
+  for (let i = ti + 1; i < lines.length; i++) {
+    const raw = lines[i].replace(/^\t+/, t => '  '.repeat(t.length));
+    const text = raw.trim();
+    if (!text) { gap = true; continue; }
+    if (text.startsWith('//')) continue;
+    const indent = raw.length - raw.trimStart().length;
+    while (stack.length > 1 && top().indent >= indent) stack.pop();
+    const escaped = text.startsWith('\\');
+    const m = !escaped && text.match(LINE_RE);
+    if (m && m[1] === '=') top().answers.push(parseInline(m[2] || ''));
+    else if (m) {
+      const n = mkNode(MARKS[m[1]], m[2] || '', indent, i, file);
+      top().children.push(n); stack.push(n);
+    } else {
+      const t = top();
+      if (gap && t.notes.length) t.notes.push('');
+      t.notes.push(escaped ? text.slice(1) : text);
+    }
+    gap = false;
+  }
+  return doc;
+}
+
+/* ---------- workspace: grafts, rollups, references ---------- */
+let files = {}, order = [], active = '';
+let CACHE = {};
+const BUILDING = new Set();
+
+const fileKey = n => { n = n.trim().replace(/^\.\//, ''); return /\.sprig$/.test(n) ? n : n + '.sprig'; };
+function linkParts(tok) {
+  const r = tok.match(/\[\[([^\]\^]+)(?:\^([\w-]+))?\]\]/);
+  return r ? {file: fileKey(r[1]), id: r[2] || null} : null;
+}
+const clone = n => ({...n, children: n.children.map(clone), cloned: true});
+const labelOf = n => n.state === 'graft' ? (n.graftTitle || n.target || 'graft') : (n.meta.text || 'untitled');
+
+function buildDoc(name) {
+  if (name in CACHE) return CACHE[name];
+  if (BUILDING.has(name)) return 'cycle';
+  if (!(name in files)) return null;
+  BUILDING.add(name);
+  const doc = parse(files[name], name);
+  graftAll(doc.root);
+  BUILDING.delete(name);
+  indexAnchors(doc.root, doc.anchors);
+  roll(doc.root, null, doc.root.meta.who);
+  CACHE[name] = doc;
+  return doc;
+}
+
+function graftAll(n) {
+  for (const c of n.children) {
+    if (c.cloned) continue;
+    if (c.state === 'graft') {
+      const tok = c.meta.words.find(w => w.includes('[['));
+      const lp = tok && linkParts(tok);
+      if (!lp) c.error = 'A graft needs a link, like + [[kitchen]]';
+      else {
+        c.target = lp.file; c.targetId = lp.id;
+        const t = buildDoc(lp.file);
+        const src = t && t !== 'cycle' ? (lp.id ? t.anchors[lp.id] : t.root) : null;
+        if (t === 'cycle') c.error = `${lp.file} is already above this line, so grafting it would loop`;
+        else if (!t) c.error = `No file named ${lp.file} yet`;
+        else if (!src) c.error = `No ^${lp.id} in ${lp.file}`;
+        else {
+          c.graftTitle = lp.id ? labelOf(src) : (t.title || lp.file);
+          c.graftOwner = (src.who || [])[0] || null;
+          c.graftNotes = src.notes;
+          c.graftAnswers = lp.id ? src.answers : [];
+          c.children = c.children.concat(src.children.map(clone));
+        }
+      }
+    }
+    graftAll(c);
+  }
+}
+
+function indexAnchors(n, map) {
+  for (const c of n.children) {
+    if (c.cloned) continue;
+    if (c.meta.id && !(c.meta.id in map)) map[c.meta.id] = c;
+    indexAnchors(c, map);
+  }
+}
+
+function roll(n, inh, who) {
+  n.answered = n.state === 'ask' && n.answers.length > 0;
+  const own = n.answered ? 'done' : n.state;
+  const settled = inh || (SETTLING.has(own) ? own : null);
+  n.inh = settled;
+  n.who = n.meta.who.length ? n.meta.who : (n.state === 'graft' && n.graftOwner ? [n.graftOwner] : who);
+  const s = {total:0, done:0, doing:0, est:0};
+  const eh = estHours(n.meta.fields.est);
+  if (!n.children.length) {
+    const st = settled || own;
+    const upkeep = !!n.meta.fields.every;
+    if (!upkeep && (st === 'todo' || st === 'doing' || st === 'done' || st === 'ask')) {
+      s.total = 1;
+      if (st === 'done') s.done = 1;
+      if (st === 'doing') s.doing = 1;
+      if (st !== 'done') s.est = eh;
+    }
+  } else {
+    for (const c of n.children) {
+      const cs = roll(c, settled, n.who);
+      s.total += cs.total; s.done += cs.done; s.doing += cs.doing; s.est += cs.est;
+    }
+    if (!s.est && eh && !settled) s.est = eh;
+  }
+  n.stats = s;
+  const derived = s.total === 0 ? 'empty' : s.done === s.total ? 'done' : (s.doing || s.done) ? 'doing' : 'todo';
+  n.view = settled || ((own === 'group' || own === 'graft' || own === 'root') ? derived : own);
+  return s;
+}
+
+function resolveRef(ref, from) {
+  let r;
+  if ((r = ref.match(/^\^([\w-]+)$/))) {
+    const d = buildDoc(from);
+    const nd = d && d !== 'cycle' ? d.anchors[r[1]] : null;
+    return {node: nd, label: nd ? labelOf(nd) : ref};
+  }
+  const lp = linkParts(ref);
+  if (lp) {
+    const d = buildDoc(lp.file);
+    if (!d || d === 'cycle') return {node: null, label: ref};
+    if (lp.id) { const nd = d.anchors[lp.id]; return {node: nd, label: nd ? labelOf(nd) : ref}; }
+    return {node: d.root, label: d.title || lp.file};
+  }
+  return {node: null, label: ref};
+}
+
+function blockers(n) {
+  if (!OPEN.has(n.view) || !n.meta.after.length) return null;
+  const out = [];
+  for (const ref of n.meta.after) {
+    const t = resolveRef(ref, n.file);
+    if (!t.node) out.push({label: ref, unknown: true});
+    else if (t.node.view !== 'done') out.push({label: t.label});
+  }
+  return out.length ? out : null;
+}
+
+function walkLeaves(root, fn) {
+  (function w(n, path, ib, due, prio) {
+    for (const c of n.children) {
+      const own = blockers(c);
+      const b = OPEN.has(c.view) && (own || ib) ? (own || ib) : null;
+      const d = c.meta.fields.due || due;
+      const p = Math.max(prio, c.meta.prio);
+      if (!c.children.length) fn(c, path, b, d, p);
+      else w(c, path.concat(labelOf(c)), b, d, p);
+    }
+  })(root, [], null, root.meta.fields.due || null, 0);
+}
+
+
+
+/* ---------- terminal rendering ---------- */
+const CH = {todo:'-', doing:'~', done:'x', dropped:'/', later:'>', ask:'?', group:'#', graft:'+'};
+const S = (t, c = '') => ({t: String(t), c});
+const width = (segs) => segs.reduce((n, s) => n + [...s.t].length, 0);
+const padTo = (segs, w) => { const n = width(segs); return n < w ? segs.concat(S(' '.repeat(w - n))) : segs; };
+const clip = (t, w) => ([...t].length > w ? [...t].slice(0, w - 1).join('') + '…' : t);
+const toHTML = (lines) => lines.map((l) => l.map((s) => (s.c ? `<span class="${s.c}">${esc(s.t)}</span>` : esc(s.t))).join('')).join('\n');
+const prompt = (cmd) => [S('$ ', 't-dim'), S(cmd, 't-b')];
+const markOf = (n) => {
+  if (n.state === 'group') return S('#', 'm-group');
+  if (n.state === 'graft') return S('+', 'm-graft');
+  if (n.answered) return S('?', 'm-answer');
+  const st = n.inh && n.inh !== n.state ? n.inh : n.state;
+  return S(CH[st] || '-', 'm-' + st);
+};
+const shortDate = (v) => { const d = parseDate(v); return d ? d.toLocaleDateString('en-GB', {day: 'numeric', month: 'short'}) : v; };
+const rel = (v) => { const d = parseDate(v); if (!d) return ''; const n = Math.round((d - TODAY) / 864e5); return n < 0 ? `${-n}d late` : n === 0 ? 'today' : `in ${n}d`; };
+const bar = (done, total, w = 10) => { const f = total ? Math.round((done / total) * w) : 0; return [S('█'.repeat(f), 'm-done'), S('░'.repeat(w - f), 't-dim')]; };
+
+function build() { CACHE = {}; return Object.fromEntries(ORDER.map((f) => [f, buildDoc(f)])); }
+function findNode(doc, text) { let hit = null; (function w(n) { for (const c of n.children) { if (!hit && c.meta.text === text) hit = c; w(c); } })(doc.root); return hit; }
+
+function readyList(doc) {
+  const ready = [], waiting = [];
+  walkLeaves(doc.root, (n, path, b, due, prio) => {
+    if (!OPEN.has(n.view)) return;
+    const d = parseDate(due);
+    (b ? waiting : ready).push({n, path, b, due, prio, t: d ? d.getTime() : Infinity});
+  });
+  ready.sort((a, b) => (b.n.view === 'doing') - (a.n.view === 'doing') || b.prio - a.prio || a.t - b.t);
+  return {ready, waiting};
+}
+
+function renderNext(limit = 7) {
+  const doc = build()['bakery.sprig'];
+  const {ready, waiting} = readyList(doc);
+  const asks = ready.filter((r) => r.n.view === 'ask').length;
+  const lines = [prompt(`sprig next --limit ${limit}`)];
+  for (const r of ready.slice(0, limit)) {
+    const where = r.path.length ? r.path[r.path.length - 1] : 'bakery';
+    const due = r.due ? [S(shortDate(r.due) + ' · ' + rel(r.due), rel(r.due).includes('late') ? 't-err' : 't-dim')] : [];
+    const pr = r.prio ? [S('  ' + '!'.repeat(r.prio), 't-err')] : [];
+    lines.push(padTo([S('  '), markOf(r.n), S(' '), S(clip(r.n.meta.text, 30), r.n.view === 'doing' ? 't-b' : '')], 36).concat(padTo([S(clip(where, 18), 't-dim')], 20), due, pr));
+  }
+  lines.push([]);
+  lines.push([S(`${Math.min(limit, ready.length)} of ${ready.length} ready · ${waiting.length} waiting · ${asks} question${asks === 1 ? '' : 's'}`, 't-dim')]);
+  return toHTML(lines);
+}
+
+function renderStatus() {
+  const docs = build();
+  const lines = [prompt('sprig status')];
+  for (const f of ORDER.filter((f) => f !== 'dana.sprig')) {
+    const d = docs[f];
+    const s = d.root.stats;
+    let waiting = 0, late = 0;
+    walkLeaves(d.root, (n, p, b, due) => { if (!OPEN.has(n.view)) return; if (b) waiting++; if (due && rel(due).includes('late')) late++; });
+    lines.push(padTo([S(f.replace('.sprig', ''))], 11).concat(bar(s.done, s.total, 8), [S(' ')], padTo([S(`${s.done}/${s.total}`)], 7), padTo([S(waiting ? `${waiting} waiting` : '', 't-warn')], 11), [S(late ? `${late} late` : '', 't-err')]));
+  }
+  const b = docs['bakery.sprig'].root.stats;
+  lines.push([]);
+  lines.push([S('$ ', 't-dim'), S('sprig status --oneline', 't-b')]);
+  lines.push([S('sprig ', 't-dim'), S(`${Math.round((b.done / b.total) * 100)}%`), S(' · ', 't-dim'), S(`${readyList(docs['bakery.sprig']).ready.length} ready`, 'm-done'), S(' · ', 't-dim'), S(`${readyList(docs['bakery.sprig']).waiting.length} waiting`, 'm-doing')]);
+  return toHTML(lines);
+}
+
+function treeLines(file, {depth = 3, expandGrafts = true} = {}) {
+  const doc = build()[file];
+  const s = doc.root.stats;
+  const lines = [padTo([S(doc.title || file, 't-b')], 44).concat([S(`${s.done}/${s.total}  `, 't-dim')], bar(s.done, s.total, 10))];
+  (function walk(n, prefix, d) {
+    const kids = n.children;
+    kids.forEach((c, i) => {
+      const last = i === kids.length - 1;
+      const own = blockers(c);
+      const segs = [S(prefix + (last ? '└─ ' : '├─ '), 't-dim'), markOf(c), S(' ')];
+      const text = c.state === 'graft' ? (c.graftTitle || c.target) : c.meta.text;
+      segs.push(S(text, c.children.length ? 't-b' : (c.view === 'done' || c.view === 'dropped' ? 't-dim' : '')));
+      if (c.state === 'graft') segs.push(S('  ' + c.target, 't-dim t-u'));
+      if (c.meta.prio) segs.push(S('  ' + '!'.repeat(c.meta.prio), 't-err'));
+      if (c.meta.fields.due && c.view !== 'done') segs.push(S('  ' + shortDate(c.meta.fields.due), rel(c.meta.fields.due).includes('late') ? 't-err' : 't-dim'));
+      if (own) segs.push(S('  waits on ' + own.map((b) => b.label).join(', '), 't-warn'));
+      if (c.children.length && c.stats.total) segs.push(S(`  ${c.stats.done}/${c.stats.total}`, 't-dim'));
+      lines.push(segs);
+      if (c.children.length && d < depth && (expandGrafts || c.state !== 'graft')) walk(c, prefix + (last ? '   ' : '│  '), d + 1);
+    });
+  })(doc.root, '', 1);
+  return lines;
+}
+
+function renderTree() {
+  const lines = [prompt('sprig tree kitchen.sprig')].concat(treeLines('kitchen.sprig', {depth: 3}));
+  return toHTML(lines);
+}
+
+function renderWhy() {
+  const docs = build();
+  const target = findNode(docs['kitchen.sprig'], 'Tiling');
+  const lines = [prompt('sprig why Tiling')];
+  const loc = (n) => `${n.file}:${n.line + 1}`;
+  lines.push(padTo([markOf(target), S(' '), S(target.meta.text, 't-b')], 34).concat([S(loc(target), 't-dim')]));
+  // Tiling's own after: list is empty; it inherits blocking from its parent.
+  let parent = null;
+  (function w(n, up) { for (const c of n.children) { if (c === target) parent = up; w(c, c); } })(docs['kitchen.sprig'].root, null);
+  lines.push([S('└─ ', 't-dim'), S('inside ', 't-dim'), S(parent.meta.text, 't-b'), S(', which waits on:', 't-dim')]);
+  const seen = new Set();
+  (function chain(n, prefix) {
+    const refs = n.meta.after.map((r) => ({r, t: resolveRef(r, n.file)})).filter(({t}) => t.node && t.node.view !== 'done');
+    refs.forEach(({t}, i) => {
+      const last = i === refs.length - 1;
+      const m = t.node;
+      const who = m.who && m.who.length ? '@' + m.who[0] : '';
+      lines.push(padTo([S(prefix + (last ? '└─ ' : '├─ '), 't-dim'), markOf(m), S(' '), S(clip(labelOf(m), 26))], 40).concat([S(loc(m), 't-dim'), S(who ? '  ' + who : '', 't-dim')]));
+      if (seen.has(m)) return;
+      seen.add(m);
+      if (m.meta.after.length) chain(m, prefix + (last ? '   ' : '│  '));
+      else lines.push([S(prefix + (last ? '   ' : '│  ') + '└─ ', 't-dim'), S(m.children.length ? `${m.stats.done} of ${m.stats.total} done, nothing blocks it` : m.view === 'doing' ? 'in progress, nothing blocks it' : 'ready to start', 'm-done')]);
+    });
+  })(parent, '   ');
+  return toHTML(lines);
+}
+
+function renderAgenda(days = 30) {
+  const docs = build();
+  const items = [];
+  for (const f of ORDER.filter((f) => f !== 'dana.sprig')) {
+    (function w(n) { for (const c of n.children) { if (c.cloned) continue; const due = c.meta.fields.due; const d = parseDate(due); if (d && OPEN.has(c.view) && (d - TODAY) / 864e5 <= days) items.push({c, d, f}); w(c); } })(docs[f].root);
+  }
+  items.sort((a, b) => a.d - b.d);
+  const lines = [prompt(`sprig agenda --days ${days}`)];
+  let last = '';
+  for (const {c, d, f} of items.slice(0, 8)) {
+    const day = d.toLocaleDateString('en-GB', {weekday: 'short', day: 'numeric', month: 'short'});
+    const late = d < TODAY;
+    lines.push(padTo([S(day === last ? '' : day, late ? 't-err' : 't-dim')], 13).concat([markOf(c), S(' ')], padTo([S(clip(c.meta.text, 28))], 30), [S(f.replace('.sprig', ''), 't-dim')], c.meta.fields.every ? [S('  every ' + c.meta.fields.every, 'm-later')] : []));
+    last = day;
+  }
+  return toHTML(lines);
+}
+
+function renderCheck() {
+  const saved = files;
+  files = {...files};
+  files['lease.sprig'] = files['lease.sprig'].replace('after:^permit', 'after:^permt');
+  files['bakery.sprig'] = files['bakery.sprig'].replace('+ [[kitchen]]', '+ [[kitchn]]');
+  CACHE = {};
+  const out = [];
+  for (const f of ORDER) {
+    const d = buildDoc(f);
+    const lines = files[f].split('\n');
+    (function w(n) { for (const c of n.children) { if (c.cloned) continue;
+      if (c.error) { const col = lines[c.line].indexOf('[[') + 1; out.push({f, line: c.line + 1, col, code: 'S0201', msg: c.error.replace(' yet', '').replace(/^N/, 'n')}); }
+      const b = blockers(c);
+      if (b) for (const x of b.filter((y) => y.unknown)) { const col = lines[c.line].indexOf(x.label) + 1; out.push({f, line: c.line + 1, col, code: 'S0103', msg: `no item ${x.label} in ${f}`}); }
+      w(c); } })(d.root);
+  }
+  files = saved; CACHE = {};
+  const lines = [prompt('sprig check')];
+  for (const o of out) lines.push([S(`${o.f}:${o.line}:${o.col}: `, 't-dim'), S('error', 't-err'), S(`[${o.code}]`, 't-dim'), S(': ' + o.msg)]);
+  lines.push([]);
+  lines.push([S(`${out.length} errors in ${new Set(out.map((o) => o.f)).size} files · `, 't-dim'), S('exit 1', 't-err')]);
+  return toHTML(lines);
+}
+
+function renderFmt() {
+  // Two planted slips in launch.sprig: a typed date and a stray indent.
+  const L = files['launch.sprig'].split('\n');
+  const i = L.findIndex((l) => l.includes('Two counter staff'));
+  const j = L.findIndex((l) => l.includes('+ [[groceries]]'));
+  const typed = L[i].replace(/due:\S+/, 'due:fri');
+  const lines = [prompt('sprig fmt --check'), [S('launch.sprig', 't-b'), S('  2 lines would change', 't-dim')]];
+  const diff = (n, a, b) => { lines.push([S(String(n + 1).padStart(4) + '  ', 't-dim'), S('-' + a, 't-err')]); lines.push([S(String(n + 1).padStart(4) + '  ', 't-dim'), S('+' + b, 't-ok')]); };
+  diff(i, typed, expandDates(typed));
+  diff(j, ' ' + L[j], L[j]);
+  lines.push([]);
+  lines.push([S('1 file would change · ', 't-dim'), S('exit 1', 't-err')]);
+  return toHTML(lines);
+}
+
+function renderColourTree(mono) {
+  return toHTML([prompt((mono ? 'NO_COLOR=1 ' : '') + 'sprig tree lease.sprig')].concat(treeLines('lease.sprig', {depth: 3})));
+}
+
+files = {...SAMPLES};
+const ORDER = SAMPLE_ORDER;
+const $ = (id) => document.getElementById(id);
+$('heroTerm').innerHTML = renderNext(6);
+$('tNext').innerHTML = renderNext(5);
+$('tStatus').innerHTML = renderStatus();
+$('tTree').innerHTML = renderTree();
+$('tWhy').innerHTML = renderWhy();
+$('tAgenda').innerHTML = renderAgenda(30);
+$('tCheck').innerHTML = renderCheck();
+$('tFmt').innerHTML = renderFmt();
+$('tColour').innerHTML = renderColourTree(false);
+$('tMono').innerHTML = renderColourTree(true);
+
+/* ---------- the TUI ---------- */
+const tui = $('tui');
+const T = {view: 'tree', cursor: 0, collapsed: new Set(), filter: '', typing: false, flash: '', help: false, focused: false, top: 0};
+const ROWS = 17;
+const keyOf = (n) => n.file + ':' + n.line;
+
+function rowsFor(docs) {
+  const doc = docs['bakery.sprig'];
+  const f = T.filter.toLowerCase();
+  const match = (n) => !f || labelOf(n).toLowerCase().includes(f);
+  if (T.view === 'next') return readyList(doc).ready.filter((r) => match(r.n)).map((r) => ({n: r.n, depth: 0, sub: r.path.length ? r.path[r.path.length - 1] : ''}));
+  if (T.view === 'agenda') {
+    const items = [];
+    for (const fl of ORDER.filter((x) => x !== 'dana.sprig')) (function w(n) { for (const c of n.children) { if (c.cloned) continue; const d = parseDate(c.meta.fields.due); if (d && OPEN.has(c.view) && match(c)) items.push({n: c, d, sub: fl.replace('.sprig', '')}); w(c); } })(docs[fl].root);
+    items.sort((a, b) => a.d - b.d);
+    return items.map((i) => ({...i, depth: 0}));
+  }
+  return (function w(n, depth) {
+    const acc = [];
+    for (const c of n.children) {
+      const sub = c.children.length && (f || !T.collapsed.has(keyOf(c))) ? w(c, depth + 1) : [];
+      if (match(c) || sub.length) acc.push({n: c, depth}, ...sub);
+    }
+    return acc;
+  })(doc.root, 0);
+}
+
+function detail(n) {
+  if (!n) return '<p class="kv">Nothing selected.</p>';
+  const own = blockers(n);
+  const f = n.meta.fields;
+  const kv = (k, v) => (v ? `<p class="kv">${k} <b>${esc(v)}</b></p>` : '');
+  const notes = n.notes.filter((x) => x).join(' ');
+  const answers = (n.answers || []).concat(n.graftAnswers || []).map((a) => a.words.join(' '));
+  return `<h4><span class="${markOf(n).c}">${esc(markOf(n).t)}</span> ${esc(labelOf(n))}</h4>` +
+    kv('at', `${n.file}:${n.line + 1}`) +
+    kv('status', n.answered ? 'answered' : n.view) +
+    kv('owner', n.who && n.who.length ? '@' + n.who.join(' @') : '') +
+    kv('due', f.due ? `${shortDate(f.due)} · ${rel(f.due)}` : '') +
+    kv('estimate', f.est) +
+    kv('every', f.every) +
+    kv('progress', n.children.length && n.stats.total ? `${n.stats.done} of ${n.stats.total} done` : '') +
+    (own ? `<p class="kv">waits on <b style="color:var(--t-doing)">${esc(own.map((b) => b.label).join(', '))}</b></p>` : '') +
+    (answers.length ? `<p class="kv">answer <b style="color:var(--t-answer)">${esc(answers[0])}</b></p>` : '') +
+    (notes ? `<p class="note">${esc(notes)}</p>` : '');
+}
+
+function renderTUI() {
+  const docs = build();
+  const rows = rowsFor(docs);
+  T.cursor = Math.max(0, Math.min(T.cursor, rows.length - 1));
+  if (T.cursor < T.top) T.top = T.cursor;
+  if (T.cursor >= T.top + ROWS) T.top = T.cursor - ROWS + 1;
+  T.top = Math.max(0, Math.min(T.top, Math.max(0, rows.length - ROWS)));
+  const sel = rows[T.cursor];
+  const s = docs['bakery.sprig'].root.stats;
+  const {ready, waiting} = readyList(docs['bakery.sprig']);
+  let lastSub = '';
+  const left = rows.slice(T.top, T.top + ROWS).map((r, i) => {
+    const n = r.n;
+    const idx = T.top + i;
+    const kids = n.children.length && T.view === 'tree';
+    const caret = kids ? (T.collapsed.has(keyOf(n)) && !T.filter ? '▸' : '▾') : ' ';
+    const m = markOf(n);
+    const own = blockers(n);
+    let rt = '';
+    if (T.view === 'agenda') rt = r.sub;
+    else if (kids && n.stats.total) rt = `${n.stats.done}/${n.stats.total}`;
+    else if (n.meta.fields.due && n.view !== 'done') rt = shortDate(n.meta.fields.due);
+    let head = '';
+    if (T.view === 'agenda') { const day = r.d.toLocaleDateString('en-GB', {weekday: 'short', day: 'numeric', month: 'short'}); if (day !== lastSub) head = `<div class="date">${esc(day)}</div>`; lastSub = day; }
+    const indent = '  '.repeat(r.depth);
+    const text = labelOf(n) + (T.view === 'next' && r.sub ? `  · ${r.sub}` : '');
+    return head + `<div class="row${idx === T.cursor ? ' sel' : ''}"><span class="txt">${indent}<span class="t-dim">${caret}</span> <span class="${m.c}">${esc(m.t)}</span> ${esc(text)}${own ? ' <span class="t-warn">⧗</span>' : ''}</span><span class="rt">${esc(rt)}</span></div>`;
+  }).join('');
+  const views = ['tree', 'next', 'agenda'].map((v, i) => `<span class="${T.view === v ? 'on' : ''}">${i + 1} ${v === 'next' ? 'next up' : v}</span>`).join('');
+  const status = T.typing
+    ? `<span class="prompt">/${esc(T.filter)}▏</span><span>Enter keeps it · Esc clears</span>`
+    : `<span>${T.flash ? `<span class="flash">${esc(T.flash)}</span>` : `bakery.sprig  ${s.done}/${s.total} done · ${ready.length} ready · ${waiting.length} waiting${T.filter ? ` · filter “${esc(T.filter)}”` : ''}`}</span><span>? help</span>`;
+  tui.innerHTML =
+    `<div class="hdr"><span class="views">${views}</span><span class="t-dim">~/bakery</span></div>` +
+    `<div class="panes"><div class="left">${left || '<div class="row"><span class="txt t-dim">nothing here</span></div>'}</div><div class="right">${detail(sel && sel.n)}</div></div>` +
+    `<div class="sts">${status}</div>` +
+    (T.help ? `<div class="overlay">j k   move          x   tick\nh l   fold          ~   doing\n1 2 3 views         /   filter\ne     edit at line  a A add\nu     undo          q   quit\n\n<span class="t-dim">any key closes this</span></div>` : '') +
+    (T.focused ? '' : '<div class="hint" data-focus>Click here, then use the keys</div>');
+}
+
+function tick(n, to) {
+  if (!n || n.state === 'group' || n.state === 'graft') { T.flash = 'groups and grafts take their status from their children'; return; }
+  const lines = files[n.file].split('\n');
+  const ln = lines[n.line];
+  const i = ln.search(/\S/);
+  const from = ln[i];
+  if (!TICKABLE.includes(from)) return;
+  let next = to || (from === 'x' ? '-' : 'x');
+  let edited = ln.slice(0, i) + next + ln.slice(i + 1);
+  if (next === 'x' && n.meta.fields.every) {
+    // Recurring (spec §10.4): the due date moves on and the item stays open.
+    const cur = parseDate(n.meta.fields.due);
+    const nd = nextDue(cur && cur >= TODAY ? cur : TODAY, n.meta.fields.every);
+    if (nd) { edited = ln.replace(/(^|\s)due:\S+/, `$1due:${iso(nd)}`); next = from; T.flash = `${n.file}:${n.line + 1}  due → ${iso(nd)}`; }
+  }
+  lines[n.line] = edited;
+  files[n.file] = lines.join('\n');
+  if (!T.flash) T.flash = `${n.file}:${n.line + 1}  ${from} → ${next}`;
+}
+
+function key(k) {
+  const was = T.flash;
+  T.flash = '';
+  if (T.help) { T.help = false; renderTUI(); return; }
+  if (T.typing) {
+    if (k === 'Escape') { T.typing = false; T.filter = ''; }
+    else if (k === 'Enter') T.typing = false;
+    else if (k === 'Backspace') T.filter = T.filter.slice(0, -1);
+    else if (k.length === 1) T.filter += k;
+    T.cursor = 0; renderTUI(); return;
+  }
+  const rows = rowsFor(build());
+  const sel = rows[T.cursor];
+  switch (k) {
+    case 'j': case 'ArrowDown': T.cursor++; break;
+    case 'k': case 'ArrowUp': T.cursor--; break;
+    case 'g': case 'Home': T.cursor = 0; break;
+    case 'G': case 'End': T.cursor = rows.length - 1; break;
+    case 'h': case 'ArrowLeft': if (sel && sel.n.children.length) T.collapsed.add(keyOf(sel.n)); break;
+    case 'l': case 'ArrowRight': case ' ': if (sel) T.collapsed.delete(keyOf(sel.n)); break;
+    case 'x': tick(sel && sel.n); break;
+    case '~': tick(sel && sel.n, '~'); break;
+    case '1': T.view = 'tree'; T.cursor = 0; break;
+    case '2': T.view = 'next'; T.cursor = 0; break;
+    case '3': T.view = 'agenda'; T.cursor = 0; break;
+    case '/': T.typing = true; T.filter = ''; break;
+    case 'Escape': T.filter = ''; break;
+    case '?': T.help = true; break;
+    case 'e': T.flash = sel ? `would run: $EDITOR +${sel.n.line + 1} ${sel.n.file}` : ''; break;
+    case 'a': case 'A': T.flash = `would add ${k === 'A' ? 'a child of' : 'a sibling after'} the selected item`; break;
+    case 'u': T.flash = 'would undo this session’s last write'; break;
+    case 'q': T.flash = 'q quits the real thing'; break;
+    default: T.flash = was; return false;
+  }
+  renderTUI();
+  return true;
+}
+
+tui.addEventListener('keydown', (e) => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const handled = key(e.key);
+  if (handled !== false) e.preventDefault();
+});
+tui.addEventListener('focus', () => { T.focused = true; renderTUI(); });
+tui.addEventListener('blur', () => { T.focused = false; renderTUI(); });
+tui.addEventListener('click', (e) => {
+  if (e.target.closest('[data-focus]')) { tui.focus(); return; }
+  const row = e.target.closest('.row');
+  if (row) { const i = [...tui.querySelectorAll('.left .row')].indexOf(row); if (i >= 0) { T.cursor = T.top + i; renderTUI(); } }
+});
+document.querySelector('.keystrip').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-key]');
+  if (!b) return;
+  T.focused = true;
+  key(b.dataset.key);
+});
+renderTUI();
+})();
+</script>
+</html>
