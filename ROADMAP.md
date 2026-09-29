@@ -42,9 +42,9 @@ A public website that explains Sprig in ten seconds and lets a visitor edit a re
 
 ## v0.2 — Write plans in your editor
 
-`··········` 0% · 0 of 19 done · due 2027-01-29
+`··········` 0% · 0 of 24 done · due 2027-01-29
 
-VS Code highlights `.sprig` files, completes people, anchors and file links, shows `sprig check` diagnostics as you type, and ticks items with a code action. `sprig fmt` normalises a file without touching anything it doesn't mean to.
+VS Code highlights `.sprig` files, completes people, anchors and file links, shows `sprig check` diagnostics as you type, and ticks items with a code action. `sprig fmt` normalises a file without touching anything it doesn't mean to. In the terminal, `sprig tree`, `status` and `why` show a plan's shape and what holds it up, and every command completes in the shell.
 
 - [ ] [`0016`](https://github.com/oddurs/sprig/blob/main/cairn/items/0016-resolve-typed-date-shortcuts-against-an-injected-today.md) Resolve typed date shortcuts against an injected today <sup>feature · p1 · core</sup>
 - [ ] [`0020`](https://github.com/oddurs/sprig/blob/main/cairn/items/0020-conformance-examples-tokens-fields-and-dates.md) Conformance examples: tokens, fields and dates <sup>feature · p1 · suite</sup>
@@ -65,12 +65,17 @@ VS Code highlights `.sprig` files, completes people, anchors and file links, sho
 - [ ] [`0055`](https://github.com/oddurs/sprig/blob/main/cairn/items/0055-editor-setup-guide-neovim-helix-zed.md) Editor setup guide: Neovim, Helix, Zed <sup>docs · p1 · docs</sup>
 - [ ] [`0056`](https://github.com/oddurs/sprig/blob/main/cairn/items/0056-performance-baseline-and-regression-gate.md) Performance baseline and regression gate <sup>chore · p1 · core</sup>
 - [ ] [`0057`](https://github.com/oddurs/sprig/blob/main/cairn/items/0057-release-v0-2.md) Release v0.2 <sup>chore · p0 · release</sup>
+- [ ] [`0118`](https://github.com/oddurs/sprig/blob/main/cairn/items/0118-resolve-item-refs-from-the-command-line.md) Resolve item refs from the command line <sup>feature · p0 · core</sup>
+- [ ] [`0119`](https://github.com/oddurs/sprig/blob/main/cairn/items/0119-output-layer-terminal-plain-and-colour-from-the-marks.md) Output layer: terminal, --plain, and colour from the marks <sup>feature · p0 · cli</sup>
+- [ ] [`0120`](https://github.com/oddurs/sprig/blob/main/cairn/items/0120-sprig-status-the-whole-folder-on-one-screen.md) sprig status: the whole folder on one screen <sup>feature · p1 · cli</sup>
+- [ ] [`0121`](https://github.com/oddurs/sprig/blob/main/cairn/items/0121-sprig-why-explain-what-an-item-is-waiting-on.md) sprig why: explain what an item is waiting on <sup>feature · p1 · cli</sup>
+- [ ] [`0122`](https://github.com/oddurs/sprig/blob/main/cairn/items/0122-shell-completions-and-a-man-page.md) Shell completions and a man page <sup>feature · p1 · cli</sup>
 
 ## v0.3 — Agents work the plan
 
-`··········` 0% · 0 of 15 done · due 2027-04-02
+`··········` 0% · 0 of 22 done · due 2027-04-02
 
-`sprig mcp` lets a coding agent read a repository's `PLAN.sprig`, find ready work, tick, add and answer items, where every change is an ordinary file edit a person can review. Plans export to calendars and JSON, and existing checklists import.
+`sprig mcp` lets a coding agent read a repository's `PLAN.sprig`, find ready work, tick, add and answer items, where every change is an ordinary file edit a person can review. Plans export to calendars and JSON, and existing checklists import. From the shell, `mark`, `add`, `answer`, `find`, `agenda` and `graph` cover the everyday writes and questions, through the same edit API the agents use.
 
 - [ ] [`0024`](https://github.com/oddurs/sprig/blob/main/cairn/items/0024-sprig-next-json.md) sprig next --json <sup>feature · p1 · cli</sup>
 - [ ] [`0058`](https://github.com/oddurs/sprig/blob/main/cairn/items/0058-what-tools-should-sprig-mcp-expose.md) What tools should sprig mcp expose? <sup>spike · p0 · agents</sup>
@@ -87,10 +92,30 @@ VS Code highlights `.sprig` files, completes people, anchors and file links, sho
 - [ ] [`0069`](https://github.com/oddurs/sprig/blob/main/cairn/items/0069-can-a-person-be-an-email-address.md) Can a person be an email address? <sup>spike · p1 · spec</sup>
 - [ ] [`0070`](https://github.com/oddurs/sprig/blob/main/cairn/items/0070-should-a-file-declare-its-spec-version.md) Should a file declare its spec version? <sup>spike · p1 · spec</sup>
 - [ ] [`0071`](https://github.com/oddurs/sprig/blob/main/cairn/items/0071-release-v0-3.md) Release v0.3 <sup>chore · p0 · release</sup>
+- [ ] [`0123`](https://github.com/oddurs/sprig/blob/main/cairn/items/0123-sprig-mark-and-sprig-answer.md) sprig mark and sprig answer <sup>feature · p1 · cli</sup>
+- [ ] [`0124`](https://github.com/oddurs/sprig/blob/main/cairn/items/0124-sprig-add-append-an-item-from-the-shell.md) sprig add: append an item from the shell <sup>feature · p1 · cli</sup>
+- [ ] [`0125`](https://github.com/oddurs/sprig/blob/main/cairn/items/0125-sprig-edit-open-editor-at-an-item.md) sprig edit: open $EDITOR at an item <sup>feature · p2 · cli</sup>
+- [ ] [`0126`](https://github.com/oddurs/sprig/blob/main/cairn/items/0126-sprig-find-search-by-text-and-by-token.md) sprig find: search by text and by token <sup>feature · p2 · cli</sup>
+- [ ] [`0127`](https://github.com/oddurs/sprig/blob/main/cairn/items/0127-sprig-agenda-dated-work-by-day.md) sprig agenda: dated work by day <sup>feature · p2 · cli</sup>
+- [ ] [`0128`](https://github.com/oddurs/sprig/blob/main/cairn/items/0128-sprig-graph-the-dependency-graph-for-graphviz-and-mermaid.md) sprig graph: the dependency graph for Graphviz and Mermaid <sup>feature · p2 · interop</sup>
+- [ ] [`0129`](https://github.com/oddurs/sprig/blob/main/cairn/items/0129-guide-sprig-in-the-shell.md) Guide: Sprig in the shell <sup>docs · p2 · docs</sup>
+
+## v0.4 — Work the plan from one screen
+
+`··········` 0% · 0 of 6 done · due 2027-05-21
+
+`sprig tui`: the tree, what's next and the agenda for a folder of plans on one terminal screen, with vim keys, writes that go through the same one-line edits as the verbs, and live reload when a file changes underneath it. Plan: `design/cli-plan.html`.
+
+- [ ] [`0130`](https://github.com/oddurs/sprig/blob/main/cairn/items/0130-how-should-sprig-tui-be-built.md) How should sprig tui be built? <sup>spike · p0 · cli</sup>
+- [ ] [`0131`](https://github.com/oddurs/sprig/blob/main/cairn/items/0131-sprig-tui-tree-view-detail-pane-and-navigation.md) sprig tui: tree view, detail pane and navigation <sup>feature · p0 · cli</sup>
+- [ ] [`0132`](https://github.com/oddurs/sprig/blob/main/cairn/items/0132-sprig-tui-tick-mark-add-and-undo.md) sprig tui: tick, mark, add and undo <sup>feature · p0 · cli</sup>
+- [ ] [`0133`](https://github.com/oddurs/sprig/blob/main/cairn/items/0133-sprig-tui-reload-when-a-file-changes-on-disk.md) sprig tui: reload when a file changes on disk <sup>feature · p0 · cli</sup>
+- [ ] [`0134`](https://github.com/oddurs/sprig/blob/main/cairn/items/0134-sprig-tui-next-up-and-agenda-views-and-filtering.md) sprig tui: next-up and agenda views, and filtering <sup>feature · p1 · cli</sup>
+- [ ] [`0135`](https://github.com/oddurs/sprig/blob/main/cairn/items/0135-release-v0-4.md) Release v0.4 <sup>chore · p0 · release</sup>
 
 ## v1.0 — Sprig 1.0
 
-`··········` 0% · 0 of 11 done · due 2027-06-11
+`··········` 0% · 0 of 11 done · due 2027-07-02
 
 A frozen spec under CC0, a conformance suite that covers every rule, and packaged tools a stranger installs in one command on macOS, Linux and Windows. No new surface: this milestone makes promises about what already exists.
 

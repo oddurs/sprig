@@ -18,9 +18,10 @@ Anyone deciding whether to build on Sprig, and needing to know what won't change
 
 ## Change
 
-`docs/stability.md`: a file valid under 1.0 parses the same way forever; spec changes after 1.0 are additive; removing anything needs spec 2.0; diagnostic codes are never reused; crates and the CLI follow semver.
+`docs/stability.md`: a file valid under 1.0 parses the same way forever; spec changes after 1.0 are additive; removing anything needs spec 2.0; diagnostic codes are never reused; crates and the CLI follow semver, and for the CLI that covers exit codes and the column order of every command's `--plain` output.
 
 ## Acceptance criteria
 
 - [ ] Linked from the README, the spec and the crate documentation.
 - [ ] Every promise can be tested, and says what test holds it.
+- [ ] The `--plain` columns of every command are listed, each with the snapshot test that holds it.
