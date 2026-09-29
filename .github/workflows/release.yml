@@ -39,8 +39,10 @@ jobs:
           # Generated notes credit whoever appears in the history, and a bot or
           # an assistant that ended up there must not be credited in a release.
           notes=$(gh release view "$tag" --json body --jq .body)
-          cleaned=$(printf '%s\n' "$notes" | grep -Eiv \
-            '(claude|anthropic|copilot|chatgpt|\[bot\]|generated (with|by) +(claude|chatgpt|copilot|an? (ai|assistant|llm)))' || true)
+          # grep exits 1 when it filtered out every line, which is an answer
+          # here; 2 is an error and must fail the job.
+          cleaned=$(printf '%s\n' "$notes" | { grep -Eiv \
+            '(claude|anthropic|copilot|chatgpt|\[bot\]|generated (with|by) +(claude|chatgpt|copilot|an? (ai|assistant|llm)))' || [ $? -eq 1 ]; })
           if [ "$notes" != "$cleaned" ]; then
             printf '%s\n' "$cleaned" | gh release edit "$tag" --notes-file -
           fi
