@@ -20,6 +20,7 @@ The specification is the authority. Read it before writing or editing a .sprig f
 
 - [Your first plan](${at('/docs/first-plan/')}): a five-minute tutorial
 - [Settled arguments](${at('/decisions/')}): why each rule is the way it is
+- [The toolchain](${at('/tools/')}): the planned sprig commands, their output contract and when each lands
 - [How Sprig compares](${at('/compare/')})
 - [Roadmap](${at('/roadmap/')})
 `;

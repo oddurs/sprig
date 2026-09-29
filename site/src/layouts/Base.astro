@@ -8,7 +8,7 @@ import '../styles/view.css';
 interface Props {
 	title: string;
 	description: string;
-	current?: 'home' | 'play';
+	current?: 'home' | 'play' | 'tools';
 }
 const { title, description, current } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -18,6 +18,7 @@ const ogImage = new URL(url('/og.png'), Astro.site);
 const repo = 'https://github.com/oddurs/sprig';
 const nav = [
 	{ label: 'Docs', href: url('/docs/first-plan/') },
+	{ label: 'Tools', href: url('/tools/'), current: current === 'tools' },
 	{ label: 'Spec', href: url('/spec/') },
 	{ label: 'Playground', href: url('/play/'), current: current === 'play' },
 	{ label: 'GitHub', href: repo },

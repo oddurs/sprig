@@ -12,6 +12,11 @@ import Text from '../components/primitives/Text.astro';
 import Base from '../layouts/Base.astro';
 import { blockers, find, fmtEst, highlight, render, slug } from '../lib/render.js';
 import { planFragment } from '../lib/share.js';
+import { screen } from '../lib/terminal.js';
+import Surfaces from '../components/Surfaces.astro';
+import Terminal from '../components/Terminal.astro';
+import examples from '../generated/examples.json';
+import facts from '../generated/facts.json';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const url = (path: string) => `${base}${path}`;
@@ -88,13 +93,18 @@ const decisions = [
 	{ mark: 'dropped', ruling: 'Rejected', title: 'No Markdown checkboxes in the parser', body: 'Two spellings for every status, forever. An importer converts them once.' },
 ] as const;
 
+// Numbers in running prose read better as words.
+const words: Record<number, string> = { 12: 'twelve', 13: 'thirteen', 14: 'fourteen', 15: 'fifteen', 16: 'sixteen', 17: 'seventeen', 18: 'eighteen', 19: 'nineteen', 20: 'twenty' };
+
+const tools = screen('next', examples as Record<string, string>, { limit: 5, compact: true });
+
 const faq = [
 	['Isn’t this xkcd 927?', 'Yes, it’s a new format. None of the existing ones computes what’s blocked across files while staying readable in cat. If one does, open an issue and this page will say so.'],
 	['Why not Org-mode?', 'Org does far more. Sprig does less on purpose, so it can be implemented from a spec in any language and read without Emacs.'],
 	['Why not Markdown checkboxes?', 'They can’t say what’s blocked, and accepting both spellings would double every tool. An importer converts them once.'],
 	['Is this an AI thing?', 'It’s a text format. Coding agents read and edit it the way people do, which is why status is computed instead of trusted. Nothing in Sprig calls a model.'],
 	['Does it need an account or a server?', 'No. Plans are files. A shared playground link keeps the plan in the URL fragment, which browsers never send anywhere.'],
-	['Why Rust?', 'One core compiles to a native binary and to WebAssembly, so the terminal, the editor and this page give the same answer.'],
+	['Why Rust?', 'It compiles to a small native binary with no runtime, and to WebAssembly for the browser, from one codebase.'],
 	['Is the format stable?', 'It’s a draft. Spec 1.0 freezes it; after that, a 1.0 file parses the same way forever.'],
 	['What about my phone?', 'Any text editor works today. A phone app for shared lists is planned for after 1.0.'],
 ];
@@ -198,6 +208,17 @@ const faq = [
 		</Inline>
 	</Section>
 
+	<Section id="tools-h" title="One parser in every tool." intro="The Rust core compiles to a native binary and to WebAssembly, so the terminal, your editor, a coding agent and this page give the same answer about the same file. No account, no server, no config file.">
+		<Grid cols={2} gap={7} rowGap={6}>
+			{/* A wrapper, so the screen keeps its own height beside the taller list. */}
+			<div><Terminal html={tools.html} title="~/bakery" /></div>
+			<Surfaces />
+		</Grid>
+		<Inline gap={4}>
+			<a class="text-link" href={url('/tools/')}>The toolchain</a>
+		</Inline>
+	</Section>
+
 	<Section id="opinions-h" title="Every rule was argued both ways." intro="Sprig is opinionated on purpose. The rulings are written down with the case against each, including the arguments that lost.">
 		<Grid cols={3} gap={6} rowGap={7}>
 			{decisions.map((d) => (
@@ -213,7 +234,7 @@ const faq = [
 			))}
 		</Grid>
 		<Inline gap={4}>
-			<a class="text-link" href={url('/decisions/')}>All fourteen settled arguments</a>
+			<a class="text-link" href={url('/decisions/')}>All {words[facts.decisions] ?? facts.decisions} settled arguments</a>
 			<a class="text-link" href={url('/compare/')}>How Sprig compares</a>
 		</Inline>
 	</Section>

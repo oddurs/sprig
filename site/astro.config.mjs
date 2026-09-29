@@ -89,6 +89,7 @@ export default defineConfig({
 				{
 					label: 'Explanation',
 					items: [
+						{ label: 'The toolchain', link: '/tools/' },
 						{ label: 'Settled arguments', slug: 'decisions' },
 						{ label: 'How Sprig compares', slug: 'compare' },
 					],
