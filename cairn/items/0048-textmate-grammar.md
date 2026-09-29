@@ -26,3 +26,7 @@ VS Code highlights with TextMate grammars, and GitHub's Linguist does too.
 
 - [ ] `vscode-tmgrammar-test` snapshot tests cover every token kind.
 - [ ] Scope names follow TextMate conventions so existing themes colour them.
+
+## 2026-09-28
+
+A first TextMate grammar exists at editors/sprig.tmLanguage.json (from the website work, 0099); the site uses it to highlight sprig code blocks. It has no vscode-tmgrammar-test snapshots yet, which this item still requires.

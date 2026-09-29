@@ -27,14 +27,19 @@ structure. Progress, estimates and what's blocked are computed, never written.
 
 ## Status
 
-Sprig is a draft (0.2) with a plan. There is no parser yet, and nothing to
-install. What exists today:
+Sprig is a draft (0.3) with a plan. The Rust parser isn't written yet, so there
+is nothing to install. What exists today:
 
-- [`design/sprig-draft-0.2.html`](design/sprig-draft-0.2.html): the language,
-  the settled design arguments, and a working playground with five linked
-  sample files. Open it in a browser; it runs offline apart from web fonts.
-- [`design/ecosystem-plan.html`](design/ecosystem-plan.html): how Sprig gets
-  from a draft to something people use, with the roadmap written in Sprig.
+- **The website**, [oddurs.github.io/sprig](https://oddurs.github.io/sprig/):
+  the idea in one page, a [playground](https://oddurs.github.io/sprig/play/)
+  with six linked example files, the spec, and the settled arguments. It runs
+  the draft reference parser until the Rust core replaces it. Source in
+  [`site/`](site).
+- [`spec/sprig.md`](spec/sprig.md): the specification, every rule numbered,
+  each with an example.
+- [`examples/bakery/`](examples/bakery): six plans that graft into one.
+- [`design/`](design): the draft 0.2 page with its reference parser, the
+  ecosystem plan, and the website plan.
 - [`ROADMAP.md`](ROADMAP.md): the backlog from v0.1 to 1.0, generated from the
   [cairn](https://oddurs.github.io/cairn) items in [`cairn/items/`](cairn/items).
 - A Rust workspace (`crates/sprig-core`, `crates/sprig-cli`) with a `sprig`
@@ -42,11 +47,9 @@ install. What exists today:
 
 ## Quickstart
 
-Try the language in the playground:
-
-```sh
-open design/sprig-draft-0.2.html      # xdg-open on Linux, start on Windows
-```
+Try the language in the [playground](https://oddurs.github.io/sprig/play/), or
+work through [your first plan](https://oddurs.github.io/sprig/docs/first-plan/)
+in five minutes.
 
 Build the CLI from source (Rust 1.98, installed automatically by rustup from
 `rust-toolchain.toml`):
@@ -70,6 +73,7 @@ scripts/setup                            # once per clone: hooks and toolchain
 scripts/agent doctor                     # is this checkout ready?
 scripts/agent start feat/0017-grafts     # a worktree and branch of its own
 scripts/task check                       # format, lint, test, build, backlog
+scripts/task site                        # build the website and check its links
 scripts/agent pr                         # check, push, open the pull request
 ```
 

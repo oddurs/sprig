@@ -13,3 +13,15 @@
 
 # macOS
 .DS_Store
+
+# The website: dependencies, build output, and content generated from the
+# repository at build time by site/scripts/sync.mjs
+/site/node_modules/
+/site/dist/
+/site/.astro/
+/site/src/generated/
+/site/public/spec.md
+/site/src/content/docs/spec.md
+/site/src/content/docs/decisions.md
+/site/src/content/docs/roadmap.md
+/site/src/content/docs/changelog.md

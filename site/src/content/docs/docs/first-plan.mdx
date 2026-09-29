@@ -1,0 +1,163 @@
+---
+title: Your first plan
+description: Write a real plan in Sprig in five minutes, in the playground, with nothing to install.
+---
+
+import PlayLink from '../../../components/PlayLink.astro';
+
+This takes about five minutes and needs nothing installed. Each step is a
+complete Sprig file; open it in the playground to see what Sprig computes from
+it, then change it and watch the result move.
+
+The `sprig` command brings the same plans to the terminal in v0.1. This tutorial
+will gain those steps when it ships.
+
+## 1. A list
+
+Every item is a line that starts with a mark and a space. `-` is something to do
+and `x` is done. The first line is the title.
+
+```sprig
+Move flats
+
+- Pack
+- Book a van
+x Tell the landlord
+```
+
+<PlayLink files={{ 'move.sprig': `Move flats
+
+- Pack
+- Book a van
+x Tell the landlord` }} />
+
+The view shows one of three done. Tick *Pack* in the view and the source changes
+too: the file is always the truth.
+
+## 2. Break it down
+
+Indent to put items inside another. There's no limit to how deep, and each
+parent adds up what's beneath it.
+
+```sprig
+Move flats
+
+- Pack
+  x Books
+  - Kitchen
+  - Bathroom
+- Book a van
+x Tell the landlord
+```
+
+<PlayLink files={{ 'move.sprig': `Move flats
+
+- Pack
+  x Books
+  - Kitchen
+  - Bathroom
+- Book a van
+x Tell the landlord` }} />
+
+*Pack* now shows 1 of 3. A parent keeps the mark you give it: when all its
+children are done, the view suggests ticking it rather than doing it for you.
+
+## 3. Say what waits
+
+Give an item an anchor with `^name`, and make another wait on it with
+`after:^name`. Anything waiting is blocked until what it waits on is done.
+
+```sprig
+Move flats
+
+- Pack  ^pack
+  x Books
+  - Kitchen
+- Book a van  ^van
+- Move everything  after:^van  after:^pack
+```
+
+<PlayLink files={{ 'move.sprig': `Move flats
+
+- Pack  ^pack
+  x Books
+  - Kitchen
+- Book a van  ^van
+- Move everything  after:^van  after:^pack` }} />
+
+Switch the view to **Next up**: *Kitchen* and *Book a van* are ready, and *Move
+everything* is waiting on two things. Tick *Pack* and *Book a van* and it moves to ready.
+
+## 4. Ask, then answer
+
+A line starting with `?` is a question. Write the answer underneath with `=`, and
+the question counts as done. The decision stays in the file, next to what it
+decided.
+
+```sprig
+Move flats
+
+? Keep the old sofa?
+  = No. It won't fit in the lift.
+- Sell the sofa
+```
+
+<PlayLink files={{ 'move.sprig': `Move flats
+
+? Keep the old sofa?
+  = No. It won't fit in the lift.
+- Sell the sofa` }} />
+
+## 5. People and dates
+
+`@name` says who. It flows down, so a name on the title owns the whole file until
+an item names someone else. Dates are written `due:2026-10-17`; in the
+playground you can type `due:fri` and it becomes a real date when you press
+Enter.
+
+```sprig
+Move flats  @me
+
+- Book a van  due:2026-10-16
+- Carry the heavy boxes  @jo
+```
+
+<PlayLink files={{ 'move.sprig': `Move flats  @me
+
+- Book a van  due:2026-10-16
+- Carry the heavy boxes  @jo` }} />
+
+## 6. Split it into files
+
+When a plan grows, move a branch into its own file and graft it back with
+`+ [[name]]`. Progress and blockers carry across.
+
+```sprig
+Move flats
+
++ [[packing]]
+- Book a van
+```
+
+```sprig
+Packing
+
+x Books
+- Kitchen
+- Bathroom
+```
+
+<PlayLink files={{ 'move.sprig': `Move flats
+
++ [[packing]]
+- Book a van`, 'packing.sprig': `Packing
+
+x Books
+- Kitchen
+- Bathroom` }} label="Open both files in the playground" />
+
+That's the whole idea. From here:
+
+- The [specification](/spec/) has every rule, numbered, with an example.
+- The [settled arguments](/decisions/) say why each rule is the way it is.
+- The [playground](/play/) has a six-file plan for opening a bakery to explore.

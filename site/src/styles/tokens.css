@@ -1,0 +1,138 @@
+/*
+ * Sprig's palette and type, shared by the landing page, the playground and the
+ * docs. Colour lives in tokens only: the light palette on :root, the dark one
+ * applied by the OS setting when no theme is chosen, and by data-theme when one
+ * is (the docs' theme picker writes it; the landing page reads the same choice).
+ * Every face is a system font, so the site ships no font files.
+ */
+:root {
+	--paper: #eceee8;
+	--paper-2: #e2e7df;
+	--card: #f6f8f4;
+	--ink: #17201a;
+	--ink-2: #3a463e;
+	--muted: #5c695f;
+	--rule: #c3ccc1;
+	--rule-2: #d6ddd3;
+	--leaf: #2d6a3d;
+	--leaf-strong: #1f4f2c;
+	--leaf-soft: #d3e3d2;
+	--leaf-ink: #f6f8f4;
+	--focus: #2d6a3d;
+
+	--s-todo: #3a463e;
+	--s-doing: #a4640f;
+	--s-done: #2d6a3d;
+	--s-drop: #7f8a82;
+	--s-later: #36628f;
+	--s-ask: #74449b;
+	--s-graft: #a8432a;
+
+	--chip: #dce3d9;
+	--chip-ink: #2e3a32;
+	--who-bg: #d0e4de;
+	--who-ink: #1d5147;
+	--late-bg: #f4d8d0;
+	--late-ink: #922b1c;
+	--block-bg: #f1e2c8;
+	--block-ink: #7b4a0e;
+
+	--code-bg: #151d18;
+	--code-bg-2: #1c2620;
+	--code-rule: #2b372f;
+	--code-ink: #dce3da;
+	--k-title: #ffffff;
+	--k-hkey: #8a978e;
+	--k-todo: #e6ece4;
+	--k-doing: #f0b54a;
+	--k-done: #86cc95;
+	--k-drop: #7a867e;
+	--k-later: #86b6e8;
+	--k-ask: #cba1ec;
+	--k-graft: #f2906f;
+	--k-who: #8ed6ca;
+	--k-tag: #e9a6c8;
+	--k-prio: #ff7c6b;
+	--k-id: #b5c3b9;
+	--k-key: #8a978e;
+	--k-val: #e8d7a2;
+	--k-link: #f2906f;
+	--k-note: #a2aea6;
+	--k-com: #66736a;
+
+	--font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial, sans-serif;
+	--font-serif: ui-serif, 'Iowan Old Style', Charter, 'Bitstream Charter', 'Sitka Text', Cambria, Georgia, serif;
+	--font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) {
+		color-scheme: dark;
+		--paper: #101512;
+		--paper-2: #161d18;
+		--card: #141a16;
+		--ink: #e1e7e0;
+		--ink-2: #bac5bc;
+		--muted: #8f9c93;
+		--rule: #2e3a32;
+		--rule-2: #232d26;
+		--leaf: #7cc48c;
+		--leaf-strong: #a3dcae;
+		--leaf-soft: #1c3322;
+		--leaf-ink: #0f1511;
+		--focus: #7cc48c;
+		--s-todo: #bac5bc;
+		--s-doing: #e9a93e;
+		--s-done: #7cc48c;
+		--s-drop: #6f7b73;
+		--s-later: #80aee0;
+		--s-ask: #c49be6;
+		--s-graft: #ee8b69;
+		--chip: #222d26;
+		--chip-ink: #cbd5cd;
+		--who-bg: #183832;
+		--who-ink: #9adcd0;
+		--late-bg: #46211a;
+		--late-ink: #ffb4a6;
+		--block-bg: #3a2d16;
+		--block-ink: #f2c47a;
+		--code-bg: #0a0e0b;
+		--code-bg-2: #111713;
+		--code-rule: #222d26;
+	}
+}
+
+:root[data-theme='dark'] {
+	color-scheme: dark;
+	--paper: #101512;
+	--paper-2: #161d18;
+	--card: #141a16;
+	--ink: #e1e7e0;
+	--ink-2: #bac5bc;
+	--muted: #8f9c93;
+	--rule: #2e3a32;
+	--rule-2: #232d26;
+	--leaf: #7cc48c;
+	--leaf-strong: #a3dcae;
+	--leaf-soft: #1c3322;
+	--leaf-ink: #0f1511;
+	--focus: #7cc48c;
+	--s-todo: #bac5bc;
+	--s-doing: #e9a93e;
+	--s-done: #7cc48c;
+	--s-drop: #6f7b73;
+	--s-later: #80aee0;
+	--s-ask: #c49be6;
+	--s-graft: #ee8b69;
+	--chip: #222d26;
+	--chip-ink: #cbd5cd;
+	--who-bg: #183832;
+	--who-ink: #9adcd0;
+	--late-bg: #46211a;
+	--late-ink: #ffb4a6;
+	--block-bg: #3a2d16;
+	--block-ink: #f2c47a;
+	--code-bg: #0a0e0b;
+	--code-bg-2: #111713;
+	--code-rule: #222d26;
+}

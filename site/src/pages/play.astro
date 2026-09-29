@@ -1,0 +1,68 @@
+---
+import Base from '../layouts/Base.astro';
+import examples from '../generated/examples.json';
+import { highlight, render } from '../lib/render.js';
+import { shiftExamples } from '../lib/dates.js';
+
+// The page is an app, but it still arrives complete: the example workspace is
+// rendered at build time, so a reader without JavaScript sees the plan and its
+// computed view before being told the editor needs a script.
+const order = ['bakery.sprig', 'lease.sprig', 'kitchen.sprig', 'launch.sprig', 'groceries.sprig', 'dana.sprig'];
+const files = shiftExamples(examples as Record<string, string>, new Date());
+const view = render(files, order[0]);
+---
+
+<Base
+	title="Playground · Sprig"
+	description="Write a Sprig plan across several files and see what is done, blocked and next, computed as you type. Share it as a link; nothing is uploaded."
+	current="play"
+>
+	<div class="wrap">
+		<div class="play-head">
+			<div>
+				<h1>Playground</h1>
+				<p>Six linked files for opening a bakery. Edit any of them, tick a mark in the view, or start your own file. Share copies a link that holds the whole workspace; nothing is uploaded.</p>
+			</div>
+			<p class="status">Runs the draft reference parser until the Rust core ships.</p>
+		</div>
+		<noscript><p class="noscript">The playground needs JavaScript to edit. Below is the example plan and what Sprig computes from it.</p></noscript>
+		<div class="pg" id="pg">
+			<div class="demo-src">
+				<div class="tabs" id="tabs" role="tablist" aria-label="Files">
+					{order.map((f, i) => <button type="button" class="tab" role="tab" data-file={f} aria-selected={i === 0 ? 'true' : 'false'}>{f}</button>)}
+				</div>
+				<div class="ed">
+					<pre class="sc" id="hl" aria-hidden="true" set:html={highlight(files[order[0]]) + '\n\n'} />
+					<textarea id="src" spellcheck="false" wrap="off" autocapitalize="off" autocomplete="off" aria-label="Sprig source">{files[order[0]]}</textarea>
+				</div>
+				<div class="edfoot">
+					<span><kbd>Tab</kbd> indent · <kbd>⇧Tab</kbd> outdent · <kbd id="modkey">⌘</kbd><kbd>↵</kbd> cycle - ~ x · type <kbd>due:fri</kbd> and press <kbd>↵</kbd></span>
+					<span style="display:flex;gap:8px;align-items:center">
+						<span class="toast" id="toast" role="status"></span>
+						<button class="ghost" id="share" type="button">Share</button>
+						<button class="ghost" id="reset" type="button">Reset</button>
+					</span>
+				</div>
+			</div>
+			<div class="rv" id="rv">
+				<div class="rv-head" id="rvHead">
+					<div class="rv-file">{order[0]}</div>
+					<h2>{view.doc.title}</h2>
+				</div>
+				<div class="rv-tools">
+					<div class="seg" role="group" aria-label="View">
+						<button type="button" data-vm="tree" aria-pressed="true">Tree</button>
+						<button type="button" data-vm="next" aria-pressed="false">Next up</button>
+					</div>
+					<div class="people" id="people" role="group" aria-label="Filter by person"></div>
+					<label class="hd"><input type="checkbox" id="hideDone" /> Hide done</label>
+				</div>
+				<div class="rv-body sv" id="rvBody" set:html={view.html} />
+			</div>
+		</div>
+	</div>
+	<script type="application/json" id="examples" set:html={JSON.stringify({ files: examples, order })} />
+	<script>
+		import '../scripts/play.js';
+	</script>
+</Base>

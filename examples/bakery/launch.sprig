@@ -1,0 +1,19 @@
+Opening week  @kim  due:2026-12-09
+
+# Brand
+  ~ Logo, second round  ^logo  due:2026-10-14
+    Round one was too rustic. New brief: a kiln, drawn in one line.
+  - Window lettering  after:^logo  after:[[bakery^name]]  est:1d
+  - Menu boards  after:^logo  est:4h
+# Hiring
+  x Head baker  @dana
+    Priya Nair. Starts two weeks before the soft opening.
+  - Two counter staff  ^counter  due:2026-11-05
+  - Morning rota  after:^counter  est:2h
+- Soft opening  due:2026-12-02
+  - Invite the street  #neighbours  est:3h
+  - Stock the shelves
+    + [[groceries]]
+- Opening day  due:2026-12-09  !!
+  - Free loaf for the first 50 through the door
+  - Photos for the local paper  @dana

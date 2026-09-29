@@ -1,0 +1,233 @@
+---
+import Base from '../layouts/Base.astro';
+import { blockers, find, fmtEst, highlight, render, slug } from '../lib/render.js';
+import { planFragment } from '../lib/share.js';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const url = (path: string) => `${base}${path}`;
+
+// Hero examples carry no dates: the computed view is rendered at build time,
+// and a date would make it stale by the next morning.
+const presets = {
+	release: {
+		label: 'a release',
+		text: `Release 2.0  @kim
+
+# Sync engine
+  x Conflict rules  @teo
+  ~ Offline queue  @teo  est:3d
+- Migration guide  ^guide  est:1d
+? Keep the free tier?  ^tier
+- Announce  after:^guide  after:^tier`,
+	},
+	move: {
+		label: 'a move',
+		text: `Move flats  @me
+
+~ Pack
+  x Books
+  - Kitchen  est:3h
+- Book a van  ^van
+- Move everything  after:^van  @me @jo
+? Keep the old sofa?`,
+	},
+	list: {
+		label: 'a list',
+		text: `Saturday shop
+
+- oat milk
+- sourdough  !
+x eggs
+- coffee beans  #market`,
+	},
+};
+const first = presets.release.text;
+const hero = render({ 'plan.sprig': first }, 'plan.sprig', 'next');
+
+// What it computes: three tiny plans, and the sentence each one earns.
+const cBlocked = `- Tests  ^tests\n- Ship  after:^tests`;
+const cProgress = `- Kitchen\n  x Strip out\n  - Tiling  est:3h\n  - Paint  est:2h`;
+const cNext = `x Pack\n- Book a van  ^van\n- Move  after:^van`;
+const blockedDoc = render({ 'a.sprig': cBlocked }, 'a.sprig').doc;
+const ship = find(blockedDoc, 'Ship');
+const blockedSentence = `Ship waits on ${blockers(ship)!.map((b: { label: string }) => b.label).join(', ')}.`;
+const kitchen = find(render({ 'a.sprig': cProgress }, 'a.sprig').doc, 'Kitchen');
+const progressSentence = `Kitchen: ${kitchen.stats.done} of ${kitchen.stats.total} done, ${fmtEst(kitchen.stats.est)} left.`;
+const next = render({ 'a.sprig': cNext }, 'a.sprig');
+const nextSentence = `Ready now: ${next.readyText.join(', ')}. Waiting: ${next.waitingText.join(', ')}.`;
+
+// Plans across files.
+const house = `House 2027  @sam\n\n+ [[kitchen]]\n- Insurance renewal`;
+const kitchenFile = `Kitchen  @jo\n\nx Strip out\n- Tiling  ^tiling  est:5h\n- Paint  after:^tiling`;
+const houseView = render({ 'house.sprig': house, 'kitchen.sprig': kitchenFile }, 'house.sprig');
+
+const company = {
+	'northwind.sprig': `Northwind 2027  @ana\n\n+ [[product]]  @kim\n+ [[hiring]]   @dana`,
+	'product.sprig': `Product\n\n- Sync engine  ^sync\n- Mobile app  after:^sync`,
+	'hiring.sprig': `Hiring\n\nx Head of design\n- Two engineers`,
+};
+const sizes = [
+	{ label: 'A list', note: '5 lines, no setup', href: url(`/play/#${planFragment({ 'list.sprig': presets.list.text })}`) },
+	{ label: 'A weekend', note: 'two people, one wait', href: url(`/play/#${planFragment({ 'move.sprig': presets.move.text })}`) },
+	{ label: 'A project', note: 'blocked, and a question', href: url(`/play/#${planFragment({ 'release.sprig': first })}`) },
+	{ label: 'A company', note: 'a folder of grafts', href: url(`/play/#${planFragment(company, 'northwind.sprig')}`) },
+];
+
+const decisions = [
+	{ ruling: 'changed', mark: '~ changed', title: "Groups start with '# ', not a trailing colon", body: 'A trailing colon turned any note ending in one into a heading, by accident.' },
+	{ ruling: 'added', mark: '+ added', title: "A question ends with an '= ' answer line", body: 'Ticking a question threw the answer away. Now the decision stays in the file.' },
+	{ ruling: 'rejected', mark: '/ rejected', title: 'No Markdown checkboxes in the parser', body: 'Two spellings for every status, forever. sprig import converts them once.' },
+];
+
+const faq = [
+	['Isn’t this xkcd 927?', 'Yes, it’s a new format. None of the existing ones computes what’s blocked across files while staying readable in cat. If one does, open an issue and this page will say so.'],
+	['Why not Org-mode?', 'Org does far more. Sprig does less on purpose, so it can be implemented from a spec in any language and read without Emacs.'],
+	['Why not Markdown checkboxes?', 'They can’t say what’s blocked, and accepting both spellings would double every tool. An importer converts them once.'],
+	['Is this an AI thing?', 'It’s a text format. Coding agents read and edit it the way people do, which is why status is computed instead of trusted. Nothing in Sprig calls a model.'],
+	['Does it need an account or a server?', 'No. Plans are files. A shared playground link keeps the plan in the URL fragment, which browsers never send anywhere.'],
+	['Why Rust?', 'One core compiles to a native binary and to WebAssembly, so the terminal, the editor and this page give the same answer.'],
+	['Is the format stable?', 'It’s a draft. Spec 1.0 freezes it; after that, a 1.0 file parses the same way forever.'],
+	['What about my phone?', 'Any text editor works today. A phone app for shared lists is planned for after 1.0.'],
+];
+---
+
+<Base
+	title="Sprig: plain-text plans that work out what's next"
+	description="A plain-text format for plans. Start a line with a mark, indent to break it down, and Sprig works out what is done, what is blocked and what you can do next, across files."
+	current="home"
+>
+	<div class="wrap">
+		<section class="hero" aria-labelledby="hero-h">
+			<div>
+				<p class="eyebrow">A plain-text format for plans</p>
+				<h1 id="hero-h">Write the plan. Sprig works out the rest.</h1>
+				<p class="lede">Start a line with a mark and indent to break it down. Sprig works out what’s done, what’s blocked and what you can do next, across as many files as the plan needs.</p>
+				<div class="btns">
+					<a class="btn primary" href={url('/play/')}>Open the playground</a>
+					<a class="btn" href={url('/spec/')}>Read the spec</a>
+					<a class="btn" href="https://github.com/oddurs/sprig">GitHub</a>
+				</div>
+				<p class="status">Draft 0.3. The <code>sprig</code> command arrives with v0.1; until then this page runs the draft reference parser.</p>
+			</div>
+			<div>
+				<div class="demo" id="demo">
+					<div class="demo-src">
+						<div class="tabs" role="tablist" aria-label="Example plans">
+							{Object.entries(presets).map(([key, p], i) => (
+								<button type="button" class="tab" role="tab" data-preset={key} aria-selected={i === 0 ? 'true' : 'false'}>{p.label}</button>
+							))}
+						</div>
+						<div class="ed">
+							<pre class="sc" aria-hidden="true" id="demo-hl" set:html={highlight(first) + '\n\n'} />
+							<textarea id="demo-src" spellcheck="false" wrap="off" autocapitalize="off" autocomplete="off" aria-label="Example plan, editable">{first}</textarea>
+						</div>
+					</div>
+					<div class="demo-view">
+						<div class="demo-bar">
+							<span class="demo-stats" id="demo-stats">{hero.stats.done}/{hero.stats.total} done · {hero.ready} ready · {hero.waiting} waiting</span>
+							<button type="button" class="mini-btn edit-src" id="demo-edit" aria-expanded="false">Edit the source</button>
+							<div class="seg" role="group" aria-label="View">
+								<button type="button" data-vm="next" aria-pressed="true">Next up</button>
+								<button type="button" data-vm="tree" aria-pressed="false">Tree</button>
+							</div>
+						</div>
+						<div class="demo-body sv" id="demo-body" set:html={hero.html} />
+					</div>
+				</div>
+				<ul class="legend" aria-label="The marks">
+					<li class="g-todo">-<small>to do</small></li>
+					<li class="g-doing">~<small>doing</small></li>
+					<li class="g-done">x<small>done</small></li>
+					<li class="g-dropped">/<small>dropped</small></li>
+					<li class="g-later">&gt;<small>later</small></li>
+					<li class="g-ask">?<small>ask</small></li>
+					<li class="g-ask">=<small>answer</small></li>
+					<li class="g-group">#<small>group</small></li>
+					<li class="g-graft">+<small>graft</small></li>
+				</ul>
+				<p class="hint">Tick “Migration guide”, or add <code>  = Yes, capped</code> under the question, and watch Announce unblock.</p>
+			</div>
+		</section>
+
+		<section class="sec" aria-labelledby="computes-h">
+			<div class="sec-head">
+				<h2 id="computes-h">It works out what you’d track by hand.</h2>
+				<p>Checklists record what you ticked. Sprig also works out what’s waiting on what, how far along each branch is, and what can start now. None of it is written by hand, so none of it goes stale.</p>
+			</div>
+			<div class="three">
+				<div class="concept">
+					<figure class="code-card"><figcaption><b>blocked</b><span>after:</span></figcaption><pre class="sc" set:html={highlight(cBlocked)} /></figure>
+					<p class="result">{blockedSentence}</p>
+					<h3>What’s blocked</h3>
+					<p>Name an item with an anchor, point at it with <code>after:</code>, and anything waiting shows as blocked until it’s done.</p>
+				</div>
+				<div class="concept">
+					<figure class="code-card"><figcaption><b>progress</b><span>est:</span></figcaption><pre class="sc" set:html={highlight(cProgress)} /></figure>
+					<p class="result">{progressSentence}</p>
+					<h3>How far along</h3>
+					<p>Every branch adds up what’s under it, estimates included. Ticking a leaf moves every parent above it.</p>
+				</div>
+				<div class="concept">
+					<figure class="code-card"><figcaption><b>next up</b><span>computed</span></figcaption><pre class="sc" set:html={highlight(cNext)} /></figure>
+					<p class="result">{nextSentence}</p>
+					<h3>What’s next</h3>
+					<p>Open, unblocked work, ranked by what’s in progress, priority and due date. It’s the question a plan exists to answer.</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="sec" aria-labelledby="files-h">
+			<div class="sec-head">
+				<h2 id="files-h">A big plan is a folder of small ones.</h2>
+				<p><code>+ [[kitchen]]</code> grafts another file in as a branch. Progress, owners and blockers carry across, so a company plan is an index of team plans, each owned by the people who work it.</p>
+			</div>
+			<div class="files">
+				<figure class="code-card"><figcaption><b>house.sprig</b></figcaption><pre class="sc" set:html={highlight(house)} /></figure>
+				<figure class="code-card"><figcaption><b>kitchen.sprig</b></figcaption><pre class="sc" set:html={highlight(kitchenFile)} /></figure>
+				<div class="rendered sv">
+					<div class="cap">house.sprig, as Sprig reads it</div>
+					<Fragment set:html={houseView.html} />
+				</div>
+			</div>
+			<div class="sizes">
+				{sizes.map((s) => (
+					<a href={s.href}><b>{s.label}</b><span>{s.note}</span></a>
+				))}
+			</div>
+		</section>
+
+		<section class="sec" aria-labelledby="opinions-h">
+			<div class="sec-head">
+				<h2 id="opinions-h">Every rule was argued both ways.</h2>
+				<p>Sprig is opinionated on purpose. The rulings are written down with the case against each, including the arguments that lost.</p>
+			</div>
+			<div class="debates">
+				{decisions.map((d) => (
+					<article class="db">
+						<span class={`ruling r-${d.ruling}`}>{d.mark}</span>
+						<h3>{d.title}</h3>
+						<p>{d.body}</p>
+						<a href={url(`/decisions/#${slug(d.title)}`)}>The full argument</a>
+					</article>
+				))}
+			</div>
+			<p class="status" style="margin-top:18px"><a href={url('/decisions/')}>All fourteen settled arguments</a> · <a href={url('/compare/')}>How Sprig compares to Org-mode, todo.txt and others</a></p>
+		</section>
+
+		<section class="sec" aria-labelledby="faq-h">
+			<div class="sec-head">
+				<h2 id="faq-h">Questions you’re about to ask</h2>
+				<p>Two sentences each. Anything missing belongs in an issue.</p>
+			</div>
+			<dl class="faq">
+				{faq.map(([q, a]) => (
+					<div><dt>{q}</dt><dd>{a}</dd></div>
+				))}
+			</dl>
+		</section>
+	</div>
+	<script type="application/json" id="demo-presets" set:html={JSON.stringify(Object.fromEntries(Object.entries(presets).map(([k, p]) => [k, p.text])))} />
+	<script>
+		import '../scripts/hero.js';
+	</script>
+</Base>
