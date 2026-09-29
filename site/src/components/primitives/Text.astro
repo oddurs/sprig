@@ -1,0 +1,49 @@
+---
+// Every piece of display text: the element is chosen for meaning, the look from
+// the type scale. Large sizes tighten their tracking; headings balance.
+import type { HTMLTag } from 'astro/types';
+import type { TextSize, Weight } from '../../design/types';
+
+interface Props {
+	as?: HTMLTag;
+	size?: TextSize;
+	weight?: Weight;
+	tone?: 'default' | 'muted';
+	font?: 'sans' | 'mono';
+	measure?: boolean;
+	id?: string;
+}
+// Astro hands a parent's scope class to its children as `class`. Merge it so
+// the parent's scoped styles still reach this element, rather than letting it
+// replace this component's own class; authors can't pass one (Props has none).
+const { as: Tag = 'p', size = 'base', weight = 'regular', tone = 'default', font = 'sans', measure = false, class: scope, ...rest } = Astro.props as Props & { class?: string };
+const tight = ['xl', '2xl', '3xl'].includes(size);
+const style = [
+	`--size: var(--text-${size})`,
+	`--leading: var(--leading-${size})`,
+	`--weight: var(--weight-${weight})`,
+	`--tone: var(--${tone === 'muted' ? 'text-muted' : 'text'})`,
+	`--family: var(--font-${font})`,
+	`--tracking: ${tight ? '-0.025em' : '0'}`,
+	`--measure: ${measure ? 'var(--measure-prose)' : 'none'}`,
+].join('; ');
+---
+
+<Tag class={["sp-text", scope].filter(Boolean).join(" ")} style={style} {...rest}><slot /></Tag>
+
+<style>
+	.sp-text {
+		margin: 0;
+		font-family: var(--family);
+		font-size: var(--size);
+		line-height: var(--leading);
+		font-weight: var(--weight);
+		letter-spacing: var(--tracking);
+		color: var(--tone);
+		max-width: var(--measure);
+		text-wrap: pretty;
+	}
+	:is(h1, h2, h3, h4).sp-text {
+		text-wrap: balance;
+	}
+</style>

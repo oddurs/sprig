@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { satteri } from '@astrojs/markdown-satteri';
 import starlight from '@astrojs/starlight';
 import { defineConfig, passthroughImageService } from 'astro/config';
+import { shikiTheme, themes } from './src/design/tokens.mjs';
 
 // The site lives at oddurs.github.io/sprig until the name spike (cairn 0006)
 // settles a domain. Moving it is these two values and nothing else: content
@@ -49,7 +50,7 @@ export default defineConfig({
 			favicon: '/favicon.svg',
 			social: [{ icon: 'github', label: 'GitHub', href: repo }],
 			editLink: { baseUrl: `${repo}/edit/main/site/` },
-			customCss: ['./src/styles/tokens.css', './src/styles/view.css', './src/styles/starlight.css'],
+			customCss: ['./src/generated/tokens.css', './src/styles/view.css', './src/styles/starlight.css'],
 			disable404Route: true,
 			head: [
 				{ tag: 'meta', attrs: { property: 'og:image', content: ogImage } },
@@ -58,8 +59,23 @@ export default defineConfig({
 				{ tag: 'meta', attrs: { name: 'twitter:image', content: ogImage } },
 				{ tag: 'link', attrs: { rel: 'alternate', type: 'application/atom+xml', title: 'Sprig releases', href: `${base}/feed.xml` } },
 			],
+			// Code blocks use syntax themes built from the same tokens as the site's
+			// own highlighter. Expressive Code would otherwise nudge colours towards
+			// its own contrast target; the tokens already guarantee 4.5:1.
 			expressiveCode: {
+				themes: [shikiTheme('dark'), shikiTheme('light')],
+				minSyntaxHighlightingColorContrast: 0,
 				shiki: { langs: [{ ...grammar, name: 'sprig' }] },
+				styleOverrides: {
+					borderRadius: '8px',
+					borderColor: ({ theme }) => themes[theme.type].border,
+					codeBackground: ({ theme }) => themes[theme.type]['surface-raised'],
+					frames: {
+						shadowColor: 'transparent',
+						editorTabBarBackground: ({ theme }) => themes[theme.type]['surface-raised'],
+						terminalTitlebarBackground: ({ theme }) => themes[theme.type]['surface-raised'],
+					},
+				},
 			},
 			sidebar: [
 				{
@@ -82,6 +98,7 @@ export default defineConfig({
 					items: [
 						{ label: 'Roadmap', slug: 'roadmap' },
 						{ label: 'Changelog', slug: 'changelog' },
+						{ label: 'Design system', slug: 'docs/design' },
 						{ label: 'Contributing', link: `${repo}/blob/main/CONTRIBUTING.md` },
 					],
 				},

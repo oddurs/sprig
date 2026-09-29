@@ -1,0 +1,50 @@
+---
+// The colour tokens, rendered from the token module for both themes at once:
+// the design page's evidence that every value is where the system says it is.
+import { contrast, themes } from '../design/tokens.mjs';
+
+interface Props {
+	names: string[];
+}
+const { names } = Astro.props;
+const rows = names.map((name) => ({
+	name,
+	light: themes.light[name],
+	dark: themes.dark[name],
+	lightRatio: contrast(themes.light[name], themes.light.surface),
+	darkRatio: contrast(themes.dark[name], themes.dark.surface),
+}));
+---
+
+<table class="swatches">
+	<thead>
+		<tr><th>Token</th><th>Light</th><th>Dark</th></tr>
+	</thead>
+	<tbody>
+		{
+			rows.map((r) => (
+				<tr>
+					<td><code>--{r.name}</code></td>
+					<td><span class="chip" style={`background:${r.light}`} /> <code>{r.light}</code> <span class="ratio">{r.lightRatio.toFixed(2)}:1</span></td>
+					<td><span class="chip" style={`background:${r.dark}`} /> <code>{r.dark}</code> <span class="ratio">{r.darkRatio.toFixed(2)}:1</span></td>
+				</tr>
+			))
+		}
+	</tbody>
+</table>
+
+<style>
+	.chip {
+		display: inline-block;
+		width: 16px;
+		height: 16px;
+		border-radius: var(--radius-sm);
+		border: 1px solid var(--border);
+		vertical-align: -3px;
+	}
+	.ratio {
+		color: var(--text-muted);
+		font-size: var(--text-xs);
+		font-variant-numeric: tabular-nums;
+	}
+</style>

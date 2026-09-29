@@ -2,12 +2,22 @@
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "name": "Sprig",
   "scopeName": "source.sprig",
-  "fileTypes": ["sprig"],
+  "fileTypes": [
+    "sprig"
+  ],
   "patterns": [
-    { "include": "#comment" },
-    { "include": "#escaped-note" },
-    { "include": "#answer" },
-    { "include": "#item" }
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#escaped-note"
+    },
+    {
+      "include": "#answer"
+    },
+    {
+      "include": "#item"
+    }
   ],
   "repository": {
     "comment": {
@@ -17,63 +27,53 @@
     "escaped-note": {
       "match": "^(\\s*)(\\\\)(.*)$",
       "captures": {
-        "2": { "name": "constant.character.escape.sprig" }
+        "2": {
+          "name": "constant.character.escape.sprig"
+        }
       }
     },
     "answer": {
       "begin": "^(\\s*)(=)(?=\\s|$)",
-      "beginCaptures": { "2": { "name": "keyword.operator.answer.sprig" } },
+      "beginCaptures": {
+        "2": {
+          "name": "keyword.mark.answer.sprig"
+        }
+      },
       "end": "$",
-      "contentName": "markup.italic.answer.sprig",
-      "patterns": [{ "include": "#tokens" }]
+      "patterns": [
+        {
+          "include": "#tokens"
+        }
+      ],
+      "contentName": "markup.italic.answer.sprig"
     },
     "item": {
       "patterns": [
-        { "include": "#mark-done" },
-        { "include": "#mark-dropped" },
-        { "include": "#mark-group" },
-        { "include": "#mark-graft" },
-        { "include": "#mark-question" },
-        { "include": "#mark-open" }
+        {
+          "include": "#mark-todo"
+        },
+        {
+          "include": "#mark-doing"
+        },
+        {
+          "include": "#mark-done"
+        },
+        {
+          "include": "#mark-dropped"
+        },
+        {
+          "include": "#mark-later"
+        },
+        {
+          "include": "#mark-ask"
+        },
+        {
+          "include": "#mark-group"
+        },
+        {
+          "include": "#mark-graft"
+        }
       ]
-    },
-    "mark-open": {
-      "begin": "^(\\s*)([-~>])(?=\\s|$)",
-      "beginCaptures": { "2": { "name": "keyword.control.mark.sprig" } },
-      "end": "$",
-      "patterns": [{ "include": "#tokens" }]
-    },
-    "mark-done": {
-      "begin": "^(\\s*)(x)(?=\\s|$)",
-      "beginCaptures": { "2": { "name": "markup.inserted.mark.done.sprig" } },
-      "end": "$",
-      "patterns": [{ "include": "#tokens" }]
-    },
-    "mark-dropped": {
-      "begin": "^(\\s*)(/)(?=\\s|$)",
-      "beginCaptures": { "2": { "name": "markup.deleted.mark.dropped.sprig" } },
-      "end": "$",
-      "contentName": "markup.strikethrough.sprig",
-      "patterns": [{ "include": "#tokens" }]
-    },
-    "mark-question": {
-      "begin": "^(\\s*)(\\?)(?=\\s|$)",
-      "beginCaptures": { "2": { "name": "keyword.operator.question.sprig" } },
-      "end": "$",
-      "patterns": [{ "include": "#tokens" }]
-    },
-    "mark-group": {
-      "begin": "^(\\s*)(#)(?=\\s|$)",
-      "beginCaptures": { "2": { "name": "punctuation.definition.heading.sprig" } },
-      "end": "$",
-      "contentName": "markup.heading.group.sprig",
-      "patterns": [{ "include": "#tokens" }]
-    },
-    "mark-graft": {
-      "begin": "^(\\s*)(\\+)(?=\\s|$)",
-      "beginCaptures": { "2": { "name": "keyword.control.graft.sprig" } },
-      "end": "$",
-      "patterns": [{ "include": "#tokens" }]
     },
     "tokens": {
       "patterns": [
@@ -96,20 +96,145 @@
         {
           "match": "(?<=^|\\s)([A-Za-z][\\w\\-]*)(:)(\"[^\"]*\"|(?!//)\\S+)",
           "captures": {
-            "1": { "name": "support.type.property-name.sprig" },
-            "2": { "name": "punctuation.separator.key-value.sprig" },
+            "1": {
+              "name": "support.type.property-name.sprig"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.sprig"
+            },
             "3": {
               "name": "string.unquoted.value.sprig",
-              "patterns": [{ "include": "#link" }]
+              "patterns": [
+                {
+                  "include": "#link"
+                }
+              ]
             }
           }
         },
-        { "include": "#link" }
+        {
+          "include": "#link"
+        }
       ]
     },
     "link": {
       "name": "markup.underline.link.sprig",
       "match": "\\[\\[[^\\]]+\\]\\]"
+    },
+    "mark-todo": {
+      "begin": "^(\\s*)(-)(?=\\s|$)",
+      "beginCaptures": {
+        "2": {
+          "name": "keyword.mark.todo.sprig"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "include": "#tokens"
+        }
+      ]
+    },
+    "mark-doing": {
+      "begin": "^(\\s*)(~)(?=\\s|$)",
+      "beginCaptures": {
+        "2": {
+          "name": "keyword.mark.doing.sprig"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "include": "#tokens"
+        }
+      ]
+    },
+    "mark-later": {
+      "begin": "^(\\s*)(>)(?=\\s|$)",
+      "beginCaptures": {
+        "2": {
+          "name": "keyword.mark.later.sprig"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "include": "#tokens"
+        }
+      ]
+    },
+    "mark-done": {
+      "begin": "^(\\s*)(x)(?=\\s|$)",
+      "beginCaptures": {
+        "2": {
+          "name": "keyword.mark.done.sprig"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "include": "#tokens"
+        }
+      ],
+      "contentName": "markup.done.sprig"
+    },
+    "mark-dropped": {
+      "begin": "^(\\s*)(/)(?=\\s|$)",
+      "beginCaptures": {
+        "2": {
+          "name": "keyword.mark.dropped.sprig"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "include": "#tokens"
+        }
+      ],
+      "contentName": "markup.strikethrough.sprig"
+    },
+    "mark-ask": {
+      "begin": "^(\\s*)(\\?)(?=\\s|$)",
+      "beginCaptures": {
+        "2": {
+          "name": "keyword.mark.ask.sprig"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "include": "#tokens"
+        }
+      ]
+    },
+    "mark-group": {
+      "begin": "^(\\s*)(#)(?=\\s|$)",
+      "beginCaptures": {
+        "2": {
+          "name": "keyword.mark.group.sprig"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "include": "#tokens"
+        }
+      ],
+      "contentName": "markup.heading.group.sprig"
+    },
+    "mark-graft": {
+      "begin": "^(\\s*)(\\+)(?=\\s|$)",
+      "beginCaptures": {
+        "2": {
+          "name": "keyword.mark.graft.sprig"
+        }
+      },
+      "end": "$",
+      "patterns": [
+        {
+          "include": "#tokens"
+        }
+      ]
     }
   }
 }

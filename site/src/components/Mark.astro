@@ -1,0 +1,32 @@
+---
+// One mark, in its colour. The glyph is decorative wherever its name is shown
+// beside it; give it a label when it stands alone.
+import type { MarkKey } from '../design/types';
+import { marks } from '../design/tokens.mjs';
+
+interface Props {
+	kind: MarkKey;
+	size?: 'sm' | 'md' | 'lg' | 'xl';
+	label?: boolean;
+}
+const { kind, size = 'md', label = false } = Astro.props;
+const mark = marks.find((m) => m.key === kind)!;
+---
+
+<span class={`sp-mark sp-size-${size}`} style={`--mark: var(--mark-${kind})`} aria-hidden={label ? undefined : 'true'} aria-label={label ? mark.name : undefined} role={label ? 'img' : undefined}>{mark.char}</span>
+
+<style>
+	.sp-mark {
+		font-family: var(--font-mono);
+		color: var(--mark);
+		font-weight: var(--weight-medium);
+		line-height: 1;
+		display: inline-block;
+		min-width: 1ch;
+		text-align: center;
+	}
+	.sp-size-sm { font-size: var(--text-sm); }
+	.sp-size-md { font-size: var(--text-md); }
+	.sp-size-lg { font-size: var(--text-xl); }
+	.sp-size-xl { font-size: var(--text-3xl); }
+</style>

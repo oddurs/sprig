@@ -1,0 +1,34 @@
+---
+// A page section: a heading, an optional introduction, and its content, with
+// the same generous spacing everywhere so pages breathe at one rhythm.
+import Stack from './primitives/Stack.astro';
+import Text from './primitives/Text.astro';
+
+interface Props {
+	id: string;
+	title: string;
+	intro?: string;
+}
+const { id, title, intro } = Astro.props;
+---
+
+<section class="sp-section" aria-labelledby={id}>
+	<Stack gap={7}>
+		<Stack gap={3}>
+			<Text as="h2" id={id} size="xl" weight="bold">{title}</Text>
+			{intro && <Text size="md" tone="muted" measure>{intro}</Text>}
+		</Stack>
+		<slot />
+	</Stack>
+</section>
+
+<style>
+	.sp-section {
+		padding-block: var(--space-10) 0;
+	}
+	@media (max-width: 559px) {
+		.sp-section {
+			padding-block: var(--space-8) 0;
+		}
+	}
+</style>

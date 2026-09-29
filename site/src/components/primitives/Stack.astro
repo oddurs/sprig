@@ -1,0 +1,29 @@
+---
+// Vertical flow. Spacing between children comes from the space scale and is the
+// parent's job, so nothing inside a Stack needs a margin.
+import type { HTMLTag } from 'astro/types';
+import type { Space } from '../../design/types';
+
+interface Props {
+	as?: HTMLTag;
+	gap?: Space;
+	id?: string;
+	'aria-labelledby'?: string;
+	'aria-label'?: string;
+}
+// Astro hands a parent's scope class to its children as `class`. Merge it so
+// the parent's scoped styles still reach this element, rather than letting it
+// replace this component's own class; authors can't pass one (Props has none).
+const { as: Tag = 'div', gap = 4, class: scope, ...rest } = Astro.props as Props & { class?: string };
+---
+
+<Tag class={["sp-stack", scope].filter(Boolean).join(" ")} style={`--gap: var(--space-${gap})`} {...rest}><slot /></Tag>
+
+<style>
+	.sp-stack {
+		display: flex;
+		flex-direction: column;
+		gap: var(--gap);
+		min-width: 0;
+	}
+</style>

@@ -17,6 +17,7 @@ const rv = $('#rv');
 const rvHead = $('#rvHead');
 const rvBody = $('#rvBody');
 const people = $('#people');
+const newFile = $('#newFile');
 const toast = $('#toast');
 
 let files = {};
@@ -319,11 +320,13 @@ $('#share').addEventListener('click', async () => {
 
 let naming = false;
 function renderTabs() {
-	tabs.innerHTML =
-		order.map((f) => `<button type="button" class="tab" role="tab" aria-selected="${f === active}" data-file="${sprig.esc(f)}">${sprig.esc(f)}</button>`).join('') +
-		(naming
-			? '<input id="newName" class="tab-input" placeholder="file name" aria-label="New file name" maxlength="40">'
-			: '<button type="button" class="tab new" data-new="1">+ new file</button>');
+	tabs.innerHTML = order
+		.map((f) => `<button type="button" class="tab" role="tab" aria-selected="${f === active}" data-file="${sprig.esc(f)}">${sprig.esc(f)}</button>`)
+		.join('');
+	// The new-file control is not a tab, so it lives beside the tab list, not in it.
+	newFile.innerHTML = naming
+		? '<input id="newName" class="tab-input" placeholder="file name" aria-label="New file name" maxlength="40">'
+		: '<button type="button" class="tab" data-new="1">+ new file</button>';
 	const cur = tabs.querySelector('[aria-selected="true"]');
 	if (cur) tabs.scrollLeft = Math.max(0, cur.offsetLeft - tabs.clientWidth / 2 + cur.offsetWidth / 2);
 	if (naming) {
@@ -452,10 +455,9 @@ function toggle(n) {
 
 tabs.addEventListener('click', (e) => {
 	const t = e.target.closest('[data-file]');
-	if (t) {
-		switchFile(t.dataset.file);
-		return;
-	}
+	if (t) switchFile(t.dataset.file);
+});
+newFile.addEventListener('click', (e) => {
 	if (e.target.closest('[data-new]')) {
 		naming = true;
 		renderTabs();

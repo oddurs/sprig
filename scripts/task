@@ -23,7 +23,7 @@ usage: scripts/task <target>
   build      compile everything, including the tests
   check      fmt:check, lint, test, build, and backlog when cairn is installed
   backlog    cairn check --strict, and ROADMAP.md is up to date (needs cairn)
-  site       build the website and check its links and requests (needs node)
+  site       build the website, check tokens, contrast, links and accessibility (needs node, chrome)
 USAGE
 }
 
@@ -67,6 +67,8 @@ case "${1:-}" in
     }
     npm --prefix site ci --no-audit --no-fund
     npm --prefix site run build
+    # axe in both themes; GitHub's runners ship Chrome, locally set CHROME_PATH if needed
+    npm --prefix site run a11y
     ;;
   backlog)
     command -v cairn >/dev/null 2>&1 || {

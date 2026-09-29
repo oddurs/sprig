@@ -1,0 +1,31 @@
+---
+// Horizontal flow that wraps. For rows of buttons, links, chips.
+import type { HTMLTag } from 'astro/types';
+import type { Space } from '../../design/types';
+
+interface Props {
+	as?: HTMLTag;
+	gap?: Space;
+	align?: 'start' | 'center' | 'baseline' | 'end';
+	justify?: 'start' | 'between' | 'end';
+	'aria-label'?: string;
+}
+// Astro hands a parent's scope class to its children as `class`. Merge it so
+// the parent's scoped styles still reach this element, rather than letting it
+// replace this component's own class; authors can't pass one (Props has none).
+const { as: Tag = 'div', gap = 3, align = 'center', justify = 'start', class: scope, ...rest } = Astro.props as Props & { class?: string };
+const justified = { start: 'flex-start', between: 'space-between', end: 'flex-end' }[justify];
+---
+
+<Tag class={["sp-inline", scope].filter(Boolean).join(" ")} style={`--gap: var(--space-${gap}); --align: ${align}; --justify: ${justified}`} {...rest}><slot /></Tag>
+
+<style>
+	.sp-inline {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--gap);
+		align-items: var(--align);
+		justify-content: var(--justify);
+		min-width: 0;
+	}
+</style>

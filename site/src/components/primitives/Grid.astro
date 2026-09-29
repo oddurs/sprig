@@ -1,0 +1,40 @@
+---
+// Equal columns that collapse on narrow screens: `cols` applies from the md
+// breakpoint (860px), `lg` from 1180px, and below md everything is one column.
+import type { HTMLTag } from 'astro/types';
+import type { Columns, Space } from '../../design/types';
+
+interface Props {
+	as?: HTMLTag;
+	cols?: Columns;
+	lg?: Columns;
+	gap?: Space;
+	rowGap?: Space;
+}
+// Astro hands a parent's scope class to its children as `class`. Merge it so
+// the parent's scoped styles still reach this element, rather than letting it
+// replace this component's own class; authors can't pass one (Props has none).
+const { as: Tag = 'div', cols = 2, lg, gap = 6, rowGap, class: scope } = Astro.props as Props & { class?: string };
+const style = `--cols: ${cols}; --cols-lg: ${lg ?? cols}; --gap: var(--space-${gap}); --row-gap: var(--space-${rowGap ?? gap})`;
+---
+
+<Tag class={["sp-grid", scope].filter(Boolean).join(" ")} style={style}><slot /></Tag>
+
+<style>
+	.sp-grid {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		column-gap: var(--gap);
+		row-gap: var(--row-gap);
+	}
+	@media (min-width: 860px) {
+		.sp-grid {
+			grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+		}
+	}
+	@media (min-width: 1180px) {
+		.sp-grid {
+			grid-template-columns: repeat(var(--cols-lg), minmax(0, 1fr));
+		}
+	}
+</style>

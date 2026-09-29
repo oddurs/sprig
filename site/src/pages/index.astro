@@ -1,4 +1,14 @@
 ---
+import Button from '../components/Button.astro';
+import Code from '../components/Code.astro';
+import Mark from '../components/Mark.astro';
+import MarkArray from '../components/MarkArray.astro';
+import Plan from '../components/Plan.astro';
+import Section from '../components/Section.astro';
+import Grid from '../components/primitives/Grid.astro';
+import Inline from '../components/primitives/Inline.astro';
+import Stack from '../components/primitives/Stack.astro';
+import Text from '../components/primitives/Text.astro';
 import Base from '../layouts/Base.astro';
 import { blockers, find, fmtEst, highlight, render, slug } from '../lib/render.js';
 import { planFragment } from '../lib/share.js';
@@ -44,22 +54,20 @@ x eggs
 const first = presets.release.text;
 const hero = render({ 'plan.sprig': first }, 'plan.sprig', 'next');
 
-// What it computes: three tiny plans, and the sentence each one earns.
+// What it computes: three small plans, and the sentence each one earns. The
+// sentences are computed here, so they can't drift from what the parser says.
 const cBlocked = `- Tests  ^tests\n- Ship  after:^tests`;
 const cProgress = `- Kitchen\n  x Strip out\n  - Tiling  est:3h\n  - Paint  est:2h`;
 const cNext = `x Pack\n- Book a van  ^van\n- Move  after:^van`;
-const blockedDoc = render({ 'a.sprig': cBlocked }, 'a.sprig').doc;
-const ship = find(blockedDoc, 'Ship');
+const ship = find(render({ 'a.sprig': cBlocked }, 'a.sprig').doc, 'Ship');
 const blockedSentence = `Ship waits on ${blockers(ship)!.map((b: { label: string }) => b.label).join(', ')}.`;
 const kitchen = find(render({ 'a.sprig': cProgress }, 'a.sprig').doc, 'Kitchen');
 const progressSentence = `Kitchen: ${kitchen.stats.done} of ${kitchen.stats.total} done, ${fmtEst(kitchen.stats.est)} left.`;
 const next = render({ 'a.sprig': cNext }, 'a.sprig');
-const nextSentence = `Ready now: ${next.readyText.join(', ')}. Waiting: ${next.waitingText.join(', ')}.`;
+const nextSentence = `Ready: ${next.readyText.join(', ')}. Waiting: ${next.waitingText.join(', ')}.`;
 
-// Plans across files.
 const house = `House 2027  @sam\n\n+ [[kitchen]]\n- Insurance renewal`;
 const kitchenFile = `Kitchen  @jo\n\nx Strip out\n- Tiling  ^tiling  est:5h\n- Paint  after:^tiling`;
-const houseView = render({ 'house.sprig': house, 'kitchen.sprig': kitchenFile }, 'house.sprig');
 
 const company = {
 	'northwind.sprig': `Northwind 2027  @ana\n\n+ [[product]]  @kim\n+ [[hiring]]   @dana`,
@@ -67,17 +75,18 @@ const company = {
 	'hiring.sprig': `Hiring\n\nx Head of design\n- Two engineers`,
 };
 const sizes = [
-	{ label: 'A list', note: '5 lines, no setup', href: url(`/play/#${planFragment({ 'list.sprig': presets.list.text })}`) },
-	{ label: 'A weekend', note: 'two people, one wait', href: url(`/play/#${planFragment({ 'move.sprig': presets.move.text })}`) },
-	{ label: 'A project', note: 'blocked, and a question', href: url(`/play/#${planFragment({ 'release.sprig': first })}`) },
-	{ label: 'A company', note: 'a folder of grafts', href: url(`/play/#${planFragment(company, 'northwind.sprig')}`) },
+	{ label: 'a list', href: url(`/play/#${planFragment({ 'list.sprig': presets.list.text })}`) },
+	{ label: 'a weekend', href: url(`/play/#${planFragment({ 'move.sprig': presets.move.text })}`) },
+	{ label: 'a project', href: url(`/play/#${planFragment({ 'release.sprig': first })}`) },
+	{ label: 'a company', href: url(`/play/#${planFragment(company, 'northwind.sprig')}`) },
 ];
 
+// Rulings are shown with the mark that means what happened to the rule.
 const decisions = [
-	{ ruling: 'changed', mark: '~ changed', title: "Groups start with '# ', not a trailing colon", body: 'A trailing colon turned any note ending in one into a heading, by accident.' },
-	{ ruling: 'added', mark: '+ added', title: "A question ends with an '= ' answer line", body: 'Ticking a question threw the answer away. Now the decision stays in the file.' },
-	{ ruling: 'rejected', mark: '/ rejected', title: 'No Markdown checkboxes in the parser', body: 'Two spellings for every status, forever. sprig import converts them once.' },
-];
+	{ mark: 'doing', ruling: 'Changed', title: "Groups start with '# ', not a trailing colon", body: 'A trailing colon turned any note ending in one into a heading, by accident.' },
+	{ mark: 'graft', ruling: 'Added', title: "A question ends with an '= ' answer line", body: 'Ticking a question threw the answer away. Now the decision stays in the file.' },
+	{ mark: 'dropped', ruling: 'Rejected', title: 'No Markdown checkboxes in the parser', body: 'Two spellings for every status, forever. An importer converts them once.' },
+] as const;
 
 const faq = [
 	['Isn’t this xkcd 927?', 'Yes, it’s a new format. None of the existing ones computes what’s blocked across files while staying readable in cat. If one does, open an issue and this page will say so.'],
@@ -96,138 +105,318 @@ const faq = [
 	description="A plain-text format for plans. Start a line with a mark, indent to break it down, and Sprig works out what is done, what is blocked and what you can do next, across files."
 	current="home"
 >
-	<div class="wrap">
-		<section class="hero" aria-labelledby="hero-h">
-			<div>
-				<p class="eyebrow">A plain-text format for plans</p>
-				<h1 id="hero-h">Write the plan. Sprig works out the rest.</h1>
-				<p class="lede">Start a line with a mark and indent to break it down. Sprig works out what’s done, what’s blocked and what you can do next, across as many files as the plan needs.</p>
-				<div class="btns">
-					<a class="btn primary" href={url('/play/')}>Open the playground</a>
-					<a class="btn" href={url('/spec/')}>Read the spec</a>
-					<a class="btn" href="https://github.com/oddurs/sprig">GitHub</a>
+	<section class="hero" aria-labelledby="hero-h">
+		<Stack gap={6}>
+			<Stack gap={5}>
+				<Text size="sm" tone="muted">A plain-text format for plans</Text>
+				<Text as="h1" id="hero-h" size="3xl" weight="bold">Write the plan. Sprig works out the rest.</Text>
+				<Text size="md" tone="muted" measure>Start a line with a mark. Indent to break it down. Sprig works out what’s done, what’s blocked and what you can do next, across as many files as the plan needs.</Text>
+			</Stack>
+			<Inline gap={3}>
+				<Button href={url('/play/')} variant="primary">Open the playground</Button>
+				<Button href={url('/spec/')}>Read the spec</Button>
+				<Button href="https://github.com/oddurs/sprig" variant="ghost">GitHub</Button>
+			</Inline>
+		</Stack>
+	</section>
+
+	<section class="marks" aria-labelledby="marks-h">
+		<Stack gap={6}>
+			<Text as="h2" id="marks-h" size="sm" tone="muted">The whole language is nine marks. Each line starts with one.</Text>
+			<MarkArray />
+		</Stack>
+	</section>
+
+	<section class="example" aria-label="A live example">
+		<div class="demo" id="demo">
+			<div class="src">
+				<div class="tabs" role="tablist" aria-label="Example plans">
+					{Object.entries(presets).map(([key, p], i) => (
+						<button type="button" class="tab" role="tab" data-preset={key} aria-selected={i === 0 ? 'true' : 'false'}>{p.label}</button>
+					))}
 				</div>
-				<p class="status">Draft 0.3. The <code>sprig</code> command arrives with v0.1; until then this page runs the draft reference parser.</p>
+				<div class="ed">
+					<pre class="sc" aria-hidden="true" id="demo-hl" set:html={highlight(first) + '\n\n'} />
+					<textarea id="demo-src" spellcheck="false" wrap="off" autocapitalize="off" autocomplete="off" aria-label="Example plan, editable">{first}</textarea>
+				</div>
 			</div>
-			<div>
-				<div class="demo" id="demo">
-					<div class="demo-src">
-						<div class="tabs" role="tablist" aria-label="Example plans">
-							{Object.entries(presets).map(([key, p], i) => (
-								<button type="button" class="tab" role="tab" data-preset={key} aria-selected={i === 0 ? 'true' : 'false'}>{p.label}</button>
-							))}
+			<div class="view">
+				<div class="viewbar">
+					<span class="stats" id="demo-stats">{hero.stats.done}/{hero.stats.total} done · {hero.ready} ready · {hero.waiting} waiting</span>
+					<Inline gap={2}>
+						<button type="button" class="toggle edit" id="demo-edit" aria-expanded="false">Edit the source</button>
+						<div class="seg" role="group" aria-label="View">
+							<button type="button" class="toggle" data-vm="next" aria-pressed="true">Next up</button>
+							<button type="button" class="toggle" data-vm="tree" aria-pressed="false">Tree</button>
 						</div>
-						<div class="ed">
-							<pre class="sc" aria-hidden="true" id="demo-hl" set:html={highlight(first) + '\n\n'} />
-							<textarea id="demo-src" spellcheck="false" wrap="off" autocapitalize="off" autocomplete="off" aria-label="Example plan, editable">{first}</textarea>
-						</div>
-					</div>
-					<div class="demo-view">
-						<div class="demo-bar">
-							<span class="demo-stats" id="demo-stats">{hero.stats.done}/{hero.stats.total} done · {hero.ready} ready · {hero.waiting} waiting</span>
-							<button type="button" class="mini-btn edit-src" id="demo-edit" aria-expanded="false">Edit the source</button>
-							<div class="seg" role="group" aria-label="View">
-								<button type="button" data-vm="next" aria-pressed="true">Next up</button>
-								<button type="button" data-vm="tree" aria-pressed="false">Tree</button>
-							</div>
-						</div>
-						<div class="demo-body sv" id="demo-body" set:html={hero.html} />
-					</div>
+					</Inline>
 				</div>
-				<ul class="legend" aria-label="The marks">
-					<li class="g-todo">-<small>to do</small></li>
-					<li class="g-doing">~<small>doing</small></li>
-					<li class="g-done">x<small>done</small></li>
-					<li class="g-dropped">/<small>dropped</small></li>
-					<li class="g-later">&gt;<small>later</small></li>
-					<li class="g-ask">?<small>ask</small></li>
-					<li class="g-ask">=<small>answer</small></li>
-					<li class="g-group">#<small>group</small></li>
-					<li class="g-graft">+<small>graft</small></li>
-				</ul>
-				<p class="hint">Tick “Migration guide”, or add <code>  = Yes, capped</code> under the question, and watch Announce unblock.</p>
+				<div class="body sv" id="demo-body" set:html={hero.html} />
 			</div>
-		</section>
+		</div>
+		<Text size="sm" tone="muted">Tick <em>Migration guide</em>, or add an answer under the question, and watch <em>Announce</em> unblock. The Rust <code>sprig</code> command arrives with v0.1; until then this page runs the draft reference parser.</Text>
+	</section>
 
-		<section class="sec" aria-labelledby="computes-h">
-			<div class="sec-head">
-				<h2 id="computes-h">It works out what you’d track by hand.</h2>
-				<p>Checklists record what you ticked. Sprig also works out what’s waiting on what, how far along each branch is, and what can start now. None of it is written by hand, so none of it goes stale.</p>
-			</div>
-			<div class="three">
-				<div class="concept">
-					<figure class="code-card"><figcaption><b>blocked</b><span>after:</span></figcaption><pre class="sc" set:html={highlight(cBlocked)} /></figure>
-					<p class="result">{blockedSentence}</p>
-					<h3>What’s blocked</h3>
-					<p>Name an item with an anchor, point at it with <code>after:</code>, and anything waiting shows as blocked until it’s done.</p>
-				</div>
-				<div class="concept">
-					<figure class="code-card"><figcaption><b>progress</b><span>est:</span></figcaption><pre class="sc" set:html={highlight(cProgress)} /></figure>
-					<p class="result">{progressSentence}</p>
-					<h3>How far along</h3>
-					<p>Every branch adds up what’s under it, estimates included. Ticking a leaf moves every parent above it.</p>
-				</div>
-				<div class="concept">
-					<figure class="code-card"><figcaption><b>next up</b><span>computed</span></figcaption><pre class="sc" set:html={highlight(cNext)} /></figure>
-					<p class="result">{nextSentence}</p>
-					<h3>What’s next</h3>
-					<p>Open, unblocked work, ranked by what’s in progress, priority and due date. It’s the question a plan exists to answer.</p>
-				</div>
-			</div>
-		</section>
+	<Section id="computes-h" title="It works out what you’d track by hand." intro="Checklists record what you ticked. Sprig also works out what waits on what, how far along each branch is, and what can start now. None of it is written by hand, so none of it goes stale.">
+		<Grid cols={3} gap={6} rowGap={8}>
+			<Stack gap={4}>
+				<Code code={cBlocked} />
+				<Text size="sm" font="mono">{blockedSentence}</Text>
+				<Stack gap={2}>
+					<Text as="h3" size="md" weight="bold">What’s blocked</Text>
+					<Text tone="muted">Give an item an anchor, point at it with <code>after:</code>, and anything waiting shows as blocked until it’s done.</Text>
+				</Stack>
+			</Stack>
+			<Stack gap={4}>
+				<Code code={cProgress} />
+				<Text size="sm" font="mono">{progressSentence}</Text>
+				<Stack gap={2}>
+					<Text as="h3" size="md" weight="bold">How far along</Text>
+					<Text tone="muted">Every branch adds up what’s under it, estimates included. Ticking a leaf moves every parent above it.</Text>
+				</Stack>
+			</Stack>
+			<Stack gap={4}>
+				<Code code={cNext} />
+				<Text size="sm" font="mono">{nextSentence}</Text>
+				<Stack gap={2}>
+					<Text as="h3" size="md" weight="bold">What’s next</Text>
+					<Text tone="muted">Open, unblocked work, ranked by what’s in progress, priority and due date. It’s the question a plan exists to answer.</Text>
+				</Stack>
+			</Stack>
+		</Grid>
+	</Section>
 
-		<section class="sec" aria-labelledby="files-h">
-			<div class="sec-head">
-				<h2 id="files-h">A big plan is a folder of small ones.</h2>
-				<p><code>+ [[kitchen]]</code> grafts another file in as a branch. Progress, owners and blockers carry across, so a company plan is an index of team plans, each owned by the people who work it.</p>
-			</div>
-			<div class="files">
-				<figure class="code-card"><figcaption><b>house.sprig</b></figcaption><pre class="sc" set:html={highlight(house)} /></figure>
-				<figure class="code-card"><figcaption><b>kitchen.sprig</b></figcaption><pre class="sc" set:html={highlight(kitchenFile)} /></figure>
-				<div class="rendered sv">
-					<div class="cap">house.sprig, as Sprig reads it</div>
-					<Fragment set:html={houseView.html} />
+	<Section id="files-h" title="A big plan is a folder of small ones." intro="A graft line mounts another file as a branch. Progress, owners and blockers carry across, so a company plan is an index of team plans, each owned by the people who work it.">
+		<Grid cols={3} gap={5}>
+			<Code code={house} file="house.sprig" />
+			<Code code={kitchenFile} file="kitchen.sprig" />
+			<Plan files={{ 'house.sprig': house, 'kitchen.sprig': kitchenFile }} active="house.sprig" caption="house.sprig, as Sprig reads it" />
+		</Grid>
+		<Inline gap={4} aria-label="Open an example in the playground">
+			<Text size="sm" tone="muted">Open in the playground:</Text>
+			{sizes.map((s) => <a class="text-link" href={s.href}>{s.label}</a>)}
+		</Inline>
+	</Section>
+
+	<Section id="opinions-h" title="Every rule was argued both ways." intro="Sprig is opinionated on purpose. The rulings are written down with the case against each, including the arguments that lost.">
+		<Grid cols={3} gap={6} rowGap={7}>
+			{decisions.map((d) => (
+				<Stack gap={2}>
+					<Inline gap={2} align="baseline">
+						<Mark kind={d.mark} size="md" />
+						<Text size="sm" tone="muted">{d.ruling}</Text>
+					</Inline>
+					<Text as="h3" size="md" weight="bold">{d.title}</Text>
+					<Text tone="muted">{d.body}</Text>
+					<a class="text-link small" href={url(`/decisions/#${slug(d.title)}`)}>The full argument</a>
+				</Stack>
+			))}
+		</Grid>
+		<Inline gap={4}>
+			<a class="text-link" href={url('/decisions/')}>All fourteen settled arguments</a>
+			<a class="text-link" href={url('/compare/')}>How Sprig compares</a>
+		</Inline>
+	</Section>
+
+	<Section id="faq-h" title="Questions you’re about to ask">
+		<Grid as="dl" cols={2} gap={8} rowGap={6}>
+			{faq.map(([q, a]) => (
+				<div class="qa">
+					<Text as="dt" weight="bold">{q}</Text>
+					<Text as="dd" tone="muted">{a}</Text>
 				</div>
-			</div>
-			<div class="sizes">
-				{sizes.map((s) => (
-					<a href={s.href}><b>{s.label}</b><span>{s.note}</span></a>
-				))}
-			</div>
-		</section>
+			))}
+		</Grid>
+	</Section>
 
-		<section class="sec" aria-labelledby="opinions-h">
-			<div class="sec-head">
-				<h2 id="opinions-h">Every rule was argued both ways.</h2>
-				<p>Sprig is opinionated on purpose. The rulings are written down with the case against each, including the arguments that lost.</p>
-			</div>
-			<div class="debates">
-				{decisions.map((d) => (
-					<article class="db">
-						<span class={`ruling r-${d.ruling}`}>{d.mark}</span>
-						<h3>{d.title}</h3>
-						<p>{d.body}</p>
-						<a href={url(`/decisions/#${slug(d.title)}`)}>The full argument</a>
-					</article>
-				))}
-			</div>
-			<p class="status" style="margin-top:18px"><a href={url('/decisions/')}>All fourteen settled arguments</a> · <a href={url('/compare/')}>How Sprig compares to Org-mode, todo.txt and others</a></p>
-		</section>
-
-		<section class="sec" aria-labelledby="faq-h">
-			<div class="sec-head">
-				<h2 id="faq-h">Questions you’re about to ask</h2>
-				<p>Two sentences each. Anything missing belongs in an issue.</p>
-			</div>
-			<dl class="faq">
-				{faq.map(([q, a]) => (
-					<div><dt>{q}</dt><dd>{a}</dd></div>
-				))}
-			</dl>
-		</section>
-	</div>
 	<script type="application/json" id="demo-presets" set:html={JSON.stringify(Object.fromEntries(Object.entries(presets).map(([k, p]) => [k, p.text])))} />
 	<script>
 		import '../scripts/hero.js';
 	</script>
 </Base>
+
+<style>
+	.hero {
+		padding-block: var(--space-10) var(--space-9);
+	}
+	.marks {
+		padding-block: var(--space-7) var(--space-9);
+		border-top: 1px solid var(--border);
+	}
+	.example {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-4);
+	}
+
+	/* The live example: one frame, two panes, no decoration beyond the rule between them. */
+	.demo {
+		display: grid;
+		grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		overflow: hidden;
+	}
+	.src {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+		background: var(--surface-raised);
+		border-right: 1px solid var(--border);
+	}
+	.tabs {
+		display: flex;
+		gap: var(--space-4);
+		padding: 0 var(--space-4);
+		border-bottom: 1px solid var(--border);
+		overflow-x: auto;
+	}
+	.tab {
+		background: none;
+		border: 0;
+		border-bottom: 2px solid transparent;
+		padding: var(--space-3) 0;
+		font: inherit;
+		font-size: var(--text-sm);
+		color: var(--text-muted);
+		cursor: pointer;
+		white-space: nowrap;
+	}
+	.tab:hover {
+		color: var(--text);
+	}
+	.tab[aria-selected='true'] {
+		color: var(--text);
+		border-bottom-color: var(--text);
+	}
+	.ed {
+		position: relative;
+		height: 312px;
+	}
+	.ed pre,
+	.ed textarea {
+		position: absolute;
+		inset: 0;
+		margin: 0;
+		border: 0;
+		padding: var(--space-4);
+		font-family: var(--font-mono);
+		font-size: var(--text-sm);
+		line-height: var(--leading-md);
+		letter-spacing: 0;
+		tab-size: 2;
+		white-space: pre;
+		overflow-wrap: normal;
+	}
+	.ed pre {
+		overflow: hidden;
+		pointer-events: none;
+	}
+	.ed textarea {
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+		resize: none;
+		background: transparent;
+		color: transparent;
+		-webkit-text-fill-color: transparent;
+		caret-color: var(--text);
+		outline: none;
+	}
+	.ed:focus-within {
+		box-shadow: inset 0 0 0 2px var(--focus);
+	}
+	.view {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+	}
+	.viewbar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: var(--space-2) var(--space-3);
+		padding: var(--space-2) var(--space-4);
+		border-bottom: 1px solid var(--border);
+		min-height: 46px;
+	}
+	.stats {
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		color: var(--text-muted);
+		font-variant-numeric: tabular-nums;
+	}
+	.seg {
+		display: inline-flex;
+		border: 1px solid var(--border-strong);
+		border-radius: var(--radius-md);
+		overflow: hidden;
+	}
+	.toggle {
+		background: none;
+		border: 0;
+		padding: var(--space-1) var(--space-3);
+		font: inherit;
+		font-size: var(--text-xs);
+		color: var(--text-muted);
+		cursor: pointer;
+	}
+	.toggle[aria-pressed='true'] {
+		background: var(--text);
+		color: var(--surface);
+	}
+	.edit {
+		display: none;
+		border: 1px solid var(--border-strong);
+		border-radius: var(--radius-md);
+	}
+	.body {
+		height: 312px;
+		overflow: auto;
+		padding: var(--space-1) var(--space-4) var(--space-4);
+	}
+
+	.text-link {
+		color: var(--text);
+		font-size: var(--text-sm);
+	}
+	.text-link.small {
+		font-size: var(--text-sm);
+		color: var(--text-muted);
+	}
+	.qa {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2);
+	}
+	dd {
+		margin: 0;
+	}
+
+	@media (max-width: 859px) {
+		.demo {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.src {
+			border-right: 0;
+			border-top: 1px solid var(--border);
+			order: 2;
+		}
+		.demo:not(.src-open) .src {
+			display: none;
+		}
+		.edit {
+			display: inline-flex;
+		}
+	}
+	@media (max-width: 559px) {
+		.hero {
+			padding-block: var(--space-8) var(--space-7);
+		}
+		.ed pre,
+		.ed textarea {
+			font-size: var(--text-base);
+		}
+	}
+</style>

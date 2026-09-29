@@ -1,0 +1,62 @@
+/* The page itself: reset, body, links and focus, from semantic tokens only. */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+html {
+	-webkit-text-size-adjust: 100%;
+}
+body {
+	margin: 0;
+	background: var(--surface);
+	color: var(--text);
+	font-family: var(--font-sans);
+	font-size: var(--text-base);
+	line-height: var(--leading-base);
+}
+a {
+	color: inherit;
+	text-underline-offset: 3px;
+	text-decoration-thickness: 1px;
+}
+:focus-visible {
+	outline: 2px solid var(--focus);
+	outline-offset: 2px;
+}
+::selection {
+	background: color-mix(in oklch, var(--mark-later) 24%, var(--surface));
+}
+code {
+	font-family: var(--font-mono);
+	font-size: 0.9em;
+	background: var(--surface-raised);
+	border-radius: var(--radius-sm);
+	padding: 0 var(--space-1);
+}
+img {
+	max-width: 100%;
+}
+.skip {
+	position: absolute;
+	left: var(--space-3);
+	top: calc(-1 * var(--space-8));
+	z-index: var(--layer-overlay);
+	background: var(--text);
+	color: var(--surface);
+	padding: var(--space-2) var(--space-3);
+	border-radius: var(--radius-md);
+}
+.skip:focus {
+	top: var(--space-3);
+}
+.page {
+	max-width: var(--measure-page);
+	margin: 0 auto;
+	padding-inline: var(--space-5);
+}
+@media (max-width: 559px) {
+	.page {
+		padding-inline: var(--space-4);
+	}
+}

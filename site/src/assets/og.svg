@@ -1,26 +1,30 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
-  <rect width="1280" height="640" fill="#eceee8"/>
-  <g transform="translate(88 96) scale(2.4)">
-    <rect width="32" height="32" rx="7" fill="#2d6a3d"/>
-    <path d="M11 7.5V24.5M11 13.5H18.5M11 21.5H18.5" fill="none" stroke="#f6f8f4" stroke-width="2.6" stroke-linecap="round"/>
-    <circle cx="22" cy="13.5" r="2.6" fill="#f6f8f4"/>
-    <circle cx="22" cy="21.5" r="2.6" fill="#f6f8f4"/>
-  </g>
-  <text x="88" y="300" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="800" font-size="120" letter-spacing="-5" fill="#17201a">Sprig</text>
-  <text x="92" y="370" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="600" font-size="36" fill="#17201a">Write the plan.</text>
-  <text x="92" y="418" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="600" font-size="36" fill="#17201a">Sprig works out the rest.</text>
-  <text x="92" y="520" font-family="Menlo, Consolas, monospace" font-size="22" fill="#5c695f">A plain-text format for plans</text>
-  <g transform="translate(640 96)">
-    <rect width="552" height="448" rx="16" fill="#151d18"/>
-    <g font-family="Menlo, Consolas, monospace" font-size="21" xml:space="preserve">
-      <text x="32" y="64" fill="#ffffff">Release 2.0  <tspan fill="#8ed6ca">@kim</tspan></text>
-      <text x="32" y="128" fill="#ffffff"># Sync engine</text>
-      <text x="32" y="164" fill="#9aa39c">  <tspan fill="#86cc95">x</tspan> Conflict rules</text>
-      <text x="32" y="200" fill="#e6ece4">  <tspan fill="#f0b54a">~</tspan> Offline queue  <tspan fill="#8a978e">est:</tspan><tspan fill="#e8d7a2">3d</tspan></text>
-      <text x="32" y="236" fill="#e6ece4">- Migration guide  <tspan fill="#b5c3b9">^guide</tspan></text>
-      <text x="32" y="272" fill="#e6ece4"><tspan fill="#cba1ec">?</tspan> Keep the free tier?  <tspan fill="#b5c3b9">^tier</tspan></text>
-      <text x="32" y="308" fill="#e6ece4">- Announce  <tspan fill="#8a978e">after:</tspan><tspan fill="#b5c3b9">^guide</tspan>  <tspan fill="#8a978e">after:</tspan><tspan fill="#b5c3b9">^tier</tspan></text>
-      <text x="32" y="392" fill="#f0b54a">▸ Announce waits on 2 items</text>
-    </g>
-  </g>
+  <rect width="1280" height="640" fill="#fbfaf7"/>
+  <g transform="translate(96 96) scale(1.5)"><rect width="32" height="32" rx="7" fill="#191816"/>
+  <path d="M11 7.5V24.5M11 13.5H18.5M11 21.5H18.5" fill="none" stroke="#fbfaf7" stroke-width="2.6" stroke-linecap="round"/>
+  <circle cx="22" cy="13.5" r="2.6" fill="#7ccd8e"/>
+  <circle cx="22" cy="21.5" r="2.6" fill="#e8a95c"/></g>
+  <text x="160" y="131" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="44" font-weight="700" fill="#191816">Sprig</text>
+  <text x="96" y="250" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="56" font-weight="700" letter-spacing="-1.5" fill="#191816">Write the plan. Sprig works out the rest.</text>
+  <text x="96" y="300" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="26" fill="#64635f">A plain-text format for plans. The whole language is nine marks.</text>
+  <line x1="700.4444444444445" y1="378" x2="700.4444444444445" y2="530" stroke="#e5e5e1" stroke-width="2"/>
+  <line x1="942.2222222222222" y1="378" x2="942.2222222222222" y2="530" stroke="#e5e5e1" stroke-width="2"/>
+  <text x="156.44444444444446" y="462" text-anchor="middle" font-family="Menlo, SF Mono, Consolas, monospace" font-size="84" font-weight="500" fill="#191816">-</text>
+  <text x="156.44444444444446" y="514" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="20" fill="#64635f">to do</text>
+  <text x="277.3333333333333" y="462" text-anchor="middle" font-family="Menlo, SF Mono, Consolas, monospace" font-size="84" font-weight="500" fill="#915200">~</text>
+  <text x="277.3333333333333" y="514" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="20" fill="#64635f">doing</text>
+  <text x="398.22222222222223" y="462" text-anchor="middle" font-family="Menlo, SF Mono, Consolas, monospace" font-size="84" font-weight="500" fill="#137738">x</text>
+  <text x="398.22222222222223" y="514" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="20" fill="#64635f">done</text>
+  <text x="519.1111111111111" y="462" text-anchor="middle" font-family="Menlo, SF Mono, Consolas, monospace" font-size="84" font-weight="500" fill="#64635f">/</text>
+  <text x="519.1111111111111" y="514" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="20" fill="#64635f">dropped</text>
+  <text x="640" y="462" text-anchor="middle" font-family="Menlo, SF Mono, Consolas, monospace" font-size="84" font-weight="500" fill="#2863ab">&gt;</text>
+  <text x="640" y="514" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="20" fill="#64635f">later</text>
+  <text x="760.8888888888889" y="462" text-anchor="middle" font-family="Menlo, SF Mono, Consolas, monospace" font-size="84" font-weight="500" fill="#6f4fa1">?</text>
+  <text x="760.8888888888889" y="514" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="20" fill="#64635f">question</text>
+  <text x="881.7777777777777" y="462" text-anchor="middle" font-family="Menlo, SF Mono, Consolas, monospace" font-size="84" font-weight="500" fill="#973f6e">=</text>
+  <text x="881.7777777777777" y="514" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="20" fill="#64635f">answer</text>
+  <text x="1002.6666666666666" y="462" text-anchor="middle" font-family="Menlo, SF Mono, Consolas, monospace" font-size="84" font-weight="500" fill="#00787a">#</text>
+  <text x="1002.6666666666666" y="514" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="20" fill="#64635f">group</text>
+  <text x="1123.5555555555554" y="462" text-anchor="middle" font-family="Menlo, SF Mono, Consolas, monospace" font-size="84" font-weight="500" fill="#9f4325">+</text>
+  <text x="1123.5555555555554" y="514" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="20" fill="#64635f">graft</text>
 </svg>
