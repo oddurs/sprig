@@ -9,7 +9,7 @@ so small plans add up to a big one. People and coding agents read, edit and
 check the same file.
 
 ```
-Open the bakery  @dana  target:2026-12-05
+Open the bakery  @dana  due:2026-12-05
 
 # Money
   Budget is 180k. Over 10k needs two quotes.
@@ -27,7 +27,7 @@ structure. Progress, estimates and what's blocked are computed, never written.
 
 ## Status
 
-Sprig is a draft (0.3) with a plan. The Rust parser isn't written yet, so there
+Sprig is a draft (0.4) with a plan. The Rust parser isn't written yet, so there
 is nothing to install. What exists today:
 
 - **The website**, [oddurs.github.io/sprig](https://oddurs.github.io/sprig/):

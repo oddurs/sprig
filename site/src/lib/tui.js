@@ -3,7 +3,7 @@
 // the page can render the first frame at build time and the browser only takes
 // over once someone presses a key.
 import * as sprig from './sprig.js';
-import { dayMonth, markOf, pinned, readyList, rel, shortDate } from './terminal.js';
+import { dayMonth, markOf, pinned, readyList, rel, shortDate, waitsText } from './terminal.js';
 
 const ROWS = 17;
 const ROOT = 'bakery.sprig';
@@ -68,7 +68,7 @@ function detail(n) {
 		kv('estimate', f.est) +
 		kv('every', f.every) +
 		kv('progress', n.children.length && n.stats.total ? `${n.stats.done} of ${n.stats.total} done` : '') +
-		kv('waits on', own ? own.map((b) => b.label).join(', ') : '') +
+		(own ? `<p class="kv">${esc(waitsText(own))}</p>` : '') +
 		kv('answer', answers[0]) +
 		(notes ? `<p class="note">${esc(notes.replace(/\[\[([^\]]+)\]\]/g, '$1'))}</p>` : '')
 	);
@@ -100,7 +100,7 @@ export function frame(state, files) {
 				else if (n.meta.fields.due && n.view !== 'done') right = shortDate(n.meta.fields.due);
 				let head = '';
 				if (state.view === 'agenda') {
-					const day = r.d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+					const day = r.d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
 					if (day !== lastDay) head = `<div class="day">${esc(day)}</div>`;
 					lastDay = day;
 				}
