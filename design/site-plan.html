@@ -1,0 +1,1753 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sprig Site Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --paper:#ECEFE9; --paper-2:#E2E7DF; --card:#F5F7F3; --ink:#17201A; --ink-2:#3F4B43; --muted:#66736A;
+  --rule:#C3CCC1; --rule-2:#D6DDD3; --focus:#2D6A3D;
+  --leaf:#2D6A3D; --leaf-ink:#F5F7F3;
+  --s-todo:#3F4B43; --s-doing:#B26F12; --s-done:#2D6A3D; --s-drop:#8C968E; --s-later:#3A679A; --s-ask:#7D4BA3; --s-graft:#B2482B;
+  --chip:#DCE3D9; --chip-ink:#2E3A32;
+  --who-bg:#D0E4DE; --who-ink:#1D5147;
+  --late-bg:#F4D8D0; --late-ink:#9B2F1F;
+  --block-bg:#F1E2C8; --block-ink:#83500F;
+  --code-bg:#151D18; --code-bg-2:#1C2620; --code-rule:#2B372F; --code-ink:#DCE3DA;
+  --k-title:#FFFFFF; --k-hkey:#7F8C83; --k-todo:#E6ECE4; --k-doing:#F0B54A; --k-done:#86CC95; --k-drop:#6F7B73;
+  --k-later:#86B6E8; --k-ask:#CBA1EC; --k-graft:#F2906F; --k-who:#8ED6CA; --k-tag:#E9A6C8; --k-prio:#FF7C6B;
+  --k-id:#B5C3B9; --k-key:#7F8C83; --k-val:#E8D7A2; --k-link:#F2906F; --k-note:#9AA79E; --k-com:#5B685F;
+  --serif:"Newsreader", Georgia, "Times New Roman", serif;
+  --display:"Bricolage Grotesque", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"Spline Sans Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#101512; --paper-2:#161D18; --card:#141A16; --ink:#E1E7E0; --ink-2:#BAC5BC; --muted:#8B988F;
+    --rule:#2E3A32; --rule-2:#232D26; --focus:#7CC48C;
+    --leaf:#7CC48C; --leaf-ink:#0F1511;
+    --s-todo:#BAC5BC; --s-doing:#E9A93E; --s-done:#7CC48C; --s-drop:#6B776F; --s-later:#80AEE0; --s-ask:#C49BE6; --s-graft:#EE8B69;
+    --chip:#222D26; --chip-ink:#CBD5CD;
+    --who-bg:#183832; --who-ink:#9ADCD0;
+    --late-bg:#46211A; --late-ink:#FFB4A6;
+    --block-bg:#3A2D16; --block-ink:#F2C47A;
+    --code-bg:#0A0E0B; --code-bg-2:#111713; --code-rule:#222D26;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#101512; --paper-2:#161D18; --card:#141A16; --ink:#E1E7E0; --ink-2:#BAC5BC; --muted:#8B988F;
+  --rule:#2E3A32; --rule-2:#232D26; --focus:#7CC48C;
+  --leaf:#7CC48C; --leaf-ink:#0F1511;
+  --s-todo:#BAC5BC; --s-doing:#E9A93E; --s-done:#7CC48C; --s-drop:#6B776F; --s-later:#80AEE0; --s-ask:#C49BE6; --s-graft:#EE8B69;
+  --chip:#222D26; --chip-ink:#CBD5CD;
+  --who-bg:#183832; --who-ink:#9ADCD0;
+  --late-bg:#46211A; --late-ink:#FFB4A6;
+  --block-bg:#3A2D16; --block-ink:#F2C47A;
+  --code-bg:#0A0E0B; --code-bg-2:#111713; --code-rule:#222D26;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font:17px/1.55 var(--serif);padding-inline:clamp(16px,4vw,40px);padding-block:0 64px}
+.wrap{max-width:1200px;margin:0 auto}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+code,.mono{font-family:var(--mono);font-size:.84em}
+p code,li code,dd code{background:var(--chip);color:var(--chip-ink);padding:1px 5px;border-radius:4px;white-space:nowrap}
+
+/* top bar */
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-block:18px;border-bottom:1px solid var(--rule);font:500 12.5px/1 var(--mono);color:var(--muted)}
+.top .brand{color:var(--ink);font-weight:600;letter-spacing:.02em}
+.top nav{display:flex;gap:18px;flex-wrap:wrap}
+.top nav a{text-decoration:none}
+.top nav a:hover{color:var(--ink)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.02fr);gap:clamp(28px,5vw,64px);align-items:end;padding-block:clamp(40px,7vw,80px) 44px}
+.eyebrow{font:500 12px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 18px}
+h1{font:800 clamp(92px,15vw,200px)/.8 var(--display);font-variation-settings:"opsz" 96;letter-spacing:-.05em;margin:0 0 28px;margin-left:-.04em}
+h1 .dot{color:var(--leaf)}
+.lede{font-size:clamp(19px,2vw,22px);line-height:1.45;color:var(--ink-2);max-width:32ch;margin:0 0 20px;text-wrap:pretty}
+.specline{font:12.5px/1.6 var(--mono);color:var(--muted);margin:0 0 14px}
+.newin{margin:0;font-size:15.5px;color:var(--ink-2);max-width:40ch}
+.newin b{font:700 12px/1 var(--mono);letter-spacing:.04em;background:var(--block-bg);color:var(--block-ink);padding:3px 6px;border-radius:4px;margin-right:6px}
+
+.code-card{margin:0;background:var(--code-bg);color:var(--code-ink);border-radius:10px;overflow:hidden;min-width:0}
+.code-card figcaption{display:flex;justify-content:space-between;gap:12px;padding:10px 16px;border-bottom:1px solid var(--code-rule);font:500 12px/1 var(--mono);color:var(--k-hkey)}
+.code-card figcaption b{color:var(--code-ink);font-weight:500}
+pre.code{margin:0;padding:18px 20px 20px;font:13.5px/1.7 var(--mono);overflow-x:auto;tab-size:2}
+
+/* marks band */
+.marks{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));border-top:1.5px solid var(--ink);border-bottom:1px solid var(--rule)}
+.mk{padding:12px 12px 20px;border-left:1px solid var(--rule);display:flex;flex-direction:column;gap:6px}
+.mk:first-child{border-left:0;padding-left:0}
+.mk.gs{border-left:1.5px solid var(--ink)}
+.mk:first-child.gs{border-left:0}
+.mk .grp{font:500 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);height:1em}
+.mk .g{font:500 clamp(54px,6vw,88px)/1 var(--mono);height:1.02em;display:block}
+.mk .n{font:700 13px/1.2 var(--display);letter-spacing:.08em;text-transform:uppercase}
+.mk .d{font-size:15px;line-height:1.4;color:var(--muted)}
+.g-todo{color:var(--s-todo)} .g-doing{color:var(--s-doing)} .g-done{color:var(--s-done)} .g-dropped{color:var(--s-drop)}
+.g-later{color:var(--s-later)} .g-ask{color:var(--s-ask)} .g-graft{color:var(--s-graft)} .g-group{color:var(--ink)}
+
+/* sections */
+.sec{padding-block:clamp(56px,8vw,96px) 0}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px 48px;align-items:end;margin-bottom:28px}
+h2{font:750 clamp(34px,4.8vw,58px)/.98 var(--display);letter-spacing:-.035em;margin:0;text-wrap:balance}
+.sec-head p{margin:0;color:var(--ink-2);max-width:52ch;text-wrap:pretty}
+h3{font:700 21px/1.2 var(--display);letter-spacing:-.01em;margin:0 0 8px;text-wrap:balance}
+
+.principles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid var(--rule)}
+.principles article{padding:22px 22px 4px 0}
+.principles article+article{padding-left:22px;border-left:1px solid var(--rule)}
+.principles p{margin:0;font-size:16px;color:var(--ink-2)}
+
+/* playground */
+.pg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);height:740px;border:1.5px solid var(--ink);border-radius:12px;overflow:hidden;background:var(--card)}
+.edp{display:flex;flex-direction:column;min-height:0;background:var(--code-bg);color:var(--code-ink)}
+.tabs{display:flex;align-items:stretch;gap:2px;overflow-x:auto;background:var(--code-bg-2);border-bottom:1px solid var(--code-rule);padding:0 8px;flex:none;scrollbar-width:thin}
+.tab{flex:none;background:none;border:0;border-bottom:2px solid transparent;padding:12px 10px 10px;font:500 12.5px/1 var(--mono);color:var(--k-hkey);cursor:pointer;white-space:nowrap}
+.tab:hover{color:var(--code-ink)}
+.tab[aria-selected="true"]{color:var(--k-title);border-bottom-color:var(--k-done)}
+.tab-new{color:var(--k-done)}
+.tab-input{flex:none;width:130px;margin:6px 4px;background:var(--code-bg);border:1px solid var(--code-rule);border-radius:5px;color:var(--k-title);font:500 12.5px/1 var(--mono);padding:5px 8px}
+.ed{position:relative;flex:1;min-height:0}
+.ed pre,.ed textarea{position:absolute;inset:0;margin:0;border:0;padding:16px 18px;font:14px/1.65 var(--mono);letter-spacing:0;tab-size:2;white-space:pre;word-wrap:normal;overflow-wrap:normal}
+.ed pre{overflow:hidden;pointer-events:none;padding-bottom:60px;padding-right:60px;color:var(--code-ink)}
+.ed textarea{width:100%;height:100%;overflow:auto;resize:none;background:transparent;color:transparent;-webkit-text-fill-color:transparent;caret-color:#FFFFFF;outline:none}
+.ed textarea::selection{background:rgba(134,204,149,.3)}
+.ed:focus-within{box-shadow:inset 0 0 0 2px rgba(134,204,149,.35)}
+.edfoot{flex:none;display:flex;justify-content:space-between;align-items:center;gap:8px 12px;flex-wrap:wrap;padding:9px 14px;border-top:1px solid var(--code-rule);font:12px/1.4 var(--mono);color:var(--k-hkey)}
+.edfoot kbd{font:inherit;color:var(--code-ink)}
+.ghost{background:none;border:1px solid var(--code-rule);border-radius:5px;padding:5px 9px;font:500 12px/1 var(--mono);color:var(--code-ink);cursor:pointer}
+.ghost:hover{border-color:var(--k-hkey)}
+.ghost.armed{border-color:var(--k-prio);color:var(--k-prio)}
+
+/* highlight tokens (always on a dark code surface) */
+.k-title,.k-group,.k-gm{color:var(--k-title)}
+.k-todo{color:var(--k-todo)} .k-doing{color:var(--k-doing)} .k-done{color:var(--k-done)} .k-dropped{color:var(--k-drop)}
+.k-later{color:var(--k-later)} .k-ask,.k-ans{color:var(--k-ask)} .k-graft{color:var(--k-graft)}
+.k-anst{color:var(--code-ink)}
+.k-who{color:var(--k-who)} .k-tag{color:var(--k-tag)} .k-prio{color:var(--k-prio)}
+.k-id{color:var(--k-id);text-decoration:underline dotted;text-underline-offset:3px}
+.k-key{color:var(--k-key)} .k-val{color:var(--k-val)} .k-link{color:var(--k-link)}
+.k-note{color:var(--k-note)} .k-com,.k-esc{color:var(--k-com)}
+.kl-done{opacity:.55} .kl-dropped{opacity:.5;text-decoration:line-through} .kl-later{opacity:.72}
+
+/* rendered view */
+.rv{display:flex;flex-direction:column;min-height:0;border-left:1.5px solid var(--ink)}
+.rv-head{flex:none;padding:18px 24px 14px;border-bottom:1px solid var(--rule-2)}
+.rv-file{font:500 11.5px/1 var(--mono);color:var(--muted);letter-spacing:.04em;margin-bottom:8px}
+.rv-head h3{font-size:clamp(24px,2.4vw,30px);letter-spacing:-.025em;margin:0 0 8px}
+.props{display:flex;flex-wrap:wrap;gap:4px 16px;margin:0 0 10px;font:12.5px/1.5 var(--mono)}
+.props div{display:flex;gap:6px;align-items:baseline}
+.props dt{color:var(--muted)} .props dd{margin:0;color:var(--ink)}
+.props .rel{color:var(--muted)}
+.rv-notes{font-size:15.5px;line-height:1.45;color:var(--ink-2);max-width:60ch;margin-bottom:12px}
+.rv-notes p{margin:0 0 4px}
+.big{display:flex;align-items:center;gap:12px}
+.bar{display:flex;flex:1;height:6px;border-radius:3px;background:var(--rule-2);overflow:hidden}
+.bar i{display:block;background:var(--s-done)} .bar b{display:block;background:var(--s-doing)}
+.big .pct{font:600 13px/1 var(--mono);font-variant-numeric:tabular-nums;min-width:4ch;text-align:right}
+.stats{margin:8px 0 0;font-size:14.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.stats b{color:var(--ink);font-weight:600}
+.rv-tools{flex:none;display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;padding:10px 24px;border-bottom:1px solid var(--rule-2);background:var(--paper-2)}
+.seg{display:flex;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.seg button{background:none;border:0;padding:6px 11px;font:600 12px/1 var(--display);letter-spacing:.02em;cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.people{display:flex;gap:6px;flex-wrap:wrap}
+.pchip{background:none;border:1px solid var(--rule);border-radius:20px;padding:4px 9px;font:500 11.5px/1 var(--mono);cursor:pointer;color:var(--ink-2)}
+.pchip[aria-pressed="true"]{background:var(--who-bg);border-color:transparent;color:var(--who-ink)}
+.hd{display:flex;gap:6px;align-items:center;font:500 12px/1 var(--display);color:var(--muted);margin-left:auto;cursor:pointer}
+.rv-body{flex:1;min-height:0;overflow:auto;padding:10px 24px 32px}
+
+.tree,.tree ul{list-style:none;margin:0;padding:0}
+.tree ul{margin-left:6px;padding-left:18px;border-left:1px solid var(--rule-2)}
+.row{display:grid;grid-template-columns:14px 18px minmax(0,1fr) auto;gap:8px;align-items:start;padding:4px 0}
+.body{min-width:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 6px}
+.txt{font-size:16px;line-height:1.45;cursor:pointer;margin-right:4px}
+.txt:hover{text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:3px}
+.has-kids>.row .txt,.s-group>.row .txt{font:600 15px/1.5 var(--display);letter-spacing:-.005em}
+.s-graft>.row .txt .gt{font:700 15.5px/1.45 var(--display)}
+.v-done>.row .txt,.v-later>.row .txt{color:var(--muted)}
+.v-dropped>.row .txt{color:var(--muted);text-decoration:line-through}
+.is-blocked>.row .txt{color:var(--ink-2)}
+.notes,.answers{padding-left:48px;margin:0 0 6px;max-width:66ch}
+.notes{font-size:15px;line-height:1.45;color:var(--muted)}
+.notes p{margin:0 0 4px}
+.notes code{background:var(--chip);padding:0 4px;border-radius:3px}
+.ans{margin:0 0 4px;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;font-size:15.5px;line-height:1.45;color:var(--ink)}
+.ans .eq{font:600 14px/1 var(--mono);color:var(--s-ask)}
+.nwho{color:var(--who-ink)}
+.flink,.fchip{font:500 12.5px/1 var(--mono);color:var(--s-graft);text-decoration:none;border-bottom:1px dashed currentColor}
+.flink:hover,.fchip:hover{border-bottom-style:solid}
+.s-graft>ul{border-left:1.5px dashed var(--s-graft)}
+.untitled{color:var(--muted);font-style:italic}
+
+.caret{width:14px;height:14px;margin-top:5px;padding:0;border:0;background:none;cursor:pointer;position:relative;color:var(--muted)}
+.caret::before{content:"";position:absolute;left:3px;top:3px;border:4px solid transparent;border-left:6px solid currentColor;transform:rotate(90deg);transform-origin:3px 4px;transition:transform .15s}
+.caret[aria-expanded="false"]::before{transform:none}
+.mark{width:16px;height:16px;margin-top:4px;border-radius:50%;border:1.5px solid var(--s-todo);background:transparent;padding:0;display:grid;place-items:center;position:relative;color:var(--s-todo);font:700 10px/1 var(--mono)}
+button.mark{cursor:pointer}
+button.mark:hover{box-shadow:0 0 0 3px var(--rule-2)}
+.m-doing{border-color:var(--s-doing);background:linear-gradient(90deg,transparent 50%,var(--s-doing) 50%)}
+.m-done,.m-answered{border-color:var(--s-done);background:var(--s-done)}
+.m-answered{border-color:var(--s-ask);background:var(--s-ask)}
+.m-done::after,.m-answered::after{content:"";width:7px;height:4px;border:solid var(--leaf-ink);border-width:0 0 1.8px 1.8px;transform:translateY(-1px) rotate(-45deg)}
+.m-done.inherited{opacity:.55}
+.m-dropped{border-color:var(--s-drop)}
+.m-dropped::after{content:"";width:12px;height:1.5px;background:var(--s-drop);transform:rotate(-45deg)}
+.m-later{border-color:var(--s-later);color:var(--s-later)} .m-later::after{content:"›";font-size:13px;transform:translateY(-1px)}
+.m-ask{border-color:var(--s-ask);color:var(--s-ask)} .m-ask::after{content:"?"}
+.m-group{border:0;color:var(--s-todo)} .m-group::after{content:"";width:7px;height:7px;background:currentColor;transform:rotate(45deg)}
+.m-group.v-done{color:var(--s-done)} .m-group.v-doing{color:var(--s-doing)}
+.m-graft{border-radius:4px;border-color:var(--s-graft);color:var(--s-graft)} .m-graft::after{content:"+";font-size:13px;font-weight:500}
+.m-graft.v-done{background:var(--s-graft);color:var(--leaf-ink)}
+.is-blocked>.row .mark{border-style:dashed}
+
+.chip{display:inline-flex;align-items:center;font:500 11.5px/1 var(--mono);padding:3px 6px;border-radius:4px;background:var(--chip);color:var(--chip-ink);white-space:nowrap}
+.chip.who{background:var(--who-bg);color:var(--who-ink)} .chip.who.soft{background:none;box-shadow:inset 0 0 0 1px var(--who-bg)}
+.chip.tag{background:none;color:var(--muted);box-shadow:inset 0 0 0 1px var(--rule)}
+.chip.id,.chip.kv{background:none;color:var(--muted);padding-inline:2px}
+.chip.prio{background:none;color:var(--late-ink);font-weight:600;padding-inline:1px}
+.chip.late{background:var(--late-bg);color:var(--late-ink)}
+.chip.block{background:var(--block-bg);color:var(--block-ink)}
+.chip.err{background:var(--late-bg);color:var(--late-ink)}
+.chip.ready{background:none;box-shadow:inset 0 0 0 1px var(--s-done);color:var(--s-done)}
+.v-done>.row .chip.date,.v-dropped>.row .chip.date{opacity:.6}
+.prog{display:flex;align-items:center;gap:7px;margin-top:6px;font:500 11.5px/1 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.prog .bar{width:44px;flex:none;height:4px}
+
+.flash>.row{animation:flash 1.4s ease-out}
+@keyframes flash{0%,30%{background:var(--block-bg)}100%{background:transparent}}
+
+.nx-h{font:700 12px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:16px 0 4px}
+.nx{list-style:none;margin:0;padding:0}
+.nx li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:8px;padding:9px 0;border-bottom:1px solid var(--rule-2)}
+.nx .path{font:500 11.5px/1.4 var(--mono);color:var(--muted);margin-bottom:2px}
+.nx .path span{opacity:.6}
+.nx .line{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 6px}
+.nx .is-blocked .mark{border-style:dashed}
+.empty{color:var(--muted);font-style:italic;margin:12px 0}
+
+/* reference */
+.ref{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 40px}
+.ref h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;padding-bottom:10px;border-bottom:1.5px solid var(--ink);margin:0}
+.ref dl{margin:0}
+.ref dl div{display:grid;grid-template-columns:minmax(96px,auto) minmax(0,1fr);gap:14px;padding:10px 0;border-bottom:1px solid var(--rule-2);align-items:baseline}
+.ref dt{font:500 13.5px/1.4 var(--mono);color:var(--ink);white-space:nowrap}
+.ref dd{margin:0;font-size:15.5px;line-height:1.45;color:var(--ink-2)}
+.ref dd code{font-size:12.5px}
+
+/* scales */
+.scales{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.scales .code-card{display:flex;flex-direction:column}
+.scales pre.code{font-size:12.5px;padding:14px 16px 16px;flex:1}
+.scale-cap{margin:12px 0 0;font-size:15px;color:var(--ink-2)}
+.scale-cap b{font:700 15px var(--display);color:var(--ink);display:block;margin-bottom:2px}
+
+/* rules */
+.rules{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px;align-items:start}
+.rules ol{margin:0;padding:0;list-style:none;counter-reset:r}
+.rules li{counter-increment:r;display:grid;grid-template-columns:34px minmax(0,1fr);padding:12px 0;border-bottom:1px solid var(--rule-2);font-size:16px;color:var(--ink-2)}
+.rules li::before{content:counter(r);font:600 13px/1.6 var(--mono);color:var(--muted)}
+.rules li b{color:var(--ink);font-weight:600}
+.grammar .k-r{color:var(--k-who)} .grammar .k-s{color:var(--k-val)}
+
+/* decisions */
+.tally{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.debates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 44px}
+.db{padding:22px 0 26px;border-top:1px solid var(--rule)}
+.db header{display:flex;gap:12px;align-items:baseline;margin-bottom:12px}
+.db h3{margin:0;font-size:20px}
+.ruling{flex:none;font:600 11.5px/1 var(--mono);padding:4px 7px;border-radius:4px;white-space:nowrap}
+.r-changed{background:var(--block-bg);color:var(--block-ink)}
+.r-added{background:var(--chip);color:var(--s-done)}
+.r-kept{box-shadow:inset 0 0 0 1px var(--rule);color:var(--ink-2)}
+.r-rejected{background:var(--late-bg);color:var(--late-ink)}
+.fa{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-bottom:12px}
+.fa b{font:700 11px/1 var(--display);letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px}
+.fa p{margin:0;font-size:15.5px;line-height:1.45;color:var(--ink-2)}
+.verdict{margin:0;font-size:16px;line-height:1.5;color:var(--ink)}
+.verdict b{font:700 15px var(--display)}
+
+footer{margin-top:80px;padding-top:18px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font:12.5px/1.5 var(--mono);color:var(--muted)}
+
+@media (max-width:1020px){
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .marks{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .mk,.mk.gs{border-left:0;padding-left:0;border-top:1px solid var(--rule)}
+  .mk:nth-child(-n+3){border-top:0}
+  .mk:nth-child(3n+2),.mk:nth-child(3n){padding-left:14px;border-left:1px solid var(--rule)}
+  .principles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .principles article:nth-child(3){padding-left:0;border-left:0}
+  .principles article:nth-child(n+3){border-top:1px solid var(--rule);margin-top:18px}
+  .pg{grid-template-columns:minmax(0,1fr);height:auto}
+  .ed{flex:none;height:440px}
+  .rv{border-left:0;border-top:1.5px solid var(--ink)}
+  .rv-body{flex:none;max-height:640px}
+  .ref{grid-template-columns:minmax(0,1fr);gap:32px}
+  .scales{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .rules{grid-template-columns:minmax(0,1fr)}
+  .sec-head{grid-template-columns:minmax(0,1fr)}
+  .debates{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .mk .d{font-size:13.5px}
+  .principles{grid-template-columns:minmax(0,1fr)}
+  .principles article,.principles article+article{padding-left:0;border-left:0}
+  .principles article+article{border-top:1px solid var(--rule);margin-top:14px}
+  .scales{grid-template-columns:minmax(0,1fr)}
+  .fa{grid-template-columns:minmax(0,1fr);gap:12px}
+  .ed pre,.ed textarea{font-size:16px}
+  .rv-head,.rv-tools,.rv-body{padding-inline:16px}
+  .hd{margin-left:0}
+  .notes,.answers{padding-left:30px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before{transition:none!important;animation:none!important}
+}
+
+/* ---------- this page ---------- */
+.thesis{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:end;padding-block:clamp(40px,7vw,80px) 44px;border-bottom:1.5px solid var(--ink)}
+.thesis h1{font:800 clamp(44px,6.6vw,88px)/.94 var(--display);letter-spacing:-.045em;margin:0 0 22px;text-wrap:balance}
+.thesis .lede{max-width:44ch}
+.facts{margin:0;display:grid;gap:0;border-top:1px solid var(--rule)}
+.facts div{display:grid;grid-template-columns:110px minmax(0,1fr);gap:12px;padding:10px 0;border-bottom:1px solid var(--rule)}
+.facts dt{font:600 11.5px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:0;font-size:16px;line-height:1.4;color:var(--ink)}
+
+.minute{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1.5px solid var(--ink)}
+.minute li{padding:16px 16px 18px 0;display:flex;flex-direction:column;gap:6px}
+.minute li+li{padding-left:16px;border-left:1px solid var(--rule)}
+.minute .t{font:600 22px/1 var(--mono);color:var(--s-graft);font-variant-numeric:tabular-nums}
+.minute b{font:700 15px/1.25 var(--display)}
+.minute p{margin:0;font-size:15px;line-height:1.4;color:var(--ink-2)}
+.minute .must{font-size:14.5px;color:var(--ink)}
+.minute .must::before{content:"Site must: ";font:600 11px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+
+.wire{display:flex;flex-direction:column;gap:0}
+.wrow{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:28px;align-items:stretch;padding-block:0}
+.frame-top{grid-column:1;border:1.5px solid var(--ink);border-bottom:0;border-radius:12px 12px 0 0;padding:9px 14px;background:var(--paper-2);font:500 12px/1 var(--mono);color:var(--muted);display:flex;justify-content:space-between}
+.wf{border:1.5px solid var(--ink);border-top:1px solid var(--rule);background:var(--card);padding:22px 24px}
+.wrow.first .wf{border-top:0}
+.wrow.last .wf{border-radius:0 0 12px 12px}
+.wf .tag{font:600 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:block}
+.wf h4{font:750 clamp(22px,2.6vw,32px)/1.05 var(--display);letter-spacing:-.03em;margin:0 0 8px;text-wrap:balance}
+.wf h4.big{font-size:clamp(34px,4.4vw,54px);letter-spacing:-.045em}
+.wf p{margin:0 0 10px;font-size:16px;color:var(--ink-2);max-width:56ch}
+.wf .btns{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 16px}
+.wf .btn-mock{font:600 13px/1 var(--display);padding:9px 13px;border-radius:7px;border:1px solid var(--ink);color:var(--ink)}
+.wf .btn-mock.primary{background:var(--ink);color:var(--paper)}
+.note{padding:18px 0 24px;display:flex;flex-direction:column;gap:10px}
+.note h3{font-size:17px;margin:0}
+.note p{margin:0;font-size:15.5px;line-height:1.45;color:var(--ink-2)}
+.note .hn{font-size:15px;color:var(--ink)}
+.note .hn b{font:600 11px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--s-graft);display:block;margin-bottom:3px}
+
+.hero-demo{border:1.5px solid var(--ink);border-radius:10px;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.hd-ed{display:flex;flex-direction:column;background:var(--code-bg);min-width:0}
+.hd-tabs{display:flex;gap:2px;background:var(--code-bg-2);border-bottom:1px solid var(--code-rule);padding:0 8px;overflow-x:auto}
+.hero-demo .ed{height:290px;flex:none}
+.hero-demo .ed pre,.hero-demo .ed textarea{font-size:13px;padding:14px 16px}
+.hd-view{display:flex;flex-direction:column;min-width:0;background:var(--card)}
+.hd-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 14px;border-bottom:1px solid var(--rule-2);background:var(--paper-2);flex-wrap:wrap}
+.hd-stats{font:500 12px/1.3 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.hd-body{height:290px;overflow:auto;padding:4px 14px 14px}
+.hd-body .txt{font-size:15px}
+.hd-body .notes,.hd-body .answers{padding-left:40px}
+.hint{font:12.5px/1.5 var(--mono);color:var(--muted);margin:10px 0 0}
+.legend{margin-top:12px}
+.legend .mini-marks{font-size:22px;gap:2px 14px}
+.edit-src{display:none}
+.revised{margin:18px 0 0;font-size:15.5px;color:var(--ink-2);max-width:48ch}
+.revised b{font:700 12px/1 var(--mono);letter-spacing:.04em;background:var(--block-bg);color:var(--block-ink);padding:3px 6px;border-radius:4px;margin-right:6px}
+
+.mini-marks{display:flex;flex-wrap:wrap;gap:4px 18px;font:500 30px/1.1 var(--mono)}
+.mini-marks span{display:flex;flex-direction:column;align-items:flex-start}
+.mini-marks small{font:600 10px/1.2 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.mini .code-card pre.code{font-size:11.5px;padding:10px 12px;line-height:1.6}
+.mini .code-card figcaption{padding:7px 12px;font-size:11px}
+.mini .res{font:500 12px/1.4 var(--mono);color:var(--ink);margin:6px 0 0}
+.ladder4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.ladder4 div{border:1px solid var(--rule);border-radius:7px;padding:10px;background:var(--paper)}
+.ladder4 b{font:700 14px/1.2 var(--display);display:block}
+.ladder4 span{font:12px/1.4 var(--mono);color:var(--muted)}
+.dec-mini{list-style:none;margin:0;padding:0}
+.dec-mini li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px solid var(--rule-2);font-size:15px;color:var(--ink-2);align-items:baseline}
+.cmp-wrap{overflow-x:auto}
+.cmp{border-collapse:collapse;width:100%;min-width:560px;font-size:14px}
+.cmp th,.cmp td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--rule-2);vertical-align:top}
+.cmp th{font:600 12px/1.2 var(--mono);color:var(--muted)}
+.cmp td:first-child{font:600 13px/1.3 var(--display);color:var(--ink)}
+.cmp .y{color:var(--s-done)} .cmp .p{color:var(--s-doing)} .cmp .n{color:var(--muted)}
+.faq{margin:0}
+.faq div{padding:9px 0;border-bottom:1px solid var(--rule-2)}
+.faq dt{font:600 15px/1.3 var(--display);color:var(--ink)}
+.faq dd{margin:3px 0 0;font-size:15px;line-height:1.45;color:var(--ink-2)}
+.foot-mock{font:12.5px/1.6 var(--mono);color:var(--muted)}
+
+.sm{border:1.5px solid var(--ink);border-radius:12px;overflow:hidden;background:var(--card)}
+.sm .rv{border-left:0}
+.sm .rv-body{max-height:620px}
+
+.quad{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border:1.5px solid var(--ink);border-radius:12px;overflow:hidden}
+.quad article{padding:20px 22px;background:var(--card)}
+.quad article:nth-child(odd){border-right:1px solid var(--rule)}
+.quad article:nth-child(-n+2){border-bottom:1px solid var(--rule)}
+.quad .axis{font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.quad h3{margin:6px 0 4px}
+.quad p{margin:0 0 10px;font-size:15px;color:var(--ink-2)}
+.quad ul{list-style:none;margin:0;padding:0}
+.quad li{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-top:1px solid var(--rule-2);font-size:15px;align-items:baseline}
+.ms{font:500 11px/1 var(--mono);padding:3px 6px;border-radius:4px;background:var(--chip);color:var(--chip-ink);white-space:nowrap}
+.ms.now{background:var(--who-bg);color:var(--who-ink)}
+.flow{list-style:none;margin:24px 0 0;padding:0;border-top:1.5px solid var(--ink)}
+.flow li{display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr);gap:10px;padding:9px 0;border-bottom:1px solid var(--rule-2);align-items:baseline}
+.flow code{font-size:13px}
+.flow .arr{font:500 14px var(--mono);color:var(--muted);text-align:center}
+.flow .to{font:500 13.5px/1.3 var(--mono);color:var(--s-graft)}
+
+.basics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px}
+.basics h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;padding-bottom:10px;border-bottom:1.5px solid var(--ink);margin:0}
+.basics ul{list-style:none;margin:0;padding:0}
+.basics li{display:grid;grid-template-columns:20px minmax(0,1fr);padding:9px 0;border-bottom:1px solid var(--rule-2);font-size:15.5px;line-height:1.4;color:var(--ink-2)}
+.basics li::before{font:600 14px/1.45 var(--mono)}
+.basics .have li::before{content:"x";color:var(--s-done)}
+.basics .soon li::before{content:"-";color:var(--s-todo)}
+.basics .later li::before{content:">";color:var(--s-later)}
+.basics li b{color:var(--ink);font-weight:600}
+
+.decs{list-style:none;margin:0;padding:0;border-top:1.5px solid var(--ink)}
+.decs li{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.6fr);gap:24px;padding:14px 0;border-bottom:1px solid var(--rule-2)}
+.decs b{font:700 16px/1.3 var(--display);color:var(--ink)}
+.decs p{margin:0;font-size:15.5px;color:var(--ink-2)}
+.budget{border-collapse:collapse;width:100%;margin-top:28px}
+.budget td{padding:9px 0;border-bottom:1px solid var(--rule-2);font-size:15.5px;vertical-align:baseline}
+.budget td:last-child{text-align:right;font:600 14px var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;padding-left:16px}
+
+.titles{list-style:none;margin:0;padding:0;border-top:1.5px solid var(--ink)}
+.titles li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;padding:12px 0;border-bottom:1px solid var(--rule-2)}
+.titles .tt{font:500 15.5px/1.4 var(--mono);color:var(--ink)}
+.titles .len{font:500 12px/1.6 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.titles .why{grid-column:1/-1;font-size:15px;color:var(--ink-2);margin:0}
+.titles .rec .tt::after{content:"recommended";font:600 10.5px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;background:var(--block-bg);color:var(--block-ink);padding:3px 6px;border-radius:4px;margin-left:8px;vertical-align:2px}
+.comment{margin:0;background:var(--card);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.comment figcaption{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-bottom:1px solid var(--rule);font:500 12px/1 var(--mono);color:var(--muted);background:var(--paper-2)}
+.comment .body{padding:16px 18px;font:14px/1.6 var(--mono);white-space:pre-wrap;color:var(--ink);max-width:78ch}
+.btn{background:none;border:1px solid var(--rule);border-radius:5px;padding:5px 9px;font:500 12px/1 var(--mono);color:var(--ink-2);cursor:pointer}
+.btn:hover{border-color:var(--ink-2)}
+.launch-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:start;margin-top:36px}
+.plain{list-style:none;margin:0;padding:0}
+.plain li{display:grid;grid-template-columns:22px minmax(0,1fr);padding:9px 0;border-bottom:1px solid var(--rule-2);font-size:15.5px;color:var(--ink-2)}
+.plain li::before{font:600 14px/1.5 var(--mono)}
+.plain.todo li::before{content:"-";color:var(--s-todo)}
+.plain.no li::before{content:"/";color:var(--s-drop)}
+.plain li b{color:var(--ink);font-weight:600}
+.qa{border-collapse:collapse;width:100%;min-width:620px}
+.qa th,.qa td{text-align:left;padding:9px 10px 9px 0;border-bottom:1px solid var(--rule-2);vertical-align:top;font-size:15px}
+.qa th{font:600 11.5px/1.2 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.qa td:first-child{font:600 15px/1.35 var(--display);color:var(--ink);width:30%}
+.qa td:nth-child(2){font:500 13px/1.4 var(--mono);color:var(--s-graft);width:18%}
+
+.items{border-collapse:collapse;width:100%;min-width:720px}
+.items th,.items td{text-align:left;padding:9px 10px 9px 0;border-bottom:1px solid var(--rule-2);vertical-align:top;font-size:15px}
+.items th{font:600 11.5px/1.2 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.items td:first-child{font:600 15px/1.35 var(--display);color:var(--ink)}
+.items td.m{font:500 12.5px/1.4 var(--mono);color:var(--muted);white-space:nowrap}
+
+@media (max-width:1020px){
+  .thesis,.launch-grid{grid-template-columns:minmax(0,1fr)}
+  .minute{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .minute li+li{padding-left:0;border-left:0}
+  .minute li:nth-child(even){padding-left:16px;border-left:1px solid var(--rule)}
+  .minute li:nth-child(n+3){border-top:1px solid var(--rule)}
+  .minute li:last-child{grid-column:1/-1;padding-left:0;border-left:0}
+  .wrow{grid-template-columns:minmax(0,1fr);gap:10px;padding-bottom:26px}
+  .frame-top,.wrow.frame{display:none}
+  .wf,.wrow.first .wf{border-top:1.5px solid var(--ink);border-radius:10px}
+  .wrow.last .wf{border-radius:10px}
+  .note{padding:0}
+  .basics{grid-template-columns:minmax(0,1fr)}
+  .decs li{grid-template-columns:minmax(0,1fr);gap:4px}
+}
+@media (max-width:700px){
+  .hero-demo{grid-template-columns:minmax(0,1fr)}
+  .hd-view{order:-1}
+  .hd-ed{border-top:1.5px solid var(--ink)}
+  .hero-demo:not(.src-open) .hd-ed{display:none}
+  .edit-src{display:inline-flex}
+  .three,.two,.quad{grid-template-columns:minmax(0,1fr)}
+  .quad article:nth-child(odd){border-right:0}
+  .quad article:not(:last-child){border-bottom:1px solid var(--rule)}
+  .ladder4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .minute{grid-template-columns:minmax(0,1fr)}
+  .minute li:nth-child(even){padding-left:0;border-left:0}
+  .minute li+li{border-top:1px solid var(--rule)}
+  .wf{padding:18px 16px}
+  .flow li{grid-template-columns:minmax(0,1fr);gap:2px}
+  .flow .arr{display:none}
+}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="brand">sprig<span style="color:var(--leaf)">.</span> site plan</span>
+    <nav aria-label="Sections">
+      <a href="#landing">Landing page</a>
+      <a href="#pages">Every page</a>
+      <a href="#docs">Docs</a>
+      <a href="#basics">Basics</a>
+      <a href="#launch">Launch</a>
+      <a href="#arguments">Arguments</a>
+    </nav>
+    <span>Plan · September 2026</span>
+  </header>
+
+  <section class="thesis">
+    <div>
+      <p class="eyebrow">The Sprig website</p>
+      <h1>Ten seconds to get it. Thirty to try it.</h1>
+      <p class="lede">On launch day the site has one job. A sceptical reader arriving from Hacker News understands Sprig from the first screen, and edits a real plan before deciding whether to scroll. Everything else, the docs included, is a structure built now and filled in as the roadmap ships.</p>
+      <p class="revised"><b>revised</b>Every part of this plan was argued both ways: seven calls changed, three things were added. <a href="#arguments">The arguments.</a></p>
+    </div>
+    <dl class="facts">
+      <div><dt>Launch</dt><dd>Show HN on the first Tuesday after three gates pass: v0.1 with binaries, the WebAssembly playground, and a cleared name. Earliest 1 December 2026.</dd></div>
+      <div><dt>Domain</dt><dd>Decided by the name spike (cairn 0006). Until then, oddurs.github.io/sprig.</dd></div>
+      <div><dt>Stack</dt><dd>Astro and Starlight, static, with sprig-core compiled to WebAssembly, so the site and the CLI can't disagree.</dd></div>
+      <div><dt>Weight</dt><dd>No JavaScript until you type. Every page works with it turned off.</dd></div>
+      <div><dt>Tracking</dt><dd>None. No cookies, no analytics, no third-party requests.</dd></div>
+    </dl>
+  </section>
+
+  <section class="sec" aria-labelledby="minute-h">
+    <div class="sec-head">
+      <h2 id="minute-h">The first minute</h2>
+      <p>How a Hacker News reader tends to meet a new project, in order. This is a working assumption from watching launches, not measured data, and every section of the site answers one step of it.</p>
+    </div>
+    <ol class="minute">
+      <li><span class="t">0s</span><b>Reads the title</b><p>Decides from about 80 characters whether to click.</p><p class="must">be described exactly by the title, with no surprises on arrival.</p></li>
+      <li><span class="t">5s</span><b>Reads the first screen</b><p>Looks for what it is, what it looks like and whether it's real.</p><p class="must">show the syntax and its computed result above the fold.</p></li>
+      <li><span class="t">20s</span><b>Pokes at it</b><p>Edits the example, ticks something, breaks it on purpose.</p><p class="must">respond instantly, with no signup and no server.</p></li>
+      <li><span class="t">40s</span><b>Opens GitHub</b><p>Checks the README, licence, last commit, and whether the code exists.</p><p class="must">have a README that matches the site and a repo that's alive.</p></li>
+      <li><span class="t">60s+</span><b>Reads the comments</b><p>The top comments often decide whether others click at all.</p><p class="must">answer the obvious questions before they're asked, and have the author in the thread.</p></li>
+    </ol>
+  </section>
+
+  <section class="sec" id="landing" aria-labelledby="landing-h">
+    <div class="sec-head">
+      <h2 id="landing-h">The landing page</h2>
+      <p>Six blocks, one concept each, every one with something you can see computed. The wireframe is the page in order and the first block works. The right column says why each block earns its place.</p>
+    </div>
+    <div class="wire">
+      <div class="wrow frame"><div class="frame-top"><span>your-domain/</span><span>landing</span></div><div></div></div>
+
+      <div class="wrow first">
+        <div class="wf">
+          <span class="tag">Hero</span>
+          <h4 class="big">Write the plan. Sprig works out the rest.</h4>
+          <p>Sprig is a plain-text format for plans. Start a line with a mark and indent to break it down. It works out what's done, what's blocked and what you can do next, across as many files as the plan needs.</p>
+          <div class="btns"><span class="btn-mock primary">Install</span><span class="btn-mock">Read the spec</span><span class="btn-mock">GitHub</span></div>
+          <div class="hero-demo">
+            <div class="hd-ed">
+              <div class="hd-tabs" id="heroTabs" role="tablist" aria-label="Example plans"></div>
+              <div class="ed">
+                <pre class="hl" id="heroHl" aria-hidden="true"></pre>
+                <textarea id="heroSrc" spellcheck="false" wrap="off" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Example plan, editable"></textarea>
+              </div>
+            </div>
+            <div class="hd-view" id="heroView">
+              <div class="hd-bar">
+                <span class="hd-stats" id="heroStats"></span>
+                <button type="button" class="btn edit-src" id="heroEditBtn" aria-expanded="false">Edit the source</button>
+                <div class="seg" role="group" aria-label="View">
+                  <button type="button" data-vm="next" aria-pressed="true">Next up</button>
+                  <button type="button" data-vm="tree" aria-pressed="false">Tree</button>
+                </div>
+              </div>
+              <div class="hd-body" id="heroBody"></div>
+            </div>
+          </div>
+          <div class="legend"><div class="mini-marks">
+            <span class="g-todo">-<small>to do</small></span><span class="g-doing">~<small>doing</small></span><span class="g-done">x<small>done</small></span><span class="g-dropped">/<small>dropped</small></span><span class="g-later">&gt;<small>later</small></span><span class="g-ask">?<small>ask</small></span><span class="g-ask">=<small>answer</small></span><span class="g-group">#<small>group</small></span><span class="g-graft">+<small>graft</small></span>
+          </div></div>
+          <p class="hint">This block works. Tick "Migration guide", or add <b>= Yes, capped</b> under the question, and watch Announce unblock.</p>
+        </div>
+        <div class="note">
+          <h3>The syntax is the pitch</h3>
+          <p>The first screen is the format itself, editable, next to what it computes, with the nine marks as its legend. No illustration, no video, no waitlist. The computed side is rendered into the HTML at build time, so it reads correctly before any script loads.</p>
+          <p>On a phone the computed view comes first and tapping a mark is the interaction; the source opens behind a button. Narrow this window to see it.</p>
+          <p class="hn"><b>For HN</b>Readers judge a format by looking at it. A live example with no signup is the fastest way to prove the thing is real.</p>
+        </div>
+      </div>
+
+      <div class="wrow">
+        <div class="wf mini">
+          <span class="tag">What it computes</span>
+          <h4>You write the plan. Sprig works out the rest.</h4>
+          <div class="three">
+            <div><figure class="code-card"><figcaption><b>blocked</b></figcaption><pre class="code" data-snippet="c-blocked"></pre></figure><p class="res">Ship waits on Tests.</p></div>
+            <div><figure class="code-card"><figcaption><b>progress</b></figcaption><pre class="code" data-snippet="c-progress"></pre></figure><p class="res">Kitchen 1/3, and 9h left.</p></div>
+            <div><figure class="code-card"><figcaption><b>next up</b></figcaption><pre class="code" data-snippet="c-next"></pre></figure><p class="res">Ready: Book a van.</p></div>
+          </div>
+        </div>
+        <div class="note">
+          <h3>The reason to switch</h3>
+          <p>Markdown checkboxes and todo.txt can't say what's blocked. This section shows the three computations side by side, each small enough to read in a glance.</p>
+          <p class="hn"><b>For HN</b>This is the answer to "why not just use a checklist", shown rather than argued.</p>
+        </div>
+      </div>
+
+      <div class="wrow">
+        <div class="wf mini">
+          <span class="tag">Plans across files</span>
+          <h4>A big plan is a folder of small ones.</h4>
+          <div class="two">
+            <figure class="code-card"><figcaption><b>house.sprig</b></figcaption><pre class="code" data-snippet="g-house"></pre></figure>
+            <figure class="code-card"><figcaption><b>kitchen.sprig</b></figcaption><pre class="code" data-snippet="g-kitchen"></pre></figure>
+          </div>
+          <div class="ladder4" style="margin-top:12px">
+            <div><b>A list</b><span>5 lines, no setup</span></div>
+            <div><b>A weekend</b><span>dates, two people</span></div>
+            <div><b>A project</b><span>blocked, a question</span></div>
+            <div><b>A company</b><span>a folder of grafts</span></div>
+          </div>
+        </div>
+        <div class="note">
+          <h3>The feature nothing else in plain text has</h3>
+          <p>Grafts show why Sprig scales without becoming a database. The four sizes underneath answer "is this for me?" for the casual and the serious reader at once; each opens that example in the playground.</p>
+        </div>
+      </div>
+
+      <div class="wrow">
+        <div class="wf">
+          <span class="tag">Opinions</span>
+          <h4>Every rule was argued both ways.</h4>
+          <ul class="dec-mini">
+            <li><span class="ruling r-changed">~ changed</span><span>Groups start with <code># </code>, because a trailing colon turned notes into headings by accident.</span></li>
+            <li><span class="ruling r-added">+ added</span><span>A question ends with an <code>= </code> answer, so the decision stays in the file.</span></li>
+            <li><span class="ruling r-rejected">/ rejected</span><span>Markdown checkboxes: two spellings for every status, forever.</span></li>
+          </ul>
+        </div>
+        <div class="note">
+          <h3>Show the reasoning</h3>
+          <p>Three rulings with their case against, and a link to all fourteen on /decisions, generated from the cairn decision items.</p>
+          <p class="hn"><b>For HN</b>Visible trade-offs earn more trust than claims. Admitting the arguments you lost pre-empts half the thread.</p>
+        </div>
+      </div>
+
+      <div class="wrow">
+        <div class="wf">
+          <span class="tag">Questions</span>
+          <h4>Questions you're about to ask</h4>
+          <dl class="faq" id="faqMock"></dl>
+        </div>
+        <div class="note">
+          <h3>Pre-empt the thread</h3>
+          <p>Each answer is two sentences at most, in plain words. The same text goes in the thread's replies. Org-mode and todo.txt get generous prose here; the feature table lives on /compare, where a wrong cell is a small fix instead of the top comment.</p>
+          <p class="hn"><b>For HN</b>Leading with AI would start a different argument. Agents appear as one honest answer, not as the headline.</p>
+        </div>
+      </div>
+
+      <div class="wrow last">
+        <div class="wf">
+          <span class="tag">Footer</span>
+          <p class="foot-mock">Spec: CC0 · Code: MIT · No cookies, no analytics · GitHub · Roadmap · Changelog (RSS) · Decisions · Security</p>
+        </div>
+        <div class="note">
+          <h3>Say what isn't there</h3>
+          <p>A no-tracking line costs nothing and answers a question HN readers check by opening dev tools.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="pages" aria-labelledby="pages-h">
+    <div class="sec-head">
+      <h2 id="pages-h">Every page, as a Sprig plan</h2>
+      <p>The site map is a <code>.sprig</code> file, read by the same parser as the playground. Pages that wait on the roadmap say so, and <b>Next up</b> works out what can be built today. Filter by role to see one person's pages.</p>
+    </div>
+    <div class="sm">
+      <div class="rv" id="smView">
+        <div class="rv-head" id="smHead"></div>
+        <div class="rv-tools">
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" data-vm="tree" aria-pressed="true">Tree</button>
+            <button type="button" data-vm="next" aria-pressed="false">Next up</button>
+            <button type="button" data-vm="source" aria-pressed="false">Source</button>
+          </div>
+          <div class="people" id="smPeople" role="group" aria-label="Filter by role"></div>
+        </div>
+        <div class="rv-body" id="smBody"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="docs" aria-labelledby="docs-h">
+    <div class="sec-head">
+      <h2 id="docs-h">A house for the docs</h2>
+      <p>The docs follow Diátaxis: four kinds of page for four needs, so each page does one job. At launch the structure holds exactly one hand-written page; everything else live on the day is generated from the repository. The rest arrive as the roadmap delivers what they describe.</p>
+    </div>
+    <div class="quad">
+      <article><span class="axis">learning · doing</span><h3>Tutorials</h3><p>A lesson with a guaranteed good ending.</p><ul>
+        <li>Your first plan in five minutes <span class="ms now">launch · written</span></li>
+        <li>Plans across files <span class="ms">after launch</span></li>
+        <li>Working with a coding agent <span class="ms">v0.3</span></li></ul></article>
+      <article><span class="axis">working · doing</span><h3>How-to guides</h3><p>A recipe for one real task.</p><ul>
+        <li>Check plans in CI <span class="ms">after launch</span></li>
+        <li>Set up your editor <span class="ms">v0.2</span></li>
+        <li>Give an agent your plan <span class="ms">v0.3</span></li>
+        <li>Import from Markdown or todo.txt <span class="ms">v0.3</span></li>
+        <li>Put due dates in your calendar <span class="ms">v0.3</span></li></ul></article>
+      <article><span class="axis">working · knowing</span><h3>Reference</h3><p>Exact, complete, generated wherever possible.</p><ul>
+        <li>The spec, one anchor per rule <span class="ms now">launch · generated</span></li>
+        <li>sprig command <span class="ms now">launch · generated</span></li>
+        <li>Diagnostic codes <span class="ms now">launch · generated</span></li>
+        <li>JSON tree schema <span class="ms now">launch · generated</span></li>
+        <li>MCP tools <span class="ms">v0.3</span></li></ul></article>
+      <article><span class="axis">learning · knowing</span><h3>Explanation</h3><p>Why it's this way.</p><ul>
+        <li>The settled arguments <span class="ms now">launch · generated</span></li>
+        <li>Design principles <span class="ms">after launch</span></li>
+        <li>How blocking and progress are computed <span class="ms">after launch</span></li>
+        <li>The stability promise <span class="ms">1.0</span></li></ul></article>
+    </div>
+    <h3 style="margin-top:36px;font-size:22px">Nothing written twice</h3>
+    <p style="max-width:62ch;color:var(--ink-2);margin:0">Every page that can come from the repository does, at build time. A docs page drifting out of date is then a failing build instead of a quiet lie.</p>
+    <ul class="flow">
+      <li><code>spec/sprig.md</code><span class="arr">→</span><span class="to">/spec, and raw at /spec.md</span></li>
+      <li><code>spec/diagnostics.md</code><span class="arr">→</span><span class="to">/docs/reference/diagnostics</span></li>
+      <li><code>spec/tree.schema.json</code><span class="arr">→</span><span class="to">/docs/reference/tree-schema</span></li>
+      <li><code>sprig --help</code>, run at build time<span class="arr">→</span><span class="to">/docs/reference/cli</span></li>
+      <li><code>cairn</code> decision items<span class="arr">→</span><span class="to">/decisions</span></li>
+      <li><code>ROADMAP.md</code><span class="arr">→</span><span class="to">/roadmap</span></li>
+      <li><code>CHANGELOG.md</code><span class="arr">→</span><span class="to">/changelog and /feed.xml</span></li>
+      <li><code>examples/*.sprig</code><span class="arr">→</span><span class="to">playground presets and /examples</span></li>
+      <li><code>docs/**/*.md</code><span class="arr">→</span><span class="to">everything else under /docs</span></li>
+    </ul>
+  </section>
+
+  <section class="sec" id="basics" aria-labelledby="basics-h">
+    <div class="sec-head">
+      <h2 id="basics-h">The open-source basics</h2>
+      <p>What a careful visitor checks for on a young project. Most of it exists since the repository was bootstrapped; the middle column is what launch week needs.</p>
+    </div>
+    <div class="basics">
+      <div class="have"><h3>In the repo today</h3><ul>
+        <li><span><b>README</b> with CI and licence badges</span></li>
+        <li><span><b>MIT</b> for code, <b>CC0</b> for the spec</span></li>
+        <li><span><b>CONTRIBUTING</b>, <b>Code of Conduct</b> (Contributor Covenant 2.1)</span></li>
+        <li><span><b>SECURITY</b> with private advisories</span></li>
+        <li><span><b>CHANGELOG</b> in Keep a Changelog form</span></li>
+        <li><span>Issue forms, PR template, CODEOWNERS, Dependabot</span></li>
+        <li><span>CI on Linux, macOS and Windows, and a protected main</span></li>
+        <li><span>A public roadmap, generated from cairn</span></li></ul></div>
+      <div class="soon"><h3>Before launch</h3><ul>
+        <li><span><b>Prebuilt binaries</b> with checksums, so trying it doesn't need Rust</span></li>
+        <li><span><b>Social preview image</b>, 1280×640, for GitHub and link unfurls</span></li>
+        <li><span><b>Logo mark and favicon</b>, drawn from the <code>+</code> graft mark</span></li>
+        <li><span>A <b>terminal recording</b> of <code>sprig next</code> in the README, as text, not a GIF</span></li>
+        <li><span><b>good first issue</b> labels on small, ready cairn items</span></li>
+        <li><span><b>Discussions</b> switched on for launch week, so questions don't become issues</span></li>
+        <li><span><code>examples/</code> with real plans, and v0.1 release notes</span></li>
+        <li><span>A line on the name, if it stays Sprig next to Hack Club's project</span></li></ul></div>
+      <div class="later"><h3>Later</h3><ul>
+        <li><span><b>FUNDING.yml</b> once there's a fiscal host (0094)</span></li>
+        <li><span><b>GOVERNANCE</b> with the RFC process (0072)</span></li>
+        <li><span><b>CITATION.cff</b>, so the spec can be cited</span></li>
+        <li><span>GitHub highlighting through Linguist (0093)</span></li>
+        <li><span>A conformance badge for other tools (0095)</span></li>
+        <li><span>A "used by" list, once it's true</span></li></ul></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="stack-h">
+    <div class="sec-head">
+      <h2 id="stack-h">How it's built</h2>
+      <p>The decisions that shape the build, each with the reason. Budgets follow, because HN readers do open the network tab.</p>
+    </div>
+    <ul class="decs">
+      <li><b>Static and prerendered</b><p>Every page is HTML at build time, including the hero's computed view. JavaScript only wakes the editor when you type. A static site can't fall over under a front-page spike.</p></li>
+      <li><b>Astro and Starlight, not the house Next.js setup</b><p>Astro ships zero JavaScript by default and makes the playground its one island; Starlight brings the docs layout and Pagefind search. Even a static Next.js export ships the React runtime on every page, which breaks the budget below. This departs from the <code>nextjs-site</code> convention on purpose; overrule it if one toolchain across projects matters more.</p></li>
+      <li><b>The playground runs sprig-core as WebAssembly</b><p>Never a JavaScript port. The one-implementation decision holds on the website too, and the same WebAssembly module renders the hero at build time in Node.</p></li>
+      <li><b>In the same repository, under <code>site/</code></b><p>A change to the format and the page describing it land in one pull request. A CI job builds the site and checks links when <code>site/</code>, <code>spec/</code>, <code>docs/</code> or <code>cairn/</code> change; the <code>required</code> job counts a skipped run as a pass, and the pre-push hook doesn't build it because it's slow.</p></li>
+      <li><b>Search is Pagefind, through Starlight</b><p>A static index built at deploy time. No search service, no API key.</p></li>
+      <li><b>GitHub Pages, deployed from main</b><p>Free, and one less account. The custom domain comes after the name spike.</p></li>
+      <li><b>No analytics</b><p>GitHub traffic insights and the launch thread are enough feedback. Fonts are self-hosted and subset, so the page makes no third-party requests.</p></li>
+      <li><b>Sharing without a server</b><p>A playground link carries the plan in the URL fragment, compressed with the browser's own CompressionStream, and browsers never send the fragment to a server. The FAQ says so.</p></li>
+    </ul>
+    <table class="budget">
+      <tbody>
+        <tr><td>Landing page HTML and CSS, compressed</td><td>≤ 60 KB</td></tr>
+        <tr><td>JavaScript before the first interaction</td><td>0 KB</td></tr>
+        <tr><td>Editor and WebAssembly core, loaded on first keystroke</td><td>≤ 300 KB</td></tr>
+        <tr><td>Fonts, subset, font-display: swap</td><td>≤ 120 KB</td></tr>
+        <tr><td>Largest contentful paint, mid-range phone on 4G</td><td>&lt; 1.5 s</td></tr>
+        <tr><td>Third-party requests</td><td>0</td></tr>
+        <tr><td>Pages usable with JavaScript off</td><td>all, editing aside</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="sec" id="launch" aria-labelledby="launch-h">
+    <div class="sec-head">
+      <h2 id="launch-h">The launch</h2>
+      <p>A Show HN on the first Tuesday, around 08:30 US Eastern, after three gates pass: v0.1 is out with binaries, the playground runs the WebAssembly core, and the name is cleared. The earliest is 1 December 2026, eleven days after v0.1 and clear of Thanksgiving week. A date that arrives before the gates moves.</p>
+    </div>
+    <h3 style="font-size:22px">The title</h3>
+    <ul class="titles" id="titles"></ul>
+
+    <div class="launch-grid">
+      <figure class="comment">
+        <figcaption><span>The author's first comment, posted right after the link</span><button type="button" class="btn" id="copyComment">Copy</button></figcaption>
+        <div class="body" id="makerComment">Hi HN. Sprig is a plain-text format for plans, and a small Rust tool that reads it.
+
+I wanted one format for a grocery list and for a project spread across several repositories. Markdown checkboxes can't say what's blocked and todo.txt is flat. Org-mode does all of it and more, but mostly inside Emacs. So in Sprig every line starts with a mark (- ~ x / &gt; ? = # +), indentation is structure, and three things are computed instead of written: progress, what's blocked, and what you can do next. A line like + [[kitchen]] grafts another file in as a branch, so a big plan is a folder of small ones.
+
+What works today: the draft spec, the playground on the site, and sprig next and sprig check in the terminal, with binaries for macOS, Linux and Windows. What doesn't yet: editor support (next release), and an MCP server so coding agents can read and update the same file (the one after).
+
+The design arguments are on the site, including the ones I lost. I'd most like to hear where the syntax is ambiguous, and what would make you move a real plan into it.</div>
+      </figure>
+      <div>
+        <h3 style="font-size:20px">A week before</h3>
+        <ul class="plain todo">
+          <li><span><b>A quiet preview</b> for five to ten people who would put a real plan in it. They're asked for bugs, never for votes or comments on the day.</span></li>
+          <li><span><b>If the name stays Sprig</b>, add one line to the comment saying Hack Club also has a project called Sprig, and why this one kept the name.</span></li>
+        </ul>
+        <h3 style="font-size:20px;margin-top:22px">On the day</h3>
+        <ul class="plain todo">
+          <li><span><b>Post the comment within a minute</b> of the link, and stay for the first six hours.</span></li>
+          <li><span><b>Reply to every substantive comment</b> in the first two hours, briefly and with thanks for criticism.</span></li>
+          <li><span><b>File real criticism as cairn items</b> the same day, and link the item in the thread.</span></li>
+          <li><span><b>Check the site on a phone</b> before posting: playground, spec anchors, install page.</span></li>
+        </ul>
+        <h3 style="font-size:20px;margin-top:22px">Never</h3>
+        <ul class="plain no">
+          <li><span><b>Ask anyone to upvote or comment.</b> It breaks the site's guidelines, and HN detects voting rings.</span></li>
+          <li><span><b>Argue with a dismissal.</b> Answer the question inside it, or leave it.</span></li>
+          <li><span><b>Repost the same week</b> if it sinks. Ship what the comments asked for; a later post with a real change is fair.</span></li>
+        </ul>
+        <h3 style="font-size:20px;margin-top:22px">It worked if</h3>
+        <ul class="plain todo">
+          <li><span>Every substantive criticism of the syntax is a cairn item within a day.</span></li>
+          <li><span>At least one decision is revisited or confirmed on the record because of the thread.</span></li>
+          <li><span>A week later, a handful of people are running a real plan in it. Stars measure the title, not the format.</span></li>
+        </ul>
+        <h3 style="font-size:20px;margin-top:22px">Afterwards</h3>
+        <p style="margin:0;font-size:15.5px;color:var(--ink-2)">r/rust for the parser and WebAssembly story, r/commandline for the CLI, This Week in Rust for the crate, and lobste.rs if a member offers an invite. One post each, spaced out, each saying what changed since the last.</p>
+      </div>
+    </div>
+
+    <h3 style="font-size:22px;margin-top:40px">The questions, and where the site answers them</h3>
+    <div class="cmp-wrap">
+      <table class="qa">
+        <thead><tr><th>Question</th><th>Answered at</th><th>The short answer</th></tr></thead>
+        <tbody id="qaRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="sec" id="arguments" aria-labelledby="args-h">
+    <div class="sec-head">
+      <h2 id="args-h">Arguments, settled</h2>
+      <div>
+        <p>Every part of the first version of this plan, argued both ways. The rulings are already applied to everything above.</p>
+        <div class="tally"><span class="ruling r-changed">~ 7 changed</span><span class="ruling r-added">+ 3 added</span><span class="ruling r-kept">x 3 kept</span><span class="ruling r-rejected">/ 2 rejected</span></div>
+      </div>
+    </div>
+    <div class="debates">
+      <article class="db">
+        <header><span class="ruling r-changed">~ changed</span><h3>Next.js, or something lighter?</h3></header>
+        <div class="fa"><div><b>The house setup</b><p>One toolchain across every project, following the nextjs-site conventions.</p></div><div><b>Against</b><p>Even a static Next.js export ships the React runtime on every page. That breaks this plan's own promise of no JavaScript before you type, on the homepage of a plain-text format, in front of the readers most likely to check.</p></div></div>
+        <p class="verdict"><b>Ruling.</b> Astro with Starlight: zero JavaScript by default, the playground as its one island, Pagefind search built in. It departs from the house setup on purpose; overrule it if consistency matters more than the budget.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-changed">~ changed</span><h3>A launch date, or a gate?</h3></header>
+        <div class="fa"><div><b>A date</b><p>Deadlines get things finished, and 1 December misses Thanksgiving week.</p></div><div><b>Against</b><p>The launch rests on three things that can slip: v0.1, the WebAssembly build and the name. A date that arrives first forces a launch without a playground or under a disputed name, and a first impression can't be redone.</p></div></div>
+        <p class="verdict"><b>Ruling.</b> Launch on the first Tuesday after all three gates pass. 1 December is the earliest, not the plan.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-changed">~ changed</span><h3>A comparison table on the landing page?</h3></header>
+        <div class="fa"><div><b>For</b><p>They'll ask about Org-mode and todo.txt within ten comments, so answer first.</p></div><div><b>Against</b><p>Every cell is a claim, and one wrong cell becomes the top comment. A table also frames Sprig as a feature checklist, the weakest way to see it.</p></div></div>
+        <p class="verdict"><b>Ruling.</b> The landing page answers in generous prose inside the questions. The verified table lives on /compare, where a correction is a small edit, not a headline.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-changed">~ changed</span><h3>Nine sections, or fewer?</h3></header>
+        <div class="fa"><div><b>Nine</b><p>Each section teaches exactly one concept.</p></div><div><b>Against</b><p>A long scroll reads as marketing, and three sections repeated others: the marks strip restated the hero, the sizes restated the hero's presets, and the table restated the questions.</p></div></div>
+        <p class="verdict"><b>Ruling.</b> Six blocks. The marks became the hero's legend, the sizes joined plans across files, the table moved to /compare.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-changed">~ changed</span><h3>Lead with the category, or the thesis?</h3></header>
+        <div class="fa"><div><b>The category</b><p>"Plans as plain text" says exactly what it is.</p></div><div><b>Against</b><p>The HN title already names the category, and "plain text" describes todo.txt too. What nothing else does is compute the plan.</p></div></div>
+        <p class="verdict"><b>Ruling.</b> The headline is "Write the plan. Sprig works out the rest." The first sentence underneath names the category.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-changed">~ changed</span><h3>A live editor on a phone?</h3></header>
+        <div class="fa"><div><b>The same everywhere</b><p>One demo, one set of behaviour to test.</p></div><div><b>Against</b><p>Nobody types code on a phone, and a stacked editor pushes the computed view, the half that matters, below the fold.</p></div></div>
+        <p class="verdict"><b>Ruling.</b> On narrow screens the computed view comes first and tapping a mark is the interaction. The source opens behind a button, and the WebAssembly core loads on the first tap.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-changed">~ changed</span><h3>How many docs at launch?</h3></header>
+        <div class="fa"><div><b>Many</b><p>HN readers click around, and a thin docs site looks unfinished.</p></div><div><b>Against</b><p>Ten hand-written pages in the eleven days after v0.1, alongside the site, is how a launch slips. Readers open the spec, the install page and one tutorial.</p></div></div>
+        <p class="verdict"><b>Ruling.</b> One hand-written page at launch, the first-plan tutorial. Everything else live on the day is generated. The rest is parked with <code>&gt;</code> in the site plan.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-added">+ added</span><h3>Launch cold, or preview first?</h3></header>
+        <div class="fa"><div><b>Cold</b><p>The reaction is honest, and nobody feels recruited.</p></div><div><b>Against</b><p>The first hour decides a Show HN, and a broken install on an untested platform is exactly what fills it.</p></div></div>
+        <p class="verdict"><b>Ruling.</b> A quiet preview a week before, for five to ten people who'd use it on a real plan. They're asked for bugs, never for votes or comments on the day.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-added">+ added</span><h3>What counts as success?</h3></header>
+        <div class="fa"><div><b>Stars</b><p>Easy to see, and easy to compare.</p></div><div><b>Against</b><p>Stars measure the title, not the format. This launch exists to test the syntax while it can still change.</p></div></div>
+        <p class="verdict"><b>Ruling.</b> Success is feedback that changes something: criticism filed as items, a decision revisited or confirmed on the record, and a handful of real plans running a week later.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-added">+ added</span><h3>Launch under a name that might collide?</h3></header>
+        <div class="fa"><div><b>Launch anyway</b><p>Renaming costs little while nothing is published.</p></div><div><b>Against</b><p>Hack Club's Sprig is well known to exactly this audience, and the collision will be raised in the thread whether or not the page mentions it.</p></div></div>
+        <p class="verdict"><b>Ruling.</b> The name spike stays a hard gate. If the name stays, the first comment says so in one line, before anyone else does.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-kept">x kept</span><h3>Launch at v0.1, or wait for editor support?</h3></header>
+        <div class="fa"><div><b>Wait</b><p>A VS Code extension makes a stronger first impression.</p></div><div><b>Against waiting</b><p>Feedback on the syntax is worth most before 1.0 freezes it, and the syntax is what's being judged. Waiting for v0.2 spends that window.</p></div></div>
+        <p class="verdict"><b>Ruling.</b> v0.1 it is, with the first comment asking for syntax feedback specifically.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-kept">x kept</span><h3>Analytics?</h3></header>
+        <div class="fa"><div><b>For</b><p>Without numbers there's no way to see where people drop off.</p></div><div><b>Against</b><p>The question this launch asks, whether the syntax is right, is answered in comments, not counters. And "no tracking" is a promise HN readers verify.</p></div></div>
+        <p class="verdict"><b>Ruling.</b> None. GitHub's traffic insights are enough.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-kept">x kept</span><h3>Mention agents on the page?</h3></header>
+        <div class="fa"><div><b>Lead with them</b><p>Developers working with agents are the first audience in the roadmap.</p></div><div><b>Against</b><p>Leading with AI on HN starts a different argument and buries the format.</p></div></div>
+        <p class="verdict"><b>Ruling.</b> One plain answer in the questions and one line in the first comment. v0.3, when agents work end to end, gets its own post.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-rejected">/ rejected</span><h3>A waitlist or newsletter signup?</h3></header>
+        <div class="fa"><div><b>For</b><p>It builds an audience for the releases after launch.</p></div><div><b>Against</b><p>An email field on an open-source launch reads as a funnel. RSS and GitHub's release watch do the job without collecting anything.</p></div></div>
+        <p class="verdict"><b>Ruling.</b> No.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-rejected">/ rejected</span><h3>A video in the hero?</h3></header>
+        <div class="fa"><div><b>For</b><p>Motion shows ticking and unblocking at a glance.</p></div><div><b>Against</b><p>It weighs more than the whole page and convinces less than a demo the reader drives.</p></div></div>
+        <p class="verdict"><b>Ruling.</b> No. A text recording goes in the README, where GitHub can't run the playground.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="road-h">
+    <div class="sec-head">
+      <h2 id="road-h">What this changes in the roadmap</h2>
+      <p>A launch is a release, so it gets a milestone: <b>launch</b>, gated by evidence rather than a date (earliest 1 December 2026), after v0.1. Two items move forward from later milestones, because a Show HN without a browser playground or downloadable binaries would lose most readers at step three.</p>
+    </div>
+    <div class="cmp-wrap">
+      <table class="items">
+        <thead><tr><th>Item</th><th>Type · priority · size</th><th>Waits on</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>Compile sprig-core to WebAssembly for the browser</td><td class="m">feature · p0 · m</td><td class="m">0019</td><td>Split from 0085. The npm package stays in later; the site only needs the module.</td></tr>
+          <tr><td>Prebuilt binaries for the v0.1 release</td><td class="m">chore · p0 · m</td><td class="m">0027</td><td>Split from 0078. harrow's release workflow already does this for four targets.</td></tr>
+          <tr><td>Site scaffold: Astro and Starlight, deployed to Pages</td><td class="m">chore · p0 · s</td><td class="m">none</td><td>Zero JavaScript by default, search built in. The CI job runs only when the site's sources change.</td></tr>
+          <tr><td>Landing hero with a live editor, prerendered</td><td class="m">feature · p0 · m</td><td class="m">WebAssembly, scaffold</td><td>The first block of the wireframe above.</td></tr>
+          <tr><td>Landing concept sections</td><td class="m">feature · p0 · m</td><td class="m">hero</td><td>Marks, computes, files, sizes, opinions.</td></tr>
+          <tr><td>Questions on the landing page; verified table on /compare</td><td class="m">docs · p0 · s</td><td class="m">scaffold</td><td>Prose on the page, claims on a page built to be corrected.</td></tr>
+          <tr><td>Spec page with an anchor per rule, raw copy at /spec.md</td><td class="m">feature · p0 · s</td><td class="m">0007</td><td>The page HN readers open second.</td></tr>
+          <tr><td>Playground page with link sharing in the URL fragment</td><td class="m">feature · p1 · m</td><td class="m">WebAssembly</td><td>Multi-file; nothing uploaded.</td></tr>
+          <tr><td>Decisions and roadmap pages generated from cairn</td><td class="m">feature · p1 · s</td><td class="m">scaffold</td><td>Visible reasoning, kept current by the build.</td></tr>
+          <tr><td>First-plan tutorial</td><td class="m">docs · p0 · s</td><td class="m">0027</td><td>The one hand-written page at launch. Moves that part of 0081 forward.</td></tr>
+          <tr><td>Quiet preview with five to ten real users</td><td class="m">chore · p1 · s</td><td class="m">hero, binaries</td><td>Finds the broken install before the launch's first hour does.</td></tr>
+          <tr><td>Social image, favicon, 404, feed, sitemap, llms.txt</td><td class="m">chore · p1 · s</td><td class="m">scaffold</td><td>The edges a careful visitor checks.</td></tr>
+          <tr><td>Launch post, first comment and day-of checklist</td><td class="m">chore · p0 · s</td><td class="m">every gate: v0.1, WebAssembly, the name</td><td>This section, as an item that closes when the post is up.</td></tr>
+          <tr><td>Area <code>site</code> added to the cairn schema</td><td class="m">chore · p0 · s</td><td class="m">none</td><td>So these items can be filtered like the rest.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <span>Sprig site plan. The hero and the site map run on the reference parser from the draft 0.2 page.</span>
+    <span>Nothing here is filed in cairn yet.</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+/* ---------- dates: the samples are written relative to today ---------- */
+const TODAY = (() => { const d = new Date(); d.setHours(0,0,0,0); return d; })();
+const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const D = n => iso(addDays(TODAY, n));
+
+const HERO = {
+'release': `Release 2.0  @kim  target:${D(40)}
+
+# Sync engine
+  x Conflict rules  @teo
+  ~ Offline queue  @teo  est:3d
+- Migration guide  ^guide  est:1d
+? Keep the free tier?  ^tier
+- Announce  after:^guide  after:^tier`,
+'move': `Move flats  @me  due:${D(21)}
+
+~ Pack
+  x Books
+  - Kitchen  est:3h
+- Book a van  ^van  due:${D(20)}
+- Move everything  after:^van  @me @jo
+? Keep the old sofa?`,
+'list': `Saturday shop
+
+- oat milk
+- sourdough  !
+x eggs
+- coffee beans  #market`
+};
+const HERO_LABELS = {release: 'a release', move: 'a move', list: 'a list'};
+
+const SITE = `Sprig website  @site  target:2026-12-01
+
+Every page, written as a plan. Pages that wait on the roadmap say so, and pages parked until after launch are marked >.
+
+? Which domain?  ^domain  @maintainer  !!!
+  Settled by the name spike, cairn 0006. Nothing goes public before it.
+- WebAssembly build of sprig-core  ^wasm  @maintainer  !!
+  The playground runs the CLI's parser, or the site and the tool disagree.
+- v0.1 released  ^release  @maintainer  due:2026-11-20
+- Spec written as spec/sprig.md  ^spec  @maintainer
+  Cairn 0007.
+
+# Launch pages
+  - Landing  path:/  ^landing  after:^wasm
+    - Hero: the thesis, a live plan, the marks as its legend
+    - What it computes
+    - Plans across files, at every size
+    - Opinions
+    - Questions
+  - Playground  path:/play  after:^wasm
+    Multi-file, shared as a link. The plan travels in the URL fragment, never to a server.
+  - Spec  path:/spec  after:^spec
+    One anchor per rule. Also served raw at /spec.md.
+  - Install  path:/install  after:^release
+  - Decisions  path:/decisions
+    Generated from the cairn decision items.
+  - Roadmap  path:/roadmap
+    Generated from ROADMAP.md.
+  - Changelog and feed  path:/changelog  after:^release
+  - Compared  path:/compare
+    Every cell checked against the alternative's current docs. Linked from the questions, not on the landing page.
+  - Quiet preview with five to ten real users  ^preview  after:^landing  after:^release
+  - Show HN  after:^preview  after:^domain  !!!
+
+# Docs  @docs
+  # Tutorials
+    - Your first plan in five minutes  after:^release
+    > Plans across files
+    - Working with a coding agent  after:^v03
+  # How-to guides
+    > Check plans in CI
+    - Set up your editor  after:^v02
+    - Give an agent your plan  after:^v03
+    - Import from Markdown or todo.txt  after:^v03
+  # Reference
+    - The spec  after:^spec
+    - sprig command, generated  after:^release
+    - Diagnostic codes, generated  after:^release
+    - MCP tools  after:^v03
+  # Explanation
+    - The settled arguments, generated
+    > Design principles
+    > How blocking and progress are computed
+    - The stability promise  after:^v10
+
+# Around the edges
+  - 404 page, written in Sprig  path:/404
+  - llms.txt for agents  path:/llms.txt
+  - Social preview image
+  - sitemap.xml, robots.txt, feed.xml  after:^release
+
+- v0.2 released  ^v02  @maintainer  due:2027-01-29
+- v0.3 released  ^v03  @maintainer  due:2027-04-02
+- 1.0 released  ^v10  @maintainer  due:2027-06-11`;
+
+const SNIPPETS = {
+'c-blocked': `- Tests  ^tests
+- Ship  after:^tests`,
+'c-progress': `- Kitchen
+  x Strip out
+  - Tiling  est:5h
+  - Paint  est:4h`,
+'c-next': `x Pack
+- Book a van  ^van
+- Move  after:^van`,
+'g-house': `House 2027  @sam
+
++ [[kitchen]]
++ [[garden]]
+- Insurance renewal`,
+'g-kitchen': `Kitchen  @jo
+
+x Strip out
+- Tiling  ^tiling  est:5h
+- Paint  after:^tiling`
+};
+
+const FAQ = [
+ ['Isn’t this xkcd 927?', '#faq', 'Yes, it’s a new format. None of the existing ones computes what’s blocked across files while staying readable in cat. If one does, tell us and this page will say so.'],
+ ['Why not Org-mode?', '#faq, /compare', 'Org does far more. Sprig does less on purpose, so it can be implemented from a spec in any language and read without Emacs.'],
+ ['Why not Markdown checkboxes?', '/decisions', 'They can’t say what’s blocked, and accepting both spellings would double every tool. sprig import converts them once.'],
+ ['Is this an AI thing?', '#faq', 'It’s a text format. Agents read and edit it the way people do, which is why status is computed instead of trusted. Nothing in Sprig calls a model.'],
+ ['Does it need an account or a server?', '#faq', 'No. Plans are files. A shared playground link keeps the plan in the URL fragment, which browsers never send anywhere.'],
+ ['Why Rust?', '#faq', 'One core compiles to a native binary and to WebAssembly, so the terminal, the editor and this page give the same answer.'],
+ ['Is the format stable?', '/roadmap', 'It’s a draft. Spec 1.0 freezes it; after that a 1.0 file parses the same way forever.'],
+ ['What about my phone?', '#faq', 'Any text editor works today. A phone app for shared lists is on the list for after 1.0.'],
+];
+
+const TITLES = [
+ ['Show HN: Sprig – a plain-text format for plans that works out what’s blocked', true, 'Names the category and the one thing competitors can’t do. Nothing in it can be called hype.'],
+ ['Show HN: Sprig – plain-text plans, from a grocery list to a multi-file project', false, 'Leads with range. Clear, but "multi-file" undersells grafts, and it says nothing about what’s computed.'],
+ ['Show HN: Sprig – like Markdown, for to-do lists that grow into projects', false, 'The most familiar framing, and it invites a thread about why Markdown isn’t enough.'],
+];
+
+/* ---------- language ---------- */
+const MARKS = {'-':'todo','~':'doing','x':'done','/':'dropped','>':'later','?':'ask','+':'graft','#':'group','=':'answer'};
+const LINE_RE = /^([-~x\/>?+#=])(?:\s+(.*))?$/;
+const TOKEN_RE = /[^\s"]*"[^"]*"\S*|\S+/g;
+const FIELD_RE = /^([a-z][\w-]*):(.+)$/i;
+const DATE_KEYS = new Set(['due','start','target']);
+const OPEN = new Set(['todo','doing','ask']);
+const SETTLING = new Set(['done','dropped','later']);
+const TICKABLE = '-~x/>?';
+const MONTHS = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+const DAYS = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const unquote = v => v.replace(/^"(.*)"$/, '$1');
+
+function monthIndex(v) {
+  v = String(v).toLowerCase();
+  if (v.length < 3 || !/^[a-z]+$/.test(v)) return -1;
+  return MONTHS.findIndex(m => m.startsWith(v));
+}
+function weekdayIndex(v) {
+  v = String(v).toLowerCase();
+  return v.length >= 3 ? DAYS.findIndex(d => d.startsWith(v)) : -1;
+}
+
+function parseDate(v) {
+  if (!v) return null;
+  v = String(v).toLowerCase().trim();
+  let m;
+  if ((m = v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/))) return new Date(+m[1], m[2] - 1, +m[3]);
+  if (v === 'today') return TODAY;
+  if (v === 'tomorrow') return addDays(TODAY, 1);
+  if ((m = v.match(/^\+(\d+)([dw])$/))) return addDays(TODAY, +m[1] * (m[2] === 'w' ? 7 : 1));
+  if ((m = v.match(/^q([1-4])$/))) {
+    let d = new Date(TODAY.getFullYear(), +m[1] * 3, 0);
+    if (d < TODAY) d = new Date(TODAY.getFullYear() + 1, +m[1] * 3, 0);
+    return d;
+  }
+  let mi = -1, day = 0;
+  if ((m = v.match(/^([a-z]+)-?(\d{1,2})$/))) { mi = monthIndex(m[1]); day = +m[2]; }
+  else if ((m = v.match(/^(\d{1,2})-?([a-z]+)$/))) { mi = monthIndex(m[2]); day = +m[1]; }
+  if (mi >= 0) {
+    const d = new Date(TODAY.getFullYear(), mi, day);
+    // A bare month-day more than four months back means next year.
+    if ((d - TODAY) / 864e5 < -120) d.setFullYear(d.getFullYear() + 1);
+    return d;
+  }
+  const wd = weekdayIndex(v);
+  return wd >= 0 ? addDays(TODAY, (wd - TODAY.getDay() + 7) % 7) : null;
+}
+
+function nextDue(base, every) {
+  every = String(every).toLowerCase();
+  let m;
+  if (/^(day|daily)$/.test(every)) return addDays(base, 1);
+  if (/^(week|weekly)$/.test(every)) return addDays(base, 7);
+  if (/^(month|monthly)$/.test(every)) return new Date(base.getFullYear(), base.getMonth() + 1, base.getDate());
+  if ((m = every.match(/^(\d+)([dw])$/))) return addDays(base, +m[1] * (m[2] === 'w' ? 7 : 1));
+  const wd = weekdayIndex(every);
+  return wd >= 0 ? addDays(base, ((wd - base.getDay() + 7) % 7) || 7) : null;
+}
+
+// Typed shortcuts become ISO so the file means the same thing tomorrow.
+function expandDates(line) {
+  return line.replace(/(^|\s)(due|start|target):([^\s"]+)/gi, (all, pre, k, v) => {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return all;
+    const d = parseDate(v);
+    return d ? `${pre}${k}:${iso(d)}` : all;
+  });
+}
+
+function estHours(v) {
+  const r = v && String(v).match(/^(\d+(?:\.\d+)?)([hdw])$/i);
+  return r ? +r[1] * ({h:1, d:8, w:40}[r[2].toLowerCase()]) : 0;
+}
+const fmtEst = h => h < 8 ? `${+h.toFixed(1)}h` : `${+(h / 8).toFixed(1)}d`;
+
+function parseInline(text) {
+  const m = {who:[], tags:[], prio:0, id:null, fields:{}, after:[], words:[]};
+  for (const t of text.match(TOKEN_RE) || []) {
+    let r;
+    if ((r = t.match(/^@([\w.\-]+)$/))) m.who.push(r[1]);
+    else if ((r = t.match(/^#([\w\-]+)$/))) m.tags.push(r[1]);
+    else if (/^!{1,3}$/.test(t)) m.prio = Math.max(m.prio, t.length);
+    else if ((r = t.match(/^\^([\w\-]+)$/))) m.id = r[1];
+    else if ((r = t.match(FIELD_RE)) && !r[2].startsWith('//')) {
+      const key = r[1].toLowerCase(), val = unquote(r[2]);
+      if (key === 'after') m.after.push(val); else m.fields[key] = val;
+    }
+    else m.words.push(t);
+  }
+  m.text = m.words.join(' ').replace(/\[\[([^\]]+)\]\]/g, '$1');
+  return m;
+}
+
+function mkNode(state, text, indent, line, file) {
+  return {state, meta: parseInline(text), children: [], notes: [], answers: [], indent, line, file};
+}
+
+function titleIndex(lines) {
+  let i = 0;
+  while (i < lines.length && (!lines[i].trim() || lines[i].trim().startsWith('//'))) i++;
+  return i < lines.length && !/^\s/.test(lines[i]) && !LINE_RE.test(lines[i]) ? i : -1;
+}
+
+function parse(src, file) {
+  const lines = src.replace(/\r/g, '').split('\n');
+  const root = mkNode('root', '', -1, -1, file);
+  const doc = {file, title: null, root, anchors: {}};
+  const ti = titleIndex(lines);
+  if (ti >= 0) { root.meta = parseInline(lines[ti].trim()); doc.title = root.meta.text || null; }
+  const stack = [root];
+  const top = () => stack[stack.length - 1];
+  let gap = false;
+  for (let i = ti + 1; i < lines.length; i++) {
+    const raw = lines[i].replace(/^\t+/, t => '  '.repeat(t.length));
+    const text = raw.trim();
+    if (!text) { gap = true; continue; }
+    if (text.startsWith('//')) continue;
+    const indent = raw.length - raw.trimStart().length;
+    while (stack.length > 1 && top().indent >= indent) stack.pop();
+    const escaped = text.startsWith('\\');
+    const m = !escaped && text.match(LINE_RE);
+    if (m && m[1] === '=') top().answers.push(parseInline(m[2] || ''));
+    else if (m) {
+      const n = mkNode(MARKS[m[1]], m[2] || '', indent, i, file);
+      top().children.push(n); stack.push(n);
+    } else {
+      const t = top();
+      if (gap && t.notes.length) t.notes.push('');
+      t.notes.push(escaped ? text.slice(1) : text);
+    }
+    gap = false;
+  }
+  return doc;
+}
+
+/* ---------- workspace: grafts, rollups, references ---------- */
+let files = {}, order = [], active = '';
+let CACHE = {};
+const BUILDING = new Set();
+
+const fileKey = n => { n = n.trim().replace(/^\.\//, ''); return /\.sprig$/.test(n) ? n : n + '.sprig'; };
+function linkParts(tok) {
+  const r = tok.match(/\[\[([^\]\^]+)(?:\^([\w-]+))?\]\]/);
+  return r ? {file: fileKey(r[1]), id: r[2] || null} : null;
+}
+const clone = n => ({...n, children: n.children.map(clone), cloned: true});
+const labelOf = n => n.state === 'graft' ? (n.graftTitle || n.target || 'graft') : (n.meta.text || 'untitled');
+
+function buildDoc(name) {
+  if (name in CACHE) return CACHE[name];
+  if (BUILDING.has(name)) return 'cycle';
+  if (!(name in files)) return null;
+  BUILDING.add(name);
+  const doc = parse(files[name], name);
+  graftAll(doc.root);
+  BUILDING.delete(name);
+  indexAnchors(doc.root, doc.anchors);
+  roll(doc.root, null, doc.root.meta.who);
+  CACHE[name] = doc;
+  return doc;
+}
+
+function graftAll(n) {
+  for (const c of n.children) {
+    if (c.cloned) continue;
+    if (c.state === 'graft') {
+      const tok = c.meta.words.find(w => w.includes('[['));
+      const lp = tok && linkParts(tok);
+      if (!lp) c.error = 'A graft needs a link, like + [[kitchen]]';
+      else {
+        c.target = lp.file; c.targetId = lp.id;
+        const t = buildDoc(lp.file);
+        const src = t && t !== 'cycle' ? (lp.id ? t.anchors[lp.id] : t.root) : null;
+        if (t === 'cycle') c.error = `${lp.file} is already above this line, so grafting it would loop`;
+        else if (!t) c.error = `No file named ${lp.file} yet`;
+        else if (!src) c.error = `No ^${lp.id} in ${lp.file}`;
+        else {
+          c.graftTitle = lp.id ? labelOf(src) : (t.title || lp.file);
+          c.graftOwner = (src.who || [])[0] || null;
+          c.graftNotes = src.notes;
+          c.graftAnswers = lp.id ? src.answers : [];
+          c.children = c.children.concat(src.children.map(clone));
+        }
+      }
+    }
+    graftAll(c);
+  }
+}
+
+function indexAnchors(n, map) {
+  for (const c of n.children) {
+    if (c.cloned) continue;
+    if (c.meta.id && !(c.meta.id in map)) map[c.meta.id] = c;
+    indexAnchors(c, map);
+  }
+}
+
+function roll(n, inh, who) {
+  n.answered = n.state === 'ask' && n.answers.length > 0;
+  const own = n.answered ? 'done' : n.state;
+  const settled = inh || (SETTLING.has(own) ? own : null);
+  n.inh = settled;
+  n.who = n.meta.who.length ? n.meta.who : (n.state === 'graft' && n.graftOwner ? [n.graftOwner] : who);
+  const s = {total:0, done:0, doing:0, est:0};
+  const eh = estHours(n.meta.fields.est);
+  if (!n.children.length) {
+    const st = settled || own;
+    const upkeep = !!n.meta.fields.every;
+    if (!upkeep && (st === 'todo' || st === 'doing' || st === 'done' || st === 'ask')) {
+      s.total = 1;
+      if (st === 'done') s.done = 1;
+      if (st === 'doing') s.doing = 1;
+      if (st !== 'done') s.est = eh;
+    }
+  } else {
+    for (const c of n.children) {
+      const cs = roll(c, settled, n.who);
+      s.total += cs.total; s.done += cs.done; s.doing += cs.doing; s.est += cs.est;
+    }
+    if (!s.est && eh && !settled) s.est = eh;
+  }
+  n.stats = s;
+  const derived = s.total === 0 ? 'empty' : s.done === s.total ? 'done' : (s.doing || s.done) ? 'doing' : 'todo';
+  n.view = settled || ((own === 'group' || own === 'graft' || own === 'root') ? derived : own);
+  return s;
+}
+
+function resolveRef(ref, from) {
+  let r;
+  if ((r = ref.match(/^\^([\w-]+)$/))) {
+    const d = buildDoc(from);
+    const nd = d && d !== 'cycle' ? d.anchors[r[1]] : null;
+    return {node: nd, label: nd ? labelOf(nd) : ref};
+  }
+  const lp = linkParts(ref);
+  if (lp) {
+    const d = buildDoc(lp.file);
+    if (!d || d === 'cycle') return {node: null, label: ref};
+    if (lp.id) { const nd = d.anchors[lp.id]; return {node: nd, label: nd ? labelOf(nd) : ref}; }
+    return {node: d.root, label: d.title || lp.file};
+  }
+  return {node: null, label: ref};
+}
+
+function blockers(n) {
+  if (!OPEN.has(n.view) || !n.meta.after.length) return null;
+  const out = [];
+  for (const ref of n.meta.after) {
+    const t = resolveRef(ref, n.file);
+    if (!t.node) out.push({label: ref, unknown: true});
+    else if (t.node.view !== 'done') out.push({label: t.label});
+  }
+  return out.length ? out : null;
+}
+
+/* ---------- highlighting ---------- */
+const linkSpans = s => esc(s).replace(/\[\[[^\]]+\]\]/g, x => `<span class="k-link">${x}</span>`);
+function hlToken(t, note) {
+  let r;
+  if (note) return /^@[\w.\-]+[.,;:!?)]*$/.test(t) ? `<span class="k-who">${esc(t)}</span>` : linkSpans(t);
+  if (/^@[\w.\-]+$/.test(t)) return `<span class="k-who">${esc(t)}</span>`;
+  if (/^#[\w\-]+$/.test(t)) return `<span class="k-tag">${esc(t)}</span>`;
+  if (/^!{1,3}$/.test(t)) return `<span class="k-prio">${t}</span>`;
+  if (/^\^[\w\-]+$/.test(t)) return `<span class="k-id">${esc(t)}</span>`;
+  if ((r = t.match(FIELD_RE)) && !r[2].startsWith('//')) {
+    const v = r[2];
+    const cls = v.startsWith('[[') ? 'k-link' : v.startsWith('^') ? 'k-id' : 'k-val';
+    return `<span class="k-key">${esc(r[1])}:</span><span class="${cls}">${esc(v)}</span>`;
+  }
+  return linkSpans(t);
+}
+function hlInline(s, note) {
+  return (s.match(/\s+|[^\s"]*"[^"]*"\S*|\S+/g) || []).map(t => /^\s/.test(t) ? t : hlToken(t, note)).join('');
+}
+function hlLine(ln) {
+  const ind = ln.match(/^\s*/)[0];
+  const body = ln.slice(ind.length);
+  if (!body) return esc(ln);
+  if (body.startsWith('//')) return ind + `<span class="k-com">${esc(body)}</span>`;
+  if (body.startsWith('\\')) return ind + `<span class="k-esc">\\</span><span class="k-note">${hlInline(body.slice(1), true)}</span>`;
+  const m = body.match(LINE_RE);
+  if (!m) return ind + `<span class="k-note">${hlInline(body, true)}</span>`;
+  const rest = hlInline(body.slice(1));
+  if (m[1] === '#') return ind + `<span class="k-gm">#</span><span class="k-group">${rest}</span>`;
+  if (m[1] === '=') return ind + `<span class="k-ans">=</span><span class="k-anst">${rest}</span>`;
+  const st = MARKS[m[1]];
+  return ind + `<span class="k-${st}">${esc(m[1])}</span><span class="kl-${st}">${rest}</span>`;
+}
+function highlight(src) {
+  const lines = src.split('\n');
+  const ti = titleIndex(lines);
+  return lines.map((ln, i) => i === ti ? `<span class="k-title">${hlInline(ln)}</span>` : hlLine(ln)).join('\n');
+}
+
+/* ---------- rendering ---------- */
+let REF = [];
+let FP = null, HIDE = false, VM = 'tree';
+const COLL = new Set();
+
+function relDays(d) {
+  if (d === 0) return 'today';
+  if (d === 1) return 'tomorrow';
+  if (d < 0) return `${-d}d ago`;
+  if (d < 14) return `in ${d}d`;
+  if (d < 60) return `in ${Math.round(d / 7)}w`;
+  return `in ${Math.round(d / 30)}mo`;
+}
+function fmtDate(d) {
+  const s = d.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+  return d.getFullYear() !== TODAY.getFullYear() ? `${s}, ${d.getFullYear()}` : s;
+}
+const daysFrom = d => Math.round((d - TODAY) / 864e5);
+function dateChip(k, v, view) {
+  const d = parseDate(v);
+  const pre = k === 'due' ? '' : k + ' ';
+  if (!d) return `<span class="chip">${pre}${esc(v)}</span>`;
+  const diff = daysFrom(d);
+  let cls = 'chip date', rel = '';
+  if (!SETTLING.has(view)) {
+    if (diff < 0 && k !== 'start') { cls += ' late'; rel = `${-diff}d late`; }
+    else rel = relDays(diff);
+  }
+  return `<span class="${cls}">${pre}${fmtDate(d)}${rel ? ' · ' + rel : ''}</span>`;
+}
+
+function linkHTML(inner) {
+  const lp = linkParts('[[' + inner + ']]');
+  if (!lp) return esc(inner);
+  return `<a href="#" class="flink" data-go="${esc(lp.file)}"${lp.id ? ` data-id="${esc(lp.id)}"` : ''}>${esc(inner)}</a>`;
+}
+function wordHTML(w) {
+  const r = w.match(/^(.*?)\[\[([^\]]+)\]\](.*)$/);
+  return r ? esc(r[1]) + linkHTML(r[2]) + esc(r[3]) : esc(w);
+}
+function inlineHTML(n) {
+  if (n.state === 'graft') {
+    const where = n.target ? n.target + (n.targetId ? '^' + n.targetId : '') : '';
+    return `<span class="gt">${esc(n.graftTitle || n.target || 'Graft')}</span>` +
+      (where ? ` <a href="#" class="fchip" data-go="${esc(n.target)}"${n.targetId ? ` data-id="${esc(n.targetId)}"` : ''}>${esc(where)}</a>` : '');
+  }
+  return n.meta.words.map(wordHTML).join(' ') || '<span class="untitled">untitled</span>';
+}
+function mdLite(s) {
+  let h = esc(s);
+  h = h.replace(/`([^`]+)`/g, '<code>$1</code>');
+  h = h.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  h = h.replace(/(^|[\s(])\*([^*\s][^*]*)\*/g, '$1<em>$2</em>');
+  h = h.replace(/(^|\s)(@[\w.\-]*\w)/g, '$1<span class="nwho">$2</span>');
+  h = h.replace(/\[\[([^\]]+)\]\]/g, (_, x) => linkHTML(x.replace(/&amp;/g, '&')));
+  h = h.replace(/(^|\s)(https?:\/\/[^\s<]+)/g, '$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+  return h;
+}
+function notesHTML(notes) {
+  const paras = [];
+  let cur = [];
+  for (const l of notes) { if (l === '') { if (cur.length) paras.push(cur); cur = []; } else cur.push(l); }
+  if (cur.length) paras.push(cur);
+  return paras.map(p => `<p>${mdLite(p.join(' '))}</p>`).join('');
+}
+function answersHTML(list) {
+  return list.map(a => {
+    const chips = a.who.map(w => `<span class="chip who">@${esc(w)}</span>`).join('') +
+      Object.entries(a.fields).map(([k, v]) => { const d = parseDate(v); return `<span class="chip kv">${esc(k)} ${d ? fmtDate(d) : esc(v)}</span>`; }).join('');
+    return `<p class="ans"><span class="eq">=</span><span>${a.words.map(wordHTML).join(' ')}</span>${chips}</p>`;
+  }).join('');
+}
+
+function chipsHTML(n, blk) {
+  const f = n.meta.fields, c = [];
+  if (n.meta.prio) c.push(`<span class="chip prio" title="Priority ${n.meta.prio}">${'!'.repeat(n.meta.prio)}</span>`);
+  for (const w of n.meta.who) c.push(`<span class="chip who">@${esc(w)}</span>`);
+  if (n.state === 'graft' && !n.meta.who.length && n.graftOwner) c.push(`<span class="chip who soft">@${esc(n.graftOwner)}</span>`);
+  for (const k of ['start', 'due', 'target']) if (f[k]) c.push(dateChip(k, f[k], n.view));
+  if (f.est && !n.children.length) c.push(`<span class="chip">${esc(f.est)}</span>`);
+  if (f.every) c.push(`<span class="chip">every ${esc(f.every)}</span>`);
+  for (const t of n.meta.tags) c.push(`<span class="chip tag">#${esc(t)}</span>`);
+  for (const [k, v] of Object.entries(f)) {
+    if (!['start', 'due', 'target', 'est', 'every'].includes(k)) c.push(`<span class="chip kv">${esc(k)} ${esc(v)}</span>`);
+  }
+  if (blk) for (const b of blk) {
+    c.push(b.unknown ? `<span class="chip err">can't find ${esc(b.label)}</span>` : `<span class="chip block">waits on ${esc(b.label)}</span>`);
+  }
+  const s = n.stats;
+  if (n.children.length && OPEN.has(n.state) && !n.inh && !n.answered && s.total && s.done === s.total) c.push('<span class="chip ready">all done · tick it</span>');
+  if (n.meta.id) c.push(`<span class="chip id">^${esc(n.meta.id)}</span>`);
+  if (n.error) c.push(`<span class="chip err">${esc(n.error)}</span>`);
+  return c.join('');
+}
+
+function progHTML(n) {
+  const s = n.stats;
+  if (!n.children.length || !s.total) return '<span></span>';
+  const pct = s.done / s.total * 100, dp = s.doing / s.total * 100;
+  return `<span class="prog" title="${s.done} of ${s.total} done"><span class="bar"><i style="width:${pct}%"></i><b style="width:${dp}%"></b></span>${s.done}/${s.total}${s.est ? ' · ' + fmtEst(s.est) : ''}</span>`;
+}
+
+function visible(n) {
+  if (HIDE && (n.view === 'done' || n.view === 'dropped')) return false;
+  if (!FP) return true;
+  if (!n.children.length) return n.who.includes(FP);
+  return n.meta.who.includes(FP) || n.children.some(visible);
+}
+
+function markHTML(n, k) {
+  if (n.state === 'group' || n.state === 'graft') return `<span class="mark m-${n.state} v-${n.view}" aria-hidden="true"></span>`;
+  const inherited = n.inh && n.inh !== n.state && !n.answered;
+  const disp = n.answered ? 'answered' : inherited ? n.inh : n.state;
+  const label = n.state === 'done' ? 'Reopen' : n.meta.fields.every ? 'Done for now, move to next date' : 'Mark done';
+  return `<button type="button" class="mark m-${disp}${inherited ? ' inherited' : ''}" data-act="toggle" data-k="${k}" aria-label="${label}: ${esc(labelOf(n))}" title="${label}"></button>`;
+}
+
+function nodeHTML(n, inhBlk) {
+  if (!visible(n)) return '';
+  const k = REF.push(n) - 1;
+  const own = blockers(n);
+  const blocked = OPEN.has(n.view) && !!(own || inhBlk);
+  const kids = n.children.length > 0;
+  const ck = `${n.file}:${n.line}`;
+  const open = !COLL.has(ck);
+  const caret = kids ? `<button type="button" class="caret" data-act="fold" data-ck="${esc(ck)}" aria-expanded="${open}" aria-label="${open ? 'Collapse' : 'Expand'}"></button>` : '<span></span>';
+  let extra = n.notes.length ? `<div class="notes">${notesHTML(n.notes)}</div>` : '';
+  if (open && n.graftNotes && n.graftNotes.length) extra += `<div class="notes">${notesHTML(n.graftNotes)}</div>`;
+  const answers = n.answers.concat(n.graftAnswers || []);
+  if (answers.length) extra += `<div class="answers">${answersHTML(answers)}</div>`;
+  const inner = kids && open ? n.children.map(c => nodeHTML(c, blocked ? (own || inhBlk) : null)).join('') : '';
+  return `<li class="node v-${n.view} s-${n.state}${blocked ? ' is-blocked' : ''}${kids ? ' has-kids' : ''}" data-src="${esc(ck)}">` +
+    `<div class="row">${caret}${markHTML(n, k)}<div class="body"><span class="txt" data-act="src" data-k="${k}">${inlineHTML(n)}</span>${chipsHTML(n, own)}</div>${progHTML(n)}</div>` +
+    extra + (inner ? `<ul>${inner}</ul>` : '') + '</li>';
+}
+
+function walkLeaves(root, fn) {
+  (function w(n, path, ib, due, prio) {
+    for (const c of n.children) {
+      const own = blockers(c);
+      const b = OPEN.has(c.view) && (own || ib) ? (own || ib) : null;
+      const d = c.meta.fields.due || due;
+      const p = Math.max(prio, c.meta.prio);
+      if (!c.children.length) fn(c, path, b, d, p);
+      else w(c, path.concat(labelOf(c)), b, d, p);
+    }
+  })(root, [], null, root.meta.fields.due || null, 0);
+}
+
+function nextHTML(doc) {
+  const ready = [], waiting = [];
+  walkLeaves(doc.root, (n, path, b, due, prio) => {
+    if (!OPEN.has(n.view) || (FP && !n.who.includes(FP))) return;
+    const d = parseDate(due);
+    (b ? waiting : ready).push({n, path, b, t: d ? d.getTime() : Infinity, prio});
+  });
+  ready.sort((a, b) => (b.n.view === 'doing') - (a.n.view === 'doing') || b.prio - a.prio || a.t - b.t);
+  const li = x => {
+    const k = REF.push(x.n) - 1;
+    const path = x.path.length ? x.path.map(esc).join(' <span>›</span> ') : esc(doc.title || doc.file);
+    return `<li class="v-${x.n.view}${x.b ? ' is-blocked' : ''}">${markHTML(x.n, k)}<div><div class="path">${path}</div>` +
+      `<div class="line"><span class="txt" data-act="src" data-k="${k}">${inlineHTML(x.n)}</span>${chipsHTML(x.n, x.b)}</div></div></li>`;
+  };
+  return `<div class="nx-h">Ready now · ${ready.length}</div>` +
+    (ready.length ? `<ul class="nx">${ready.map(li).join('')}</ul>` : '<p class="empty">Nothing is ready. Everything open is waiting on something.</p>') +
+    `<div class="nx-h">Waiting · ${waiting.length}</div>` +
+    (waiting.length ? `<ul class="nx">${waiting.map(li).join('')}</ul>` : '<p class="empty">Nothing is blocked.</p>');
+}
+
+function propsHTML(doc) {
+  const m = doc.root.meta, out = [];
+  if (m.who.length) out.push(['owner', m.who.map(w => `<span class="chip who">@${esc(w)}</span>`).join(' ')]);
+  for (const [k, v] of Object.entries(m.fields)) {
+    const d = DATE_KEYS.has(k) ? parseDate(v) : null;
+    out.push([k, d ? `${fmtDate(d)} <span class="rel">${relDays(daysFrom(d))}</span>` : esc(v)]);
+  }
+  for (const t of m.tags) out.push(['tag', '#' + esc(t)]);
+  return out.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${v}</dd></div>`).join('');
+}
+
+/* ---------- this page ---------- */
+const $ = s => document.querySelector(s);
+
+function instance(name, text) {
+  return {files: {[name]: text}, active: name, ref: [], vm: 'tree', fp: null, coll: new Set()};
+}
+// The core keeps its state in module globals; each view swaps its own in for
+// the length of one render, so the hero and the site map don't share clicks.
+function within(inst, fn) {
+  files = inst.files; active = inst.active; FP = inst.fp; VM = inst.vm; HIDE = false;
+  COLL.clear(); inst.coll.forEach(c => COLL.add(c));
+  CACHE = {}; REF = [];
+  const doc = buildDoc(active);
+  const out = doc && doc !== 'cycle' ? fn(doc) : '<p class="empty">This file could not be read.</p>';
+  inst.ref = REF.slice();
+  return out;
+}
+function tickLine(inst, n) {
+  if (!n || !(n.file in inst.files)) return false;
+  const lines = inst.files[n.file].split('\n');
+  const ln = lines[n.line];
+  if (ln == null) return false;
+  const i = ln.search(/\S/);
+  const ch = ln[i];
+  if (!ch || !TICKABLE.includes(ch)) return false;
+  lines[n.line] = ln.slice(0, i) + (ch === 'x' ? '-' : 'x') + ln.slice(i + 1);
+  inst.files[n.file] = lines.join('\n');
+  return true;
+}
+function setPressed(root, vm) {
+  root.querySelectorAll('[data-vm]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.vm === vm)));
+}
+
+/* hero */
+const hero = instance('plan.sprig', HERO.release);
+hero.vm = 'next';
+let heroPreset = 'release';
+const hSrc = $('#heroSrc'), hHl = $('#heroHl'), hBody = $('#heroBody'), hStats = $('#heroStats');
+
+function heroTabs() {
+  $('#heroTabs').innerHTML = Object.keys(HERO).map(k =>
+    `<button type="button" class="tab" role="tab" data-preset="${k}" aria-selected="${k === heroPreset}">${HERO_LABELS[k]}</button>`).join('');
+}
+function heroPaint() { hHl.innerHTML = highlight(hSrc.value) + '\n\n'; hHl.scrollTop = hSrc.scrollTop; hHl.scrollLeft = hSrc.scrollLeft; }
+function heroRender() {
+  hBody.innerHTML = within(hero, doc => {
+    const s = doc.root.stats;
+    let ready = 0, waiting = 0;
+    walkLeaves(doc.root, (n, path, b) => { if (OPEN.has(n.view)) { if (b) waiting++; else ready++; } });
+    hStats.textContent = `${s.done}/${s.total} done · ${ready} ready · ${waiting} waiting`;
+    return hero.vm === 'next' ? nextHTML(doc) : `<ul class="tree">${doc.root.children.map(c => nodeHTML(c, null)).join('')}</ul>`;
+  });
+}
+function heroLoad(k) {
+  heroPreset = k; hero.files['plan.sprig'] = HERO[k]; hero.coll.clear();
+  hSrc.value = HERO[k]; hSrc.scrollTop = 0; heroTabs(); heroPaint(); heroRender();
+}
+let hTimer = 0;
+hSrc.addEventListener('input', () => {
+  hero.files['plan.sprig'] = hSrc.value; heroPaint();
+  clearTimeout(hTimer); hTimer = setTimeout(heroRender, 60);
+});
+hSrc.addEventListener('scroll', () => { hHl.scrollTop = hSrc.scrollTop; hHl.scrollLeft = hSrc.scrollLeft; });
+hSrc.addEventListener('keydown', e => {
+  if (e.key !== 'Tab' || e.metaKey || e.ctrlKey || e.altKey) return;
+  e.preventDefault();
+  const a = hSrc.selectionStart;
+  const s = hSrc.value.lastIndexOf('\n', a - 1) + 1;
+  if (e.shiftKey) {
+    const r = (hSrc.value.slice(s).match(/^ {1,2}/) || [''])[0].length;
+    hSrc.setRangeText('', s, s + r, 'preserve');
+    hSrc.setSelectionRange(Math.max(s, a - r), Math.max(s, a - r));
+  } else {
+    hSrc.setRangeText('  ', s, s, 'preserve');
+    hSrc.setSelectionRange(a + 2, a + 2);
+  }
+  hSrc.dispatchEvent(new Event('input'));
+});
+$('#heroEditBtn').addEventListener('click', e => {
+  const open = document.querySelector('.hero-demo').classList.toggle('src-open');
+  e.currentTarget.setAttribute('aria-expanded', String(open));
+  e.currentTarget.textContent = open ? 'Hide the source' : 'Edit the source';
+});
+$('#heroTabs').addEventListener('click', e => { const t = e.target.closest('[data-preset]'); if (t) heroLoad(t.dataset.preset); });
+$('#heroView').addEventListener('click', e => {
+  const vm = e.target.closest('[data-vm]');
+  if (vm) { hero.vm = vm.dataset.vm; setPressed($('#heroView'), hero.vm); heroRender(); return; }
+  const t = e.target.closest('[data-act]');
+  if (!t) return;
+  if (t.dataset.act === 'toggle' && tickLine(hero, hero.ref[+t.dataset.k])) {
+    const pos = hSrc.selectionStart;
+    hSrc.value = hero.files['plan.sprig']; hSrc.setSelectionRange(pos, pos);
+    heroPaint(); heroRender();
+  } else if (t.dataset.act === 'fold') {
+    const ck = t.dataset.ck; if (hero.coll.has(ck)) hero.coll.delete(ck); else hero.coll.add(ck); heroRender();
+  } else if (t.dataset.act === 'src') {
+    const n = hero.ref[+t.dataset.k];
+    if (!n || n.line < 0) return;
+    const lines = hSrc.value.split('\n');
+    let off = 0;
+    for (let i = 0; i < n.line; i++) off += lines[i].length + 1;
+    if (matchMedia('(pointer: fine)').matches) hSrc.focus({preventScroll: true});
+    hSrc.setSelectionRange(off, off + lines[n.line].length);
+  }
+});
+
+/* site map */
+const site = instance('site.sprig', SITE);
+const smHead = $('#smHead'), smBody = $('#smBody'), smPeople = $('#smPeople'), smView = $('#smView');
+function siteRender() {
+  const st = smBody.scrollTop;
+  smBody.innerHTML = within(site, doc => {
+    const who = new Set();
+    (function w(n) { for (const c of n.children) { c.who.forEach(x => who.add(x)); w(c); } })(doc.root);
+    smPeople.innerHTML = [`<button type="button" class="pchip" data-fp="" aria-pressed="${!site.fp}">every role</button>`]
+      .concat([...who].sort().map(p => `<button type="button" class="pchip" data-fp="${esc(p)}" aria-pressed="${site.fp === p}">@${esc(p)}</button>`)).join('');
+    const s = doc.root.stats;
+    let ready = 0, waiting = 0, asks = 0;
+    walkLeaves(doc.root, (n, path, b) => { if (OPEN.has(n.view)) { if (b) waiting++; else ready++; } if (n.view === 'ask') asks++; });
+    smHead.innerHTML = `<div class="rv-file">site.sprig</div><h3>${esc(doc.title)}</h3><dl class="props">${propsHTML(doc)}</dl>` +
+      (doc.root.notes.length ? `<div class="rv-notes">${notesHTML(doc.root.notes)}</div>` : '') +
+      `<p class="stats"><b>${s.total}</b> pages and tasks · ${ready} can start now · ${waiting} wait on the roadmap · ${asks} open question</p>`;
+    if (site.vm === 'next') return nextHTML(doc);
+    if (site.vm === 'source') return `<pre class="code" style="background:var(--code-bg);color:var(--code-ink);border-radius:8px;margin:10px 0">${highlight(site.files['site.sprig'])}</pre>`;
+    return `<ul class="tree">${doc.root.children.map(c => nodeHTML(c, null)).join('')}</ul>`;
+  });
+  smBody.scrollTop = st;
+}
+smView.addEventListener('click', e => {
+  const vm = e.target.closest('[data-vm]');
+  if (vm) { site.vm = vm.dataset.vm; setPressed(smView, site.vm); smBody.scrollTop = 0; siteRender(); return; }
+  const fp = e.target.closest('[data-fp]');
+  if (fp) { site.fp = fp.dataset.fp || null; siteRender(); return; }
+  const t = e.target.closest('[data-act]');
+  if (!t) return;
+  if (t.dataset.act === 'toggle' && tickLine(site, site.ref[+t.dataset.k])) siteRender();
+  else if (t.dataset.act === 'fold') { const ck = t.dataset.ck; if (site.coll.has(ck)) site.coll.delete(ck); else site.coll.add(ck); siteRender(); }
+});
+
+/* static parts */
+document.querySelectorAll('pre[data-snippet]').forEach(p => { p.innerHTML = highlight(SNIPPETS[p.dataset.snippet] || ''); });
+$('#faqMock').innerHTML = FAQ.map(([q, , a]) => `<div><dt>${esc(q)}</dt><dd>${esc(a)}</dd></div>`).join('');
+$('#qaRows').innerHTML = FAQ.map(([q, where, a]) => `<tr><td>${esc(q)}</td><td>${esc(where)}</td><td>${esc(a)}</td></tr>`).join('');
+$('#titles').innerHTML = TITLES.map(([t, rec, why]) =>
+  `<li${rec ? ' class="rec"' : ''}><span class="tt">${esc(t)}</span><span class="len">${[...t].length}/80</span><p class="why">${esc(why)}</p></li>`).join('');
+
+$('#copyComment').addEventListener('click', e => {
+  const btn = e.currentTarget, text = $('#makerComment').textContent;
+  const done = msg => { btn.textContent = msg; setTimeout(() => { btn.textContent = 'Copy'; }, 1600); };
+  const select = () => { const r = document.createRange(); r.selectNodeContents($('#makerComment')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); done('Selected'); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => done('Copied'), select);
+  else select();
+});
+
+heroLoad('release');
+siteRender();
+})();
+</script>

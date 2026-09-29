@@ -28,6 +28,29 @@ A stranger installs `sprig`, writes a plan across one or more `.sprig` files, an
 - [ ] [`0026`](https://github.com/oddurs/sprig/blob/main/cairn/items/0026-readme-install-and-a-first-plan-in-five-minutes.md) README: install and a first plan in five minutes <sup>docs · p0 · docs</sup>
 - [ ] [`0027`](https://github.com/oddurs/sprig/blob/main/cairn/items/0027-release-v0-1.md) Release v0.1 <sup>chore · p0 · release</sup>
 
+## launch — Launch the website and Show HN
+
+`··········` 0% · 0 of 16 done · due 2026-12-01
+
+A public website that explains Sprig in ten seconds and lets a visitor edit a real plan in thirty, and a Show HN post that points at it. The site's plan, including the arguments behind its shape, is in `design/site-plan.html`.
+
+- [ ] [`0099`](https://github.com/oddurs/sprig/blob/main/cairn/items/0099-site-scaffold-astro-and-starlight-with-native-fonts.md) Site scaffold: Astro and Starlight with native fonts <sup>chore · p0 · site</sup>
+- [ ] [`0100`](https://github.com/oddurs/sprig/blob/main/cairn/items/0100-landing-page-hero-with-a-live-plan-prerendered.md) Landing page hero with a live plan, prerendered <sup>feature · p0 · site</sup>
+- [ ] [`0101`](https://github.com/oddurs/sprig/blob/main/cairn/items/0101-landing-page-sections-what-it-computes-files-opinions-questions.md) Landing page sections: what it computes, files, opinions, questions <sup>feature · p0 · site</sup>
+- [ ] [`0102`](https://github.com/oddurs/sprig/blob/main/cairn/items/0102-comparison-page-with-every-claim-sourced.md) Comparison page with every claim sourced <sup>docs · p0 · site</sup>
+- [ ] [`0103`](https://github.com/oddurs/sprig/blob/main/cairn/items/0103-spec-page-with-an-anchor-per-rule-and-a-raw-copy.md) Spec page with an anchor per rule, and a raw copy <sup>feature · p0 · site</sup>
+- [ ] [`0104`](https://github.com/oddurs/sprig/blob/main/cairn/items/0104-playground-page-with-link-sharing-in-the-url-fragment.md) Playground page with link sharing in the URL fragment <sup>feature · p1 · site</sup>
+- [ ] [`0105`](https://github.com/oddurs/sprig/blob/main/cairn/items/0105-decisions-roadmap-and-changelog-pages-generated-from-the-repository.md) Decisions, roadmap and changelog pages generated from the repository <sup>feature · p1 · site</sup>
+- [ ] [`0106`](https://github.com/oddurs/sprig/blob/main/cairn/items/0106-tutorial-your-first-plan-in-the-playground.md) Tutorial: your first plan, in the playground <sup>docs · p0 · site</sup>
+- [ ] [`0107`](https://github.com/oddurs/sprig/blob/main/cairn/items/0107-social-image-favicon-404-sitemap-robots-and-llms-txt.md) Social image, favicon, 404, sitemap, robots and llms.txt <sup>chore · p1 · site</sup>
+- [ ] [`0108`](https://github.com/oddurs/sprig/blob/main/cairn/items/0108-deploy-the-site-to-github-pages-from-main.md) Deploy the site to GitHub Pages from main <sup>chore · p0 · site</sup>
+- [ ] [`0109`](https://github.com/oddurs/sprig/blob/main/cairn/items/0109-playground-and-hero-run-sprig-core-compiled-to-webassembly.md) Playground and hero run sprig-core compiled to WebAssembly <sup>feature · p0 · core</sup>
+- [ ] [`0110`](https://github.com/oddurs/sprig/blob/main/cairn/items/0110-prebuilt-binaries-for-the-v0-1-release.md) Prebuilt binaries for the v0.1 release <sup>chore · p0 · release</sup>
+- [ ] [`0111`](https://github.com/oddurs/sprig/blob/main/cairn/items/0111-quiet-preview-with-five-to-ten-real-users.md) Quiet preview with five to ten real users <sup>chore · p1 · community</sup>
+- [ ] [`0112`](https://github.com/oddurs/sprig/blob/main/cairn/items/0112-launch-post-first-comment-and-day-of-checklist.md) Launch post, first comment and day-of checklist <sup>chore · p0 · community</sup>
+- [ ] [`0113`](https://github.com/oddurs/sprig/blob/main/cairn/items/0113-extend-the-first-plan-tutorial-to-the-terminal.md) Extend the first-plan tutorial to the terminal <sup>docs · p1 · site</sup>
+- [ ] [`0114`](https://github.com/oddurs/sprig/blob/main/cairn/items/0114-cli-reference-generated-from-sprig-help.md) CLI reference generated from sprig --help <sup>feature · p1 · site</sup>
+
 ## v0.2 — Write plans in your editor
 
 `··········` 0% · 0 of 19 done · due 2027-01-29
