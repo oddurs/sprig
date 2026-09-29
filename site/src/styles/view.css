@@ -126,3 +126,58 @@
 @media (prefers-reduced-motion: reduce) {
 	.sv .flash > .row { animation: none; }
 }
+
+/*
+ * Terminal screens (.st) and the TUI demo (.tui), as lib/terminal.js and
+ * lib/tui.js emit them. The CLI's own rule holds here: only a mark takes
+ * colour, so the .mono screen, which drops it, says exactly as much.
+ */
+.st,
+.tui { font-family: var(--font-mono); font-size: var(--text-sm); line-height: var(--leading-base); color: var(--text); }
+.st { white-space: pre; tab-size: 2; }
+:is(.st, .tui) .t-dim { color: var(--text-muted); }
+:is(.st, .tui) .t-b { font-weight: var(--weight-bold); }
+:is(.st, .tui) .t-u { text-decoration: underline; text-underline-offset: 3px; }
+:is(.st, .tui) .m-todo { color: var(--mark-todo); }
+:is(.st, .tui) .m-doing { color: var(--mark-doing); }
+:is(.st, .tui) .m-done { color: var(--mark-done); }
+:is(.st, .tui) .m-dropped { color: var(--mark-dropped); }
+:is(.st, .tui) .m-later { color: var(--mark-later); }
+:is(.st, .tui) .m-ask { color: var(--mark-ask); }
+:is(.st, .tui) .m-answer { color: var(--mark-answer); }
+:is(.st, .tui) .m-group { color: var(--mark-group); }
+:is(.st, .tui) .m-graft { color: var(--mark-graft); }
+.st.mono [class^='m-'] { color: var(--text); }
+
+.tui { position: relative; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface-raised); overflow: hidden; }
+.tui:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.tui .hdr,
+.tui .sts { display: flex; justify-content: space-between; gap: var(--space-3); padding: var(--space-1) var(--space-4); white-space: nowrap; overflow: hidden; }
+.tui .hdr { border-bottom: 1px solid var(--border); }
+.tui .sts { border-top: 1px solid var(--border); color: var(--text-muted); }
+.tui .views span { margin-right: var(--space-4); color: var(--text-muted); }
+.tui .views .on { color: var(--text); text-decoration: underline; text-underline-offset: 4px; }
+.tui .panes { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); height: 440px; }
+.tui .left { overflow: hidden; padding: var(--space-2) 0; border-right: 1px solid var(--border); }
+.tui .right { overflow: hidden; padding: var(--space-3) var(--space-4); }
+.tui .row { display: flex; justify-content: space-between; gap: var(--space-3); padding: 0 var(--space-4) 0 var(--space-2); white-space: pre; }
+.tui .row .txt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.tui .row.sel { background: var(--surface); }
+.tui .cur { display: inline-block; width: 2ch; font-weight: var(--weight-bold); }
+.tui .day { padding: var(--space-2) var(--space-4) 0; color: var(--text-muted); }
+.tui .title { margin: 0 0 var(--space-2); font-weight: var(--weight-bold); }
+.tui .kv { margin: 0; color: var(--text-muted); }
+.tui .kv b { color: var(--text); font-weight: var(--weight-medium); }
+.tui .note { margin: var(--space-3) 0 0; font-family: var(--font-sans); line-height: var(--leading-sm); color: var(--text-muted); }
+.tui .help { position: absolute; inset: var(--space-7) var(--space-7) auto; padding: var(--space-4) var(--space-5); background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-md); white-space: pre; }
+
+@media (max-width: 859px) {
+	.tui .panes { grid-template-columns: minmax(0, 1fr); height: 400px; }
+	.tui .left { border-right: 0; }
+	.tui .right { display: none; }
+}
+@media (max-width: 559px) {
+	.st,
+	.tui { font-size: var(--text-xs); }
+	.tui .help { inset: var(--space-5) var(--space-4) auto; }
+}

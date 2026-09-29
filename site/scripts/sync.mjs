@@ -131,6 +131,9 @@ const examples = Object.fromEntries(
 );
 write(join(generated, 'examples.json'), JSON.stringify(examples, null, '\t'));
 
+/* counts the pages state in prose, so a sentence like "all fifteen" can't go stale */
+write(join(generated, 'facts.json'), JSON.stringify({ decisions: decisions.length }, null, '\t'));
+
 console.log(
 	`sync: spec, ${decisions.length} decisions, roadmap, changelog (${releases.length} releases), ${Object.keys(examples).length} examples`,
 );

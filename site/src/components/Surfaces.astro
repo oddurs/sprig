@@ -1,0 +1,54 @@
+---
+// Where Sprig runs, and when each place arrives. The milestones are the
+// roadmap's; change them there first.
+import Text from './primitives/Text.astro';
+
+const surfaces = [
+	{ name: 'Playground', when: 'Today', body: 'Edit a plan and watch it compute, in this browser. It runs the draft reference parser until the Rust core replaces it.' },
+	{ name: 'sprig', code: true, when: 'v0.1', body: 'The command line: what’s next, what’s broken, what’s blocked, and one-line writes.' },
+	{ name: 'Editors', when: 'v0.2', body: 'A language server for diagnostics, completion and ticking in place, a VS Code extension, and a Tree-sitter grammar.' },
+	{ name: 'sprig mcp', code: true, when: 'v0.3', body: 'Coding agents read the plan, find ready work and tick it, as file edits you review.' },
+	{ name: 'sprig tui', code: true, when: 'v0.4', body: 'A folder of plans on one terminal screen, with vim keys.' },
+];
+---
+
+<dl class="sp-surfaces">
+	{
+		surfaces.map((s) => (
+			<div class="row">
+				<dt>
+					<Text as="span" weight="bold" font={s.code ? 'mono' : 'sans'}>{s.name}</Text>
+					<Text as="span" size="sm" tone={s.when === 'Today' ? 'default' : 'muted'} font="mono">{s.when}</Text>
+				</dt>
+				<dd>
+					<Text size="sm" tone="muted">{s.body}</Text>
+				</dd>
+			</div>
+		))
+	}
+</dl>
+
+<style>
+	.sp-surfaces {
+		margin: 0;
+	}
+	.row {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-1);
+		padding-block: var(--space-4);
+		border-top: 1px solid var(--border);
+	}
+	.row:last-child {
+		border-bottom: 1px solid var(--border);
+	}
+	dt {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: var(--space-4);
+	}
+	dd {
+		margin: 0;
+	}
+</style>

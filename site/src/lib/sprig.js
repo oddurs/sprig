@@ -7,7 +7,7 @@
 // The design page kept its workspace in module state, and so does this. A
 // render is: useWorkspace(files), beginRender(), build and render, endRender().
 
-const TODAY = (() => { const d = new Date(); d.setHours(0,0,0,0); return d; })();
+let TODAY = (() => { const d = new Date(); d.setHours(0,0,0,0); return d; })();
 const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
 const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
@@ -499,10 +499,20 @@ export function setView({fp = null, hide = false, vm = 'tree', collapsed = []} =
   for (const c of collapsed) COLL.add(c);
 }
 export function beginRender() { CACHE = {}; REF = []; }
+
+// The CLI's --today. Pages that render dated examples at build time pin the
+// date, so what they print stays true after the build instead of drifting a
+// day each morning.
+export function withToday(day, fn) {
+  const was = TODAY;
+  TODAY = day;
+  CACHE = {};
+  try { return fn(); } finally { TODAY = was; CACHE = {}; }
+}
 export function endRender() { return REF.slice(); }
 
 export {
   TODAY, addDays, iso, parseDate, nextDue, expandDates, fmtEst, esc,
-  MARKS, LINE_RE, OPEN, TICKABLE, titleIndex, parse, buildDoc, blockers, labelOf,
+  MARKS, LINE_RE, OPEN, TICKABLE, titleIndex, parse, buildDoc, blockers, labelOf, resolveRef,
   highlight, walkLeaves, nodeHTML, nextHTML, propsHTML, notesHTML,
 };
