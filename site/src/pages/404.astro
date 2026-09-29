@@ -1,6 +1,12 @@
 ---
+import Button from '../components/Button.astro';
+import Code from '../components/Code.astro';
+import Plan from '../components/Plan.astro';
+import Grid from '../components/primitives/Grid.astro';
+import Inline from '../components/primitives/Inline.astro';
+import Stack from '../components/primitives/Stack.astro';
+import Text from '../components/primitives/Text.astro';
 import Base from '../layouts/Base.astro';
-import { highlight, render } from '../lib/render.js';
 
 // A 404 written in Sprig, rendered by the same parser as everything else: the
 // page you wanted is blocked on a link that doesn't exist.
@@ -10,26 +16,36 @@ const plan = `Page not found  @you
 - Check the link that brought you here  ^link
   Something pointed at a page that doesn't exist.
 - Start again from the front page`;
-const view = render({ '404.sprig': plan }, '404.sprig');
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <Base title="Page not found · Sprig" description="This page doesn't exist.">
-	<div class="wrap">
-		<section class="lost">
-			<div>
-				<p class="eyebrow">404</p>
-				<h1>This page is blocked.</h1>
-				<p class="lede">It waits on a link that points nowhere. The plan on the right says so, computed by the same parser as the rest of the site.</p>
-				<div class="btns">
-					<a class="btn primary" href={`${base}/`}>Front page</a>
-					<a class="btn" href={`${base}/docs/first-plan/`}>Docs</a>
-				</div>
-			</div>
-			<div>
-				<figure class="code-card"><figcaption><b>404.sprig</b></figcaption><pre class="sc" set:html={highlight(plan)} /></figure>
-				<div class="rendered sv" style="margin-top:14px"><Fragment set:html={view.html} /></div>
-			</div>
-		</section>
-	</div>
+	<section class="lost" aria-labelledby="lost-h">
+		<Grid cols={2} gap={8} rowGap={7}>
+			<Stack gap={5}>
+				<Text size="sm" tone="muted">404</Text>
+				<Text as="h1" id="lost-h" size="2xl" weight="bold">This page is blocked.</Text>
+				<Text size="md" tone="muted" measure>It waits on a link that points nowhere. The plan beside this says so, worked out by the same parser as the rest of the site.</Text>
+				<Inline gap={3}>
+					<Button href={`${base}/`} variant="primary">Front page</Button>
+					<Button href={`${base}/docs/first-plan/`}>Docs</Button>
+				</Inline>
+			</Stack>
+			<Stack gap={4}>
+				<Code code={plan} file="404.sprig" />
+				<Plan files={{ '404.sprig': plan }} active="404.sprig" caption="as Sprig reads it" />
+			</Stack>
+		</Grid>
+	</section>
 </Base>
+
+<style>
+	.lost {
+		padding-block: var(--space-10) 0;
+	}
+	@media (max-width: 559px) {
+		.lost {
+			padding-block: var(--space-8) 0;
+		}
+	}
+</style>

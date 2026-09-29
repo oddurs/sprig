@@ -1,10 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Sprig">
-  <rect width="32" height="32" rx="7" fill="#2d6a3d"/>
-  <g fill="none" stroke="#f6f8f4" stroke-width="2.6" stroke-linecap="round">
-    <path d="M11 7.5V24.5M11 13.5H18.5M11 21.5H18.5"/>
-  </g>
-  <g fill="#f6f8f4">
-    <circle cx="22" cy="13.5" r="2.6"/>
-    <circle cx="22" cy="21.5" r="2.6"/>
-  </g>
+  <rect width="32" height="32" rx="7" fill="#191816"/>
+  <path d="M11 7.5V24.5M11 13.5H18.5M11 21.5H18.5" fill="none" stroke="#fbfaf7" stroke-width="2.6" stroke-linecap="round"/>
+  <circle cx="22" cy="13.5" r="2.6" fill="#7ccd8e"/>
+  <circle cx="22" cy="21.5" r="2.6" fill="#e8a95c"/>
 </svg>

@@ -1,7 +1,9 @@
 ---
-import '../styles/tokens.css';
+// The page shell for the hand-built pages. Its header matches the docs'
+// header in height, rule and type, so moving between them feels like one site.
+import '../generated/tokens.css';
+import '../styles/base.css';
 import '../styles/view.css';
-import '../styles/site.css';
 
 interface Props {
 	title: string;
@@ -14,6 +16,12 @@ const url = (path: string) => `${base}${path}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL(url('/og.png'), Astro.site);
 const repo = 'https://github.com/oddurs/sprig';
+const nav = [
+	{ label: 'Docs', href: url('/docs/first-plan/') },
+	{ label: 'Spec', href: url('/spec/') },
+	{ label: 'Playground', href: url('/play/'), current: current === 'play' },
+	{ label: 'GitHub', href: repo },
+];
 ---
 
 <!doctype html>
@@ -37,7 +45,7 @@ const repo = 'https://github.com/oddurs/sprig';
 		<meta property="og:image:height" content="640" />
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:image" content={ogImage} />
-		{/* The docs' theme picker stores a choice; honour it here too. Without it, the OS setting decides. */}
+		{/* The docs' theme picker stores a choice; honour it here too. Without one, the OS decides. */}
 		<script is:inline>
 			try {
 				const t = localStorage.getItem('starlight-theme');
@@ -47,37 +55,95 @@ const repo = 'https://github.com/oddurs/sprig';
 	</head>
 	<body>
 		<a class="skip" href="#main">Skip to content</a>
-		<header class="site-head">
-			<div class="wrap">
+		<header class="head">
+			<div class="page bar">
 				<a class="brand" href={url('/')}>
-					<img src={url('/favicon.svg')} alt="" width="28" height="28" />
+					<img src={url('/favicon.svg')} alt="" width="24" height="24" />
 					<span>Sprig</span>
-					<span class="ver">draft 0.3</span>
 				</a>
-				<nav class="site-nav" aria-label="Site">
-					<a href={url('/docs/first-plan/')}>Docs</a>
-					<a href={url('/spec/')}>Spec</a>
-					<a href={url('/play/')} aria-current={current === 'play' ? 'page' : undefined}>Playground</a>
-					<a href={url('/decisions/')}>Decisions</a>
-					<a href={repo}>GitHub</a>
+				<nav aria-label="Site">
+					{nav.map((n) => <a href={n.href} aria-current={n.current ? 'page' : undefined}>{n.label}</a>)}
 				</nav>
 			</div>
 		</header>
-		<main id="main">
+		<main id="main" class="page">
 			<slot />
 		</main>
-		<footer class="site-foot">
-			<div class="wrap">
-				<span>Spec: CC0 · Code: MIT · No cookies, no analytics, no third-party requests.</span>
+		<footer class="foot">
+			<div class="page bar">
+				<span>Spec CC0 · Code MIT · No cookies, no analytics, no third-party requests</span>
 				<nav aria-label="Project">
+					<a href={url('/decisions/')}>Decisions</a>
 					<a href={url('/roadmap/')}>Roadmap</a>
 					<a href={url('/changelog/')}>Changelog</a>
-					<a href={url('/feed.xml')}>Atom feed</a>
-					<a href={url('/compare/')}>Compare</a>
+					<a href={url('/docs/design/')}>Design</a>
 					<a href={`${repo}/blob/main/SECURITY.md`}>Security</a>
-					<a href={repo}>GitHub</a>
 				</nav>
 			</div>
 		</footer>
 	</body>
 </html>
+
+<style>
+	.head {
+		border-bottom: 1px solid var(--border);
+	}
+	.bar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: var(--space-3) var(--space-6);
+	}
+	.head .bar {
+		min-height: 56px;
+		padding-block: var(--space-2);
+	}
+	.brand {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		text-decoration: none;
+		font-weight: var(--weight-bold);
+		font-size: var(--text-md);
+	}
+	nav {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-1) var(--space-5);
+		font-size: var(--text-sm);
+	}
+	nav a {
+		color: var(--text-muted);
+		text-decoration: none;
+	}
+	nav a:hover,
+	nav a[aria-current='page'] {
+		color: var(--text);
+	}
+	nav a[aria-current='page'] {
+		text-decoration: underline;
+		text-underline-offset: 6px;
+	}
+	main {
+		display: block;
+	}
+	.foot {
+		margin-top: var(--space-10);
+		border-top: 1px solid var(--border);
+		font-size: var(--text-xs);
+		color: var(--text-muted);
+	}
+	.foot .bar {
+		padding-block: var(--space-6);
+	}
+	.foot nav {
+		font-size: var(--text-xs);
+		gap: var(--space-1) var(--space-4);
+	}
+	@media (max-width: 559px) {
+		.foot {
+			margin-top: var(--space-8);
+		}
+	}
+</style>

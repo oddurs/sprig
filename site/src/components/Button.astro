@@ -1,0 +1,80 @@
+---
+// A link or a button. Primary is the one action a section is for; secondary is
+// an alternative; ghost is a quiet way out. Variant and size are attributes,
+// not classes, so no global class elsewhere on a page (the docs have several)
+// can collide with them.
+interface Props {
+	href?: string;
+	variant?: 'primary' | 'secondary' | 'ghost';
+	size?: 'sm' | 'md';
+	type?: 'button' | 'submit';
+	id?: string;
+	'aria-expanded'?: 'true' | 'false';
+	'aria-pressed'?: 'true' | 'false';
+}
+// Astro hands a parent's scope class to its children as `class`. Merge it so
+// the parent's scoped styles still reach this element, rather than letting it
+// replace this component's own class; authors can't pass one (Props has none).
+const { href, variant = 'secondary', size = 'md', type = 'button', class: scope, ...rest } = Astro.props as Props & { class?: string };
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag class={["sp-button", scope].filter(Boolean).join(" ")} data-variant={variant} data-size={size} href={href} type={href ? undefined : type} {...rest}><slot /></Tag>
+
+<style>
+	.sp-button {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		font: inherit;
+		font-weight: var(--weight-medium);
+		text-decoration: none;
+		border-radius: var(--radius-md);
+		border: 1px solid transparent;
+		cursor: pointer;
+		transition:
+			background-color var(--duration-fast) var(--ease),
+			border-color var(--duration-fast) var(--ease),
+			color var(--duration-fast) var(--ease);
+	}
+	.sp-button[data-size='md'] {
+		font-size: var(--text-sm);
+		padding: var(--space-2) var(--space-4);
+		min-height: 40px;
+	}
+	.sp-button[data-size='sm'] {
+		font-size: var(--text-xs);
+		padding: var(--space-1) var(--space-3);
+		min-height: 32px;
+	}
+	.sp-button[data-variant='primary'] {
+		background: var(--text);
+		color: var(--surface);
+	}
+	.sp-button[data-variant='primary']:hover {
+		background: var(--text-muted);
+	}
+	.sp-button[data-variant='secondary'] {
+		background: transparent;
+		color: var(--text);
+		border-color: var(--border-strong);
+	}
+	.sp-button[data-variant='secondary']:hover {
+		border-color: var(--text);
+	}
+	.sp-button[data-variant='ghost'] {
+		background: transparent;
+		color: var(--text-muted);
+	}
+	.sp-button[data-variant='ghost']:hover {
+		color: var(--text);
+	}
+	.sp-button:focus-visible {
+		outline: 2px solid var(--focus);
+		outline-offset: 2px;
+	}
+	.sp-button:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+</style>

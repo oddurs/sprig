@@ -1,52 +1,72 @@
 /*
- * Starlight in Sprig's colours. Starlight's own properties live in cascade
- * layers, so these unlayered declarations win in both themes; the tokens they
- * point at flip with the theme themselves.
+ * Starlight in Sprig's tokens. Starlight keeps its own properties in cascade
+ * layers, so these unlayered ones win in both themes; the tokens they name flip
+ * with the theme themselves. The accent is ink, like the rest of the system:
+ * colour belongs to the marks.
  */
 :root {
 	--sl-font: var(--font-sans);
 	--sl-font-mono: var(--font-mono);
 
-	--sl-color-white: var(--ink);
-	--sl-color-gray-1: var(--ink);
-	--sl-color-gray-2: var(--ink-2);
-	--sl-color-gray-3: var(--muted);
-	--sl-color-gray-4: var(--muted);
-	--sl-color-gray-5: var(--rule);
-	--sl-color-gray-6: var(--paper-2);
-	--sl-color-gray-7: var(--card);
-	--sl-color-black: var(--paper);
+	--sl-color-white: var(--text);
+	--sl-color-gray-1: var(--text);
+	--sl-color-gray-2: var(--text);
+	--sl-color-gray-3: var(--text-muted);
+	--sl-color-gray-4: var(--text-muted);
+	--sl-color-gray-5: var(--border-strong);
+	--sl-color-gray-6: var(--border);
+	--sl-color-gray-7: var(--surface-raised);
+	--sl-color-black: var(--surface);
 
-	--sl-color-accent-low: var(--leaf-soft);
-	--sl-color-accent: var(--leaf);
-	--sl-color-accent-high: var(--leaf-strong);
+	--sl-color-accent-low: var(--surface-raised);
+	--sl-color-accent: var(--text);
+	--sl-color-accent-high: var(--text);
 
-	--sl-color-text: var(--ink-2);
-	--sl-color-text-accent: var(--leaf);
-	--sl-color-text-invert: var(--leaf-ink);
-	--sl-color-bg: var(--paper);
-	--sl-color-bg-nav: var(--card);
-	--sl-color-bg-sidebar: var(--paper);
-	--sl-color-bg-inline-code: var(--chip);
-	--sl-color-bg-accent: var(--leaf);
-	--sl-color-hairline-light: var(--rule-2);
-	--sl-color-hairline: var(--rule-2);
-	--sl-color-hairline-shade: var(--rule);
+	--sl-color-text: var(--text);
+	--sl-color-text-accent: var(--text);
+	--sl-color-text-invert: var(--surface);
+	--sl-color-bg: var(--surface);
+	--sl-color-bg-nav: var(--surface);
+	--sl-color-bg-sidebar: var(--surface);
+	--sl-color-bg-inline-code: var(--surface-raised);
+	--sl-color-bg-accent: var(--text);
+	--sl-color-hairline-light: var(--border);
+	--sl-color-hairline: var(--border);
+	--sl-color-hairline-shade: var(--border);
 
-	/* Note asides take the blue hue; Sprig has none. */
-	--sl-color-blue-low: var(--leaf-soft);
-	--sl-color-blue: var(--leaf);
-	--sl-color-blue-high: var(--leaf-strong);
+	/* Note asides are the only kind the docs use: neutral, like everything else. */
+	--sl-color-blue-low: var(--surface-raised);
+	--sl-color-blue: var(--border-strong);
+	--sl-color-blue-high: var(--text);
 }
 
-/* Rule headings in the spec read as numbered clauses. */
+/* The current page is marked by weight and a quiet surface, not a colour block. */
+.sidebar-content a[aria-current='page'],
+.sidebar-content a[aria-current='page']:hover,
+.sidebar-content a[aria-current='page']:focus {
+	background: var(--surface-raised);
+	color: var(--text);
+	font-weight: var(--weight-medium);
+}
+.sl-markdown-content :is(h1, h2, h3, h4) {
+	font-weight: var(--weight-bold);
+	letter-spacing: -0.015em;
+}
 .sl-markdown-content h3 {
 	font-variant-numeric: tabular-nums;
 }
-.sl-markdown-content table {
-	font-variant-numeric: tabular-nums;
+.site-title {
+	font-weight: var(--weight-bold);
+	font-size: var(--text-md);
 }
 .site-title img {
-	height: 1.6rem;
+	height: 24px;
 	width: auto;
+}
+
+/* Long lines in code blocks wrap instead of scrolling sideways, so no block is
+   a scroll area a keyboard can't reach. */
+.expressive-code .ec-line .code {
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
 }

@@ -4,11 +4,13 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "node scripts/sync.mjs && astro dev",
-    "build": "node scripts/sync.mjs && astro build && node scripts/check.mjs",
+    "build": "node scripts/sync.mjs && node scripts/contrast.mjs && node scripts/lint-tokens.mjs && astro build && node scripts/check.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "sync": "node scripts/sync.mjs",
-    "check": "node scripts/check.mjs"
+    "check": "node scripts/check.mjs",
+    "a11y": "node scripts/a11y.mjs",
+    "assets": "node scripts/assets.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.2",
@@ -18,5 +20,8 @@
   "private": true,
   "engines": {
     "node": ">=22.12"
+  },
+  "devDependencies": {
+    "axe-core": "^4.13.0"
   }
 }

@@ -29,7 +29,7 @@ A stranger installs `sprig`, writes a plan across one or more `.sprig` files, an
 
 ## launch — Launch the website and Show HN
 
-`··········` 0% · 0 of 7 done · due 2026-12-01
+`··········` 0% · 0 of 6 done · due 2026-12-01
 
 A public website that explains Sprig in ten seconds and lets a visitor edit a real plan in thirty, and a Show HN post that points at it. The site's plan, including the arguments behind its shape, is in `design/site-plan.html`.
 
@@ -39,7 +39,6 @@ A public website that explains Sprig in ten seconds and lets a visitor edit a re
 - [ ] [`0112`](https://github.com/oddurs/sprig/blob/main/cairn/items/0112-launch-post-first-comment-and-day-of-checklist.md) Launch post, first comment and day-of checklist <sup>chore · p0 · community</sup>
 - [ ] [`0113`](https://github.com/oddurs/sprig/blob/main/cairn/items/0113-extend-the-first-plan-tutorial-to-the-terminal.md) Extend the first-plan tutorial to the terminal <sup>docs · p1 · site</sup>
 - [ ] [`0114`](https://github.com/oddurs/sprig/blob/main/cairn/items/0114-cli-reference-generated-from-sprig-help.md) CLI reference generated from sprig --help <sup>feature · p1 · site</sup>
-- [ ] [`0115`](https://github.com/oddurs/sprig/blob/main/cairn/items/0115-design-system-for-the-site-tokens-the-nine-marks-a-calmer-layout.md) Design system for the site: tokens, the nine marks, a calmer layout <sup>feature · p1 · site</sup>
 
 ## v0.2 — Write plans in your editor
 

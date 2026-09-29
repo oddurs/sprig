@@ -1,0 +1,174 @@
+---
+// The nine marks, in the language's order, in three groups. This is the one way
+// the marks are shown as a set: the hero, the docs and the design page all use
+// it, so the concept always reads the same way.
+//
+// `full` shows each mark's meaning and links it to its rule in the spec;
+// `compact` is a legend.
+import { markGroups, marks } from '../design/tokens.mjs';
+
+interface Props {
+	variant?: 'full' | 'compact';
+}
+const { variant = 'full' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const groups = markGroups.map((g) => ({ ...g, marks: marks.filter((m) => m.group === g.key) }));
+---
+
+<div class="sp-wrap">
+<div class={`sp-array sp-${variant}`} role="group" aria-label="The nine marks">
+	{
+		groups.map((g) => (
+			<div class={`sp-group sp-g-${g.key}`} style={`--count: ${g.marks.length}`}>
+				{variant === 'full' && <p class="sp-group-name">{g.name}</p>}
+				<ol class="sp-marks" aria-label={g.name}>
+					{g.marks.map((m) => (
+						<li class="sp-item" style={`--mark: var(--mark-${m.key})`}>
+							{variant === 'full' ? (
+								<a class="sp-link" href={`${base}/spec/#${m.rule}`}>
+									<span class="sp-glyph" aria-hidden="true">{m.char}</span>
+									<span class="sp-name">{m.name}</span>
+									<span class="sp-meaning">{m.meaning}</span>
+								</a>
+							) : (
+								<>
+									<span class="sp-glyph" aria-hidden="true">{m.char}</span>
+									<span class="sp-name">{m.name}</span>
+								</>
+							)}
+						</li>
+					))}
+				</ol>
+			</div>
+		))
+	}
+</div>
+</div>
+
+<style>
+	/* The array lays itself out by its own width, not the viewport's: it sits in
+	   a full-width hero and in a narrow docs column, and must read well in both. */
+	.sp-wrap {
+		container-type: inline-size;
+	}
+	.sp-array {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		gap: var(--space-6) var(--space-5);
+	}
+	.sp-g-status {
+		grid-column: 1 / -1;
+	}
+	.sp-g-structure {
+		border-left: 1px solid var(--border);
+		padding-left: var(--space-5);
+	}
+	.sp-marks {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(var(--count), minmax(0, 1fr));
+		gap: var(--space-5) var(--space-4);
+	}
+	.sp-group-name {
+		margin: 0 0 var(--space-4);
+		font-size: var(--text-xs);
+		font-weight: var(--weight-medium);
+		color: var(--text-muted);
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+	.sp-glyph {
+		display: block;
+		font-family: var(--font-mono);
+		font-weight: var(--weight-medium);
+		color: var(--mark);
+		line-height: 1;
+	}
+	.sp-name {
+		display: block;
+		color: var(--text);
+		font-weight: var(--weight-medium);
+	}
+	.sp-meaning {
+		display: block;
+		color: var(--text-muted);
+	}
+
+	/* full: the hero and the design page */
+	.sp-full .sp-glyph {
+		font-size: var(--text-3xl);
+		margin-bottom: var(--space-3);
+	}
+	.sp-full .sp-name {
+		font-size: var(--text-sm);
+		margin-bottom: var(--space-1);
+	}
+	.sp-full .sp-meaning {
+		font-size: var(--text-xs);
+		line-height: var(--leading-xs);
+	}
+	.sp-link {
+		display: block;
+		text-decoration: none;
+		border-radius: var(--radius-sm);
+	}
+	.sp-link:hover .sp-name {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	.sp-link:focus-visible {
+		outline: 2px solid var(--focus);
+		outline-offset: 4px;
+	}
+
+	/* compact: a legend beside an example, always one row */
+	.sp-compact {
+		grid-template-columns: minmax(0, 5fr) minmax(0, 2fr) minmax(0, 2fr);
+		gap: var(--space-4);
+	}
+	.sp-compact .sp-g-status {
+		grid-column: auto;
+	}
+	.sp-compact .sp-g-decide,
+	.sp-compact .sp-g-structure {
+		border-left: 1px solid var(--border);
+		padding-left: var(--space-4);
+	}
+	.sp-compact .sp-marks {
+		gap: var(--space-3);
+	}
+	.sp-compact .sp-glyph {
+		font-size: var(--text-lg);
+		margin-bottom: var(--space-1);
+	}
+	.sp-compact .sp-name {
+		font-size: var(--text-xs);
+		color: var(--text-muted);
+		font-weight: var(--weight-regular);
+	}
+
+	/* Narrow: five status marks don't fit with their meanings, so they wrap to three. */
+	@container (max-width: 479px) {
+		.sp-full .sp-g-status .sp-marks {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+		.sp-compact .sp-name {
+			display: none;
+		}
+	}
+	/* Wide: all nine in one row, the groups divided by a rule. */
+	@container (min-width: 860px) {
+		.sp-full {
+			grid-template-columns: minmax(0, 5fr) minmax(0, 2fr) minmax(0, 2fr);
+		}
+		.sp-full .sp-g-status {
+			grid-column: auto;
+		}
+		.sp-full .sp-g-decide {
+			border-left: 1px solid var(--border);
+			padding-left: var(--space-5);
+		}
+	}
+</style>

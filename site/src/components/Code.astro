@@ -1,0 +1,44 @@
+---
+// A Sprig example, highlighted by the same rules as the playground and the
+// docs: marks in their colours, everything else in the neutrals.
+import { highlight } from '../lib/render.js';
+
+interface Props {
+	code: string;
+	file?: string;
+}
+const { code, file } = Astro.props;
+---
+
+<figure class="sp-code">
+	{file && <figcaption>{file}</figcaption>}
+	<pre class="sc" set:html={highlight(code)} />
+</figure>
+
+<style>
+	.sp-code {
+		margin: 0;
+		min-width: 0;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		background: var(--surface-raised);
+		overflow: hidden;
+	}
+	figcaption {
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		color: var(--text-muted);
+		padding: var(--space-2) var(--space-4);
+		border-bottom: 1px solid var(--border);
+	}
+	pre {
+		margin: 0;
+		padding: var(--space-4);
+		font-family: var(--font-mono);
+		font-size: var(--text-sm);
+		line-height: var(--leading-md);
+		overflow-x: auto;
+		tab-size: 2;
+		color: var(--text);
+	}
+</style>

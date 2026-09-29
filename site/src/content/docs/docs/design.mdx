@@ -1,0 +1,159 @@
+---
+title: Design system
+description: The tokens, the nine marks and the components the Sprig site is built from, and the rules that keep them consistent.
+---
+
+import Button from '../../../components/Button.astro';
+import Code from '../../../components/Code.astro';
+import Mark from '../../../components/Mark.astro';
+import MarkArray from '../../../components/MarkArray.astro';
+import Plan from '../../../components/Plan.astro';
+import Swatches from '../../../components/Swatches.astro';
+import { marks, space, type, weight, radius, motion, breakpoints } from '../../../design/tokens.mjs';
+
+The site is built from a small system: tokens, a few layout primitives, the
+components the site actually uses, and three rules. Everything on this page is
+rendered from the same sources the site uses, so it can't disagree with them.
+
+## One idea
+
+**The nine marks are the only colour.** Everything else is a quiet neutral, so
+the marks read as what they are: the whole language, one character per state.
+They appear as a set in one component, `MarkArray`, and their colours drive the
+code highlighting, the plan view, the social image and the favicon.
+
+<MarkArray />
+
+## The marks
+
+Each mark's colour is set in OKLCH at one lightness and one chroma per theme, so
+none is louder than another. *To do* and *dropped* are deliberately neutral: the
+default state and the dead one. Every mark clears 4.5:1 against both surfaces in
+both themes, and `scripts/contrast.mjs` fails the build if one stops doing so.
+The ratios below are measured against the page surface.
+
+<Swatches names={marks.map((m) => `mark-${m.key}`)} />
+
+## Colour
+
+Components use semantic tokens only. Each names a job, not a value, and each
+theme gives it a value. There are six.
+
+<Swatches names={['surface', 'surface-raised', 'border', 'border-strong', 'text', 'text-muted']} />
+
+- **surface** is the page; **surface-raised** is code and editors.
+- **border** separates; **border-strong** outlines a control, and clears 3:1.
+- **text** is almost everything; **text-muted** is supporting text, and clears 4.5:1.
+- A state tint, like the amber behind a blocked item's "waits on", is mixed from
+  that state's mark with `color-mix`, so no new colour enters the palette.
+
+## Type
+
+Two families, both from the system: the platform's sans for everything, and its
+monospace for code and marks. No font files are shipped.
+
+<table>
+	<thead><tr><th>Token</th><th>Size</th><th>Line height</th><th>Sample</th></tr></thead>
+	<tbody>
+		{Object.entries(type).map(([name, [size, leading]]) => (
+			<tr><td><code>--text-{name}</code></td><td>{size}</td><td>{leading}</td><td style={`font-size:var(--text-${name});line-height:var(--leading-${name})`}>Plans</td></tr>
+		))}
+	</tbody>
+</table>
+
+Three weights: {Object.entries(weight).map(([k, v]) => `${k} ${v}`).join(', ')}. Sizes
+from `xl` up tighten their tracking slightly.
+
+## Space
+
+One scale for margin, padding and gap. Sections are separated by the two
+largest steps, which is most of what "letting it breathe" means in practice.
+
+<table>
+	<thead><tr><th>Token</th><th>Value</th><th></th></tr></thead>
+	<tbody>
+		{Object.entries(space).map(([k, v]) => (
+			<tr><td><code>--space-{k}</code></td><td>{v}</td><td><span style={`display:inline-block;height:8px;width:var(--space-${k});background:var(--text)`} /></td></tr>
+		))}
+	</tbody>
+</table>
+
+## Radius, motion, layers and breakpoints
+
+- Radius: {Object.entries(radius).map(([k, v]) => `${k} (${v})`).join(', ')}.
+- Motion: {motion.fast} and {motion.base}, one easing; both drop to zero under
+  `prefers-reduced-motion`.
+- Layers: base, sticky, overlay. No literal z-index.
+- Breakpoints: {Object.values(breakpoints).join('px, ')}px. Media queries can't
+  read custom properties, so these three are the only widths a media query may
+  use, and the build checks it.
+- No shadows. Elevation is a change of surface, not a drop shadow.
+
+## Components
+
+### Mark
+
+One mark in its colour. Decorative wherever its name is shown beside it; given
+a label when it stands alone.
+
+<p><Mark kind="done" size="lg" /> <Mark kind="ask" size="lg" /> <Mark kind="graft" size="lg" label /></p>
+
+### MarkArray
+
+The nine marks as a set, in the language's order and groups. `full` links each
+mark to its rule in the spec; `compact` is a legend.
+
+<MarkArray variant="compact" />
+
+**Do** show the marks as a set only through this component. **Don't** recolour a
+mark for emphasis, or show a subset without saying which.
+
+### Button
+
+<p><Button variant="primary">Primary</Button> <Button>Secondary</Button> <Button variant="ghost">Ghost</Button> <Button size="sm">Small</Button></p>
+
+Primary is the one action a section is for; there is at most one per section.
+Secondary is an alternative, ghost a quiet way out.
+
+### Code
+
+A Sprig example, highlighted by the same rules everywhere: marks in their
+colours, everything else neutral.
+
+<Code code={`Release 2.0  @kim
+
+- Migration guide  ^guide
+? Keep the free tier?  ^tier
+  = Yes, capped at three devices.
+- Announce  after:^guide  after:^tier`} file="release.sprig" />
+
+### Plan
+
+A plan as Sprig reads it, rendered at build time by the parser.
+
+<Plan files={{ 'release.sprig': `Release 2.0  @kim
+
+- Migration guide  ^guide
+? Keep the free tier?  ^tier
+  = Yes, capped at three devices.
+- Announce  after:^guide  after:^tier` }} active="release.sprig" caption="release.sprig, as Sprig reads it" />
+
+### Primitives
+
+`Stack`, `Inline`, `Grid` and `Text` do the layout, and accept only token
+values: `gap={5}` type-checks, `gap="13px"` doesn't. A component never sets its
+own margin; the parent's gap does the spacing. `Section` is the one pattern: a
+heading, an optional introduction and content, at the site's rhythm.
+
+## Rules
+
+1. **Colour is a token.** `scripts/lint-tokens.mjs` fails the build on any colour
+   value outside `site/src/design/tokens.mjs`, on spacing or type sizes off the
+   scales, and on media queries at other widths.
+2. **A component needs a real use.** The site has what it uses and nothing it
+   might one day. A pattern becomes a component the third time it appears.
+3. **Changing a token is a system change.** Adding one is cheap. Changing one
+   moves every page, which is the point, so it's done deliberately.
+
+Every page is checked with axe in both themes on every build, and a violation
+fails it.

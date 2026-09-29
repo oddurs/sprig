@@ -8,6 +8,7 @@
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { css } from '../src/design/tokens.mjs';
 
 const site = join(dirname(fileURLToPath(import.meta.url)), '..');
 const repo = join(site, '..');
@@ -99,7 +100,10 @@ write(
 	page(
 		{ title: 'Roadmap', description: 'From draft to 1.0, generated from the project’s cairn backlog.', editUrl: false },
 		`:::note[Generated]\nBuilt from [\`ROADMAP.md\`](${blob}/ROADMAP.md), which cairn renders from the items in [\`cairn/items\`](${blob}/cairn/items).\n:::\n\n` +
-			dropTitle(read('ROADMAP.md')).replace(/<!--[\s\S]*?-->\n*/g, ''),
+			dropTitle(read('ROADMAP.md'))
+				.replace(/<!--[\s\S]*?-->\n*/g, '')
+				// Task-list checkboxes would render as unlabelled, disabled form controls.
+				.replace(/^(\s*)- \[[ x]\] /gm, '$1- '),
 	),
 );
 const changelog = read('CHANGELOG.md');
@@ -115,6 +119,9 @@ const releases = [...changelog.matchAll(/^## \[(\d[^\]]*)\] - (\d{4}-\d{2}-\d{2}
 	([, version, date, notes]) => ({ version, date, notes: notes.trim() }),
 );
 write(join(generated, 'releases.json'), JSON.stringify(releases, null, '\t'));
+
+/* design tokens, as CSS custom properties for every page and the docs */
+write(join(generated, 'tokens.css'), css());
 
 /* example plans for the playground */
 const examples = Object.fromEntries(
