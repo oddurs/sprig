@@ -197,9 +197,9 @@ description = "Rough size, never an estimate. xl means it has not been split yet
 [[field]]
 name = "area"
 kind = "enum"
-values = ["spec", "suite", "core", "cli", "lsp", "editors", "agents", "interop", "release", "docs", "community"]
+values = ["spec", "suite", "core", "cli", "lsp", "editors", "agents", "interop", "release", "docs", "site", "community"]
 column = true
-description = "spec: the document; suite: conformance examples; core: sprig-core crate; cli: the sprig binary; lsp: language server; editors: grammars and extensions; agents: MCP and agent conventions; interop: import, export, calendars, CI; release: packaging and CI; docs: guides; community: name, governance, stewardship"
+description = "spec: the document; suite: conformance examples; core: sprig-core crate; cli: the sprig binary; lsp: language server; editors: grammars and extensions; agents: MCP and agent conventions; interop: import, export, calendars, CI; release: packaging and CI; docs: guides; site: the website; community: name, governance, stewardship"
 
 # ─── Saved views ─────────────────────────────────────────────────────────────
 
