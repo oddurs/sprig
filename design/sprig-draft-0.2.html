@@ -1,0 +1,1589 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sprig</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400&family=Spline+Sans+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --paper:#ECEFE9; --paper-2:#E2E7DF; --card:#F5F7F3; --ink:#17201A; --ink-2:#3F4B43; --muted:#66736A;
+  --rule:#C3CCC1; --rule-2:#D6DDD3; --focus:#2D6A3D;
+  --leaf:#2D6A3D; --leaf-ink:#F5F7F3;
+  --s-todo:#3F4B43; --s-doing:#B26F12; --s-done:#2D6A3D; --s-drop:#8C968E; --s-later:#3A679A; --s-ask:#7D4BA3; --s-graft:#B2482B;
+  --chip:#DCE3D9; --chip-ink:#2E3A32;
+  --who-bg:#D0E4DE; --who-ink:#1D5147;
+  --late-bg:#F4D8D0; --late-ink:#9B2F1F;
+  --block-bg:#F1E2C8; --block-ink:#83500F;
+  --code-bg:#151D18; --code-bg-2:#1C2620; --code-rule:#2B372F; --code-ink:#DCE3DA;
+  --k-title:#FFFFFF; --k-hkey:#7F8C83; --k-todo:#E6ECE4; --k-doing:#F0B54A; --k-done:#86CC95; --k-drop:#6F7B73;
+  --k-later:#86B6E8; --k-ask:#CBA1EC; --k-graft:#F2906F; --k-who:#8ED6CA; --k-tag:#E9A6C8; --k-prio:#FF7C6B;
+  --k-id:#B5C3B9; --k-key:#7F8C83; --k-val:#E8D7A2; --k-link:#F2906F; --k-note:#9AA79E; --k-com:#5B685F;
+  --serif:"Newsreader", Georgia, "Times New Roman", serif;
+  --display:"Bricolage Grotesque", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"Spline Sans Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --paper:#101512; --paper-2:#161D18; --card:#141A16; --ink:#E1E7E0; --ink-2:#BAC5BC; --muted:#8B988F;
+    --rule:#2E3A32; --rule-2:#232D26; --focus:#7CC48C;
+    --leaf:#7CC48C; --leaf-ink:#0F1511;
+    --s-todo:#BAC5BC; --s-doing:#E9A93E; --s-done:#7CC48C; --s-drop:#6B776F; --s-later:#80AEE0; --s-ask:#C49BE6; --s-graft:#EE8B69;
+    --chip:#222D26; --chip-ink:#CBD5CD;
+    --who-bg:#183832; --who-ink:#9ADCD0;
+    --late-bg:#46211A; --late-ink:#FFB4A6;
+    --block-bg:#3A2D16; --block-ink:#F2C47A;
+    --code-bg:#0A0E0B; --code-bg-2:#111713; --code-rule:#222D26;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --paper:#101512; --paper-2:#161D18; --card:#141A16; --ink:#E1E7E0; --ink-2:#BAC5BC; --muted:#8B988F;
+  --rule:#2E3A32; --rule-2:#232D26; --focus:#7CC48C;
+  --leaf:#7CC48C; --leaf-ink:#0F1511;
+  --s-todo:#BAC5BC; --s-doing:#E9A93E; --s-done:#7CC48C; --s-drop:#6B776F; --s-later:#80AEE0; --s-ask:#C49BE6; --s-graft:#EE8B69;
+  --chip:#222D26; --chip-ink:#CBD5CD;
+  --who-bg:#183832; --who-ink:#9ADCD0;
+  --late-bg:#46211A; --late-ink:#FFB4A6;
+  --block-bg:#3A2D16; --block-ink:#F2C47A;
+  --code-bg:#0A0E0B; --code-bg-2:#111713; --code-rule:#222D26;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font:17px/1.55 var(--serif);padding-inline:clamp(16px,4vw,40px);padding-block:0 64px}
+.wrap{max-width:1200px;margin:0 auto}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+code,.mono{font-family:var(--mono);font-size:.84em}
+p code,li code,dd code{background:var(--chip);color:var(--chip-ink);padding:1px 5px;border-radius:4px;white-space:nowrap}
+
+/* top bar */
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-block:18px;border-bottom:1px solid var(--rule);font:500 12.5px/1 var(--mono);color:var(--muted)}
+.top .brand{color:var(--ink);font-weight:600;letter-spacing:.02em}
+.top nav{display:flex;gap:18px;flex-wrap:wrap}
+.top nav a{text-decoration:none}
+.top nav a:hover{color:var(--ink)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.02fr);gap:clamp(28px,5vw,64px);align-items:end;padding-block:clamp(40px,7vw,80px) 44px}
+.eyebrow{font:500 12px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 18px}
+h1{font:800 clamp(92px,15vw,200px)/.8 var(--display);font-variation-settings:"opsz" 96;letter-spacing:-.05em;margin:0 0 28px;margin-left:-.04em}
+h1 .dot{color:var(--leaf)}
+.lede{font-size:clamp(19px,2vw,22px);line-height:1.45;color:var(--ink-2);max-width:32ch;margin:0 0 20px;text-wrap:pretty}
+.specline{font:12.5px/1.6 var(--mono);color:var(--muted);margin:0 0 14px}
+.newin{margin:0;font-size:15.5px;color:var(--ink-2);max-width:40ch}
+.newin b{font:700 12px/1 var(--mono);letter-spacing:.04em;background:var(--block-bg);color:var(--block-ink);padding:3px 6px;border-radius:4px;margin-right:6px}
+
+.code-card{margin:0;background:var(--code-bg);color:var(--code-ink);border-radius:10px;overflow:hidden;min-width:0}
+.code-card figcaption{display:flex;justify-content:space-between;gap:12px;padding:10px 16px;border-bottom:1px solid var(--code-rule);font:500 12px/1 var(--mono);color:var(--k-hkey)}
+.code-card figcaption b{color:var(--code-ink);font-weight:500}
+pre.code{margin:0;padding:18px 20px 20px;font:13.5px/1.7 var(--mono);overflow-x:auto;tab-size:2}
+
+/* marks band */
+.marks{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));border-top:1.5px solid var(--ink);border-bottom:1px solid var(--rule)}
+.mk{padding:12px 12px 20px;border-left:1px solid var(--rule);display:flex;flex-direction:column;gap:6px}
+.mk:first-child{border-left:0;padding-left:0}
+.mk.gs{border-left:1.5px solid var(--ink)}
+.mk:first-child.gs{border-left:0}
+.mk .grp{font:500 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);height:1em}
+.mk .g{font:500 clamp(54px,6vw,88px)/1 var(--mono);height:1.02em;display:block}
+.mk .n{font:700 13px/1.2 var(--display);letter-spacing:.08em;text-transform:uppercase}
+.mk .d{font-size:15px;line-height:1.4;color:var(--muted)}
+.g-todo{color:var(--s-todo)} .g-doing{color:var(--s-doing)} .g-done{color:var(--s-done)} .g-dropped{color:var(--s-drop)}
+.g-later{color:var(--s-later)} .g-ask{color:var(--s-ask)} .g-graft{color:var(--s-graft)} .g-group{color:var(--ink)}
+
+/* sections */
+.sec{padding-block:clamp(56px,8vw,96px) 0}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px 48px;align-items:end;margin-bottom:28px}
+h2{font:750 clamp(34px,4.8vw,58px)/.98 var(--display);letter-spacing:-.035em;margin:0;text-wrap:balance}
+.sec-head p{margin:0;color:var(--ink-2);max-width:52ch;text-wrap:pretty}
+h3{font:700 21px/1.2 var(--display);letter-spacing:-.01em;margin:0 0 8px;text-wrap:balance}
+
+.principles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid var(--rule)}
+.principles article{padding:22px 22px 4px 0}
+.principles article+article{padding-left:22px;border-left:1px solid var(--rule)}
+.principles p{margin:0;font-size:16px;color:var(--ink-2)}
+
+/* playground */
+.pg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);height:740px;border:1.5px solid var(--ink);border-radius:12px;overflow:hidden;background:var(--card)}
+.edp{display:flex;flex-direction:column;min-height:0;background:var(--code-bg);color:var(--code-ink)}
+.tabs{display:flex;align-items:stretch;gap:2px;overflow-x:auto;background:var(--code-bg-2);border-bottom:1px solid var(--code-rule);padding:0 8px;flex:none;scrollbar-width:thin}
+.tab{flex:none;background:none;border:0;border-bottom:2px solid transparent;padding:12px 10px 10px;font:500 12.5px/1 var(--mono);color:var(--k-hkey);cursor:pointer;white-space:nowrap}
+.tab:hover{color:var(--code-ink)}
+.tab[aria-selected="true"]{color:var(--k-title);border-bottom-color:var(--k-done)}
+.tab-new{color:var(--k-done)}
+.tab-input{flex:none;width:130px;margin:6px 4px;background:var(--code-bg);border:1px solid var(--code-rule);border-radius:5px;color:var(--k-title);font:500 12.5px/1 var(--mono);padding:5px 8px}
+.ed{position:relative;flex:1;min-height:0}
+.ed pre,.ed textarea{position:absolute;inset:0;margin:0;border:0;padding:16px 18px;font:14px/1.65 var(--mono);letter-spacing:0;tab-size:2;white-space:pre;word-wrap:normal;overflow-wrap:normal}
+.ed pre{overflow:hidden;pointer-events:none;padding-bottom:60px;padding-right:60px;color:var(--code-ink)}
+.ed textarea{width:100%;height:100%;overflow:auto;resize:none;background:transparent;color:transparent;-webkit-text-fill-color:transparent;caret-color:#FFFFFF;outline:none}
+.ed textarea::selection{background:rgba(134,204,149,.3)}
+.ed:focus-within{box-shadow:inset 0 0 0 2px rgba(134,204,149,.35)}
+.edfoot{flex:none;display:flex;justify-content:space-between;align-items:center;gap:8px 12px;flex-wrap:wrap;padding:9px 14px;border-top:1px solid var(--code-rule);font:12px/1.4 var(--mono);color:var(--k-hkey)}
+.edfoot kbd{font:inherit;color:var(--code-ink)}
+.ghost{background:none;border:1px solid var(--code-rule);border-radius:5px;padding:5px 9px;font:500 12px/1 var(--mono);color:var(--code-ink);cursor:pointer}
+.ghost:hover{border-color:var(--k-hkey)}
+.ghost.armed{border-color:var(--k-prio);color:var(--k-prio)}
+
+/* highlight tokens (always on a dark code surface) */
+.k-title,.k-group,.k-gm{color:var(--k-title)}
+.k-todo{color:var(--k-todo)} .k-doing{color:var(--k-doing)} .k-done{color:var(--k-done)} .k-dropped{color:var(--k-drop)}
+.k-later{color:var(--k-later)} .k-ask,.k-ans{color:var(--k-ask)} .k-graft{color:var(--k-graft)}
+.k-anst{color:var(--code-ink)}
+.k-who{color:var(--k-who)} .k-tag{color:var(--k-tag)} .k-prio{color:var(--k-prio)}
+.k-id{color:var(--k-id);text-decoration:underline dotted;text-underline-offset:3px}
+.k-key{color:var(--k-key)} .k-val{color:var(--k-val)} .k-link{color:var(--k-link)}
+.k-note{color:var(--k-note)} .k-com,.k-esc{color:var(--k-com)}
+.kl-done{opacity:.55} .kl-dropped{opacity:.5;text-decoration:line-through} .kl-later{opacity:.72}
+
+/* rendered view */
+.rv{display:flex;flex-direction:column;min-height:0;border-left:1.5px solid var(--ink)}
+.rv-head{flex:none;padding:18px 24px 14px;border-bottom:1px solid var(--rule-2)}
+.rv-file{font:500 11.5px/1 var(--mono);color:var(--muted);letter-spacing:.04em;margin-bottom:8px}
+.rv-head h3{font-size:clamp(24px,2.4vw,30px);letter-spacing:-.025em;margin:0 0 8px}
+.props{display:flex;flex-wrap:wrap;gap:4px 16px;margin:0 0 10px;font:12.5px/1.5 var(--mono)}
+.props div{display:flex;gap:6px;align-items:baseline}
+.props dt{color:var(--muted)} .props dd{margin:0;color:var(--ink)}
+.props .rel{color:var(--muted)}
+.rv-notes{font-size:15.5px;line-height:1.45;color:var(--ink-2);max-width:60ch;margin-bottom:12px}
+.rv-notes p{margin:0 0 4px}
+.big{display:flex;align-items:center;gap:12px}
+.bar{display:flex;flex:1;height:6px;border-radius:3px;background:var(--rule-2);overflow:hidden}
+.bar i{display:block;background:var(--s-done)} .bar b{display:block;background:var(--s-doing)}
+.big .pct{font:600 13px/1 var(--mono);font-variant-numeric:tabular-nums;min-width:4ch;text-align:right}
+.stats{margin:8px 0 0;font-size:14.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.stats b{color:var(--ink);font-weight:600}
+.rv-tools{flex:none;display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;padding:10px 24px;border-bottom:1px solid var(--rule-2);background:var(--paper-2)}
+.seg{display:flex;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.seg button{background:none;border:0;padding:6px 11px;font:600 12px/1 var(--display);letter-spacing:.02em;cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.people{display:flex;gap:6px;flex-wrap:wrap}
+.pchip{background:none;border:1px solid var(--rule);border-radius:20px;padding:4px 9px;font:500 11.5px/1 var(--mono);cursor:pointer;color:var(--ink-2)}
+.pchip[aria-pressed="true"]{background:var(--who-bg);border-color:transparent;color:var(--who-ink)}
+.hd{display:flex;gap:6px;align-items:center;font:500 12px/1 var(--display);color:var(--muted);margin-left:auto;cursor:pointer}
+.rv-body{flex:1;min-height:0;overflow:auto;padding:10px 24px 32px}
+
+.tree,.tree ul{list-style:none;margin:0;padding:0}
+.tree ul{margin-left:6px;padding-left:18px;border-left:1px solid var(--rule-2)}
+.row{display:grid;grid-template-columns:14px 18px minmax(0,1fr) auto;gap:8px;align-items:start;padding:4px 0}
+.body{min-width:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 6px}
+.txt{font-size:16px;line-height:1.45;cursor:pointer;margin-right:4px}
+.txt:hover{text-decoration:underline;text-decoration-color:var(--rule);text-underline-offset:3px}
+.has-kids>.row .txt,.s-group>.row .txt{font:600 15px/1.5 var(--display);letter-spacing:-.005em}
+.s-graft>.row .txt .gt{font:700 15.5px/1.45 var(--display)}
+.v-done>.row .txt,.v-later>.row .txt{color:var(--muted)}
+.v-dropped>.row .txt{color:var(--muted);text-decoration:line-through}
+.is-blocked>.row .txt{color:var(--ink-2)}
+.notes,.answers{padding-left:48px;margin:0 0 6px;max-width:66ch}
+.notes{font-size:15px;line-height:1.45;color:var(--muted)}
+.notes p{margin:0 0 4px}
+.notes code{background:var(--chip);padding:0 4px;border-radius:3px}
+.ans{margin:0 0 4px;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px;font-size:15.5px;line-height:1.45;color:var(--ink)}
+.ans .eq{font:600 14px/1 var(--mono);color:var(--s-ask)}
+.nwho{color:var(--who-ink)}
+.flink,.fchip{font:500 12.5px/1 var(--mono);color:var(--s-graft);text-decoration:none;border-bottom:1px dashed currentColor}
+.flink:hover,.fchip:hover{border-bottom-style:solid}
+.s-graft>ul{border-left:1.5px dashed var(--s-graft)}
+.untitled{color:var(--muted);font-style:italic}
+
+.caret{width:14px;height:14px;margin-top:5px;padding:0;border:0;background:none;cursor:pointer;position:relative;color:var(--muted)}
+.caret::before{content:"";position:absolute;left:3px;top:3px;border:4px solid transparent;border-left:6px solid currentColor;transform:rotate(90deg);transform-origin:3px 4px;transition:transform .15s}
+.caret[aria-expanded="false"]::before{transform:none}
+.mark{width:16px;height:16px;margin-top:4px;border-radius:50%;border:1.5px solid var(--s-todo);background:transparent;padding:0;display:grid;place-items:center;position:relative;color:var(--s-todo);font:700 10px/1 var(--mono)}
+button.mark{cursor:pointer}
+button.mark:hover{box-shadow:0 0 0 3px var(--rule-2)}
+.m-doing{border-color:var(--s-doing);background:linear-gradient(90deg,transparent 50%,var(--s-doing) 50%)}
+.m-done,.m-answered{border-color:var(--s-done);background:var(--s-done)}
+.m-answered{border-color:var(--s-ask);background:var(--s-ask)}
+.m-done::after,.m-answered::after{content:"";width:7px;height:4px;border:solid var(--leaf-ink);border-width:0 0 1.8px 1.8px;transform:translateY(-1px) rotate(-45deg)}
+.m-done.inherited{opacity:.55}
+.m-dropped{border-color:var(--s-drop)}
+.m-dropped::after{content:"";width:12px;height:1.5px;background:var(--s-drop);transform:rotate(-45deg)}
+.m-later{border-color:var(--s-later);color:var(--s-later)} .m-later::after{content:"›";font-size:13px;transform:translateY(-1px)}
+.m-ask{border-color:var(--s-ask);color:var(--s-ask)} .m-ask::after{content:"?"}
+.m-group{border:0;color:var(--s-todo)} .m-group::after{content:"";width:7px;height:7px;background:currentColor;transform:rotate(45deg)}
+.m-group.v-done{color:var(--s-done)} .m-group.v-doing{color:var(--s-doing)}
+.m-graft{border-radius:4px;border-color:var(--s-graft);color:var(--s-graft)} .m-graft::after{content:"+";font-size:13px;font-weight:500}
+.m-graft.v-done{background:var(--s-graft);color:var(--leaf-ink)}
+.is-blocked>.row .mark{border-style:dashed}
+
+.chip{display:inline-flex;align-items:center;font:500 11.5px/1 var(--mono);padding:3px 6px;border-radius:4px;background:var(--chip);color:var(--chip-ink);white-space:nowrap}
+.chip.who{background:var(--who-bg);color:var(--who-ink)} .chip.who.soft{background:none;box-shadow:inset 0 0 0 1px var(--who-bg)}
+.chip.tag{background:none;color:var(--muted);box-shadow:inset 0 0 0 1px var(--rule)}
+.chip.id,.chip.kv{background:none;color:var(--muted);padding-inline:2px}
+.chip.prio{background:none;color:var(--late-ink);font-weight:600;padding-inline:1px}
+.chip.late{background:var(--late-bg);color:var(--late-ink)}
+.chip.block{background:var(--block-bg);color:var(--block-ink)}
+.chip.err{background:var(--late-bg);color:var(--late-ink)}
+.chip.ready{background:none;box-shadow:inset 0 0 0 1px var(--s-done);color:var(--s-done)}
+.v-done>.row .chip.date,.v-dropped>.row .chip.date{opacity:.6}
+.prog{display:flex;align-items:center;gap:7px;margin-top:6px;font:500 11.5px/1 var(--mono);color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.prog .bar{width:44px;flex:none;height:4px}
+
+.flash>.row{animation:flash 1.4s ease-out}
+@keyframes flash{0%,30%{background:var(--block-bg)}100%{background:transparent}}
+
+.nx-h{font:700 12px/1 var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:16px 0 4px}
+.nx{list-style:none;margin:0;padding:0}
+.nx li{display:grid;grid-template-columns:18px minmax(0,1fr);gap:8px;padding:9px 0;border-bottom:1px solid var(--rule-2)}
+.nx .path{font:500 11.5px/1.4 var(--mono);color:var(--muted);margin-bottom:2px}
+.nx .path span{opacity:.6}
+.nx .line{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 6px}
+.nx .is-blocked .mark{border-style:dashed}
+.empty{color:var(--muted);font-style:italic;margin:12px 0}
+
+/* reference */
+.ref{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 40px}
+.ref h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;padding-bottom:10px;border-bottom:1.5px solid var(--ink);margin:0}
+.ref dl{margin:0}
+.ref dl div{display:grid;grid-template-columns:minmax(96px,auto) minmax(0,1fr);gap:14px;padding:10px 0;border-bottom:1px solid var(--rule-2);align-items:baseline}
+.ref dt{font:500 13.5px/1.4 var(--mono);color:var(--ink);white-space:nowrap}
+.ref dd{margin:0;font-size:15.5px;line-height:1.45;color:var(--ink-2)}
+.ref dd code{font-size:12.5px}
+
+/* scales */
+.scales{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.scales .code-card{display:flex;flex-direction:column}
+.scales pre.code{font-size:12.5px;padding:14px 16px 16px;flex:1}
+.scale-cap{margin:12px 0 0;font-size:15px;color:var(--ink-2)}
+.scale-cap b{font:700 15px var(--display);color:var(--ink);display:block;margin-bottom:2px}
+
+/* rules */
+.rules{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px;align-items:start}
+.rules ol{margin:0;padding:0;list-style:none;counter-reset:r}
+.rules li{counter-increment:r;display:grid;grid-template-columns:34px minmax(0,1fr);padding:12px 0;border-bottom:1px solid var(--rule-2);font-size:16px;color:var(--ink-2)}
+.rules li::before{content:counter(r);font:600 13px/1.6 var(--mono);color:var(--muted)}
+.rules li b{color:var(--ink);font-weight:600}
+.grammar .k-r{color:var(--k-who)} .grammar .k-s{color:var(--k-val)}
+
+/* decisions */
+.tally{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.debates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 44px}
+.db{padding:22px 0 26px;border-top:1px solid var(--rule)}
+.db header{display:flex;gap:12px;align-items:baseline;margin-bottom:12px}
+.db h3{margin:0;font-size:20px}
+.ruling{flex:none;font:600 11.5px/1 var(--mono);padding:4px 7px;border-radius:4px;white-space:nowrap}
+.r-changed{background:var(--block-bg);color:var(--block-ink)}
+.r-added{background:var(--chip);color:var(--s-done)}
+.r-kept{box-shadow:inset 0 0 0 1px var(--rule);color:var(--ink-2)}
+.r-rejected{background:var(--late-bg);color:var(--late-ink)}
+.fa{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-bottom:12px}
+.fa b{font:700 11px/1 var(--display);letter-spacing:.09em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:5px}
+.fa p{margin:0;font-size:15.5px;line-height:1.45;color:var(--ink-2)}
+.verdict{margin:0;font-size:16px;line-height:1.5;color:var(--ink)}
+.verdict b{font:700 15px var(--display)}
+
+footer{margin-top:80px;padding-top:18px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font:12.5px/1.5 var(--mono);color:var(--muted)}
+
+@media (max-width:1020px){
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .marks{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .mk,.mk.gs{border-left:0;padding-left:0;border-top:1px solid var(--rule)}
+  .mk:nth-child(-n+3){border-top:0}
+  .mk:nth-child(3n+2),.mk:nth-child(3n){padding-left:14px;border-left:1px solid var(--rule)}
+  .principles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .principles article:nth-child(3){padding-left:0;border-left:0}
+  .principles article:nth-child(n+3){border-top:1px solid var(--rule);margin-top:18px}
+  .pg{grid-template-columns:minmax(0,1fr);height:auto}
+  .ed{flex:none;height:440px}
+  .rv{border-left:0;border-top:1.5px solid var(--ink)}
+  .rv-body{flex:none;max-height:640px}
+  .ref{grid-template-columns:minmax(0,1fr);gap:32px}
+  .scales{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .rules{grid-template-columns:minmax(0,1fr)}
+  .sec-head{grid-template-columns:minmax(0,1fr)}
+  .debates{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:560px){
+  body{font-size:16px}
+  .mk .d{font-size:13.5px}
+  .principles{grid-template-columns:minmax(0,1fr)}
+  .principles article,.principles article+article{padding-left:0;border-left:0}
+  .principles article+article{border-top:1px solid var(--rule);margin-top:14px}
+  .scales{grid-template-columns:minmax(0,1fr)}
+  .fa{grid-template-columns:minmax(0,1fr);gap:12px}
+  .ed pre,.ed textarea{font-size:16px}
+  .rv-head,.rv-tools,.rv-body{padding-inline:16px}
+  .hd{margin-left:0}
+  .notes,.answers{padding-left:30px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before{transition:none!important;animation:none!important}
+}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="brand">sprig<span style="color:var(--leaf)">.</span></span>
+    <nav aria-label="Sections">
+      <a href="#playground">Playground</a>
+      <a href="#reference">Reference</a>
+      <a href="#rules">Rules</a>
+      <a href="#decisions">Decisions</a>
+    </nav>
+    <span>Draft 0.2 · September 2026</span>
+  </header>
+
+  <section class="hero">
+    <div>
+      <p class="eyebrow">A plain-text format for plans</p>
+      <h1>Sprig<span class="dot">.</span></h1>
+      <p class="lede">A shopping list and an eighteen-month build use the same handful of marks, nest as deep as you like, and link across files so small plans add up to a big one.</p>
+      <p class="specline">.sprig &nbsp;·&nbsp; UTF-8 &nbsp;·&nbsp; indentation is structure &nbsp;·&nbsp; no depth limit</p>
+      <p class="newin"><b>0.2</b>Answer lines, branch grafts, dates stored as dates, and no header block. <a href="#decisions">The arguments behind each change.</a></p>
+    </div>
+    <figure class="code-card">
+      <figcaption><b>bakery.sprig</b><span>readable before it's rendered</span></figcaption>
+      <pre class="code" data-snippet="hero"></pre>
+    </figure>
+  </section>
+
+  <section class="marks" aria-label="Line starts">
+    <div class="mk gs"><span class="grp">status</span><span class="g g-todo">-</span><span class="n">To do</span><span class="d">The default. Something to do.</span></div>
+    <div class="mk"><span class="grp"></span><span class="g g-doing">~</span><span class="n">Doing</span><span class="d">Started. Hands are on it.</span></div>
+    <div class="mk"><span class="grp"></span><span class="g g-done">x</span><span class="n">Done</span><span class="d">Finished. Settles its branch.</span></div>
+    <div class="mk"><span class="grp"></span><span class="g g-dropped">/</span><span class="n">Dropped</span><span class="d">Decided against. Kept for the record.</span></div>
+    <div class="mk"><span class="grp"></span><span class="g g-later">&gt;</span><span class="n">Later</span><span class="d">Parked on purpose. Out of the count.</span></div>
+    <div class="mk gs"><span class="grp">decide</span><span class="g g-ask">?</span><span class="n">Question</span><span class="d">Open until an answer is written.</span></div>
+    <div class="mk"><span class="grp"></span><span class="g g-ask">=</span><span class="n">Answer</span><span class="d">Settles the question above it.</span></div>
+    <div class="mk gs"><span class="grp">structure</span><span class="g g-group">#</span><span class="n">Group</span><span class="d">A heading. Status comes from its children.</span></div>
+    <div class="mk"><span class="grp"></span><span class="g g-graft">+</span><span class="n">Graft</span><span class="d">A file or branch, mounted here.</span></div>
+  </section>
+
+  <section class="sec" aria-labelledby="ideas-h">
+    <div class="sec-head">
+      <h2 id="ideas-h">One construct, all the way down</h2>
+      <p>Sprig takes the indentation of an outline, the one-character status of todo.txt, the tags of TaskPaper and the links of a wiki, and drops everything else.</p>
+    </div>
+    <div class="principles">
+      <article><h3>Everything is an item</h3><p>A carton of eggs and a quarter-long milestone are the same thing: a line that starts with a mark. Even the title is an item, so its <code>@owner</code> and dates flow down to everything under it.</p></article>
+      <article><h3>The file is the truth</h3><p>The first character is the status and dates are real dates. A plan reads the same in <code>cat</code>, in a diff, or a year from now, and the view never says something the text doesn't.</p></article>
+      <article><h3>Context sits with the work</h3><p>Unmarked lines under an item are its notes. Decisions get their own line, starting with <code>=</code>, so the reason stays next to the work it changed.</p></article>
+      <article><h3>Files graft together</h3><p><code>+ [[kitchen]]</code> mounts a file as a branch and <code>+ [[kitchen^oven]]</code> mounts one part of it. Progress, estimates and blockers roll up across files.</p></article>
+    </div>
+  </section>
+
+  <section class="sec" id="playground" aria-labelledby="pg-h">
+    <div class="sec-head">
+      <h2 id="pg-h">Playground</h2>
+      <p>Six linked files for opening a bakery. The view re-reads the source as you type; tick a mark and the source changes too. <code>dana.sprig</code> is one person's week, grafted from branches of the others. Answer the naming question in <code>bakery.sprig</code> and the window lettering in <code>launch.sprig</code> unblocks.</p>
+    </div>
+    <div class="pg">
+      <div class="edp">
+        <div class="tabs" id="tabs" role="tablist" aria-label="Files"></div>
+        <div class="ed">
+          <pre class="hl" id="hl" aria-hidden="true"></pre>
+          <textarea id="src" spellcheck="false" wrap="off" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Sprig source"></textarea>
+        </div>
+        <div class="edfoot">
+          <span><kbd>Tab</kbd> indent · <kbd>⇧Tab</kbd> outdent · <kbd id="modkey">⌘</kbd><kbd>↵</kbd> cycle - ~ x · type <kbd>due:fri</kbd> and press <kbd>↵</kbd></span>
+          <button class="ghost" id="reset" type="button">Reset samples</button>
+        </div>
+      </div>
+      <div class="rv" id="rv">
+        <div class="rv-head" id="rvHead"></div>
+        <div class="rv-tools">
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" data-vm="tree" aria-pressed="true">Tree</button>
+            <button type="button" data-vm="next" aria-pressed="false">Next up</button>
+          </div>
+          <div class="people" id="people" role="group" aria-label="Filter by person"></div>
+          <label class="hd"><input type="checkbox" id="hideDone"> Hide done</label>
+        </div>
+        <div class="rv-body" id="rvBody"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="scale" aria-labelledby="scale-h">
+    <div class="sec-head">
+      <h2 id="scale-h">Same syntax at every size</h2>
+      <p>Nothing changes as a plan grows. You add an owner when there's more than one person, anchors when something waits on something else, and a second file when one gets long.</p>
+    </div>
+    <div class="scales">
+      <div><figure class="code-card"><figcaption><b>saturday.sprig</b></figcaption><pre class="code" data-snippet="list"></pre></figure><p class="scale-cap"><b>A list</b>A title and some marks. That's a valid file.</p></div>
+      <div><figure class="code-card"><figcaption><b>move.sprig</b></figcaption><pre class="code" data-snippet="weekend"></pre></figure><p class="scale-cap"><b>A weekend</b>Dates, two people, one thing waiting on another.</p></div>
+      <div><figure class="code-card"><figcaption><b>app-2.sprig</b></figcaption><pre class="code" data-snippet="project"></pre></figure><p class="scale-cap"><b>A project</b>Priorities, a settled question, one graft.</p></div>
+      <div><figure class="code-card"><figcaption><b>northwind.sprig</b></figcaption><pre class="code" data-snippet="company"></pre></figure><p class="scale-cap"><b>A company</b>Nothing but grafts. Each team owns a file.</p></div>
+    </div>
+  </section>
+
+  <section class="sec" id="reference" aria-labelledby="ref-h">
+    <div class="sec-head">
+      <h2 id="ref-h">The whole language</h2>
+      <p>Line starts say what a line is. Tokens inside a line add facts about it. Everything else is plain text, and stays readable as plain text.</p>
+    </div>
+    <div class="ref">
+      <div>
+        <h3>Line starts</h3>
+        <dl>
+          <div><dt>- ~ x / &gt;</dt><dd>To do, doing, done, dropped, later</dd></div>
+          <div><dt>? </dt><dd>Question. Open until it has an answer.</dd></div>
+          <div><dt>= </dt><dd>Answer or decision, attached to the item above</dd></div>
+          <div><dt># </dt><dd>Group. No status of its own; it shows what its children add up to.</dd></div>
+          <div><dt>+ [[file]]</dt><dd>Graft that whole file here</dd></div>
+          <div><dt>+ [[file^id]]</dt><dd>Graft one branch of it</dd></div>
+          <div><dt>plain text</dt><dd>A note on the item above</dd></div>
+          <div><dt>// </dt><dd>Comment. Never rendered.</dd></div>
+          <div><dt>\- </dt><dd>Escape: a note that happens to start with a mark</dd></div>
+        </dl>
+      </div>
+      <div>
+        <h3>Inside a line</h3>
+        <dl>
+          <div><dt>@dana</dt><dd>Who. Flows down until a child names someone else.</dd></div>
+          <div><dt>#finance</dt><dd>Tag. No space after the <code>#</code>, which is how it differs from a group.</dd></div>
+          <div><dt>! !! !!!</dt><dd>Priority</dd></div>
+          <div><dt>^signed</dt><dd>Anchor: a name other lines can point at</dd></div>
+          <div><dt>after:^signed</dt><dd>Waits on that item. Blocked until it's done.</dd></div>
+          <div><dt>[[lease^signed]]</dt><dd>Link to a file, or to an item in one</dd></div>
+          <div><dt>due:2026-10-03</dt><dd>Stored as ISO. Type <code>fri</code>, <code>+2w</code>, <code>oct3</code> or <code>tomorrow</code> and the editor converts it.</dd></div>
+          <div><dt>est:4h</dt><dd>Hours, days (8h) or weeks (5d). Sums up the tree.</dd></div>
+          <div><dt>every:fri</dt><dd>Recurring. Ticking it moves <code>due:</code> to the next one.</dd></div>
+          <div><dt>key:"two words"</dt><dd>Any other field. Quote values that have spaces.</dd></div>
+        </dl>
+      </div>
+      <div>
+        <h3>The file</h3>
+        <dl>
+          <div><dt>line 1</dt><dd>The title. It's the root item, so its tokens apply to the whole file.</dd></div>
+          <div><dt>indentation</dt><dd>Relative. Deeper than the line above makes a child. Formatters write two spaces.</dd></div>
+          <div><dt>.sprig</dt><dd>Extension. UTF-8, LF line endings.</dd></div>
+          <div><dt>one file</dt><dd>Can be a whole grocery list. Grafts join many files into one plan.</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="rules" aria-labelledby="rules-h">
+    <div class="sec-head">
+      <h2 id="rules-h">How a file is read</h2>
+      <p>The parser on this page follows these steps in order. They are the spec.</p>
+    </div>
+    <div class="rules">
+      <ol>
+        <li><span><b>Title.</b> The first non-blank line is the title, unless it starts with a mark. It is the root item and takes tokens like any other item.</span></li>
+        <li><span><b>Classify each line</b> by its first characters. A mark and a space (<code>- ~ x / &gt; ? # +</code>) start an item. <code>= </code> is an answer. <code>//</code> is a comment. <code>\</code> escapes. Anything else is a note.</span></li>
+        <li><span><b>Indentation picks the parent.</b> A line belongs to the nearest line above it with less indentation. Blank lines only separate note paragraphs.</span></li>
+        <li><span><b>Lift the tokens.</b> Split on whitespace, keeping quoted values whole. <code>@</code> <code>#</code> <code>^</code> <code>!</code> and <code>key:value</code> become metadata. What's left is the text.</span></li>
+        <li><span><b>Status flows down, progress flows up.</b> <code>x</code>, <code>/</code> or <code>&gt;</code> settles a whole branch. A <code>?</code> with an answer is done. Groups and grafts show what their leaves add up to. Recurring items are upkeep and don't count toward progress.</span></li>
+        <li><span><b>Who flows down</b> from the title and from any <code>@name</code>, until a child names someone else.</span></li>
+        <li><span><b>Blocked is computed, never written.</b> An open item is blocked while anything in its own <code>after:</code> list, or an ancestor's, is unfinished.</span></li>
+        <li><span><b>Grafts resolve by file name</b> next to the current file; <code>^id</code> narrows to one branch. A graft that loops back to a file above it is an error on that line.</span></li>
+        <li><span><b>Dates don't need a clock.</b> ISO dates mean the same thing forever. Relative words are read against today as a courtesy, and editors should expand them before saving.</span></li>
+      </ol>
+      <figure class="code-card grammar">
+        <figcaption><b>grammar</b><span>informal</span></figcaption>
+<pre class="code"><span class="k-r">file</span>    = [ title ] { line }
+<span class="k-r">title</span>   = { token }
+<span class="k-r">line</span>    = indent ( item | answer | note | comment )
+<span class="k-r">indent</span>  = { <span class="k-s">" "</span> }
+<span class="k-r">item</span>    = mark <span class="k-s">" "</span> { token }
+<span class="k-r">mark</span>    = <span class="k-s">"-"</span> | <span class="k-s">"~"</span> | <span class="k-s">"x"</span> | <span class="k-s">"/"</span> | <span class="k-s">"&gt;"</span> | <span class="k-s">"?"</span> | <span class="k-s">"#"</span> | <span class="k-s">"+"</span>
+<span class="k-r">answer</span>  = <span class="k-s">"= "</span> { token }
+<span class="k-r">comment</span> = <span class="k-s">"//"</span> text
+<span class="k-r">note</span>    = [ <span class="k-s">"\"</span> ] text
+<span class="k-r">token</span>   = <span class="k-s">"@"</span> name | <span class="k-s">"#"</span> name | <span class="k-s">"^"</span> name
+        | <span class="k-s">"!"</span> | <span class="k-s">"!!"</span> | <span class="k-s">"!!!"</span>
+        | key <span class="k-s">":"</span> ( value | <span class="k-s">'"'</span> text <span class="k-s">'"'</span> )
+        | link | word
+<span class="k-r">link</span>    = <span class="k-s">"[["</span> path [ <span class="k-s">"^"</span> name ] <span class="k-s">"]]"</span>
+
+<span class="k-com">// stored dates: 2026-12-05</span>
+<span class="k-com">// typed dates:  today tomorrow fri +3d +2w oct3 q4</span>
+<span class="k-com">// est:          h, d (8h), w (5d)</span></pre>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sec" id="decisions" aria-labelledby="dec-h">
+    <div class="sec-head">
+      <h2 id="dec-h">Arguments, settled</h2>
+      <div>
+        <p>Sprig is opinionated on purpose. Every rule here was argued both ways before it went in, and the ones that lost are written down so nobody has to argue them again.</p>
+        <div class="tally"><span class="ruling r-changed">~ 5 changed</span><span class="ruling r-added">+ 2 added</span><span class="ruling r-kept">x 3 kept</span><span class="ruling r-rejected">/ 2 rejected</span></div>
+      </div>
+    </div>
+    <div class="debates">
+      <article class="db">
+        <header><span class="ruling r-changed">~ changed</span><h3>Groups: a trailing colon, or a mark?</h3></header>
+        <div class="fa">
+          <div><b>For the colon</b><p>TaskPaper does it, and <code>Flour:</code> looks like a heading in any text editor.</p></div>
+          <div><b>Against</b><p>Every note that ended in a colon, like "Two options:", quietly became a heading and took the lines below it. A rule that fires by accident is a bad rule.</p></div>
+        </div>
+        <p class="verdict"><b>Ruling.</b> Groups start with <code># </code>, the same way every other line starts: one character, then a space. Markdown viewers show it as a heading too.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-changed">~ changed</span><h3>Should a file have a header block?</h3></header>
+        <div class="fa">
+          <div><b>For</b><p><code>owner: @dana</code> on its own line is easy to scan, and front matter is familiar.</p></div>
+          <div><b>Against</b><p>It was a second syntax for fields: <code>key: value</code> up top, <code>key:value</code> everywhere else, with different rules about spaces.</p></div>
+        </div>
+        <p class="verdict"><b>Ruling.</b> The title line is the root item and takes the same tokens as any item: <code>Open the bakery @dana target:2026-12-05</code>. A value with spaces goes in quotes.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-changed">~ changed</span><h3>Can a date be relative?</h3></header>
+        <div class="fa">
+          <div><b>For</b><p><code>due:fri</code> is the fastest thing to type and it's how people talk.</p></div>
+          <div><b>Against</b><p>A week later the same file means something else. A plan whose meaning depends on the day you open it can't be diffed, shared or trusted.</p></div>
+        </div>
+        <p class="verdict"><b>Ruling.</b> Dates are stored as ISO. <code>fri</code>, <code>+2w</code> and <code>oct3</code> still work while typing, and the editor converts them when you leave the line. The 0.1 exception that let <code>due:oct 3</code> swallow the next word is gone.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-added">+ added</span><h3>How does a question end?</h3></header>
+        <div class="fa">
+          <div><b>Just tick it</b><p><code>x</code> works for everything else, so there's nothing new to learn.</p></div>
+          <div><b>Against</b><p>Ticking a question throws away the answer, which is often the most valuable line in the plan.</p></div>
+        </div>
+        <p class="verdict"><b>Ruling.</b> An answer line starts with <code>= </code>. A <code>?</code> with an answer under it is done, and anything waiting on it unblocks. <code>grep '^ *= '</code> over a folder is the decision log.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-kept">x kept</span><h3>Should a parent's status be computed?</h3></header>
+        <div class="fa">
+          <div><b>For</b><p>No more going back to tick a parent after ticking its last child.</p></div>
+          <div><b>Against</b><p>The file would say <code>-</code> while the view says done. Once the view contradicts the text, the text stops being the plan.</p></div>
+        </div>
+        <p class="verdict"><b>Ruling.</b> The file stays the truth. The view flags a parent whose children are all done with "all done · tick it". Want a computed status? Use a <code>#</code> group. That's what groups are for.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-added">+ added</span><h3>Graft a branch, or only whole files?</h3></header>
+        <div class="fa">
+          <div><b>Files only</b><p>One file, one owner. Easy to reason about.</p></div>
+          <div><b>Against</b><p>A person's week, or a release, is naturally built from parts of several plans.</p></div>
+        </div>
+        <p class="verdict"><b>Ruling.</b> <code>+ [[lease^terms]]</code> mounts one branch, and ticking it there edits the original line. A branch grafted twice into one tree counts twice, so don't.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-changed">~ changed</span><h3>What does ticking a recurring item do?</h3></header>
+        <div class="fa">
+          <div><b>Keep a history</b><p>Append a line per completion, so the file shows every week it happened.</p></div>
+          <div><b>Against</b><p>A plan that grows a line every week turns into a diary. Version control already keeps history.</p></div>
+        </div>
+        <p class="verdict"><b>Ruling.</b> Ticking an item with <code>every:</code> moves its <code>due:</code> to the next occurrence and leaves it open. Recurring items are upkeep, so they don't count toward progress.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-changed">~ changed</span><h3>Exactly two spaces per level?</h3></header>
+        <div class="fa">
+          <div><b>For</b><p>One way to indent, so files look the same everywhere.</p></div>
+          <div><b>Against</b><p>Rejecting a file over a stray third space is hostile, and pasted text arrives indented every way there is.</p></div>
+        </div>
+        <p class="verdict"><b>Ruling.</b> Indentation is relative: deeper than the line above makes a child. Formatters write two spaces. Parsers accept whatever they're given.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-kept">x kept</span><h3>Generate ids from the item's text?</h3></header>
+        <div class="fa">
+          <div><b>For</b><p>No <code>^anchors</code> to write by hand.</p></div>
+          <div><b>Against</b><p>Rewording an item would silently break every link that points at it.</p></div>
+        </div>
+        <p class="verdict"><b>Ruling.</b> Anchors stay explicit. Only items that something points at need one.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-kept">x kept</span><h3>A letter for done?</h3></header>
+        <div class="fa">
+          <div><b>Use a symbol</b><p>Every other mark is punctuation, and a note that starts with "x " turns into an item.</p></div>
+          <div><b>Keep x</b><p>It's how people tick paper forms, and todo.txt proved it works in plain text. Nobody has to learn it.</p></div>
+        </div>
+        <p class="verdict"><b>Ruling.</b> <code>x</code> stays. A note that really starts with "x " takes a backslash.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-rejected">/ rejected</span><h3>Numbered steps for sequences?</h3></header>
+        <div class="fa">
+          <div><b>For</b><p><code>1.</code> <code>2.</code> <code>3.</code> is familiar and would chain dependencies for free.</p></div>
+          <div><b>Against</b><p>A step still needs a status, so the number fights the mark for the start of the line. Real work is rarely strictly serial either: plumbing and electrics run side by side.</p></div>
+        </div>
+        <p class="verdict"><b>Ruling.</b> No. Write <code>after:</code> where the order is real.</p>
+      </article>
+      <article class="db">
+        <header><span class="ruling r-rejected">/ rejected</span><h3>Accept Markdown checkboxes?</h3></header>
+        <div class="fa">
+          <div><b>For</b><p>Millions of <code>- [ ]</code> lists already exist.</p></div>
+          <div><b>Against</b><p>Two spellings for every status, forever, in every tool that reads Sprig.</p></div>
+        </div>
+        <p class="verdict"><b>Ruling.</b> No. Converting old lists is a one-time script's job, not the parser's.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    <span>Sprig, draft 0.2. The parser running this page is the reference implementation.</span>
+    <span>Edits in the playground stay in this browser.</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+/* ---------- dates first: the samples are written relative to today ---------- */
+const TODAY = (() => { const d = new Date(); d.setHours(0,0,0,0); return d; })();
+const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const D = n => iso(addDays(TODAY, n));
+const FRI = iso(addDays(TODAY, ((5 - TODAY.getDay() + 7) % 7) || 7));
+
+/* ---------- sample workspace ---------- */
+const SAMPLES = {
+'bakery.sprig': `Open the bakery  @dana  target:${D(69)}  where:"41 Mill Street"
+
+Corner unit, 62 m². Sourdough, laminated pastry, good coffee.
+Open seven days, 7 till 3.
+
+// Each + line grafts another file in as a branch.
+// Its progress, estimates and blockers roll up into this one.
+
+# Money  #finance
+  Budget is 180k. Anything over 10k needs a second quote.
+  x Business plan v3
+  x Bank meeting  due:${D(-17)}
+  ~ Equipment loan paperwork  ^loan  due:${D(6)}  !!
+    The bank wants a signed lease first, see [[lease^signed]].
+  - Supplier credit line  @teo  after:[[lease^signed]]
+  - Weekly numbers to the bank  every:fri  due:${FRI}
+
++ [[lease]]
++ [[kitchen]]  @teo
++ [[launch]]   @kim
+
+? Kiln & Crumb, or Mill Street Bread?  ^name
+  Street poll so far: 31 to 24 for Kiln & Crumb.
+  // Settle it: add a line under here that starts with "= ".
+`,
+'lease.sprig': `Lease  @dana
+
+x Shortlist three spaces  est:2d
+  41 Mill Street won. Corner frontage, three-phase power already in,
+  and the landlord will split the cost of a new shopfront.
+~ Negotiate terms  ^terms  due:${D(4)}  !!!
+  x Eight weeks rent-free for the fit-out
+  ~ Break clause at year three
+  ? Who pays for the grease trap?
+    Landlord says us. Our lawyer says it's a fixture.
+- Change-of-use permit  ^permit  est:3w
+  Class E covers a bakery, but seating for more than 12 needs a variation.
+- Sign the lease  ^signed  after:^terms  after:^permit
+`,
+'kitchen.sprig': `Kitchen fit-out  @teo  budget:64k
+
+- Design  ^design
+  x Layout sketch
+  ~ Ventilation plan with the engineer  due:${D(11)}  est:2d
+    Extraction has to exit through the roof, not the back wall.
+    The neighbours at no. 43 have already asked.
+# Equipment  #finance
+  - Deck oven, three decks  ^oven  !!
+    Rondo quoted 14.2k, Mono 12.9k. Mono's lead time is ten weeks.
+    - Get a third quote  due:${FRI}  est:2h
+    - Place the order  after:[[bakery^loan]]
+  - Spiral mixer, 40 litres  est:1h
+  / Proofing cabinet
+    = Dropped. The walk-in cooler can double as a retarder.
+  > Espresso machine
+    After opening, once we know what the morning rush looks like.
+- Build  after:^design  after:[[lease^signed]]
+  - Strip out  est:3d
+  - Plumbing and drains  est:4d
+  - Three-phase electrics  est:2d
+  - Tiling  est:5d
+  - Install equipment  est:2d
+`,
+'launch.sprig': `Opening week  @kim  due:${D(69)}
+
+# Brand
+  ~ Logo, second round  ^logo  due:${D(13)}
+    Round one was too rustic. New brief: a kiln, drawn in one line.
+  - Window lettering  after:^logo  after:[[bakery^name]]  est:1d
+  - Menu boards  after:^logo  est:4h
+# Hiring
+  x Head baker  @dana
+    Priya Nair. Starts two weeks before the soft opening.
+  - Two counter staff  ^counter  due:${D(35)}
+  - Morning rota  after:^counter  est:2h
+- Soft opening  due:${D(62)}
+  - Invite the street  #neighbours  est:3h
+  - Stock the shelves
+    + [[groceries]]
+- Opening day  due:${D(69)}  !!
+  - Free loaf for the first 50 through the door
+  - Photos for the local paper  @dana
+`,
+'groceries.sprig': `Supply run  every:week  where:"Wholesale Foods, unit 9"
+
+# Flour
+  - Rye, 4 sacks
+  - Strong white, 6 sacks
+  x Spelt, 1 sack
+# Dairy
+  x Butter, 10 kg
+  - Whole milk, 12 L
+# Seeds
+  - Sesame
+  - Nigella
+  x Sunflower
+- Paper bags, 1000
+- Flaky sea salt  !
+`,
+'dana.sprig': `Dana, this week  @dana
+
+Everything on Dana's plate, grafted from the plans it lives in.
+Tick something here and the line changes in its own file.
+
++ [[lease^terms]]
++ [[bakery^loan]]
++ [[kitchen^oven]]  @dana
+- Call the insurer about public liability  due:${D(2)}
+`
+};
+const SAMPLE_ORDER = ['bakery.sprig','lease.sprig','kitchen.sprig','launch.sprig','groceries.sprig','dana.sprig'];
+
+const SNIPPETS = {
+hero: `Open the bakery  @dana  target:${D(69)}
+
+# Money
+  Budget is 180k. Over 10k needs two quotes.
+  x Business plan
+  ~ Equipment loan  due:${D(6)}  !!
+  - Supplier credit  @teo  after:[[lease^signed]]
++ [[kitchen]]  @teo
+? Kiln & Crumb, or Mill Street Bread?
+  = Kiln & Crumb. Trademark search is clear.`,
+list: `Saturday shop
+
+- oat milk
+- sourdough
+x eggs
+- coffee beans  #market`,
+weekend: `Move flats  @me  due:${D(21)}
+
+~ Pack
+  x Books
+  - Kitchen  est:3h
+- Book a van  ^van  due:${D(20)}
+- Move  after:^van  @me @jo`,
+project: `App 2.0  @kim
+
+- Sync engine  !!
+  ~ Conflict rules  @teo
+  - Offline queue  est:3d
+? Keep the free tier?
+  = Yes, capped at 3 devices.
++ [[launch-plan]]`,
+company: `Northwind 2027
+
++ [[product]]    @kim
++ [[hiring]]     @dana
++ [[fundraise]]  @dana
++ [[office]]
+// each file is its own plan`
+};
+
+/* ---------- language ---------- */
+const MARKS = {'-':'todo','~':'doing','x':'done','/':'dropped','>':'later','?':'ask','+':'graft','#':'group','=':'answer'};
+const LINE_RE = /^([-~x\/>?+#=])(?:\s+(.*))?$/;
+const TOKEN_RE = /[^\s"]*"[^"]*"\S*|\S+/g;
+const FIELD_RE = /^([a-z][\w-]*):(.+)$/i;
+const DATE_KEYS = new Set(['due','start','target']);
+const OPEN = new Set(['todo','doing','ask']);
+const SETTLING = new Set(['done','dropped','later']);
+const TICKABLE = '-~x/>?';
+const MONTHS = ['january','february','march','april','may','june','july','august','september','october','november','december'];
+const DAYS = ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const unquote = v => v.replace(/^"(.*)"$/, '$1');
+
+function monthIndex(v) {
+  v = String(v).toLowerCase();
+  if (v.length < 3 || !/^[a-z]+$/.test(v)) return -1;
+  return MONTHS.findIndex(m => m.startsWith(v));
+}
+function weekdayIndex(v) {
+  v = String(v).toLowerCase();
+  return v.length >= 3 ? DAYS.findIndex(d => d.startsWith(v)) : -1;
+}
+
+function parseDate(v) {
+  if (!v) return null;
+  v = String(v).toLowerCase().trim();
+  let m;
+  if ((m = v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/))) return new Date(+m[1], m[2] - 1, +m[3]);
+  if (v === 'today') return TODAY;
+  if (v === 'tomorrow') return addDays(TODAY, 1);
+  if ((m = v.match(/^\+(\d+)([dw])$/))) return addDays(TODAY, +m[1] * (m[2] === 'w' ? 7 : 1));
+  if ((m = v.match(/^q([1-4])$/))) {
+    let d = new Date(TODAY.getFullYear(), +m[1] * 3, 0);
+    if (d < TODAY) d = new Date(TODAY.getFullYear() + 1, +m[1] * 3, 0);
+    return d;
+  }
+  let mi = -1, day = 0;
+  if ((m = v.match(/^([a-z]+)-?(\d{1,2})$/))) { mi = monthIndex(m[1]); day = +m[2]; }
+  else if ((m = v.match(/^(\d{1,2})-?([a-z]+)$/))) { mi = monthIndex(m[2]); day = +m[1]; }
+  if (mi >= 0) {
+    const d = new Date(TODAY.getFullYear(), mi, day);
+    // A bare month-day more than four months back means next year.
+    if ((d - TODAY) / 864e5 < -120) d.setFullYear(d.getFullYear() + 1);
+    return d;
+  }
+  const wd = weekdayIndex(v);
+  return wd >= 0 ? addDays(TODAY, (wd - TODAY.getDay() + 7) % 7) : null;
+}
+
+function nextDue(base, every) {
+  every = String(every).toLowerCase();
+  let m;
+  if (/^(day|daily)$/.test(every)) return addDays(base, 1);
+  if (/^(week|weekly)$/.test(every)) return addDays(base, 7);
+  if (/^(month|monthly)$/.test(every)) return new Date(base.getFullYear(), base.getMonth() + 1, base.getDate());
+  if ((m = every.match(/^(\d+)([dw])$/))) return addDays(base, +m[1] * (m[2] === 'w' ? 7 : 1));
+  const wd = weekdayIndex(every);
+  return wd >= 0 ? addDays(base, ((wd - base.getDay() + 7) % 7) || 7) : null;
+}
+
+// Typed shortcuts become ISO so the file means the same thing tomorrow.
+function expandDates(line) {
+  return line.replace(/(^|\s)(due|start|target):([^\s"]+)/gi, (all, pre, k, v) => {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return all;
+    const d = parseDate(v);
+    return d ? `${pre}${k}:${iso(d)}` : all;
+  });
+}
+
+function estHours(v) {
+  const r = v && String(v).match(/^(\d+(?:\.\d+)?)([hdw])$/i);
+  return r ? +r[1] * ({h:1, d:8, w:40}[r[2].toLowerCase()]) : 0;
+}
+const fmtEst = h => h < 8 ? `${+h.toFixed(1)}h` : `${+(h / 8).toFixed(1)}d`;
+
+function parseInline(text) {
+  const m = {who:[], tags:[], prio:0, id:null, fields:{}, after:[], words:[]};
+  for (const t of text.match(TOKEN_RE) || []) {
+    let r;
+    if ((r = t.match(/^@([\w.\-]+)$/))) m.who.push(r[1]);
+    else if ((r = t.match(/^#([\w\-]+)$/))) m.tags.push(r[1]);
+    else if (/^!{1,3}$/.test(t)) m.prio = Math.max(m.prio, t.length);
+    else if ((r = t.match(/^\^([\w\-]+)$/))) m.id = r[1];
+    else if ((r = t.match(FIELD_RE)) && !r[2].startsWith('//')) {
+      const key = r[1].toLowerCase(), val = unquote(r[2]);
+      if (key === 'after') m.after.push(val); else m.fields[key] = val;
+    }
+    else m.words.push(t);
+  }
+  m.text = m.words.join(' ').replace(/\[\[([^\]]+)\]\]/g, '$1');
+  return m;
+}
+
+function mkNode(state, text, indent, line, file) {
+  return {state, meta: parseInline(text), children: [], notes: [], answers: [], indent, line, file};
+}
+
+function titleIndex(lines) {
+  let i = 0;
+  while (i < lines.length && (!lines[i].trim() || lines[i].trim().startsWith('//'))) i++;
+  return i < lines.length && !/^\s/.test(lines[i]) && !LINE_RE.test(lines[i]) ? i : -1;
+}
+
+function parse(src, file) {
+  const lines = src.replace(/\r/g, '').split('\n');
+  const root = mkNode('root', '', -1, -1, file);
+  const doc = {file, title: null, root, anchors: {}};
+  const ti = titleIndex(lines);
+  if (ti >= 0) { root.meta = parseInline(lines[ti].trim()); doc.title = root.meta.text || null; }
+  const stack = [root];
+  const top = () => stack[stack.length - 1];
+  let gap = false;
+  for (let i = ti + 1; i < lines.length; i++) {
+    const raw = lines[i].replace(/^\t+/, t => '  '.repeat(t.length));
+    const text = raw.trim();
+    if (!text) { gap = true; continue; }
+    if (text.startsWith('//')) continue;
+    const indent = raw.length - raw.trimStart().length;
+    while (stack.length > 1 && top().indent >= indent) stack.pop();
+    const escaped = text.startsWith('\\');
+    const m = !escaped && text.match(LINE_RE);
+    if (m && m[1] === '=') top().answers.push(parseInline(m[2] || ''));
+    else if (m) {
+      const n = mkNode(MARKS[m[1]], m[2] || '', indent, i, file);
+      top().children.push(n); stack.push(n);
+    } else {
+      const t = top();
+      if (gap && t.notes.length) t.notes.push('');
+      t.notes.push(escaped ? text.slice(1) : text);
+    }
+    gap = false;
+  }
+  return doc;
+}
+
+/* ---------- workspace: grafts, rollups, references ---------- */
+let files = {}, order = [], active = '';
+let CACHE = {};
+const BUILDING = new Set();
+
+const fileKey = n => { n = n.trim().replace(/^\.\//, ''); return /\.sprig$/.test(n) ? n : n + '.sprig'; };
+function linkParts(tok) {
+  const r = tok.match(/\[\[([^\]\^]+)(?:\^([\w-]+))?\]\]/);
+  return r ? {file: fileKey(r[1]), id: r[2] || null} : null;
+}
+const clone = n => ({...n, children: n.children.map(clone), cloned: true});
+const labelOf = n => n.state === 'graft' ? (n.graftTitle || n.target || 'graft') : (n.meta.text || 'untitled');
+
+function buildDoc(name) {
+  if (name in CACHE) return CACHE[name];
+  if (BUILDING.has(name)) return 'cycle';
+  if (!(name in files)) return null;
+  BUILDING.add(name);
+  const doc = parse(files[name], name);
+  graftAll(doc.root);
+  BUILDING.delete(name);
+  indexAnchors(doc.root, doc.anchors);
+  roll(doc.root, null, doc.root.meta.who);
+  CACHE[name] = doc;
+  return doc;
+}
+
+function graftAll(n) {
+  for (const c of n.children) {
+    if (c.cloned) continue;
+    if (c.state === 'graft') {
+      const tok = c.meta.words.find(w => w.includes('[['));
+      const lp = tok && linkParts(tok);
+      if (!lp) c.error = 'A graft needs a link, like + [[kitchen]]';
+      else {
+        c.target = lp.file; c.targetId = lp.id;
+        const t = buildDoc(lp.file);
+        const src = t && t !== 'cycle' ? (lp.id ? t.anchors[lp.id] : t.root) : null;
+        if (t === 'cycle') c.error = `${lp.file} is already above this line, so grafting it would loop`;
+        else if (!t) c.error = `No file named ${lp.file} yet`;
+        else if (!src) c.error = `No ^${lp.id} in ${lp.file}`;
+        else {
+          c.graftTitle = lp.id ? labelOf(src) : (t.title || lp.file);
+          c.graftOwner = (src.who || [])[0] || null;
+          c.graftNotes = src.notes;
+          c.graftAnswers = lp.id ? src.answers : [];
+          c.children = c.children.concat(src.children.map(clone));
+        }
+      }
+    }
+    graftAll(c);
+  }
+}
+
+function indexAnchors(n, map) {
+  for (const c of n.children) {
+    if (c.cloned) continue;
+    if (c.meta.id && !(c.meta.id in map)) map[c.meta.id] = c;
+    indexAnchors(c, map);
+  }
+}
+
+function roll(n, inh, who) {
+  n.answered = n.state === 'ask' && n.answers.length > 0;
+  const own = n.answered ? 'done' : n.state;
+  const settled = inh || (SETTLING.has(own) ? own : null);
+  n.inh = settled;
+  n.who = n.meta.who.length ? n.meta.who : (n.state === 'graft' && n.graftOwner ? [n.graftOwner] : who);
+  const s = {total:0, done:0, doing:0, est:0};
+  const eh = estHours(n.meta.fields.est);
+  if (!n.children.length) {
+    const st = settled || own;
+    const upkeep = !!n.meta.fields.every;
+    if (!upkeep && (st === 'todo' || st === 'doing' || st === 'done' || st === 'ask')) {
+      s.total = 1;
+      if (st === 'done') s.done = 1;
+      if (st === 'doing') s.doing = 1;
+      if (st !== 'done') s.est = eh;
+    }
+  } else {
+    for (const c of n.children) {
+      const cs = roll(c, settled, n.who);
+      s.total += cs.total; s.done += cs.done; s.doing += cs.doing; s.est += cs.est;
+    }
+    if (!s.est && eh && !settled) s.est = eh;
+  }
+  n.stats = s;
+  const derived = s.total === 0 ? 'empty' : s.done === s.total ? 'done' : (s.doing || s.done) ? 'doing' : 'todo';
+  n.view = settled || ((own === 'group' || own === 'graft' || own === 'root') ? derived : own);
+  return s;
+}
+
+function resolveRef(ref, from) {
+  let r;
+  if ((r = ref.match(/^\^([\w-]+)$/))) {
+    const d = buildDoc(from);
+    const nd = d && d !== 'cycle' ? d.anchors[r[1]] : null;
+    return {node: nd, label: nd ? labelOf(nd) : ref};
+  }
+  const lp = linkParts(ref);
+  if (lp) {
+    const d = buildDoc(lp.file);
+    if (!d || d === 'cycle') return {node: null, label: ref};
+    if (lp.id) { const nd = d.anchors[lp.id]; return {node: nd, label: nd ? labelOf(nd) : ref}; }
+    return {node: d.root, label: d.title || lp.file};
+  }
+  return {node: null, label: ref};
+}
+
+function blockers(n) {
+  if (!OPEN.has(n.view) || !n.meta.after.length) return null;
+  const out = [];
+  for (const ref of n.meta.after) {
+    const t = resolveRef(ref, n.file);
+    if (!t.node) out.push({label: ref, unknown: true});
+    else if (t.node.view !== 'done') out.push({label: t.label});
+  }
+  return out.length ? out : null;
+}
+
+/* ---------- highlighting ---------- */
+const linkSpans = s => esc(s).replace(/\[\[[^\]]+\]\]/g, x => `<span class="k-link">${x}</span>`);
+function hlToken(t, note) {
+  let r;
+  if (note) return /^@[\w.\-]+[.,;:!?)]*$/.test(t) ? `<span class="k-who">${esc(t)}</span>` : linkSpans(t);
+  if (/^@[\w.\-]+$/.test(t)) return `<span class="k-who">${esc(t)}</span>`;
+  if (/^#[\w\-]+$/.test(t)) return `<span class="k-tag">${esc(t)}</span>`;
+  if (/^!{1,3}$/.test(t)) return `<span class="k-prio">${t}</span>`;
+  if (/^\^[\w\-]+$/.test(t)) return `<span class="k-id">${esc(t)}</span>`;
+  if ((r = t.match(FIELD_RE)) && !r[2].startsWith('//')) {
+    const v = r[2];
+    const cls = v.startsWith('[[') ? 'k-link' : v.startsWith('^') ? 'k-id' : 'k-val';
+    return `<span class="k-key">${esc(r[1])}:</span><span class="${cls}">${esc(v)}</span>`;
+  }
+  return linkSpans(t);
+}
+function hlInline(s, note) {
+  return (s.match(/\s+|[^\s"]*"[^"]*"\S*|\S+/g) || []).map(t => /^\s/.test(t) ? t : hlToken(t, note)).join('');
+}
+function hlLine(ln) {
+  const ind = ln.match(/^\s*/)[0];
+  const body = ln.slice(ind.length);
+  if (!body) return esc(ln);
+  if (body.startsWith('//')) return ind + `<span class="k-com">${esc(body)}</span>`;
+  if (body.startsWith('\\')) return ind + `<span class="k-esc">\\</span><span class="k-note">${hlInline(body.slice(1), true)}</span>`;
+  const m = body.match(LINE_RE);
+  if (!m) return ind + `<span class="k-note">${hlInline(body, true)}</span>`;
+  const rest = hlInline(body.slice(1));
+  if (m[1] === '#') return ind + `<span class="k-gm">#</span><span class="k-group">${rest}</span>`;
+  if (m[1] === '=') return ind + `<span class="k-ans">=</span><span class="k-anst">${rest}</span>`;
+  const st = MARKS[m[1]];
+  return ind + `<span class="k-${st}">${esc(m[1])}</span><span class="kl-${st}">${rest}</span>`;
+}
+function highlight(src) {
+  const lines = src.split('\n');
+  const ti = titleIndex(lines);
+  return lines.map((ln, i) => i === ti ? `<span class="k-title">${hlInline(ln)}</span>` : hlLine(ln)).join('\n');
+}
+
+/* ---------- rendering ---------- */
+let REF = [];
+let FP = null, HIDE = false, VM = 'tree';
+const COLL = new Set();
+
+function relDays(d) {
+  if (d === 0) return 'today';
+  if (d === 1) return 'tomorrow';
+  if (d < 0) return `${-d}d ago`;
+  if (d < 14) return `in ${d}d`;
+  if (d < 60) return `in ${Math.round(d / 7)}w`;
+  return `in ${Math.round(d / 30)}mo`;
+}
+function fmtDate(d) {
+  const s = d.toLocaleDateString('en-US', {month: 'short', day: 'numeric'});
+  return d.getFullYear() !== TODAY.getFullYear() ? `${s}, ${d.getFullYear()}` : s;
+}
+const daysFrom = d => Math.round((d - TODAY) / 864e5);
+function dateChip(k, v, view) {
+  const d = parseDate(v);
+  const pre = k === 'due' ? '' : k + ' ';
+  if (!d) return `<span class="chip">${pre}${esc(v)}</span>`;
+  const diff = daysFrom(d);
+  let cls = 'chip date', rel = '';
+  if (!SETTLING.has(view)) {
+    if (diff < 0 && k !== 'start') { cls += ' late'; rel = `${-diff}d late`; }
+    else rel = relDays(diff);
+  }
+  return `<span class="${cls}">${pre}${fmtDate(d)}${rel ? ' · ' + rel : ''}</span>`;
+}
+
+function linkHTML(inner) {
+  const lp = linkParts('[[' + inner + ']]');
+  if (!lp) return esc(inner);
+  return `<a href="#" class="flink" data-go="${esc(lp.file)}"${lp.id ? ` data-id="${esc(lp.id)}"` : ''}>${esc(inner)}</a>`;
+}
+function wordHTML(w) {
+  const r = w.match(/^(.*?)\[\[([^\]]+)\]\](.*)$/);
+  return r ? esc(r[1]) + linkHTML(r[2]) + esc(r[3]) : esc(w);
+}
+function inlineHTML(n) {
+  if (n.state === 'graft') {
+    const where = n.target ? n.target + (n.targetId ? '^' + n.targetId : '') : '';
+    return `<span class="gt">${esc(n.graftTitle || n.target || 'Graft')}</span>` +
+      (where ? ` <a href="#" class="fchip" data-go="${esc(n.target)}"${n.targetId ? ` data-id="${esc(n.targetId)}"` : ''}>${esc(where)}</a>` : '');
+  }
+  return n.meta.words.map(wordHTML).join(' ') || '<span class="untitled">untitled</span>';
+}
+function mdLite(s) {
+  let h = esc(s);
+  h = h.replace(/`([^`]+)`/g, '<code>$1</code>');
+  h = h.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  h = h.replace(/(^|[\s(])\*([^*\s][^*]*)\*/g, '$1<em>$2</em>');
+  h = h.replace(/(^|\s)(@[\w.\-]*\w)/g, '$1<span class="nwho">$2</span>');
+  h = h.replace(/\[\[([^\]]+)\]\]/g, (_, x) => linkHTML(x.replace(/&amp;/g, '&')));
+  h = h.replace(/(^|\s)(https?:\/\/[^\s<]+)/g, '$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+  return h;
+}
+function notesHTML(notes) {
+  const paras = [];
+  let cur = [];
+  for (const l of notes) { if (l === '') { if (cur.length) paras.push(cur); cur = []; } else cur.push(l); }
+  if (cur.length) paras.push(cur);
+  return paras.map(p => `<p>${mdLite(p.join(' '))}</p>`).join('');
+}
+function answersHTML(list) {
+  return list.map(a => {
+    const chips = a.who.map(w => `<span class="chip who">@${esc(w)}</span>`).join('') +
+      Object.entries(a.fields).map(([k, v]) => { const d = parseDate(v); return `<span class="chip kv">${esc(k)} ${d ? fmtDate(d) : esc(v)}</span>`; }).join('');
+    return `<p class="ans"><span class="eq">=</span><span>${a.words.map(wordHTML).join(' ')}</span>${chips}</p>`;
+  }).join('');
+}
+
+function chipsHTML(n, blk) {
+  const f = n.meta.fields, c = [];
+  if (n.meta.prio) c.push(`<span class="chip prio" title="Priority ${n.meta.prio}">${'!'.repeat(n.meta.prio)}</span>`);
+  for (const w of n.meta.who) c.push(`<span class="chip who">@${esc(w)}</span>`);
+  if (n.state === 'graft' && !n.meta.who.length && n.graftOwner) c.push(`<span class="chip who soft">@${esc(n.graftOwner)}</span>`);
+  for (const k of ['start', 'due', 'target']) if (f[k]) c.push(dateChip(k, f[k], n.view));
+  if (f.est && !n.children.length) c.push(`<span class="chip">${esc(f.est)}</span>`);
+  if (f.every) c.push(`<span class="chip">every ${esc(f.every)}</span>`);
+  for (const t of n.meta.tags) c.push(`<span class="chip tag">#${esc(t)}</span>`);
+  for (const [k, v] of Object.entries(f)) {
+    if (!['start', 'due', 'target', 'est', 'every'].includes(k)) c.push(`<span class="chip kv">${esc(k)} ${esc(v)}</span>`);
+  }
+  if (blk) for (const b of blk) {
+    c.push(b.unknown ? `<span class="chip err">can't find ${esc(b.label)}</span>` : `<span class="chip block">waits on ${esc(b.label)}</span>`);
+  }
+  const s = n.stats;
+  if (n.children.length && OPEN.has(n.state) && !n.inh && !n.answered && s.total && s.done === s.total) c.push('<span class="chip ready">all done · tick it</span>');
+  if (n.meta.id) c.push(`<span class="chip id">^${esc(n.meta.id)}</span>`);
+  if (n.error) c.push(`<span class="chip err">${esc(n.error)}</span>`);
+  return c.join('');
+}
+
+function progHTML(n) {
+  const s = n.stats;
+  if (!n.children.length || !s.total) return '<span></span>';
+  const pct = s.done / s.total * 100, dp = s.doing / s.total * 100;
+  return `<span class="prog" title="${s.done} of ${s.total} done"><span class="bar"><i style="width:${pct}%"></i><b style="width:${dp}%"></b></span>${s.done}/${s.total}${s.est ? ' · ' + fmtEst(s.est) : ''}</span>`;
+}
+
+function visible(n) {
+  if (HIDE && (n.view === 'done' || n.view === 'dropped')) return false;
+  if (!FP) return true;
+  if (!n.children.length) return n.who.includes(FP);
+  return n.meta.who.includes(FP) || n.children.some(visible);
+}
+
+function markHTML(n, k) {
+  if (n.state === 'group' || n.state === 'graft') return `<span class="mark m-${n.state} v-${n.view}" aria-hidden="true"></span>`;
+  const inherited = n.inh && n.inh !== n.state && !n.answered;
+  const disp = n.answered ? 'answered' : inherited ? n.inh : n.state;
+  const label = n.state === 'done' ? 'Reopen' : n.meta.fields.every ? 'Done for now, move to next date' : 'Mark done';
+  return `<button type="button" class="mark m-${disp}${inherited ? ' inherited' : ''}" data-act="toggle" data-k="${k}" aria-label="${label}: ${esc(labelOf(n))}" title="${label}"></button>`;
+}
+
+function nodeHTML(n, inhBlk) {
+  if (!visible(n)) return '';
+  const k = REF.push(n) - 1;
+  const own = blockers(n);
+  const blocked = OPEN.has(n.view) && !!(own || inhBlk);
+  const kids = n.children.length > 0;
+  const ck = `${n.file}:${n.line}`;
+  const open = !COLL.has(ck);
+  const caret = kids ? `<button type="button" class="caret" data-act="fold" data-ck="${esc(ck)}" aria-expanded="${open}" aria-label="${open ? 'Collapse' : 'Expand'}"></button>` : '<span></span>';
+  let extra = n.notes.length ? `<div class="notes">${notesHTML(n.notes)}</div>` : '';
+  if (open && n.graftNotes && n.graftNotes.length) extra += `<div class="notes">${notesHTML(n.graftNotes)}</div>`;
+  const answers = n.answers.concat(n.graftAnswers || []);
+  if (answers.length) extra += `<div class="answers">${answersHTML(answers)}</div>`;
+  const inner = kids && open ? n.children.map(c => nodeHTML(c, blocked ? (own || inhBlk) : null)).join('') : '';
+  return `<li class="node v-${n.view} s-${n.state}${blocked ? ' is-blocked' : ''}${kids ? ' has-kids' : ''}" data-src="${esc(ck)}">` +
+    `<div class="row">${caret}${markHTML(n, k)}<div class="body"><span class="txt" data-act="src" data-k="${k}">${inlineHTML(n)}</span>${chipsHTML(n, own)}</div>${progHTML(n)}</div>` +
+    extra + (inner ? `<ul>${inner}</ul>` : '') + '</li>';
+}
+
+function walkLeaves(root, fn) {
+  (function w(n, path, ib, due, prio) {
+    for (const c of n.children) {
+      const own = blockers(c);
+      const b = OPEN.has(c.view) && (own || ib) ? (own || ib) : null;
+      const d = c.meta.fields.due || due;
+      const p = Math.max(prio, c.meta.prio);
+      if (!c.children.length) fn(c, path, b, d, p);
+      else w(c, path.concat(labelOf(c)), b, d, p);
+    }
+  })(root, [], null, root.meta.fields.due || null, 0);
+}
+
+function nextHTML(doc) {
+  const ready = [], waiting = [];
+  walkLeaves(doc.root, (n, path, b, due, prio) => {
+    if (!OPEN.has(n.view) || (FP && !n.who.includes(FP))) return;
+    const d = parseDate(due);
+    (b ? waiting : ready).push({n, path, b, t: d ? d.getTime() : Infinity, prio});
+  });
+  ready.sort((a, b) => (b.n.view === 'doing') - (a.n.view === 'doing') || b.prio - a.prio || a.t - b.t);
+  const li = x => {
+    const k = REF.push(x.n) - 1;
+    const path = x.path.length ? x.path.map(esc).join(' <span>›</span> ') : esc(doc.title || doc.file);
+    return `<li class="v-${x.n.view}${x.b ? ' is-blocked' : ''}">${markHTML(x.n, k)}<div><div class="path">${path}</div>` +
+      `<div class="line"><span class="txt" data-act="src" data-k="${k}">${inlineHTML(x.n)}</span>${chipsHTML(x.n, x.b)}</div></div></li>`;
+  };
+  return `<div class="nx-h">Ready now · ${ready.length}</div>` +
+    (ready.length ? `<ul class="nx">${ready.map(li).join('')}</ul>` : '<p class="empty">Nothing is ready. Everything open is waiting on something.</p>') +
+    `<div class="nx-h">Waiting · ${waiting.length}</div>` +
+    (waiting.length ? `<ul class="nx">${waiting.map(li).join('')}</ul>` : '<p class="empty">Nothing is blocked.</p>');
+}
+
+function propsHTML(doc) {
+  const m = doc.root.meta, out = [];
+  if (m.who.length) out.push(['owner', m.who.map(w => `<span class="chip who">@${esc(w)}</span>`).join(' ')]);
+  for (const [k, v] of Object.entries(m.fields)) {
+    const d = DATE_KEYS.has(k) ? parseDate(v) : null;
+    out.push([k, d ? `${fmtDate(d)} <span class="rel">${relDays(daysFrom(d))}</span>` : esc(v)]);
+  }
+  for (const t of m.tags) out.push(['tag', '#' + esc(t)]);
+  return out.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${v}</dd></div>`).join('');
+}
+
+const $ = s => document.querySelector(s);
+const ta = $('#src'), hl = $('#hl'), tabs = $('#tabs'), rv = $('#rv'), rvHead = $('#rvHead'), rvBody = $('#rvBody'), people = $('#people');
+
+function renderView() {
+  CACHE = {}; REF = [];
+  const doc = buildDoc(active);
+  if (!doc || doc === 'cycle') { rvHead.innerHTML = ''; rvBody.innerHTML = '<p class="empty">This file could not be read.</p>'; return; }
+
+  const who = new Set();
+  (function w(n) { for (const c of n.children) { c.who.forEach(x => who.add(x)); w(c); } })(doc.root);
+  if (FP && !who.has(FP)) FP = null;
+  const focusedFp = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.fp : undefined;
+  people.innerHTML = [`<button type="button" class="pchip" data-fp="" aria-pressed="${!FP}">everyone</button>`]
+    .concat([...who].sort().map(p => `<button type="button" class="pchip" data-fp="${esc(p)}" aria-pressed="${FP === p}">@${esc(p)}</button>`)).join('');
+  if (focusedFp !== undefined) { const b = people.querySelector(`[data-fp="${CSS.escape(focusedFp)}"]`); if (b) b.focus(); }
+
+  const s = doc.root.stats;
+  let waiting = 0, asks = 0, parked = 0;
+  walkLeaves(doc.root, (n, path, b) => {
+    if (b && OPEN.has(n.view)) waiting++;
+    if (n.view === 'ask') asks++;
+    if (n.view === 'later') parked++;
+  });
+  const pct = s.total ? s.done / s.total * 100 : 0, dp = s.total ? s.doing / s.total * 100 : 0;
+  const parts = [`<b>${s.done}</b> of ${s.total} done`];
+  if (s.doing) parts.push(`${s.doing} in progress`);
+  if (waiting) parts.push(`${waiting} waiting`);
+  if (asks) parts.push(`${asks} open question${asks > 1 ? 's' : ''}`);
+  if (parked) parts.push(`${parked} parked`);
+  if (s.est) parts.push(`${fmtEst(s.est)} of estimated work left`);
+  const props = propsHTML(doc);
+  rvHead.innerHTML = `<div class="rv-file">${esc(active)}</div><h3>${esc(doc.title || active)}</h3>` +
+    (props ? `<dl class="props">${props}</dl>` : '') +
+    (doc.root.notes.length ? `<div class="rv-notes">${notesHTML(doc.root.notes)}</div>` : '') +
+    `<div class="big"><span class="bar"><i style="width:${pct}%"></i><b style="width:${dp}%"></b></span><span class="pct">${Math.round(pct)}%</span></div>` +
+    `<p class="stats">${parts.join(' · ')}</p>`;
+
+  const st = rvBody.scrollTop;
+  if (VM === 'next') rvBody.innerHTML = nextHTML(doc);
+  else {
+    const items = doc.root.children.map(c => nodeHTML(c, null)).join('');
+    rvBody.innerHTML = items ? `<ul class="tree">${items}</ul>` : '<p class="empty">No items yet. Start a line with - and a space.</p>';
+  }
+  rvBody.scrollTop = st;
+}
+
+/* ---------- editor ---------- */
+const paintHL = () => { hl.innerHTML = highlight(ta.value) + '\n\n'; syncScroll(); };
+const syncScroll = () => { hl.scrollTop = ta.scrollTop; hl.scrollLeft = ta.scrollLeft; };
+let rTimer = 0, sTimer = 0;
+function onEdit() {
+  files[active] = ta.value;
+  paintHL();
+  clearTimeout(rTimer); rTimer = setTimeout(renderView, 70);
+  clearTimeout(sTimer); sTimer = setTimeout(save, 400);
+}
+
+function replace(s, e, text, na, nb) {
+  ta.focus();
+  ta.setSelectionRange(s, e);
+  let ok = false;
+  try { ok = document.execCommand('insertText', false, text); } catch (_) { ok = false; }
+  if (!ok) ta.setRangeText(text, s, e, 'end');
+  ta.setSelectionRange(na, nb);
+  onEdit();
+}
+function lineAt(v, pos) {
+  const s = v.lastIndexOf('\n', pos - 1) + 1;
+  let e = v.indexOf('\n', pos);
+  if (e < 0) e = v.length;
+  return [s, e];
+}
+function carriesFields(v, s) {
+  const line = v.slice(s, v.indexOf('\n', s) < 0 ? v.length : v.indexOf('\n', s));
+  if (LINE_RE.test(line.trim())) return true;
+  const before = v.slice(0, s).split('\n');
+  return titleIndex(v.split('\n')) === before.length - 1;
+}
+
+function indentBy(dir) {
+  const v = ta.value, a = ta.selectionStart, b = ta.selectionEnd;
+  const s = v.lastIndexOf('\n', a - 1) + 1;
+  let e = v.indexOf('\n', b > a && v[b - 1] === '\n' ? b - 1 : b);
+  if (e < 0) e = v.length;
+  let da = 0, db = 0;
+  const out = v.slice(s, e).split('\n').map((l, idx) => {
+    if (dir > 0) { if (idx === 0) da = 2; db += 2; return '  ' + l; }
+    const r = (l.match(/^ {1,2}/) || [''])[0].length;
+    if (idx === 0) da = -Math.min(r, a - s);
+    db -= r;
+    return l.slice(r);
+  });
+  replace(s, e, out.join('\n'), Math.max(s, a + da), Math.max(s, b + db));
+}
+
+function continueLine() {
+  const v = ta.value, a = ta.selectionStart;
+  if (a !== ta.selectionEnd) return false;
+  const [s, e] = lineAt(v, a);
+  const line = v.slice(s, e);
+  if (!line.trim()) return false;
+  const atEnd = a === e;
+  // Leaving a line is when typed dates become real ones.
+  const done = atEnd && carriesFields(v, s) ? expandDates(line) : line;
+  const put = ins => {
+    if (atEnd) { const t = done + ins; replace(s, e, t, s + t.length, s + t.length); }
+    else replace(a, a, ins, a + ins.length, a + ins.length);
+    return true;
+  };
+  const m = line.match(/^(\s*)([-~x\/>?+#=])(?:(\s+)(.*))?$/);
+  if (m) {
+    if (a < s + m[1].length + 1) return false;
+    if (!(m[4] || '').trim()) {
+      // Enter on an empty item steps out a level, like an outliner; at the left edge it ends the list.
+      const rep = m[1].length >= 2 ? m[1].slice(2) + m[2] + ' ' : '';
+      replace(s, e, rep, s + rep.length, s + rep.length);
+      return true;
+    }
+    if (m[2] === '#') return put('\n' + m[1] + '  - ');
+    if (m[2] === '=') return put('\n' + m[1]);
+    return put('\n' + m[1] + (m[2] === '?' ? '?' : '-') + ' ');
+  }
+  return put('\n' + line.match(/^\s*/)[0]);
+}
+
+function cycleLine() {
+  const v = ta.value, a = ta.selectionStart, b = ta.selectionEnd;
+  const [s, e] = lineAt(v, a);
+  const line = v.slice(s, e);
+  const i = line.search(/\S/);
+  if (i < 0) return;
+  if (LINE_RE.test(line.slice(i))) {
+    const nx = {'-': '~', '~': 'x', 'x': '-', '/': '-', '>': '-', '?': '-'}[line[i]];
+    if (nx) replace(s + i, s + i + 1, nx, a, b);
+  } else replace(s + i, s + i, '- ', a + 2, b + 2);
+}
+
+ta.addEventListener('input', onEdit);
+ta.addEventListener('scroll', syncScroll);
+ta.addEventListener('keydown', e => {
+  if (e.key === 'Tab' && !e.altKey && !e.metaKey && !e.ctrlKey) { e.preventDefault(); indentBy(e.shiftKey ? -1 : 1); }
+  else if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); cycleLine(); }
+  else if (e.key === 'Enter' && !e.shiftKey && !e.altKey && !e.isComposing) { if (continueLine()) e.preventDefault(); }
+});
+// On blur, expand typed dates everywhere. The view isn't redrawn: the dates mean the same thing today,
+// and redrawing mid-click would swallow the click that caused the blur.
+ta.addEventListener('blur', () => {
+  const lines = ta.value.split('\n');
+  const ti = titleIndex(lines);
+  const out = lines.map((l, i) => (i === ti || LINE_RE.test(l.trim())) ? expandDates(l) : l).join('\n');
+  if (out === ta.value) return;
+  ta.value = out; files[active] = out; paintHL(); save();
+});
+
+function gotoLine(line) {
+  const lines = ta.value.split('\n');
+  if (line < 0 || line >= lines.length) return;
+  let off = 0;
+  for (let i = 0; i < line; i++) off += lines[i].length + 1;
+  const lead = lines[line].search(/\S/);
+  if (matchMedia('(pointer: fine)').matches) ta.focus({preventScroll: true});
+  ta.setSelectionRange(off + Math.max(0, lead), off + lines[line].length);
+  const lh = parseFloat(getComputedStyle(ta).lineHeight) || 23;
+  ta.scrollTop = Math.max(0, line * lh - ta.clientHeight / 3);
+  ta.scrollLeft = 0;
+  syncScroll();
+}
+
+/* ---------- files ---------- */
+const LS = 'sprig-playground-v2';
+function save() { try { localStorage.setItem(LS, JSON.stringify({files, order, active})); } catch (_) { /* per-viewer convenience only */ } }
+function resetSamples() { files = {...SAMPLES}; order = SAMPLE_ORDER.slice(); active = order[0]; }
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem(LS) || 'null');
+    if (s && s.files && Array.isArray(s.order)) {
+      files = s.files;
+      order = s.order.filter(f => f in files);
+      if (order.length) { active = s.active in files ? s.active : order[0]; return; }
+    }
+  } catch (_) { /* fall back to samples */ }
+  resetSamples();
+}
+
+let NEWING = false;
+function renderTabs() {
+  tabs.innerHTML = order.map(f => `<button type="button" class="tab" role="tab" aria-selected="${f === active}" data-file="${esc(f)}">${esc(f)}</button>`).join('') +
+    (NEWING ? `<input id="newName" class="tab-input" placeholder="file name" aria-label="New file name" maxlength="40">` : `<button type="button" class="tab tab-new" data-new="1">+ new file</button>`);
+  const cur = tabs.querySelector('[aria-selected="true"]');
+  if (cur) tabs.scrollLeft = Math.max(0, cur.offsetLeft - tabs.clientWidth / 2 + cur.offsetWidth / 2);
+  if (NEWING) {
+    const inp = $('#newName');
+    inp.focus();
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); const v = inp.value; NEWING = false; createFile(v); }
+      else if (e.key === 'Escape') { NEWING = false; renderTabs(); }
+    });
+    inp.addEventListener('blur', () => { if (NEWING) { NEWING = false; renderTabs(); } });
+  }
+}
+
+function titleFrom(key) {
+  const base = key.replace(/\.sprig$/, '').replace(/[-_]+/g, ' ');
+  return base.charAt(0).toUpperCase() + base.slice(1);
+}
+function createFile(name) {
+  const clean = String(name).trim().toLowerCase().replace(/\.sprig$/, '').replace(/\s+/g, '-').replace(/[^\w-]/g, '');
+  if (!clean) { renderTabs(); return; }
+  const key = fileKey(clean);
+  if (!(key in files)) { files[key] = `${titleFrom(key)}\n\n- `; order.push(key); }
+  switchFile(key);
+}
+
+function switchFile(f) {
+  active = f;
+  ta.value = files[f];
+  ta.scrollTop = 0; ta.scrollLeft = 0;
+  paintHL(); renderTabs(); renderView(); save();
+}
+
+function flash(file, line) {
+  requestAnimationFrame(() => {
+    const el = rvBody.querySelector(`[data-src="${CSS.escape(file + ':' + line)}"]`);
+    if (!el) return;
+    const r = el.getBoundingClientRect(), br = rvBody.getBoundingClientRect();
+    rvBody.scrollTop += r.top - br.top - br.height / 3;
+    el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+  });
+}
+
+function go(file, id) {
+  if (!(file in files)) { createFile(file); return; }
+  switchFile(file);
+  if (id) {
+    const d = buildDoc(file);
+    const nd = d && d !== 'cycle' ? d.anchors[id] : null;
+    if (nd) { flash(file, nd.line); gotoLine(nd.line); }
+  }
+}
+
+function toggle(n) {
+  if (!n || !(n.file in files)) return;
+  const lines = files[n.file].split('\n');
+  const ln = lines[n.line];
+  if (ln == null) return;
+  const i = ln.search(/\S/);
+  const ch = ln[i];
+  if (!ch || !TICKABLE.includes(ch)) return;
+  let next = null;
+  if (ch !== 'x' && n.meta.fields.every) {
+    // Recurring: record what's next, not what happened.
+    const cur = parseDate(n.meta.fields.due);
+    const nd = nextDue(cur && cur >= TODAY ? cur : TODAY, n.meta.fields.every);
+    if (nd) {
+      const tok = 'due:' + iso(nd);
+      next = /(^|\s)due:\S+/.test(ln) ? ln.replace(/(^|\s)due:\S+/, `$1${tok}`) : ln.replace(/\s*$/, '  ' + tok);
+      next = next.slice(0, i) + '-' + next.slice(i + 1);
+    }
+  }
+  const recurred = next !== null;
+  if (!recurred) next = ln.slice(0, i) + (ch === 'x' ? '-' : 'x') + ln.slice(i + 1);
+  lines[n.line] = next;
+  files[n.file] = lines.join('\n');
+  if (n.file === active) {
+    const a = ta.selectionStart, b = ta.selectionEnd, t = ta.scrollTop;
+    ta.value = files[active];
+    ta.setSelectionRange(a, b); ta.scrollTop = t;
+    paintHL();
+  }
+  const refocus = document.activeElement && document.activeElement.classList.contains('mark');
+  save(); renderView();
+  if (refocus) {
+    const el = rvBody.querySelector(`[data-src="${CSS.escape(n.file + ':' + n.line)}"] .mark`);
+    if (el) el.focus();
+  }
+  if (recurred) flash(n.file, n.line);
+}
+
+tabs.addEventListener('click', e => {
+  const t = e.target.closest('[data-file]');
+  if (t) { switchFile(t.dataset.file); return; }
+  if (e.target.closest('[data-new]')) { NEWING = true; renderTabs(); }
+});
+
+rv.addEventListener('click', e => {
+  const g = e.target.closest('[data-go]');
+  if (g) { e.preventDefault(); go(g.dataset.go, g.dataset.id); return; }
+  const vm = e.target.closest('[data-vm]');
+  if (vm) {
+    VM = vm.dataset.vm;
+    rv.querySelectorAll('[data-vm]').forEach(b => b.setAttribute('aria-pressed', String(b === vm)));
+    rvBody.scrollTop = 0; renderView(); return;
+  }
+  const fp = e.target.closest('[data-fp]');
+  if (fp) { FP = fp.dataset.fp || null; renderView(); return; }
+  const t = e.target.closest('[data-act]');
+  if (!t) return;
+  const act = t.dataset.act;
+  if (act === 'toggle') toggle(REF[+t.dataset.k]);
+  else if (act === 'fold') { const ck = t.dataset.ck; if (COLL.has(ck)) COLL.delete(ck); else COLL.add(ck); renderView(); }
+  else if (act === 'src') {
+    const n = REF[+t.dataset.k];
+    if (!n || n.line < 0) return;
+    if (n.file !== active) { switchFile(n.file); flash(n.file, n.line); }
+    gotoLine(n.line);
+  }
+});
+$('#hideDone').addEventListener('change', e => { HIDE = e.target.checked; renderView(); });
+
+const resetBtn = $('#reset');
+let armTimer = 0;
+resetBtn.addEventListener('click', () => {
+  if (!resetBtn.classList.contains('armed')) {
+    resetBtn.classList.add('armed'); resetBtn.textContent = 'Discard my edits?';
+    armTimer = setTimeout(() => { resetBtn.classList.remove('armed'); resetBtn.textContent = 'Reset samples'; }, 3000);
+    return;
+  }
+  clearTimeout(armTimer);
+  resetBtn.classList.remove('armed'); resetBtn.textContent = 'Reset samples';
+  resetSamples(); COLL.clear(); FP = null; switchFile(active);
+});
+
+if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) $('#modkey').textContent = 'Ctrl';
+
+document.querySelectorAll('pre[data-snippet]').forEach(p => { p.innerHTML = highlight(SNIPPETS[p.dataset.snippet] || ''); });
+
+load();
+switchFile(active);
+})();
+</script>

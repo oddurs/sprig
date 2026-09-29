@@ -1,0 +1,52 @@
+name: Bug report
+description: A file Sprig reads wrongly, or a command that misbehaves
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for the report. With a plain-text format the input usually
+        says more than a description, so please paste the smallest `.sprig`
+        file that shows the problem.
+
+  - type: textarea
+    id: input
+    attributes:
+      label: The input
+      description: The smallest `.sprig` file (or files) that reproduces it.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happens
+    attributes:
+      label: What happens
+      description: The command you ran and its full output.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-should-happen
+    attributes:
+      label: What should happen
+      description: If you can, name the spec rule (e.g. §3.2) the output breaks.
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `sprig --version`, or the commit you built from.
+    validations:
+      required: true
+
+  - type: input
+    id: platform
+    attributes:
+      label: Platform
+      placeholder: macOS 15.2 on arm64
+    validations:
+      required: true

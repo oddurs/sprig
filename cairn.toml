@@ -1,0 +1,269 @@
+# cairn.toml — the schema for Sprig's roadmap and issues.
+#
+#   cairn config          show the resolved schema
+#   cairn check           validate every item against it
+#   man cairn             full reference
+
+format = 5
+
+[project]
+name = "sprig"
+url = "https://github.com/oddurs/sprig/blob/main"
+description = "A plain-text format for plans that people and coding agents read, edit and check in the same file."
+dir = "cairn/items"
+default_type = "feature"
+default_status = "backlog"
+
+# ─── Item types ──────────────────────────────────────────────────────────────
+
+[[type]]
+name = "feature"
+icon = "+"
+color = "cyan"
+template = """
+## Problem
+
+## Proposal
+
+## Acceptance criteria
+
+- [ ]
+"""
+
+[[type]]
+name = "bug"
+icon = "!"
+color = "red"
+template = """
+## What happens
+
+## What should happen
+
+## Reproduction
+
+1.
+
+## Acceptance criteria
+
+- [ ] A conformance example or unit test reproduces the failure and passes with the fix.
+"""
+
+[[type]]
+name = "chore"
+icon = "~"
+color = "gray"
+template = """
+## Purpose
+
+## Approach
+
+## Acceptance criteria
+
+- [ ]
+"""
+
+[[type]]
+name = "docs"
+icon = "*"
+color = "blue"
+template = """
+## Reader and question
+
+## Change
+
+## Acceptance criteria
+
+- [ ] The reader can complete the task described with the current tools.
+"""
+
+[[type]]
+name = "spike"
+icon = "?"
+color = "magenta"
+description = "A timeboxed question; it closes with a written answer, never without one"
+template = """
+## Question
+
+## Timebox
+
+## What would change the answer
+
+## Answer
+
+(Written when the spike closes. A spike closed without this section filled in was wasted.)
+
+## Acceptance criteria
+
+- [ ] The Answer section states a decision and the evidence for it.
+- [ ] Follow-up items exist for everything the answer implies.
+"""
+
+[[type]]
+name = "decision"
+icon = "="
+color = "magenta"
+description = "A settled argument about the format, kept so nobody argues it again"
+template = """
+## Context
+
+## Options and tradeoffs
+
+## Decision
+
+## Revisit when
+
+## Acceptance criteria
+
+- [ ] The choice, its evidence and its consequences are recorded.
+"""
+
+[[type]]
+name = "milestone"
+groups = "one"
+inverse = "scheduled"
+description = "A release somebody could install and use; dates are decisions"
+template = """
+## Ships
+
+## Done when
+
+- [ ]
+
+## Explicitly not in this milestone
+
+-
+"""
+
+# ─── Statuses ────────────────────────────────────────────────────────────────
+
+[[status]]
+name = "backlog"
+category = "open"
+color = "gray"
+label = "not committed"
+
+[[status]]
+name = "planned"
+category = "open"
+color = "blue"
+label = "committed to a milestone"
+
+[[status]]
+name = "doing"
+label = "in progress"
+category = "active"
+color = "yellow"
+
+[[status]]
+name = "blocked"
+category = "open"
+color = "red"
+label = "waiting on something outside the graph"
+# Waiting is not work in progress. Unfinished dependencies are the separate
+# `blocked` query field; this status is for external waits, with a note saying why.
+
+[[status]]
+name = "done"
+category = "done"
+color = "green"
+
+[[status]]
+name = "dropped"
+category = "dropped"
+color = "gray"
+board = false
+
+# ─── Fields ──────────────────────────────────────────────────────────────────
+
+[[field]]
+name = "due"
+kind = "date"
+description = "When a milestone ships; a decision, not a hope"
+
+[[field]]
+name = "priority"
+kind = "enum"
+values = ["p0", "p1", "p2", "p3"]
+default = "p2"
+column = true
+description = "Relative to the milestone. p0: the milestone does not ship without it"
+
+[[field]]
+name = "effort"
+kind = "enum"
+values = ["s", "m", "l", "xl"]
+description = "Rough size, never an estimate. xl means it has not been split yet"
+
+[[field]]
+name = "area"
+kind = "enum"
+values = ["spec", "suite", "core", "cli", "lsp", "editors", "agents", "interop", "release", "docs", "community"]
+column = true
+description = "spec: the document; suite: conformance examples; core: sprig-core crate; cli: the sprig binary; lsp: language server; editors: grammars and extensions; agents: MCP and agent conventions; interop: import, export, calendars, CI; release: packaging and CI; docs: guides; community: name, governance, stewardship"
+
+# ─── Saved views ─────────────────────────────────────────────────────────────
+
+[[view]]
+name = "now"
+description = "Work someone is doing"
+filter = "category=active,type!=milestone"
+sort = "priority,id"
+columns = ["id", "status", "assignee", "priority", "area", "title"]
+
+[[view]]
+name = "next"
+description = "Committed work with nothing unfinished in its way"
+filter = "status=planned,blocked=false,type!=milestone"
+sort = "priority,milestone"
+columns = ["id", "priority", "area", "milestone", "title"]
+
+[[view]]
+name = "triage"
+description = "Open items with no milestone"
+filter = "milestone=,category=open|active,type!=milestone"
+columns = ["id", "type", "title", "created"]
+
+[[view]]
+name = "waiting"
+description = "Blocked on something outside the graph; read the item's note"
+filter = "status=blocked,type!=milestone"
+sort = "priority,id"
+
+[[view]]
+name = "spikes"
+description = "Open questions, and what they hold up"
+filter = "type=spike,category=open|active"
+sort = "priority,milestone"
+
+[[view]]
+name = "decisions"
+description = "The settled arguments behind the format"
+filter = "type=decision,category=open|active|done|dropped"
+sort = "id"
+columns = ["id", "status", "area", "title"]
+
+[[view]]
+name = "later"
+description = "Good ideas that are not on the path to 1.0"
+filter = "milestone=later,category=open|active,type!=milestone"
+sort = "priority,area"
+
+# ─── Hooks ───────────────────────────────────────────────────────────────────
+
+[hooks]
+after-create = "cairn render -q"
+after-change = "cairn render -q"
+after-remove = "cairn render -q"
+
+# ─── Rendered roadmap ────────────────────────────────────────────────────────
+
+[render]
+target = "ROADMAP.md"
+title = "Sprig roadmap"
+group_by = "milestone"
+include = "category=open|active,type!=decision"
+checkbox = true
+show_ids = true
+progress = true
+group_by_status = false
+link_items = true

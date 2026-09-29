@@ -1,0 +1,91 @@
+#!/bin/sh
+# The seam between this project and everything that automates it.
+#
+# CI, the git hooks and scripts/agent know only the verbs below. Nothing outside
+# this file knows Sprig is written in Rust, so CI and a local hook cannot drift
+# apart: they run the same line.
+set -eu
+
+cd "$(dirname "$0")/.."
+
+step() {
+  printf '\n\033[1;34m▸ %s\033[0m\n' "$1"
+}
+
+usage() {
+  cat <<'USAGE'
+usage: scripts/task <target>
+
+  fmt        format in place
+  fmt:check  verify formatting; non-zero on drift
+  lint       clippy with warnings denied, and the core purity guard
+  test       the full test suite
+  build      compile everything, including the tests
+  check      fmt:check, lint, test, build, and backlog when cairn is installed
+  backlog    cairn check --strict, and ROADMAP.md is up to date (needs cairn)
+USAGE
+}
+
+# sprig-core promises the same answer on every machine and every day, which it
+# can only keep if it never reads the filesystem, the environment or the clock.
+# A grep is crude, and that is the point: it is impossible to argue with.
+purity() {
+  if grep -rnE 'std::(fs|env|net|process)|SystemTime|Instant::now' crates/sprig-core/src; then
+    printf '\nlint: sprig-core must not touch the filesystem, environment, network or clock.\n' >&2
+    printf '      Take the value as a parameter; the CLI supplies it.\n' >&2
+    exit 1
+  fi
+}
+
+case "${1:-}" in
+  fmt)
+    cargo fmt --all
+    ;;
+  fmt:check)
+    cargo fmt --all -- --check
+    ;;
+  lint)
+    purity
+    cargo clippy --all-targets --all-features -- -D warnings
+    ;;
+  test)
+    cargo test --all-targets
+    ;;
+  build)
+    cargo build --all-targets
+    ;;
+  backlog)
+    command -v cairn >/dev/null 2>&1 || {
+      printf 'scripts/task: cairn is not installed; https://oddurs.github.io/cairn\n' >&2
+      exit 1
+    }
+    cairn check --strict --render
+    ;;
+  check)
+    step 'format'
+    "$0" fmt:check
+    step 'lint'
+    "$0" lint
+    step 'test'
+    "$0" test
+    step 'build'
+    "$0" build
+    # CI runs the backlog as a job of its own, so a machine without cairn is
+    # told rather than failed; the pull request will still be held to it.
+    step 'backlog'
+    if command -v cairn >/dev/null 2>&1; then
+      "$0" backlog
+    else
+      printf 'cairn not installed: backlog not checked here (CI checks it)\n'
+    fi
+    printf '\n\033[1;32m✓ green\033[0m\n'
+    ;;
+  -h | --help | help)
+    usage
+    ;;
+  *)
+    printf 'scripts/task: unknown target %s\n\n' "${1:-<none>}" >&2
+    usage >&2
+    exit 2
+    ;;
+esac

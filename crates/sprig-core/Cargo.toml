@@ -1,0 +1,10 @@
+[package]
+name = "sprig-core"
+description = "Parser and resolver for Sprig, a plain-text format for plans"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+publish.workspace = true
