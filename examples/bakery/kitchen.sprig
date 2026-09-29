@@ -1,0 +1,23 @@
+Kitchen fit-out  @teo  budget:64k
+
+- Design  ^design
+  x Layout sketch
+  ~ Ventilation plan with the engineer  due:2026-10-12  est:2d
+    Extraction has to exit through the roof, not the back wall.
+    The neighbours at no. 43 have already asked.
+# Equipment  #finance
+  - Deck oven, three decks  ^oven  !!
+    Rondo quoted 14.2k, Mono 12.9k. Mono's lead time is ten weeks.
+    - Get a third quote  due:2026-10-02  est:2h
+    - Place the order  after:[[bakery^loan]]
+  - Spiral mixer, 40 litres  est:1h
+  / Proofing cabinet
+    = Dropped. The walk-in cooler can double as a retarder.
+  > Espresso machine
+    After opening, once we know what the morning rush looks like.
+- Build  after:^design  after:[[lease^signed]]
+  - Strip out  est:3d
+  - Plumbing and drains  est:4d
+  - Three-phase electrics  est:2d
+  - Tiling  est:5d
+  - Install equipment  est:2d

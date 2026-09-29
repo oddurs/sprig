@@ -23,6 +23,7 @@ usage: scripts/task <target>
   build      compile everything, including the tests
   check      fmt:check, lint, test, build, and backlog when cairn is installed
   backlog    cairn check --strict, and ROADMAP.md is up to date (needs cairn)
+  site       build the website and check its links and requests (needs node)
 USAGE
 }
 
@@ -58,6 +59,14 @@ case "${1:-}" in
     ;;
   build)
     cargo build --all-targets
+    ;;
+  site)
+    command -v npm >/dev/null 2>&1 || {
+      printf 'scripts/task: npm is not installed; the site needs Node %s\n' "$(cat site/.node-version)" >&2
+      exit 1
+    }
+    npm --prefix site ci --no-audit --no-fund
+    npm --prefix site run build
     ;;
   backlog)
     command -v cairn >/dev/null 2>&1 || {

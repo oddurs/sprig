@@ -1,0 +1,15 @@
+---
+import { planFragment } from '../lib/share.js';
+
+// "Open in the playground" for a docs example. The whole example travels in
+// the link's fragment, so the tutorial's steps need no server and no storage.
+interface Props {
+	files: Record<string, string>;
+	label?: string;
+}
+const { files, label = 'Open this in the playground' } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const href = `${base}/play/#${planFragment(files)}`;
+---
+
+<p><a href={href}>{label} →</a></p>

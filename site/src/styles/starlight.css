@@ -1,0 +1,52 @@
+/*
+ * Starlight in Sprig's colours. Starlight's own properties live in cascade
+ * layers, so these unlayered declarations win in both themes; the tokens they
+ * point at flip with the theme themselves.
+ */
+:root {
+	--sl-font: var(--font-sans);
+	--sl-font-mono: var(--font-mono);
+
+	--sl-color-white: var(--ink);
+	--sl-color-gray-1: var(--ink);
+	--sl-color-gray-2: var(--ink-2);
+	--sl-color-gray-3: var(--muted);
+	--sl-color-gray-4: var(--muted);
+	--sl-color-gray-5: var(--rule);
+	--sl-color-gray-6: var(--paper-2);
+	--sl-color-gray-7: var(--card);
+	--sl-color-black: var(--paper);
+
+	--sl-color-accent-low: var(--leaf-soft);
+	--sl-color-accent: var(--leaf);
+	--sl-color-accent-high: var(--leaf-strong);
+
+	--sl-color-text: var(--ink-2);
+	--sl-color-text-accent: var(--leaf);
+	--sl-color-text-invert: var(--leaf-ink);
+	--sl-color-bg: var(--paper);
+	--sl-color-bg-nav: var(--card);
+	--sl-color-bg-sidebar: var(--paper);
+	--sl-color-bg-inline-code: var(--chip);
+	--sl-color-bg-accent: var(--leaf);
+	--sl-color-hairline-light: var(--rule-2);
+	--sl-color-hairline: var(--rule-2);
+	--sl-color-hairline-shade: var(--rule);
+
+	/* Note asides take the blue hue; Sprig has none. */
+	--sl-color-blue-low: var(--leaf-soft);
+	--sl-color-blue: var(--leaf);
+	--sl-color-blue-high: var(--leaf-strong);
+}
+
+/* Rule headings in the spec read as numbered clauses. */
+.sl-markdown-content h3 {
+	font-variant-numeric: tabular-nums;
+}
+.sl-markdown-content table {
+	font-variant-numeric: tabular-nums;
+}
+.site-title img {
+	height: 1.6rem;
+	width: auto;
+}

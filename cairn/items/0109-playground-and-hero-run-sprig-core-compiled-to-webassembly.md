@@ -29,3 +29,7 @@ Compile `sprig-core` to WebAssembly and replace the site's reference parser with
 - [ ] The site contains no parser code of its own; `site/src/lib/sprig.js` is removed.
 - [ ] The prerendered hero is produced by the same WebAssembly module the browser loads.
 - [ ] The WebAssembly core loads in under 300 KB compressed.
+
+## 2026-09-28
+
+The parser to replace is site/src/lib/sprig.js; its callers are site/src/lib/render.js (build time), site/src/scripts/hero.js and site/src/scripts/play.js (browser).

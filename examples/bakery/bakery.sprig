@@ -1,0 +1,24 @@
+Open the bakery  @dana  target:2026-12-09  where:"41 Mill Street"
+
+Corner unit, 62 m². Sourdough, laminated pastry, good coffee.
+Open seven days, 7 till 3.
+
+// Each + line grafts another file in as a branch.
+// Its progress, estimates and blockers roll up into this one.
+
+# Money  #finance
+  Budget is 180k. Anything over 10k needs a second quote.
+  x Business plan v3
+  x Bank meeting  due:2026-09-14
+  ~ Equipment loan paperwork  ^loan  due:2026-10-07  !!
+    The bank wants a signed lease first, see [[lease^signed]].
+  - Supplier credit line  @teo  after:[[lease^signed]]
+  - Weekly numbers to the bank  every:fri  due:2026-10-02
+
++ [[lease]]
++ [[kitchen]]  @teo
++ [[launch]]   @kim
+
+? Kiln & Crumb, or Mill Street Bread?  ^name
+  Street poll so far: 31 to 24 for Kiln & Crumb.
+  // Settle it: add a line under here that starts with "= ".

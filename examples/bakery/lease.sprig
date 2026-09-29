@@ -1,0 +1,13 @@
+Lease  @dana
+
+x Shortlist three spaces  est:2d
+  41 Mill Street won. Corner frontage, three-phase power already in,
+  and the landlord will split the cost of a new shopfront.
+~ Negotiate terms  ^terms  due:2026-10-05  !!!
+  x Eight weeks rent-free for the fit-out
+  ~ Break clause at year three
+  ? Who pays for the grease trap?
+    Landlord says us. Our lawyer says it's a fixture.
+- Change-of-use permit  ^permit  est:3w
+  Class E covers a bakery, but seating for more than 12 needs a variation.
+- Sign the lease  ^signed  after:^terms  after:^permit

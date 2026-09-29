@@ -1,0 +1,22 @@
+{
+  "name": "sprig-site",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "node scripts/sync.mjs && astro dev",
+    "build": "node scripts/sync.mjs && astro build && node scripts/check.mjs",
+    "preview": "astro preview",
+    "astro": "astro",
+    "sync": "node scripts/sync.mjs",
+    "check": "node scripts/check.mjs"
+  },
+  "dependencies": {
+    "@astrojs/markdown-satteri": "^0.4.2",
+    "@astrojs/starlight": "^0.42.4",
+    "astro": "^7.2.10"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=22.12"
+  }
+}

@@ -3,12 +3,13 @@ id: 106
 uid: 54549a41-88b7-42df-9424-02654ad66ade
 title: 'Tutorial: your first plan, in the playground'
 type: docs
-status: planned
+status: done
 milestone: launch
 depends_on:
 - 104
 created: 2026-09-28
 updated: 2026-09-28
+closed_at: 2026-09-28
 priority: p0
 effort: s
 area: site
@@ -24,5 +25,13 @@ A tutorial that takes the reader through marks, nesting, a dependency, a questio
 
 ## Acceptance criteria
 
-- [ ] Every snippet in the tutorial is a valid Sprig file.
-- [ ] The tutorial names v0.1 as the release that brings the same steps to the terminal, without describing commands that don't exist yet.
+- [x] Every snippet in the tutorial is a valid Sprig file.
+- [x] The tutorial names v0.1 as the release that brings the same steps to the terminal, without describing commands that don't exist yet.
+
+## 2026-09-28
+
+/docs/first-plan/ walks through marks, nesting, anchors and after:, a question and its answer, people and dates, and grafting a second file. Each of its seven Sprig snippets parses without diagnostics, and each step has an Open in the playground link that carries the example in the fragment. It says the sprig command arrives in v0.1 and describes no commands.
+
+## Result
+
+A six-step tutorial in the playground, every snippet valid and every step one click from running.
