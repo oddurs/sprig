@@ -50,6 +50,11 @@ case "${1:-}" in
     ;;
   test)
     cargo test --all-targets
+    # The workflow scripts are code too, and a broken one strands whoever
+    # relies on it mid-task.
+    for t in tests/scripts/*.sh; do
+      sh "$t"
+    done
     ;;
   build)
     cargo build --all-targets

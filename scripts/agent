@@ -32,8 +32,19 @@ primary() {
   git worktree list --porcelain | awk '/^worktree /{ sub(/^worktree /, ""); print; exit }'
 }
 
+# The repository's name, not the directory's: a clone can live under any name,
+# and its worktrees still belong in ../.worktrees/<repository>/. The directory
+# is only the answer when there is no remote to ask.
 repo_name() {
-  basename "$(primary)"
+  url=$(git remote get-url origin 2>/dev/null || true)
+  name=${url##*/}
+  name=${name##*:}
+  name=${name%.git}
+  if [ -n "$name" ]; then
+    printf '%s' "$name"
+  else
+    basename "$(primary)"
+  fi
 }
 
 # Resolved, never assumed: a repository whose default branch is `trunk` has to
