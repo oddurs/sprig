@@ -6,12 +6,11 @@ A plain-text format for plans that people and coding agents read, edit and check
 
 ## v0.1 — Check a plan from the terminal
 
-`··········` 0% · 0 of 17 done · due 2026-11-20
+`··········` 0% · 0 of 16 done · due 2026-11-20
 
 A stranger installs `sprig`, writes a plan across one or more `.sprig` files, and gets two answers: `sprig next` says what can be done right now, and `sprig check` reports broken links, loops and unknown anchors with exit codes CI can use.
 
 - [ ] [`0006`](https://github.com/oddurs/sprig/blob/main/cairn/items/0006-is-the-name-sprig-free-to-use.md) Is the name Sprig free to use? <sup>spike · p0 · community</sup>
-- [ ] [`0007`](https://github.com/oddurs/sprig/blob/main/cairn/items/0007-write-the-spec-as-spec-sprig-md-draft-0-3.md) Write the spec as spec/sprig.md, draft 0.3 <sup>docs · p0 · spec</sup>
 - [ ] [`0009`](https://github.com/oddurs/sprig/blob/main/cairn/items/0009-define-the-json-tree-schema.md) Define the JSON tree schema <sup>feature · p0 · suite</sup>
 - [ ] [`0010`](https://github.com/oddurs/sprig/blob/main/cairn/items/0010-conformance-runner-and-example-format.md) Conformance runner and example format <sup>feature · p0 · suite</sup>
 - [ ] [`0011`](https://github.com/oddurs/sprig/blob/main/cairn/items/0011-conformance-examples-lines-and-indentation.md) Conformance examples: lines and indentation <sup>feature · p0 · suite</sup>
