@@ -29,11 +29,10 @@ A stranger installs `sprig`, writes a plan across one or more `.sprig` files, an
 
 ## launch — Launch the website and Show HN
 
-`··········` 0% · 0 of 7 done · due 2026-12-01
+`··········` 0% · 0 of 6 done · due 2026-12-01
 
 A public website that explains Sprig in ten seconds and lets a visitor edit a real plan in thirty, and a Show HN post that points at it. The site's plan, including the arguments behind its shape, is in `design/site-plan.html`.
 
-- [ ] [`0108`](https://github.com/oddurs/sprig/blob/main/cairn/items/0108-deploy-the-site-to-github-pages-from-main.md) Deploy the site to GitHub Pages from main <sup>chore · p0 · site</sup>
 - [ ] [`0109`](https://github.com/oddurs/sprig/blob/main/cairn/items/0109-playground-and-hero-run-sprig-core-compiled-to-webassembly.md) Playground and hero run sprig-core compiled to WebAssembly <sup>feature · p0 · core</sup>
 - [ ] [`0110`](https://github.com/oddurs/sprig/blob/main/cairn/items/0110-prebuilt-binaries-for-the-v0-1-release.md) Prebuilt binaries for the v0.1 release <sup>chore · p0 · release</sup>
 - [ ] [`0111`](https://github.com/oddurs/sprig/blob/main/cairn/items/0111-quiet-preview-with-five-to-ten-real-users.md) Quiet preview with five to ten real users <sup>chore · p1 · community</sup>
