@@ -16,8 +16,8 @@ under it. With no path, the current directory.
 
 Exit codes:
   0  fine
-  1  findings: `check` found errors (or warnings, with --strict), or `next`
-     found nothing ready
+  1  findings: `check` found errors (or warnings, with --strict), `next`
+     found nothing ready, or `fmt --check` found files to change
   2  usage error, or a path that could not be read";
 
 #[derive(Debug, Parser)]
@@ -46,6 +46,50 @@ pub enum Command {
     /// Report broken grafts, loops and unknown references, for editors and CI
     #[command(after_help = AFTER_HELP)]
     Check(CheckArgs),
+    /// Normalise indentation, write out typed dates, trim trailing space
+    #[command(after_help = AFTER_HELP)]
+    Fmt(FmtArgs),
+    /// Mark items done, or reopen them; a recurring item moves its due date
+    #[command(after_help = TICK_HELP)]
+    Tick(TickArgs),
+}
+
+const TICK_HELP: &str = "\
+A ref names one item, from exact to forgiving:
+  ^signed          an anchor, in any file
+  lease^signed     an anchor in one file
+  lease.sprig:13   the item on a line, as compilers print it
+  \"grease trap\"    words from the item's text, matching one item
+  -                refs from standard input, one per line
+
+Every ref is resolved before anything is written: if one is unknown or
+ambiguous, nothing changes, the candidates are listed, and the exit code is 2.
+
+Exit codes:
+  0  ticked
+  2  usage error, a ref that names no item or several, or a path that could
+     not be read or written";
+
+#[derive(Debug, Args)]
+pub struct FmtArgs {
+    /// Plans to format
+    #[arg(value_name = "PATH")]
+    pub paths: Vec<PathBuf>,
+
+    /// Write nothing; list the files that would change, and exit 1 if any
+    #[arg(long)]
+    pub check: bool,
+}
+
+#[derive(Debug, Args)]
+pub struct TickArgs {
+    /// Items to tick
+    #[arg(value_name = "REF", required = true)]
+    pub refs: Vec<String>,
+
+    /// The plans the refs are in
+    #[arg(long = "in", value_name = "PATH", default_value = ".")]
+    pub plans: PathBuf,
 }
 
 #[derive(Debug, Args)]

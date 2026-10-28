@@ -301,12 +301,20 @@ pub fn lex(src: &str) -> Vec<Lexed> {
 /// leaves every other byte alone. Only `due:` and `start:` on an item, an
 /// answer or a title are dates; a note's text is never touched.
 pub fn expand_dates(line: &str, today: crate::date::Date) -> String {
-    let lexed = lex(line);
+    // Behind a BOM of its own, so a BOM the line starts with is read as text,
+    // not as the start of a file.
+    let shifted = format!("\u{feff}{line}");
+    let lexed = lex(&shifted);
     let Some(first) = lexed.first() else {
         return line.to_string();
     };
     let mut out = line.to_string();
-    let pieces = &first.pieces;
+    let pieces: Vec<(token::Piece, Span)> = first
+        .pieces
+        .iter()
+        .map(|(p, s)| (*p, Span::new(s.start - 3, s.end - 3)))
+        .collect();
+    let pieces = &pieces;
     // From the end, so earlier spans stay valid as later ones change length.
     for pair in pieces.windows(2).rev() {
         let [(token::Piece::Key, key), (token::Piece::Value, value)] = pair else {

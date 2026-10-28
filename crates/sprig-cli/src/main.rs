@@ -7,6 +7,7 @@ use sprig_core::{Date, Diagnostic, Severity, Status, Tree, next};
 
 mod args;
 mod load;
+mod write;
 
 use args::{CheckArgs, Cli, Command, NextArgs};
 use load::Loaded;
@@ -29,6 +30,8 @@ fn run() -> ExitCode {
     let result = match &cli.command {
         Command::Next(a) => cmd_next(a, today),
         Command::Check(a) => cmd_check(a, today),
+        Command::Fmt(a) => write::fmt(a, today),
+        Command::Tick(a) => write::tick(a, today),
     };
     match result {
         Ok(code) => code,
@@ -39,7 +42,7 @@ fn run() -> ExitCode {
     }
 }
 
-type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
+pub(crate) type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 
 /// Diagnostics with each file shown as the person would type it.
 fn diagnostics(loaded: &Loaded, ds: &[Diagnostic]) -> Vec<Diagnostic> {
@@ -98,7 +101,7 @@ fn cmd_check(a: &CheckArgs, today: Date) -> Result<ExitCode> {
     })
 }
 
-fn plural(n: usize, word: &str) -> String {
+pub(crate) fn plural(n: usize, word: &str) -> String {
     if n == 1 {
         format!("1 {word}")
     } else {

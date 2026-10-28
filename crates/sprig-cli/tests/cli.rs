@@ -387,3 +387,158 @@ fn a_deep_plan_does_not_overflow_the_stack() {
     assert_eq!(out.status.code(), Some(0), "{}", stderr(&out));
     assert!(stdout(&out).contains("1 ready"));
 }
+
+#[test]
+fn fmt_check_lists_files_and_fmt_rewrites_only_layout_and_dates() {
+    let dir = scratch("fmt");
+    fs::write(dir.join("tidy.sprig"), "Tidy\n\n- one\n  - two\n").unwrap();
+    fs::write(
+        dir.join("messy.sprig"),
+        "Messy   \n\n- one  due:fri\n     - two\n\n\n",
+    )
+    .unwrap();
+    let out = sprig_in(&dir, &["fmt", "--check", "--today", "2026-10-01"]);
+    assert_eq!(out.status.code(), Some(1));
+    assert_eq!(stdout(&out), "messy.sprig\n");
+    assert_eq!(
+        fs::read_to_string(dir.join("messy.sprig")).unwrap(),
+        "Messy   \n\n- one  due:fri\n     - two\n\n\n",
+        "--check writes nothing"
+    );
+
+    let out = sprig_in(&dir, &["fmt", "--today", "2026-10-01"]);
+    assert_eq!(out.status.code(), Some(0), "{}", stderr(&out));
+    assert_eq!(
+        fs::read_to_string(dir.join("messy.sprig")).unwrap(),
+        "Messy\n\n- one  due:2026-10-02\n  - two\n"
+    );
+    assert_eq!(
+        fs::read_to_string(dir.join("tidy.sprig")).unwrap(),
+        "Tidy\n\n- one\n  - two\n"
+    );
+    assert_eq!(
+        sprig_in(&dir, &["fmt", "--check", "--today", "2026-10-01"])
+            .status
+            .code(),
+        Some(0)
+    );
+}
+
+#[test]
+fn fmt_leaves_grafted_files_it_was_not_pointed_at_alone() {
+    let dir = scratch("fmt-graft");
+    fs::write(dir.join("a.sprig"), "A\n\n+ [[b]]\n").unwrap();
+    fs::write(dir.join("b.sprig"), "B\n\n- x   \n").unwrap();
+    let out = sprig_in(&dir, &["fmt", "--check", "a.sprig"]);
+    assert_eq!(out.status.code(), Some(0), "{}", stdout(&out));
+}
+
+#[test]
+fn the_repositorys_own_examples_are_formatted() {
+    let out = sprig(&["fmt", "--check", "examples"]);
+    assert_eq!(out.status.code(), Some(0), "{}", stdout(&out));
+}
+
+#[test]
+fn tick_changes_only_the_mark_or_the_due_date() {
+    let dir = scratch("tick");
+    copy_bakery(&dir);
+    let before = fs::read_to_string(dir.join("lease.sprig")).unwrap();
+    let out = sprig_in(
+        &dir,
+        &[
+            "tick",
+            "--today",
+            "2026-10-02",
+            "lease^signed",
+            "grease trap",
+        ],
+    );
+    assert_eq!(out.status.code(), Some(0), "{}", stderr(&out));
+    assert_eq!(
+        stdout(&out),
+        "lease.sprig:13  x Sign the lease  ^signed  after:^terms  after:^permit\nlease.sprig:9  x Who pays for the grease trap?\n"
+    );
+    let after = fs::read_to_string(dir.join("lease.sprig")).unwrap();
+    let diff: Vec<(usize, u8, u8)> = before
+        .bytes()
+        .zip(after.bytes())
+        .enumerate()
+        .filter(|(_, (a, b))| a != b)
+        .map(|(i, (a, b))| (i, a, b))
+        .collect();
+    assert_eq!(before.len(), after.len());
+    assert_eq!(diff.len(), 2, "exactly two marks changed: {diff:?}");
+    assert!(diff.iter().all(|&(_, _, b)| b == b'x'));
+
+    // A recurring item stays open and its due date moves on (§10.4).
+    let bakery = fs::read_to_string(dir.join("bakery.sprig")).unwrap();
+    let out = sprig_in(&dir, &["tick", "--today", "2026-10-02", "weekly numbers"]);
+    assert!(
+        stdout(&out).contains("- Weekly numbers to the bank  every:fri  due:2026-10-09"),
+        "{}",
+        stdout(&out)
+    );
+    let moved = fs::read_to_string(dir.join("bakery.sprig")).unwrap();
+    assert_eq!(moved, bakery.replace("due:2026-10-02", "due:2026-10-09"));
+
+    // Ticking a done item reopens it.
+    sprig_in(&dir, &["tick", "lease.sprig:13"]);
+    assert_eq!(
+        fs::read_to_string(dir.join("lease.sprig"))
+            .unwrap()
+            .lines()
+            .nth(12),
+        Some("- Sign the lease  ^signed  after:^terms  after:^permit")
+    );
+}
+
+#[test]
+fn an_unknown_or_ambiguous_ref_ticks_nothing_and_lists_candidates() {
+    let dir = scratch("tick-bad");
+    copy_bakery(&dir);
+    let before: Vec<String> = ["lease", "groceries"]
+        .iter()
+        .map(|f| fs::read_to_string(dir.join(format!("{f}.sprig"))).unwrap())
+        .collect();
+    let out = sprig_in(&dir, &["tick", "^signed", "sack"]);
+    assert_eq!(out.status.code(), Some(2));
+    let err = stderr(&out);
+    assert!(
+        err.contains("sack names 3 items:\n  groceries.sprig:4  Rye, 4 sacks"),
+        "{err}"
+    );
+    let after: Vec<String> = ["lease", "groceries"]
+        .iter()
+        .map(|f| fs::read_to_string(dir.join(format!("{f}.sprig"))).unwrap())
+        .collect();
+    assert_eq!(before, after, "all or nothing");
+}
+
+#[test]
+fn tick_reads_refs_from_standard_input() {
+    use std::io::Write as _;
+    let dir = scratch("tick-stdin");
+    copy_bakery(&dir);
+    let mut child = Command::new(env!("CARGO_BIN_EXE_sprig"))
+        .args(["tick", "-"])
+        .current_dir(&dir)
+        .stdin(std::process::Stdio::piped())
+        .stdout(std::process::Stdio::piped())
+        .spawn()
+        .unwrap();
+    child
+        .stdin
+        .take()
+        .unwrap()
+        .write_all(b"^permit\nkitchen.sprig:13\n\n")
+        .unwrap();
+    let out = child.wait_with_output().unwrap();
+    assert_eq!(out.status.code(), Some(0));
+    assert_eq!(stdout(&out).lines().count(), 2);
+    assert!(
+        fs::read_to_string(dir.join("kitchen.sprig"))
+            .unwrap()
+            .contains("  x Spiral mixer")
+    );
+}

@@ -1,0 +1,10 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc 0f4b85de75942cf49b7d19ff743699913138fb802f55bfa7a2b80f700aa970ca # shrinks to pick = Index(2721650764973540403), ops = [Sibling(1406166803451094190)]
+cc 6ee50d9c85166dd57591d7396eb50a817390ddfd1deb1b338133df374ef3ffc5 # shrinks to src = "\r\n\u{feff}due:fri\n"
+cc 9ba417753ebd15f8cec28d8521d6a4723cec20f059debf6f8691879a0812ded6 # shrinks to pick = Index(13305848184315086412), ops = [Child(3706900107335890143)]
+cc d8edaf77d08e752c47eb8c2fed345a4304ba2428337fe49a88583f48262da4b3 # shrinks to src = "\n  due:fri\n    = \n  // c"

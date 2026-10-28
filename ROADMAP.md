@@ -26,17 +26,13 @@ A public website that explains Sprig in ten seconds and lets a visitor edit a re
 
 ## v0.2 — Write plans in your editor
 
-`··········` 0% · 0 of 23 done · due 2027-01-29
+`··········` 0% · 0 of 18 done · due 2027-01-29
 
 VS Code highlights `.sprig` files, completes people, anchors and file links, shows `sprig check` diagnostics as you type, and ticks items with a code action. `sprig fmt` normalises a file without touching anything it doesn't mean to. In the terminal, `sprig tree`, `status` and `why` show a plan's shape and what holds it up, and every command completes in the shell.
 
 - [ ] [`0020`](https://github.com/oddurs/sprig/blob/main/cairn/items/0020-conformance-examples-tokens-fields-and-dates.md) Conformance examples: tokens, fields and dates <sup>feature · p1 · suite</sup>
 - [ ] [`0021`](https://github.com/oddurs/sprig/blob/main/cairn/items/0021-conformance-examples-grafts-rollups-and-blocking.md) Conformance examples: grafts, rollups and blocking <sup>feature · p1 · suite</sup>
-- [ ] [`0042`](https://github.com/oddurs/sprig/blob/main/cairn/items/0042-can-edits-preserve-every-byte-the-user-wrote.md) Can edits preserve every byte the user wrote? <sup>spike · p0 · core</sup>
-- [ ] [`0043`](https://github.com/oddurs/sprig/blob/main/cairn/items/0043-byte-preserving-edit-api-in-the-core.md) Byte-preserving edit API in the core <sup>feature · p0 · core</sup>
-- [ ] [`0044`](https://github.com/oddurs/sprig/blob/main/cairn/items/0044-sprig-fmt.md) sprig fmt <sup>feature · p0 · cli</sup>
 - [ ] [`0045`](https://github.com/oddurs/sprig/blob/main/cairn/items/0045-sprig-tree.md) sprig tree <sup>feature · p1 · cli</sup>
-- [ ] [`0046`](https://github.com/oddurs/sprig/blob/main/cairn/items/0046-sprig-tick.md) sprig tick <sup>feature · p1 · cli</sup>
 - [ ] [`0047`](https://github.com/oddurs/sprig/blob/main/cairn/items/0047-tree-sitter-grammar.md) Tree-sitter grammar <sup>feature · p0 · editors</sup>
 - [ ] [`0048`](https://github.com/oddurs/sprig/blob/main/cairn/items/0048-textmate-grammar.md) TextMate grammar <sup>feature · p1 · editors</sup>
 - [ ] [`0049`](https://github.com/oddurs/sprig/blob/main/cairn/items/0049-language-server-diagnostics-as-you-type.md) Language server: diagnostics as you type <sup>feature · p0 · lsp</sup>
@@ -48,7 +44,6 @@ VS Code highlights `.sprig` files, completes people, anchors and file links, sho
 - [ ] [`0055`](https://github.com/oddurs/sprig/blob/main/cairn/items/0055-editor-setup-guide-neovim-helix-zed.md) Editor setup guide: Neovim, Helix, Zed <sup>docs · p1 · docs</sup>
 - [ ] [`0056`](https://github.com/oddurs/sprig/blob/main/cairn/items/0056-performance-baseline-and-regression-gate.md) Performance baseline and regression gate <sup>chore · p1 · core</sup>
 - [ ] [`0057`](https://github.com/oddurs/sprig/blob/main/cairn/items/0057-release-v0-2.md) Release v0.2 <sup>chore · p0 · release</sup>
-- [ ] [`0118`](https://github.com/oddurs/sprig/blob/main/cairn/items/0118-resolve-item-refs-from-the-command-line.md) Resolve item refs from the command line <sup>feature · p0 · core</sup>
 - [ ] [`0119`](https://github.com/oddurs/sprig/blob/main/cairn/items/0119-output-layer-terminal-plain-and-colour-from-the-marks.md) Output layer: terminal, --plain, and colour from the marks <sup>feature · p0 · cli</sup>
 - [ ] [`0120`](https://github.com/oddurs/sprig/blob/main/cairn/items/0120-sprig-status-the-whole-folder-on-one-screen.md) sprig status: the whole folder on one screen <sup>feature · p1 · cli</sup>
 - [ ] [`0121`](https://github.com/oddurs/sprig/blob/main/cairn/items/0121-sprig-why-explain-what-an-item-is-waiting-on.md) sprig why: explain what an item is waiting on <sup>feature · p1 · cli</sup>
