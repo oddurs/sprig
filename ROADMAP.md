@@ -6,26 +6,13 @@ A plain-text format for plans that people and coding agents read, edit and check
 
 ## v0.1 — Check a plan from the terminal
 
-`··········` 0% · 0 of 16 done · due 2026-11-20
+`··········` 0% · 0 of 3 done · due 2026-11-20
 
 A stranger installs `sprig`, writes a plan across one or more `.sprig` files, and gets two answers: `sprig next` says what can be done right now, and `sprig check` reports broken links, loops and unknown anchors with exit codes CI can use.
 
-- [ ] [`0006`](https://github.com/oddurs/sprig/blob/main/cairn/items/0006-is-the-name-sprig-free-to-use.md) Is the name Sprig free to use? <sup>spike · p0 · community</sup>
-- [ ] [`0009`](https://github.com/oddurs/sprig/blob/main/cairn/items/0009-define-the-json-tree-schema.md) Define the JSON tree schema <sup>feature · p0 · suite</sup>
-- [ ] [`0010`](https://github.com/oddurs/sprig/blob/main/cairn/items/0010-conformance-runner-and-example-format.md) Conformance runner and example format <sup>feature · p0 · suite</sup>
-- [ ] [`0011`](https://github.com/oddurs/sprig/blob/main/cairn/items/0011-conformance-examples-lines-and-indentation.md) Conformance examples: lines and indentation <sup>feature · p0 · suite</sup>
-- [ ] [`0012`](https://github.com/oddurs/sprig/blob/main/cairn/items/0012-diagnostics-with-stable-codes.md) Diagnostics with stable codes <sup>feature · p0 · core</sup>
-- [ ] [`0013`](https://github.com/oddurs/sprig/blob/main/cairn/items/0013-parse-lines-into-a-tree-with-byte-spans.md) Parse lines into a tree with byte spans <sup>feature · p0 · core</sup>
-- [ ] [`0014`](https://github.com/oddurs/sprig/blob/main/cairn/items/0014-parser-robustness-arbitrary-input-crlf-bom-tabs.md) Parser robustness: arbitrary input, CRLF, BOM, tabs <sup>feature · p0 · core</sup>
-- [ ] [`0015`](https://github.com/oddurs/sprig/blob/main/cairn/items/0015-lift-inline-tokens.md) Lift inline tokens <sup>feature · p0 · core</sup>
-- [ ] [`0017`](https://github.com/oddurs/sprig/blob/main/cairn/items/0017-load-a-workspace-and-resolve-grafts.md) Load a workspace and resolve grafts <sup>feature · p0 · core</sup>
-- [ ] [`0018`](https://github.com/oddurs/sprig/blob/main/cairn/items/0018-roll-status-down-and-progress-up.md) Roll status down and progress up <sup>feature · p0 · core</sup>
-- [ ] [`0019`](https://github.com/oddurs/sprig/blob/main/cairn/items/0019-compute-blocked-items.md) Compute blocked items <sup>feature · p0 · core</sup>
-- [ ] [`0022`](https://github.com/oddurs/sprig/blob/main/cairn/items/0022-cli-skeleton-help-version-exit-codes.md) CLI skeleton: help, version, exit codes <sup>feature · p0 · cli</sup>
-- [ ] [`0023`](https://github.com/oddurs/sprig/blob/main/cairn/items/0023-sprig-next-what-can-be-done-now.md) sprig next: what can be done now <sup>feature · p0 · cli</sup>
-- [ ] [`0025`](https://github.com/oddurs/sprig/blob/main/cairn/items/0025-sprig-check-diagnostics-for-a-workspace.md) sprig check: diagnostics for a workspace <sup>feature · p0 · cli</sup>
-- [ ] [`0026`](https://github.com/oddurs/sprig/blob/main/cairn/items/0026-readme-install-and-a-first-plan-in-five-minutes.md) README: install and a first plan in five minutes <sup>docs · p0 · docs</sup>
 - [ ] [`0027`](https://github.com/oddurs/sprig/blob/main/cairn/items/0027-release-v0-1.md) Release v0.1 <sup>chore · p0 · release</sup>
+- [ ] [`0006`](https://github.com/oddurs/sprig/blob/main/cairn/items/0006-is-the-name-sprig-free-to-use.md) Is the name Sprig free to use? <sup>spike · p0 · community</sup>
+- [ ] [`0026`](https://github.com/oddurs/sprig/blob/main/cairn/items/0026-readme-install-and-a-first-plan-in-five-minutes.md) README: install and a first plan in five minutes <sup>docs · p0 · docs</sup>
 
 ## launch — Launch the website and Show HN
 
