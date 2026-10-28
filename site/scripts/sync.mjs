@@ -173,7 +173,7 @@ write(
 );
 
 /* counts the pages state in prose, so a sentence like "all fifteen" can't go stale */
-write(join(generated, 'facts.json'), JSON.stringify({ decisions: decisions.length }, null, '\t'));
+write(join(generated, 'facts.json'), JSON.stringify({ decisions: decisions.length, commands: commands.map((c) => c.name) }, null, '\t'));
 
 console.log(
 	`sync: spec, ${decisions.length} decisions, roadmap, changelog (${releases.length} releases), ${Object.keys(examples).length} examples, ${commands.length} commands`,
