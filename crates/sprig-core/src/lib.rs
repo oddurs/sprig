@@ -6,8 +6,10 @@
 
 pub mod date;
 pub mod diagnostic;
+pub mod edit;
 pub mod json;
 pub mod next;
+pub mod refs;
 pub mod syntax;
 pub mod token;
 pub mod workspace;
