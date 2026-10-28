@@ -15,5 +15,12 @@ path = "src/main.rs"
 
 [dependencies]
 clap = { version = "4", features = ["derive", "env"] }
+clap_complete = "4"
+clap_mangen = "0.2"
 jiff = "0.2"
+terminal_size = "0.4"
+unicode-width = "0.2"
 sprig-core = { path = "../sprig-core", version = "0.0.0" }
+
+[dev-dependencies]
+unicode-width = "0.2"

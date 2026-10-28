@@ -639,7 +639,7 @@ fn check_anchors(file: &str, index: &LineIndex, root: &Node, out: &mut Vec<Diagn
 }
 
 /// Visits every item under `node` in document order, not `node` itself.
-pub(crate) fn walk<'a>(node: &'a Node, f: &mut impl FnMut(&'a Node)) {
+pub fn walk<'a>(node: &'a Node, f: &mut impl FnMut(&'a Node)) {
     for c in &node.children {
         f(c);
         walk(c, f);

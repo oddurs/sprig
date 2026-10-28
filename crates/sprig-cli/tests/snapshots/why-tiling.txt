@@ -1,0 +1,9 @@
+- Tiling                                    examples/bakery/kitchen.sprig:22  @teo
+└─ inside Build, which waits:               examples/bakery/kitchen.sprig:18
+   ├─ - Design                              examples/bakery/kitchen.sprig:3  @teo
+   │  └─ 1 of 2 done, nothing blocks it
+   └─ - Sign the lease                      examples/bakery/lease.sprig:13  @dana
+      ├─ ~ Negotiate terms                  examples/bakery/lease.sprig:6  @dana
+      │  └─ 1 of 3 done, nothing blocks it
+      └─ - Change-of-use permit             examples/bakery/lease.sprig:11  @dana
+         └─ ready to start

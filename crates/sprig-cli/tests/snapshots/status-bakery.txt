@@ -1,0 +1,6 @@
+examples/bakery/bakery     ██░░░░░░░░  9/40  20 ready  12 waiting
+examples/bakery/dana       █░░░░░░░░░  1/6   4 ready   1 waiting
+examples/bakery/groceries  ███░░░░░░░  3/10  7 ready
+examples/bakery/kitchen    █░░░░░░░░░  1/10  3 ready   6 waiting
+examples/bakery/launch     ██░░░░░░░░  4/19  11 ready  4 waiting
+examples/bakery/lease      ███░░░░░░░  2/6   3 ready   1 waiting

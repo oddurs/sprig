@@ -98,3 +98,26 @@ the file's line ending and the indentation of their siblings.
 
 Ticking an item makes an open item done and a done item open, except that
 ticking an open item with `every:` moves its `due:` instead (§10.4).
+
+## T4. Output for scripts
+
+`sprig` prints tables for people and, with `--plain`, tab-separated lines for
+scripts, the way git's `--porcelain` does: no colour, nothing cut to fit, and a
+column order that is kept from one release to the next. New columns are added
+only at the end. The first field is always a ref (T1) or a path, so
+`cut -f1` gives something another command accepts.
+
+| Command | Fields |
+| --- | --- |
+| `next` | ref, mark, text, path through the tree, due date (stored form, or as written), priority (0 to 3) |
+| `check` | file, line, column, severity, code, message |
+| `tree` | ref, depth, mark, text, status, done, total |
+| `status` | file, done, total, ready, waiting, late, errors |
+
+A ref here is `file^anchor` when the item has an anchor, since that survives
+edits, and `file:line` otherwise.
+
+Colour follows the convention at no-color.org: `--color always` or `never`
+decides; otherwise a non-empty `NO_COLOR` turns it off, and it is on only
+when output goes to a terminal. Colour only ever repeats what a mark already
+says.
