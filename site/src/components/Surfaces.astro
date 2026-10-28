@@ -1,12 +1,20 @@
 ---
 // Where Sprig runs, and when each place arrives. The milestones are the
-// roadmap's; change them there first.
+// roadmap's; change them there first. What the built binary already has is
+// shown as today, from `sprig --help`.
+import facts from '../generated/facts.json';
 import Text from './primitives/Text.astro';
+
+const have = new Set<string>(facts.commands);
+// Bodies are prose with `code` spans.
+const code = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/`([^`]+)`/g, '<code>$1</code>');
 
 const surfaces = [
 	{ name: 'Playground', when: 'Today', body: 'Edit a plan and watch it compute, in this browser. It runs sprig-core, the same Rust parser as the sprig command, compiled to WebAssembly.' },
-	{ name: 'sprig', code: true, when: 'v0.1', body: 'The command line: what’s next, what’s broken, what’s blocked, and one-line writes.' },
-	{ name: 'Editors', when: 'v0.2', body: 'A language server for diagnostics, completion and ticking in place, a VS Code extension, and a Tree-sitter grammar.' },
+	{ name: 'sprig', code: true, when: have.has('next') ? 'Today' : 'v0.1', body: 'The command line: what’s next, what’s broken, what’s blocked, and one-line writes. It installs from source; the first release is v0.1.' },
+	have.has('lsp')
+		? { name: 'Editors', when: 'Today', body: '`sprig lsp` serves any editor that speaks LSP: problems as you type, completion, go to definition, hover and ticking. A VS Code extension and a Tree-sitter grammar follow in v0.2.' }
+		: { name: 'Editors', when: 'v0.2', body: 'A language server for diagnostics, completion and ticking in place, a VS Code extension, and a Tree-sitter grammar.' },
 	{ name: 'sprig mcp', code: true, when: 'v0.3', body: 'Coding agents read the plan, find ready work and tick it, as file edits you review.' },
 	{ name: 'sprig tui', code: true, when: 'v0.4', body: 'A folder of plans on one terminal screen, with vim keys.' },
 ];
@@ -21,7 +29,7 @@ const surfaces = [
 					<Text as="span" size="sm" tone={s.when === 'Today' ? 'default' : 'muted'} font="mono">{s.when}</Text>
 				</dt>
 				<dd>
-					<Text size="sm" tone="muted">{s.body}</Text>
+					<Text size="sm" tone="muted"><Fragment set:html={code(s.body)} /></Text>
 				</dd>
 			</div>
 		))
