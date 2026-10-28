@@ -1,0 +1,43 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "A",
+    "status": "empty",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 0
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "+",
+        "label": "b.sprig",
+        "status": "empty",
+        "graft": {
+          "path": "b.sprig",
+          "title": "b.sprig",
+          "mounted": false
+        },
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        }
+      }
+    ]
+  },
+  "diagnostics": [
+    {
+      "code": "S0103",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 3,
+      "span": [5, 10]
+    }
+  ]
+}

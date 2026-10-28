@@ -1,0 +1,73 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Settling",
+    "status": "done",
+    "progress": {
+      "done": 2,
+      "doing": 0,
+      "total": 2
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "x",
+        "label": "Kitchen",
+        "status": "done",
+        "settled": true,
+        "progress": {
+          "done": 2,
+          "doing": 0,
+          "total": 2
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "-",
+            "label": "Tiling",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          },
+          {
+            "file": "main.sprig",
+            "line": 5,
+            "mark": "~",
+            "label": "Paint",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            },
+            "children": [
+              {
+                "file": "main.sprig",
+                "line": 6,
+                "mark": "-",
+                "label": "Primer",
+                "status": "done",
+                "settled": true,
+                "progress": {
+                  "done": 1,
+                  "doing": 0,
+                  "total": 1
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

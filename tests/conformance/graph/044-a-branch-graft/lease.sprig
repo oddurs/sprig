@@ -1,0 +1,6 @@
+Lease
+
+- Negotiate  ^terms
+  = Two years, then rolling.
+  x Rent
+  - Break clause

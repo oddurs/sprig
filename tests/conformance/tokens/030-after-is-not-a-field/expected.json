@@ -1,0 +1,31 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "After",
+    "root": {
+      "line": 1,
+      "span": [0, 5],
+      "text": "After",
+      "children": [
+        {
+          "line": 3,
+          "span": [7, 22],
+          "mark": "-",
+          "text": "Tests",
+          "anchor": "tests"
+        },
+        {
+          "line": 4,
+          "span": [23, 55],
+          "mark": "-",
+          "text": "Ship",
+          "fields": {
+            "owner": "dana"
+          },
+          "after": ["^tests"]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

@@ -1,0 +1,78 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Typed",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 3
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "One",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 4,
+        "mark": "-",
+        "label": "Two",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 5,
+        "mark": "-",
+        "label": "Three",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      }
+    ]
+  },
+  "diagnostics": [
+    {
+      "code": "S0001",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 8,
+      "span": [14, 23]
+    },
+    {
+      "code": "S0001",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 4,
+      "col": 8,
+      "span": [31, 45]
+    },
+    {
+      "code": "S0001",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 5,
+      "col": 10,
+      "span": [55, 69]
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Top",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 1
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "+",
+        "label": "A",
+        "status": "todo",
+        "graft": {
+          "path": "a.sprig",
+          "title": "A",
+          "mounted": true
+        },
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "children": [
+          {
+            "file": "a.sprig",
+            "line": 3,
+            "mark": "+",
+            "label": "B",
+            "status": "todo",
+            "grafted": true,
+            "graft": {
+              "path": "b.sprig",
+              "title": "B",
+              "mounted": true
+            },
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "children": [
+              {
+                "file": "b.sprig",
+                "line": 3,
+                "mark": "+",
+                "label": "C",
+                "status": "todo",
+                "grafted": true,
+                "graft": {
+                  "path": "c.sprig",
+                  "title": "C",
+                  "mounted": true
+                },
+                "progress": {
+                  "done": 0,
+                  "doing": 0,
+                  "total": 1
+                },
+                "children": [
+                  {
+                    "file": "c.sprig",
+                    "line": 3,
+                    "mark": "+",
+                    "label": "a.sprig",
+                    "status": "empty",
+                    "grafted": true,
+                    "graft": {
+                      "path": "a.sprig",
+                      "title": "a.sprig",
+                      "mounted": false
+                    },
+                    "progress": {
+                      "done": 0,
+                      "doing": 0,
+                      "total": 0
+                    }
+                  },
+                  {
+                    "file": "c.sprig",
+                    "line": 4,
+                    "mark": "-",
+                    "label": "In c",
+                    "status": "todo",
+                    "grafted": true,
+                    "progress": {
+                      "done": 0,
+                      "doing": 0,
+                      "total": 1
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": [
+    {
+      "code": "S0103",
+      "severity": "error",
+      "file": "c.sprig",
+      "line": 3,
+      "col": 3,
+      "span": [5, 10]
+    }
+  ]
+}

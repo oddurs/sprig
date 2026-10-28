@@ -1,0 +1,137 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Open",
+    "status": "doing",
+    "progress": {
+      "done": 1,
+      "doing": 1,
+      "total": 5
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "First",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 4,
+        "mark": "~",
+        "label": "Second",
+        "status": "doing",
+        "progress": {
+          "done": 0,
+          "doing": 1,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 5,
+        "mark": "?",
+        "label": "Third",
+        "status": "question",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 6,
+        "mark": "x",
+        "label": "Fourth",
+        "status": "done",
+        "settled": true,
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 7,
+        "mark": "/",
+        "label": "Fifth",
+        "status": "dropped",
+        "settled": true,
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 8,
+        "mark": ">",
+        "label": "Sixth",
+        "status": "later",
+        "settled": true,
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 9,
+        "mark": "-",
+        "label": "Waits",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "blocked": true,
+        "waits_on": [
+          {
+            "after": "^a",
+            "label": "First",
+            "file": "main.sprig",
+            "line": 3
+          },
+          {
+            "after": "^b",
+            "label": "Second",
+            "file": "main.sprig",
+            "line": 4
+          },
+          {
+            "after": "^c",
+            "label": "Third",
+            "file": "main.sprig",
+            "line": 5
+          },
+          {
+            "after": "^e",
+            "label": "Fifth",
+            "file": "main.sprig",
+            "line": 7
+          },
+          {
+            "after": "^f",
+            "label": "Sixth",
+            "file": "main.sprig",
+            "line": 8
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

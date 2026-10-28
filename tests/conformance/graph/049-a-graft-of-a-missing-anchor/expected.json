@@ -1,0 +1,44 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Missing",
+    "status": "empty",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 0
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "+",
+        "label": "lease.sprig",
+        "status": "empty",
+        "graft": {
+          "path": "lease.sprig",
+          "anchor": "nowhere",
+          "title": "lease.sprig",
+          "mounted": false
+        },
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        }
+      }
+    ]
+  },
+  "diagnostics": [
+    {
+      "code": "S0102",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 3,
+      "span": [11, 28]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+Upkeep
+
+- Daily  every:day
+- Weekly  every:weekly
+- Monthly  every:month
+- Count  every:3d
+- Weekday  every:fri
+- Work  est:2h

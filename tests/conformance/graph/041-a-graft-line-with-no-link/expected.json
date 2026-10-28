@@ -1,0 +1,57 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "House",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 1
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "+",
+        "label": "the kitchen",
+        "status": "todo",
+        "graft": {
+          "path": "",
+          "title": "the kitchen",
+          "mounted": false
+        },
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "-",
+            "label": "Choose a sink",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": [
+    {
+      "code": "S0005",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 1,
+      "span": [7, 20]
+    }
+  ]
+}

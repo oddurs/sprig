@@ -1,0 +1,20 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Tags",
+    "root": {
+      "line": 1,
+      "span": [0, 4],
+      "text": "Tags",
+      "children": [
+        {
+          "line": 3,
+          "span": [6, 37],
+          "mark": "-",
+          "text": "Release #v1.2 and #it's and #"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

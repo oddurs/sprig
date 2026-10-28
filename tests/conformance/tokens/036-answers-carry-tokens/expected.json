@@ -1,0 +1,32 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Answers",
+    "root": {
+      "line": 1,
+      "span": [0, 7],
+      "text": "Answers",
+      "children": [
+        {
+          "line": 3,
+          "span": [9, 16],
+          "mark": "?",
+          "text": "Name?",
+          "answers": [
+            {
+              "line": 4,
+              "span": [19, 68],
+              "text": "Kiln & Crumb",
+              "people": ["dana"],
+              "tags": ["brand"],
+              "fields": {
+                "decided": "2026-09-20"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

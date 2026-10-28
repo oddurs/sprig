@@ -1,0 +1,147 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "House",
+    "status": "doing",
+    "progress": {
+      "done": 1,
+      "doing": 0,
+      "total": 5
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "Design",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 4,
+        "mark": "+",
+        "label": "Kitchen",
+        "status": "doing",
+        "graft": {
+          "path": "kitchen.sprig",
+          "title": "Kitchen",
+          "mounted": true
+        },
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 4
+        },
+        "people": ["teo"],
+        "children": [
+          {
+            "file": "kitchen.sprig",
+            "line": 3,
+            "mark": "-",
+            "label": "Design",
+            "status": "todo",
+            "grafted": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 2
+            },
+            "people": ["teo"],
+            "children": [
+              {
+                "file": "kitchen.sprig",
+                "line": 4,
+                "mark": "x",
+                "label": "Layout sketch",
+                "status": "done",
+                "settled": true,
+                "grafted": true,
+                "progress": {
+                  "done": 1,
+                  "doing": 0,
+                  "total": 1
+                },
+                "people": ["teo"]
+              },
+              {
+                "file": "kitchen.sprig",
+                "line": 5,
+                "mark": "-",
+                "label": "Ventilation plan",
+                "status": "todo",
+                "grafted": true,
+                "progress": {
+                  "done": 0,
+                  "doing": 0,
+                  "total": 1
+                },
+                "people": ["teo"]
+              }
+            ]
+          },
+          {
+            "file": "kitchen.sprig",
+            "line": 6,
+            "mark": "-",
+            "label": "Oven",
+            "status": "todo",
+            "grafted": true,
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 2
+            },
+            "people": ["teo"],
+            "children": [
+              {
+                "file": "kitchen.sprig",
+                "line": 8,
+                "mark": "-",
+                "label": "Get quotes",
+                "status": "todo",
+                "grafted": true,
+                "progress": {
+                  "done": 0,
+                  "doing": 0,
+                  "total": 1
+                },
+                "people": ["teo"]
+              },
+              {
+                "file": "kitchen.sprig",
+                "line": 9,
+                "mark": "-",
+                "label": "Order",
+                "status": "todo",
+                "grafted": true,
+                "progress": {
+                  "done": 0,
+                  "doing": 0,
+                  "total": 1
+                },
+                "people": ["teo"],
+                "blocked": true,
+                "waits_on": [
+                  {
+                    "after": "^design",
+                    "label": "Design",
+                    "file": "kitchen.sprig",
+                    "line": 3
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

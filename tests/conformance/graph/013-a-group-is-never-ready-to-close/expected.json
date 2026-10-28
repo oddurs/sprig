@@ -1,0 +1,44 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Groups",
+    "status": "done",
+    "progress": {
+      "done": 1,
+      "doing": 0,
+      "total": 1
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "#",
+        "label": "Dairy",
+        "status": "done",
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 1
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "x",
+            "label": "Butter",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

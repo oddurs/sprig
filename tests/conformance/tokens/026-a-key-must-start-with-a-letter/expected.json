@@ -1,0 +1,20 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Fields",
+    "root": {
+      "line": 1,
+      "span": [0, 6],
+      "text": "Fields",
+      "children": [
+        {
+          "line": 3,
+          "span": [8, 38],
+          "mark": "-",
+          "text": "Meet at 2:30 or _x:1 or -y:2"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

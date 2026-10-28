@@ -940,8 +940,11 @@ neither says enough. Each needs a ruling and conformance examples before 1.0.
    (`lines/042-an-escape-on-its-own`).
 15. **Days that do not exist.** §9.3 does not say what `feb30` or, outside a
    leap year, `feb29` means. The reference parser rolls them into the next
-   month (`feb30` is 2 March); sprig-core reads them as no date and warns
-   (S0001).
+   month (`feb30` is 2 March, and so is `2026-02-30`); sprig-core reads them as
+   no date and warns (S0001). A bare `feb29` follows the 120-day rule as if the
+   day existed this year, so read in October 2027 it is 2028-02-29
+   (`tokens/050-a-day-that-does-not-exist-is-not-a-date`,
+   `tokens/051-february-29-in-a-leap-year`).
 
 ## Appendix C. Settled arguments
 
