@@ -1,5 +1,5 @@
 {
-  "parse_ms": 5.03,
-  "resolve_ms": 13.84,
-  "check_ms": 13.69
+  "parse_ms": 4.35,
+  "resolve_ms": 6.77,
+  "check_ms": 6.99
 }

@@ -410,6 +410,7 @@ fn pressing_tab_in_zsh_offers_the_folders_anchors() {
         .arg(bin)
         .arg(repo("examples/bakery"))
         .arg("sprig tick ^")
+        .args(["signed", "terms", "loan", "oven"])
         .output()
         .unwrap();
     let screen = String::from_utf8_lossy(&out.stdout);
