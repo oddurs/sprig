@@ -26,3 +26,10 @@ All notable changes to this project are recorded here. The format follows
   instead of a JavaScript parser of its own.
 - A command-line reference page on the site, generated from `sprig --help`,
   and the first-plan tutorial now ends in the terminal.
+- `sprig fmt` and `sprig fmt --check`: two spaces per level, typed dates
+  written out, trailing whitespace gone, and nothing else.
+- `sprig tick REF...`: done, reopened, or a recurring item's due date moved
+  on, changing only that byte range. Refs are `^anchor`, `file^anchor`,
+  `file:line` or words from an item, and `-` reads them from standard input.
+- `sprig_core::edit`, a byte-preserving edit API, and `spec/tools.md`, which
+  states how refs, formatting and edits behave for other implementations.
