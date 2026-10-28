@@ -144,7 +144,17 @@ fn step(src: &str, op: &Op) -> String {
         }
         Op::Field(i, k, v) => {
             let (line, _) = pick(i);
-            let c = edit::set_field(src, line, k, v).unwrap();
+            let c = match edit::set_field(src, line, k, v) {
+                Ok(c) => c,
+                // Refused only where a quote already on the line would pair
+                // with one the edit writes.
+                Err(edit::EditError::WouldNotRead(_)) => {
+                    let text = src.split('\n').nth(line - 1).unwrap_or("");
+                    assert!(text.contains('"'), "refused a line with no quote: {text:?}");
+                    return src.to_string();
+                }
+                Err(e) => panic!("{e}"),
+            };
             let promise = move |root: &Node| {
                 let n = find(root, line);
                 match (k, v) {
@@ -345,4 +355,17 @@ proptest! {
         prop_assert!(edit::format(&once.source, today()).is_empty(), "not idempotent: {:?} -> {:?}", src, once.source);
         prop_assert_eq!(meaning(&once.source), meaning(&src), "tree changed: {:?} -> {:?}", src, once.source);
     }
+}
+
+#[test]
+fn a_field_that_would_pair_with_an_unclosed_quote_is_refused() {
+    // The new quote would close the stray one and swallow the field (§4.1).
+    let src = "Plan\n\n- Visit  where:\"41 Mill Street  @dana\n";
+    assert_eq!(
+        edit::set_field(src, 3, "due", Some("two words")),
+        Err(edit::EditError::WouldNotRead(3))
+    );
+    // A value that needs no quotes still reads back, so it is written.
+    let c = edit::set_field(src, 3, "due", Some("2026-10-02")).unwrap();
+    assert!(c.source.contains("@dana  due:2026-10-02"));
 }
