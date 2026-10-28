@@ -38,6 +38,9 @@ fn run() -> ExitCode {
         Command::Tick(a) => write::tick(a, today),
         Command::Completions(a) => completions(a.shell),
         Command::Man => man(),
+        Command::Lsp => sprig_lsp::stdio(&args::clock(&cli))
+            .map(|()| ExitCode::SUCCESS)
+            .map_err(|e| e.to_string().into()),
         Command::Complete(a) => views::candidates(&a.what, today),
     };
     match result {

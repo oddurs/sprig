@@ -99,6 +99,11 @@ into it.
 
 - [`examples/bakery/`](examples/bakery): six plans for opening a bakery that
   graft into one. Try `sprig next examples/bakery`.
+- `sprig lsp`: a language server for any editor that speaks LSP. It shows
+  problems as you type, including ones another file causes, and completes
+  people, anchors and file links. It also follows links, and its hover shows
+  progress and what an item waits on. Point your editor's LSP client at
+  `sprig lsp` for `*.sprig` files.
 - [`spec/sprig.md`](spec/sprig.md): the specification, every rule numbered,
   each with an example, and [`tests/conformance/`](tests/conformance) holding
   the implementation to it.

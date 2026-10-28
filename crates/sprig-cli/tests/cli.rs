@@ -542,3 +542,95 @@ fn tick_reads_refs_from_standard_input() {
             .contains("  x Spiral mixer")
     );
 }
+
+#[test]
+fn lsp_speaks_json_rpc_on_stdin_and_stdout_and_publishes_problems() {
+    use std::io::{BufRead, BufReader, Read, Write};
+    use std::process::Stdio;
+
+    let dir = scratch("lsp");
+    copy_bakery(&dir);
+    let path = dir
+        .canonicalize()
+        .unwrap()
+        .display()
+        .to_string()
+        .replace('\\', "/");
+    // Windows canonical paths start with \\?\, which a file URI does not.
+    let path = path.trim_start_matches("//?/");
+    let root = if path.starts_with('/') {
+        format!("file://{path}")
+    } else {
+        format!("file:///{path}")
+    };
+    let mut child = Command::new(env!("CARGO_BIN_EXE_sprig"))
+        .args(["lsp", "--today", "2026-10-01"])
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .spawn()
+        .expect("the sprig binary runs");
+    let mut stdin = child.stdin.take().unwrap();
+    let mut send = move |body: String| {
+        write!(stdin, "Content-Length: {}\r\n\r\n{body}", body.len()).unwrap();
+        stdin.flush().unwrap();
+    };
+    let mut reader = BufReader::new(child.stdout.take().unwrap());
+    // One message as an editor reads it: headers, a blank line, the body.
+    let mut next = move || {
+        let mut len = 0;
+        loop {
+            let mut header = String::new();
+            reader.read_line(&mut header).unwrap();
+            let header = header.trim_end();
+            if header.is_empty() {
+                break;
+            }
+            if let Some(n) = header.strip_prefix("Content-Length: ") {
+                len = n.parse().unwrap();
+            }
+        }
+        let mut body = vec![0; len];
+        reader.read_exact(&mut body).unwrap();
+        String::from_utf8(body).unwrap()
+    };
+
+    send(format!(
+        r#"{{"jsonrpc":"2.0","id":1,"method":"initialize","params":{{"processId":null,"rootUri":"{root}","capabilities":{{}}}}}}"#
+    ));
+    let init = next();
+    assert!(init.contains(r#""serverInfo":{"name":"sprig""#), "{init}");
+    send(r#"{"jsonrpc":"2.0","method":"initialized","params":{}}"#.into());
+    let broken =
+        fs::read_to_string(dir.join("launch.sprig")).unwrap() + "- Posters  after:^nowhere\n";
+    send(format!(
+        r#"{{"jsonrpc":"2.0","method":"textDocument/didOpen","params":{{"textDocument":{{"uri":"{root}/launch.sprig","languageId":"sprig","version":1,"text":{}}}}}}}"#,
+        json_string(&broken)
+    ));
+    let published = next();
+    assert!(
+        published.contains("textDocument/publishDiagnostics"),
+        "{published}"
+    );
+    assert!(published.contains(r#""code":"S0201""#), "{published}");
+    send(r#"{"jsonrpc":"2.0","id":2,"method":"shutdown"}"#.into());
+    assert!(next().contains(r#""id":2"#));
+    send(r#"{"jsonrpc":"2.0","method":"exit"}"#.into());
+    assert!(child.wait().unwrap().success());
+}
+
+/// A JSON string literal, for a test that writes JSON by hand.
+fn json_string(s: &str) -> String {
+    let mut out = String::from("\"");
+    for c in s.chars() {
+        match c {
+            '"' => out.push_str("\\\""),
+            '\\' => out.push_str("\\\\"),
+            '\n' => out.push_str("\\n"),
+            '\r' => out.push_str("\\r"),
+            '\t' => out.push_str("\\t"),
+            c => out.push(c),
+        }
+    }
+    out.push('"');
+    out
+}

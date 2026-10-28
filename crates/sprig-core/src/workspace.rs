@@ -14,6 +14,8 @@
 //! depend on who is asking.
 
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
+use std::rc::Rc;
+use std::sync::Arc;
 
 use crate::date::{self, Date};
 use crate::diagnostic::{Code, Diagnostic, LineIndex, Span};
@@ -121,7 +123,10 @@ impl Workspace {
         let grafted = std::mem::take(&mut b.grafted);
         let mut trees: BTreeMap<String, Tree> = BTreeMap::new();
         for file in parsed.keys() {
-            let mut root = b.rolled[file.as_str()].clone();
+            let mut root = b
+                .rolled
+                .remove(file.as_str())
+                .expect("every file was rolled");
             dates(&mut root, today);
             block(&mut root, false, today, &lookup);
             trees.insert(
@@ -285,7 +290,8 @@ pub struct Resolved {
     /// The item's text; for a graft, what it mounts; for the root, the title
     /// or the file name.
     pub label: String,
-    pub tokens: Tokens,
+    /// Shared with every other tree that shows the same line.
+    pub tokens: Arc<Tokens>,
     /// Mounted here by a graft from another file.
     pub grafted: bool,
     pub graft: Option<Graft>,
@@ -319,6 +325,13 @@ impl Resolved {
 // ----------------------------------------------------------------------------
 // Paths
 
+/// The workspace path that a link written in the file `from` names (§4.8,
+/// §8.2), or `None` when it would leave the workspace root. `link` is a
+/// [`token::Link`]'s path, with `.sprig` already added.
+pub fn link_target(from: &str, link: &str) -> Option<String> {
+    join(from, link).ok()
+}
+
 /// Resolves `link` relative to the directory of `from` (§4.8), refusing any
 /// path that leaves the root (§8.2).
 pub(crate) fn join(from: &str, link: &str) -> Result<String, ()> {
@@ -350,10 +363,16 @@ fn short(path: &str) -> &str {
 struct Expanded<'a> {
     file: &'a str,
     syn: &'a Node,
+    /// The line's tokens, copied once per file and shared by every tree the
+    /// line appears in: a long chain of grafts puts one line in many trees.
+    tokens: Arc<Tokens>,
     grafted: bool,
     graft: Option<Mount<'a>>,
     children: Vec<Expanded<'a>>,
 }
+
+/// A line of a file, or with no line, the whole file: what §8.8 counts.
+type Key<'a> = (&'a str, Option<usize>);
 
 #[derive(Clone)]
 struct Mount<'a> {
@@ -365,7 +384,7 @@ struct Mount<'a> {
     answers: &'a [Answer],
     /// What this graft brings in, for §8.8: the file and, for a branch, the
     /// anchored line. `None` when the graft mounted nothing.
-    key: Option<(String, Option<usize>)>,
+    key: Option<Key<'a>>,
     span: Span,
 }
 
@@ -398,7 +417,8 @@ struct Builder<'a> {
     index: HashMap<&'a str, LineIndex<'a>>,
     /// Graft lines, by file and line, that close a loop.
     loops: HashSet<(&'a str, usize)>,
-    expanded: HashMap<&'a str, Expanded<'a>>,
+    /// Shared, since every graft of a file starts from the same expansion.
+    expanded: HashMap<&'a str, Rc<Expanded<'a>>>,
     rolled: HashMap<&'a str, Resolved>,
     grafted: BTreeSet<String>,
     diagnostics: Vec<Diagnostic>,
@@ -470,14 +490,15 @@ impl<'a> Builder<'a> {
         }
     }
 
-    fn expanded(&mut self, file: &'a str) -> Expanded<'a> {
+    fn expanded(&mut self, file: &'a str) -> Rc<Expanded<'a>> {
         if let Some(e) = self.expanded.get(file) {
-            return e.clone();
+            return Rc::clone(e);
         }
         let doc = &self.parsed[file].document;
         let mut root = self.own(file, &doc.root);
         self.once_in_tree(file, &mut root);
-        self.expanded.insert(file, root.clone());
+        let root = Rc::new(root);
+        self.expanded.insert(file, Rc::clone(&root));
         root
     }
 
@@ -486,6 +507,7 @@ impl<'a> Builder<'a> {
         let mut e = Expanded {
             file,
             syn,
+            tokens: Arc::new(syn.tokens.clone()),
             grafted: false,
             graft: None,
             children,
@@ -601,10 +623,7 @@ impl<'a> Builder<'a> {
         if link.anchor.is_some() {
             g.answers = &src.syn.answers;
         }
-        g.key = Some((
-            target.to_string(),
-            link.anchor.as_ref().map(|_| src.syn.line),
-        ));
+        g.key = Some((target, link.anchor.as_ref().map(|_| src.syn.line)));
         for c in &src.children {
             let mut c = c.clone();
             c.mark_grafted();
@@ -616,7 +635,7 @@ impl<'a> Builder<'a> {
     /// §8.8: walking a file's own lines in document order, a graft that would
     /// bring in anything already in the tree mounts nothing.
     fn once_in_tree(&mut self, file: &'a str, root: &mut Expanded<'a>) {
-        let mut seen: HashSet<(String, Option<usize>)> = HashSet::new();
+        let mut seen: HashSet<Key<'a>> = HashSet::new();
         let mut errors = Vec::new();
         once_walk(root, &mut seen, &mut errors);
         for (span, message) in errors {
@@ -635,27 +654,27 @@ impl<'a> Builder<'a> {
     }
 }
 
-fn once_walk(
-    n: &mut Expanded<'_>,
-    seen: &mut HashSet<(String, Option<usize>)>,
+fn once_walk<'a>(
+    n: &mut Expanded<'a>,
+    seen: &mut HashSet<Key<'a>>,
     errors: &mut Vec<(Span, String)>,
 ) {
     for c in &mut n.children {
         if c.grafted {
             continue;
         }
-        seen.insert((c.file.to_string(), Some(c.syn.line)));
+        seen.insert((c.file, Some(c.syn.line)));
         if let Some(g) = &mut c.graft
-            && let Some(key) = g.key.clone()
+            && let Some(key) = g.key
         {
-            let mut incoming = vec![key.clone()];
+            let mut incoming = vec![key];
             for k in c.children.iter().filter(|k| k.grafted) {
                 within(k, &mut incoming);
             }
             if incoming.iter().any(|k| seen.contains(k)) {
                 let name = match &g.anchor {
-                    Some(a) => format!("{}^{a}", short(&key.0)),
-                    None => key.0.clone(),
+                    Some(a) => format!("{}^{a}", short(key.0)),
+                    None => key.0.to_string(),
                 };
                 errors.push((
                     g.span,
@@ -675,9 +694,9 @@ fn once_walk(
     }
 }
 
-fn within(n: &Expanded<'_>, out: &mut Vec<(String, Option<usize>)>) {
-    out.push((n.file.to_string(), Some(n.syn.line)));
-    if let Some(k) = n.graft.as_ref().and_then(|g| g.key.clone()) {
+fn within<'a>(n: &Expanded<'a>, out: &mut Vec<Key<'a>>) {
+    out.push((n.file, Some(n.syn.line)));
+    if let Some(k) = n.graft.as_ref().and_then(|g| g.key) {
         out.push(k);
     }
     for c in &n.children {
@@ -823,7 +842,7 @@ fn roll(e: &Expanded<'_>, inherited: Option<Status>, people: &[String]) -> Resol
         line: syn.line,
         mark: syn.mark,
         label,
-        tokens: syn.tokens.clone(),
+        tokens: Arc::clone(&e.tokens),
         grafted: e.grafted,
         graft,
         status,
@@ -854,13 +873,14 @@ struct Target {
 /// What every anchor and every file resolves to, in its own file's tree.
 struct Lookup<'a> {
     parsed: &'a BTreeMap<String, Parsed>,
-    anchors: HashMap<(String, String), Target>,
+    /// By file, then anchor, so a lookup borrows rather than allocates: it
+    /// runs for every `after:` in every tree.
+    anchors: HashMap<String, HashMap<String, Target>>,
     files: HashMap<String, Target>,
 }
 
-enum Outcome {
-    /// Done, and what it is: the label, file and line.
-    Found(bool, String, String, usize),
+enum Outcome<'l> {
+    Found(&'l Target),
     Unknown(Code, String),
 }
 
@@ -878,21 +898,22 @@ impl<'a> Lookup<'a> {
                     line: root.line,
                 },
             );
-            fn walk(n: &Resolved, file: &str, out: &mut HashMap<(String, String), Target>) {
+            fn walk(n: &Resolved, out: &mut HashMap<String, Target>) {
                 for c in n.children.iter().filter(|c| !c.grafted) {
                     if let Some(a) = c.tokens.anchor() {
-                        out.entry((file.to_string(), a.name.clone()))
-                            .or_insert_with(|| Target {
-                                done: c.status == Status::Done,
-                                label: c.label.clone(),
-                                file: c.file.clone(),
-                                line: c.line,
-                            });
+                        out.entry(a.name.clone()).or_insert_with(|| Target {
+                            done: c.status == Status::Done,
+                            label: c.label.clone(),
+                            file: c.file.clone(),
+                            line: c.line,
+                        });
                     }
-                    walk(c, file, out);
+                    walk(c, out);
                 }
             }
-            walk(root, file, &mut anchors);
+            let mut own = HashMap::new();
+            walk(root, &mut own);
+            anchors.insert(file.to_string(), own);
         }
         Lookup {
             parsed,
@@ -901,15 +922,19 @@ impl<'a> Lookup<'a> {
         }
     }
 
-    fn resolve(&self, from: &str, value: &str) -> Outcome {
+    fn anchor(&self, file: &str, name: &str) -> Option<&Target> {
+        self.anchors.get(file)?.get(name)
+    }
+
+    fn resolve(&self, from: &str, value: &str) -> Outcome<'_> {
         if let Some(name) = value.strip_prefix('^')
             && !name.is_empty()
             && name
                 .chars()
                 .all(|c| c.is_alphanumeric() || c == '_' || c == '-')
         {
-            return match self.anchors.get(&(from.to_string(), name.to_string())) {
-                Some(t) => Outcome::Found(t.done, t.label.clone(), t.file.clone(), t.line),
+            return match self.anchor(from, name) {
+                Some(t) => Outcome::Found(t),
                 None => Outcome::Unknown(
                     Code::UnknownLocalAnchor,
                     format!("no item ^{name} in {from}"),
@@ -932,14 +957,11 @@ impl<'a> Lookup<'a> {
             return Outcome::Unknown(Code::UnknownFile, format!("no file named {path}"));
         }
         match &link.anchor {
-            Some(a) => match self.anchors.get(&(path.clone(), a.clone())) {
-                Some(t) => Outcome::Found(t.done, t.label.clone(), t.file.clone(), t.line),
+            Some(a) => match self.anchor(&path, a) {
+                Some(t) => Outcome::Found(t),
                 None => Outcome::Unknown(Code::UnknownAnchor, format!("no item ^{a} in {path}")),
             },
-            None => {
-                let t = &self.files[&path];
-                Outcome::Found(t.done, t.label.clone(), t.file.clone(), t.line)
-            }
+            None => Outcome::Found(&self.files[&path]),
         }
     }
 }
@@ -999,12 +1021,12 @@ fn block(n: &mut Resolved, inherited: bool, today: Date, lookup: &Lookup) {
             }
             for a in &c.tokens.after {
                 match lookup.resolve(&c.file, &a.value) {
-                    Outcome::Found(true, ..) => {}
-                    Outcome::Found(false, label, file, line) => waits.push(Wait::Reference {
+                    Outcome::Found(t) if t.done => {}
+                    Outcome::Found(t) => waits.push(Wait::Reference {
                         value: a.value.clone(),
-                        label,
+                        label: t.label.clone(),
                         unknown: false,
-                        target: Some((file, line)),
+                        target: Some((t.file.clone(), t.line)),
                     }),
                     Outcome::Unknown(..) => waits.push(Wait::Reference {
                         value: a.value.clone(),
