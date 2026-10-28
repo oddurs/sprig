@@ -3,3 +3,5 @@
 [toolchain]
 channel = "1.98"
 components = ["rustfmt", "clippy"]
+# The website runs sprig-core as WebAssembly (scripts/task wasm).
+targets = ["wasm32-unknown-unknown"]

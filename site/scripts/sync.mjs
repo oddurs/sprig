@@ -5,7 +5,8 @@
 // never by hand, is what keeps a page from quietly drifting from its source:
 // change the source and the next build changes the page. Everything this
 // writes is gitignored.
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { css } from '../src/design/tokens.mjs';
@@ -16,6 +17,12 @@ const docs = join(site, 'src/content/docs');
 const generated = join(site, 'src/generated');
 const blob = 'https://github.com/oddurs/sprig/blob/main';
 const edit = 'https://github.com/oddurs/sprig/edit/main';
+
+// The site runs sprig-core, which is built by cargo rather than by npm.
+if (!existsSync(join(generated, 'sprig.wasm'))) {
+	console.error('sync: src/generated/sprig.wasm is missing. Build it first, from the repository root:\n\n  scripts/task wasm\n');
+	process.exit(1);
+}
 
 const read = (path) => readFileSync(join(repo, path), 'utf8');
 function write(path, text) {
@@ -131,9 +138,40 @@ const examples = Object.fromEntries(
 );
 write(join(generated, 'examples.json'), JSON.stringify(examples, null, '\t'));
 
+/* the command reference: the built `sprig` binary's own help, one section per command */
+const exe = process.env.SPRIG_BIN ?? join(repo, 'target/debug', process.platform === 'win32' ? 'sprig.exe' : 'sprig');
+if (!existsSync(exe)) {
+	console.error(`sync: no sprig binary at ${exe}. Build it first, from the repository root:\n\n  cargo build -p sprig-cli\n`);
+	process.exit(1);
+}
+// Without SPRIG_TODAY, so the page does not depend on who built it.
+const env = Object.fromEntries(Object.entries(process.env).filter(([k]) => k !== 'SPRIG_TODAY'));
+const help = (...args) => execFileSync(exe, [...args, '--help'], { encoding: 'utf8', env }).trimEnd();
+const top = help();
+// The commands are whatever `sprig --help` lists, so a new one needs no change here.
+const commands = [...(top.split(/^Commands:$/m)[1] ?? '').split(/^\S/m)[0].matchAll(/^ {2}([a-z][\w-]*) {2,}(.*)$/gm)].map((m) => ({ name: m[1], about: m[2] }));
+if (!commands.length) {
+	console.error('sync: `sprig --help` lists no commands');
+	process.exit(1);
+}
+const fence = (text) => '```text\n' + text + '\n```';
+write(
+	join(docs, 'docs/reference/cli.md'),
+	page(
+		{
+			title: 'Command line',
+			description: 'Every sprig command and option, from the binary\'s own help.',
+			editUrl: false,
+		},
+		`:::note[Generated]\nThis page is the output of \`sprig --help\` and of each command's help, from the build of \`crates/sprig-cli\` this site was built with. It cannot describe a flag the command does not have.\n:::\n\n` +
+			`## sprig\n\n${fence(top)}\n\n` +
+			commands.map((c) => `## sprig ${c.name}\n\n${c.about}\n\n${fence(help(c.name))}`).join('\n\n'),
+	),
+);
+
 /* counts the pages state in prose, so a sentence like "all fifteen" can't go stale */
 write(join(generated, 'facts.json'), JSON.stringify({ decisions: decisions.length }, null, '\t'));
 
 console.log(
-	`sync: spec, ${decisions.length} decisions, roadmap, changelog (${releases.length} releases), ${Object.keys(examples).length} examples`,
+	`sync: spec, ${decisions.length} decisions, roadmap, changelog (${releases.length} releases), ${Object.keys(examples).length} examples, ${commands.length} commands`,
 );

@@ -16,24 +16,20 @@ A stranger installs `sprig`, writes a plan across one or more `.sprig` files, an
 
 ## launch — Launch the website and Show HN
 
-`··········` 0% · 0 of 6 done · due 2026-12-01
+`··········` 0% · 0 of 3 done · due 2026-12-01
 
 A public website that explains Sprig in ten seconds and lets a visitor edit a real plan in thirty, and a Show HN post that points at it. The site's plan, including the arguments behind its shape, is in `design/site-plan.html`.
 
-- [ ] [`0109`](https://github.com/oddurs/sprig/blob/main/cairn/items/0109-playground-and-hero-run-sprig-core-compiled-to-webassembly.md) Playground and hero run sprig-core compiled to WebAssembly <sup>feature · p0 · core</sup>
 - [ ] [`0110`](https://github.com/oddurs/sprig/blob/main/cairn/items/0110-prebuilt-binaries-for-the-v0-1-release.md) Prebuilt binaries for the v0.1 release <sup>chore · p0 · release</sup>
 - [ ] [`0111`](https://github.com/oddurs/sprig/blob/main/cairn/items/0111-quiet-preview-with-five-to-ten-real-users.md) Quiet preview with five to ten real users <sup>chore · p1 · community</sup>
 - [ ] [`0112`](https://github.com/oddurs/sprig/blob/main/cairn/items/0112-launch-post-first-comment-and-day-of-checklist.md) Launch post, first comment and day-of checklist <sup>chore · p0 · community</sup>
-- [ ] [`0113`](https://github.com/oddurs/sprig/blob/main/cairn/items/0113-extend-the-first-plan-tutorial-to-the-terminal.md) Extend the first-plan tutorial to the terminal <sup>docs · p1 · site</sup>
-- [ ] [`0114`](https://github.com/oddurs/sprig/blob/main/cairn/items/0114-cli-reference-generated-from-sprig-help.md) CLI reference generated from sprig --help <sup>feature · p1 · site</sup>
 
 ## v0.2 — Write plans in your editor
 
-`··········` 0% · 0 of 24 done · due 2027-01-29
+`··········` 0% · 0 of 23 done · due 2027-01-29
 
 VS Code highlights `.sprig` files, completes people, anchors and file links, shows `sprig check` diagnostics as you type, and ticks items with a code action. `sprig fmt` normalises a file without touching anything it doesn't mean to. In the terminal, `sprig tree`, `status` and `why` show a plan's shape and what holds it up, and every command completes in the shell.
 
-- [ ] [`0016`](https://github.com/oddurs/sprig/blob/main/cairn/items/0016-resolve-typed-date-shortcuts-against-an-injected-today.md) Resolve typed date shortcuts against an injected today <sup>feature · p1 · core</sup>
 - [ ] [`0020`](https://github.com/oddurs/sprig/blob/main/cairn/items/0020-conformance-examples-tokens-fields-and-dates.md) Conformance examples: tokens, fields and dates <sup>feature · p1 · suite</sup>
 - [ ] [`0021`](https://github.com/oddurs/sprig/blob/main/cairn/items/0021-conformance-examples-grafts-rollups-and-blocking.md) Conformance examples: grafts, rollups and blocking <sup>feature · p1 · suite</sup>
 - [ ] [`0042`](https://github.com/oddurs/sprig/blob/main/cairn/items/0042-can-edits-preserve-every-byte-the-user-wrote.md) Can edits preserve every byte the user wrote? <sup>spike · p0 · core</sup>

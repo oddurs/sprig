@@ -1,5 +1,5 @@
 // The tools page's TUI demo. The first frame arrives rendered; the model and
-// the parser load the first time someone presses a key or an on-screen button.
+// sprig-core load the first time someone presses a key or an on-screen button.
 
 const screen = document.getElementById('tui');
 const keys = document.getElementById('tui-keys');
@@ -7,7 +7,7 @@ const seed = JSON.parse(document.getElementById('tui-files').textContent);
 
 /** @type {Promise<typeof import('../lib/tui.js')> | undefined} */
 let loading;
-const model = () => (loading ??= import('../lib/tui.js'));
+const model = () => (loading ??= import('../lib/tui.js').then(async (m) => (await m.ready, m)));
 const NAMED = new Set(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'Escape', 'Enter', 'Backspace']);
 let state;
 let files = seed;

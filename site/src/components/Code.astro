@@ -1,7 +1,9 @@
 ---
 // A Sprig example, highlighted by the same rules as the playground and the
 // docs: marks in their colours, everything else in the neutrals.
-import { highlight } from '../lib/render.js';
+import { highlight, ready } from '../lib/render.js';
+
+await ready;
 
 interface Props {
 	code: string;

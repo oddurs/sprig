@@ -1,8 +1,10 @@
-// What the planned `sprig` commands print, rendered by the reference parser so
-// the tools page can't show output the format doesn't produce. Screens are
+// What the planned `sprig` commands print, computed by sprig-core so the
+// tools page can't show output the format doesn't produce. Screens are
 // lines of segments; only a mark's own character takes colour, which is the
 // CLI's rule too: colour repeats what the mark says, so NO_COLOR loses nothing.
-import * as sprig from './sprig.js';
+import * as sprig from './view.js';
+
+export const ready = sprig.ready;
 
 // The example plans are written around this date, and every screen passes it
 // as --today, so the page reads the same on any day it is opened.
@@ -56,18 +58,8 @@ function load(files) {
 	return (name) => sprig.buildDoc(name);
 }
 
-/** Open leaves, ready or waiting, ranked the way `sprig next` ranks them. */
-export function readyList(doc) {
-	const ready = [];
-	const waiting = [];
-	sprig.walkLeaves(doc.root, (n, path, blocked, due, prio) => {
-		if (!sprig.OPEN.has(n.view)) return;
-		const d = sprig.parseDate(due);
-		(blocked ? waiting : ready).push({ n, path, due, prio, t: d ? d.getTime() : Infinity });
-	});
-	ready.sort((a, b) => (b.n.view === 'doing') - (a.n.view === 'doing') || b.prio - a.prio || a.t - b.t);
-	return { ready, waiting };
-}
+/** Open leaves, ready or waiting, ranked by the core the way `sprig next` ranks them. */
+export const readyList = (doc) => sprig.readyList(doc);
 
 function next(files, { limit = 6, compact = false } = {}) {
 	const doc = load(files)('bakery.sprig');
@@ -127,11 +119,11 @@ function why(files, file, text) {
 	const lines = [prompt(`sprig why ${JSON.stringify(text).replace(/^"(\w+)"$/, '$1')}`)];
 	lines.push(pad([markOf(target), S(' '), S(target.meta.text, 't-b')], 28).concat([S(loc(target), 't-dim')]));
 	// The item may wait on its own after: list, or inherit waiting from a parent.
-	const from = target.meta.after.length ? target : parent;
+	const from = (sprig.blockers(target) ?? []).some((b) => !b.date) ? target : parent;
 	if (from !== target) lines.push([S('└─ ', 't-dim'), S('inside ', 't-dim'), S(from.meta.text, 't-b'), S(', which waits on:', 't-dim')]);
 	const seen = new Set();
 	(function chain(n, prefix) {
-		const refs = n.meta.after.map((r) => sprig.resolveRef(r, n.file).node).filter((m) => m && m.view !== 'done');
+		const refs = (sprig.blockers(n) ?? []).filter((b) => !b.date && !b.unknown).map(sprig.targetOf).filter(Boolean);
 		refs.forEach((m, i) => {
 			const last = i === refs.length - 1;
 			const who = m.who?.length ? `  @${m.who[0]}` : '';
@@ -140,7 +132,7 @@ function why(files, file, text) {
 			seen.add(m);
 			const inner = prefix + (last ? '   ' : '│  ');
 			const date = sprig.blockers(m)?.find((b) => b.date);
-			if (m.meta.after.length) chain(m, inner);
+			if ((sprig.blockers(m) ?? []).some((b) => !b.date)) chain(m, inner);
 			else if (date) lines.push([S(inner + '└─ ', 't-dim'), S(`starts ${date.label}`)]);
 			else {
 				const state = m.children.length ? `${m.stats.done} of ${m.stats.total} done, nothing blocks it` : m.view === 'doing' ? 'in progress, nothing blocks it' : 'ready to start';
@@ -153,26 +145,12 @@ function why(files, file, text) {
 
 /** `sprig check` over a copy of the files with the given lines broken. */
 function check(files) {
-	const get = load(files);
-	const found = [];
-	for (const f of Object.keys(files)) {
-		const doc = get(f);
-		const src = files[f].split('\n');
-		(function w(n) {
-			for (const c of n.children) {
-				if (c.cloned) continue;
-				if (c.error) found.push({ f, line: c.line + 1, col: src[c.line].indexOf('[[') + 1, msg: c.error.replace(/ yet$/, '').replace(/^N/, 'n') });
-				for (const b of sprig.blockers(c)?.filter((x) => x.unknown) ?? []) {
-					found.push({ f, line: c.line + 1, col: src[c.line].indexOf(b.label) + 1, msg: `no item ${b.label} in ${f}` });
-				}
-				w(c);
-			}
-		})(doc.root);
-	}
+	load(files);
+	const found = sprig.diagnostics().filter((d) => d.severity === 'error');
 	const lines = [prompt('sprig check')];
-	for (const o of found) lines.push([S(`${o.f}:${o.line}:${o.col}: `, 't-dim'), S('error', 't-b'), S(`: ${o.msg}`)]);
+	for (const d of found) lines.push([S(`${d.file}:${d.line}:${d.col}: `, 't-dim'), S('error', 't-b'), S(`[${d.code}]: ${d.message}`)]);
 	lines.push([]);
-	lines.push([S(found.length ? `${found.length} errors in ${new Set(found.map((o) => o.f)).size} files · exit 1` : 'no errors · exit 0', 't-dim')]);
+	lines.push([S(found.length ? `${found.length} errors in ${new Set(found.map((d) => d.file)).size} files · exit 1` : 'no errors · exit 0', 't-dim')]);
 	return lines;
 }
 

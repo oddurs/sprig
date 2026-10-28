@@ -20,3 +20,9 @@ All notable changes to this project are recorded here. The format follows
 - `spec/tree.schema.json` and spec Appendix D, the JSON tree format.
 - `tests/conformance/`, the conformance suite, with 55 examples for lines and
   indentation.
+- Typed date shortcuts: `due:fri`, `start:+2w`, `oct3`, `q4` and the rest of
+  §9.3 resolve against `--today`.
+- The website runs `sprig-core` compiled to WebAssembly (109 KB compressed)
+  instead of a JavaScript parser of its own.
+- A command-line reference page on the site, generated from `sprig --help`,
+  and the first-plan tutorial now ends in the terminal.

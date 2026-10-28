@@ -1,7 +1,9 @@
 ---
 // A plan as Sprig reads it: the tree or the next-up list, rendered at build
 // time by the parser. The same markup the playground renders in the browser.
-import { render } from '../lib/render.js';
+import { ready, render } from '../lib/render.js';
+
+await ready;
 
 interface Props {
 	files: Record<string, string>;

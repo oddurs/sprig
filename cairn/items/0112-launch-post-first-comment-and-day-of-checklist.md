@@ -13,7 +13,7 @@ depends_on:
 - 110
 - 111
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-10-28
 priority: p0
 effort: s
 area: community
@@ -31,3 +31,7 @@ Post the Show HN with the title and first comment from the site plan, on the fir
 
 - [ ] The post and the first comment are up, with no attribution to any tool.
 - [ ] Every substantive criticism from the thread is an item within a day.
+
+## 2026-10-28
+
+Not posted, and not to be posted by anyone but the owner. The title, the first comment and the day-of checklist are already written in `design/site-plan.html` ("The title", "A week before", "On the day"). Gate status on 2026-10-28: the WebAssembly playground is done (0109). Still open: binaries (0110), the release (0027), the name (0006, which also decides the line about Hack Club's Sprig in the first comment), and the quiet preview (0111).

@@ -6,7 +6,9 @@ import Text from '../components/primitives/Text.astro';
 import examples from '../generated/examples.json';
 import Base from '../layouts/Base.astro';
 import { shiftExamples } from '../lib/dates.js';
-import { highlight, render } from '../lib/render.js';
+import { highlight, ready, render } from '../lib/render.js';
+
+await ready;
 
 // The page is an app, but it still arrives complete: the example workspace is
 // rendered at build time, so a reader without JavaScript sees the plan and its
@@ -65,7 +67,7 @@ const view = render(files, order[0]);
 			<div class="rv-body sv" id="rvBody" set:html={view.html} />
 		</div>
 	</div>
-	<Text size="sm" tone="muted">Runs the draft reference parser until the Rust core ships.</Text>
+	<Text size="sm" tone="muted">Runs sprig-core, the parser in the <code>sprig</code> command, compiled to WebAssembly.</Text>
 	<script type="application/json" id="examples" set:html={JSON.stringify({ files: examples, order })} />
 	<script>
 		import '../scripts/play.js';

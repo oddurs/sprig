@@ -2,12 +2,14 @@
 // state is plain data and the frame is a pure function of state and files, so
 // the page can render the first frame at build time and the browser only takes
 // over once someone presses a key.
-import * as sprig from './sprig.js';
+import * as sprig from './view.js';
 import { dayMonth, markOf, pinned, readyList, rel, shortDate, waitsText } from './terminal.js';
 
 const ROWS = 17;
 const ROOT = 'bakery.sprig';
 const esc = sprig.esc;
+
+export const ready = sprig.ready;
 const keyOf = (n) => `${n.file}:${n.line}`;
 const span = (s) => `<span class="${s.c}">${esc(s.t)}</span>`;
 
@@ -70,7 +72,7 @@ function detail(n) {
 		kv('progress', n.children.length && n.stats.total ? `${n.stats.done} of ${n.stats.total} done` : '') +
 		(own ? `<p class="kv">${esc(waitsText(own))}</p>` : '') +
 		kv('answer', answers[0]) +
-		(notes ? `<p class="note">${esc(notes.replace(/\[\[([^\]]+)\]\]/g, '$1'))}</p>` : '')
+		(notes ? `<p class="note">${esc(sprig.unbracket(notes))}</p>` : '')
 	);
 }
 
@@ -128,20 +130,19 @@ function tick(state, files, n, to) {
 	}
 	const lines = files[n.file].split('\n');
 	const ln = lines[n.line];
-	const i = ln.search(/\S/);
-	const from = ln[i];
-	if (!sprig.TICKABLE.includes(from)) return files;
-	let mark = to || (from === 'x' ? '-' : 'x');
-	let edited = ln.slice(0, i) + mark + ln.slice(i + 1);
-	state.flash = `${n.file}:${n.line + 1}  ${from} → ${mark}`;
-	if (mark === 'x' && n.meta.fields.every) {
+	const { marker } = sprig.classify(ln);
+	if (!marker) return files;
+	const from = ln[marker[0]];
+	let edited;
+	if (to) {
+		edited = ln.slice(0, marker[0]) + to + ln.slice(marker[1]);
+		state.flash = `${n.file}:${n.line + 1}  ${from} → ${to}`;
+	} else {
 		// A recurring item stays open and its due date moves on (spec 10.4).
-		const cur = sprig.parseDate(n.meta.fields.due);
-		const due = sprig.nextDue(cur && cur >= sprig.TODAY ? cur : sprig.TODAY, n.meta.fields.every);
-		if (due) {
-			edited = ln.replace(/(^|\s)due:\S+/, `$1due:${sprig.iso(due)}`);
-			state.flash = `${n.file}:${n.line + 1}  due → ${sprig.iso(due)}`;
-		}
+		const t = sprig.tickLine(ln);
+		if (!t) return files;
+		edited = t.line;
+		state.flash = t.movedTo ? `${n.file}:${n.line + 1}  due → ${t.movedTo}` : `${n.file}:${n.line + 1}  ${from} → ${edited[marker[0]]}`;
 	}
 	lines[n.line] = edited;
 	return { ...files, [n.file]: lines.join('\n') };

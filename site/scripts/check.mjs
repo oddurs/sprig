@@ -6,8 +6,12 @@
 // 2. The site loads nothing from another host: no external scripts, styles,
 //    images or fonts. Links out to other sites are fine; requests are not.
 //
+// 3. sprig-core ships as exactly one WebAssembly module, the site has no parser
+//    of its own, and the module stays under 300 KB compressed (cairn 0109).
+//
 // Links in playground fragments (#plan=...) are data, not anchors, and skipped.
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { gzipSync } from 'node:zlib';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -81,8 +85,23 @@ for (const css of all.filter((f) => f.endsWith('.css'))) {
 const fonts = all.filter((f) => /\.(woff2?|ttf|otf)$/.test(f));
 for (const f of fonts) problems.push(`${relative(dist, f)}: a font file shipped; the site uses system fonts only`);
 
+const wasm = all.filter((f) => f.endsWith('.wasm'));
+const BUDGET = 300 * 1024;
+let wasmSize = 0;
+if (wasm.length !== 1) problems.push(`expected one WebAssembly module in dist/, found ${wasm.length}`);
+for (const f of wasm) {
+	wasmSize = gzipSync(readFileSync(f), { level: 9 }).length;
+	if (wasmSize > BUDGET) problems.push(`${relative(dist, f)}: ${Math.round(wasmSize / 1024)} KB compressed, over the ${BUDGET / 1024} KB budget`);
+}
+// The old reference parser's tell-tale pattern; the site must not grow one back.
+for (const f of all.filter((x) => x.endsWith('.js'))) {
+	if (readFileSync(f, 'utf8').includes('[-~x\\/>?+#=]')) problems.push(`${relative(dist, f)}: looks like a Sprig line parser; ask sprig-core instead`);
+}
+
 if (problems.length) {
 	console.error(`check: ${problems.length} problem(s)\n  ${problems.join('\n  ')}`);
 	process.exit(1);
 }
-console.log(`check: ${pages.length} pages, ${checked} internal links and assets resolve, no third-party requests, no font files`);
+console.log(
+	`check: ${pages.length} pages, ${checked} internal links and assets resolve, no third-party requests, no font files, sprig-core ${Math.round(wasmSize / 1024)} KB compressed`,
+);
