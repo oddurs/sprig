@@ -36,6 +36,13 @@ purity() {
     printf '      Take the value as a parameter; the CLI supplies it.\n' >&2
     exit 1
   fi
+  # Every answer depends on the date only through --today, so the system date
+  # is read in one place: the CLI's argument parser.
+  if grep -rnE 'SystemTime|Instant::now|Zoned::now|Timestamp::now|chrono::|Local::' crates/*/src \
+    | grep -v '^crates/sprig-cli/src/args.rs:'; then
+    printf '\nlint: only crates/sprig-cli/src/args.rs may read the clock; take --today instead.\n' >&2
+    exit 1
+  fi
 }
 
 case "${1:-}" in
