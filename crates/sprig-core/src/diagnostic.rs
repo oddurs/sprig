@@ -83,6 +83,8 @@ codes! {
     SeveralAnchors = "S0003", Warning, "§4.5", "An item with more than one anchor";
     DuplicateAnchor = "S0004", Warning, "§4.5", "An anchor already used in the same file";
     GraftWithoutLink = "S0005", Error, "§8.1", "A graft line with no link";
+    UnreadableRecurrence = "S0006", Warning, "§10.3", "An every: value that is not a recurrence";
+    UnknownVersion = "S0007", Warning, "§4.6", "A title naming a version of Sprig the tool does not read";
     GraftFileMissing = "S0101", Error, "§8.5", "A graft naming a file that does not exist";
     GraftAnchorMissing = "S0102", Error, "§8.5", "A graft naming an anchor its file does not write";
     GraftLoop = "S0103", Error, "§8.4", "A graft that would loop";
@@ -93,6 +95,7 @@ codes! {
     UnknownAnchor = "S0203", Error, "§7.2", "A reference to an anchor its file does not write";
     ReferenceOutsideRoot = "S0204", Error, "§8.2", "A reference whose path leaves the workspace";
     NotAReference = "S0205", Error, "§7.2", "An after: value that is not a reference";
+    EmptyReference = "S0206", Warning, "§5.7", "A reference to something with nothing to do";
 }
 
 impl fmt::Display for Code {

@@ -1,4 +1,4 @@
-# Sprig specification, draft 0.4
+# Sprig specification, draft 0.5
 
 Sprig is a plain-text format for plans. A file is a tree of items, one per line;
 the first character of a line says what the line is, and indentation says where
@@ -11,12 +11,13 @@ implement it, copy it, or build on it, without asking.
 
 ## About this document
 
-**Status.** Draft 0.4. It formalises draft 0.2, the version described and
-implemented in `design/sprig-draft-0.2.html`, and tightens three rules of it:
-`due` is the one deadline field (§9.1), a future `start:` blocks (§7.5), and
-grafted content appears once in a tree (§8.8). Where this text and that page's
-parser otherwise disagree, the difference is listed in
-[Appendix B](#appendix-b-known-ambiguities) rather than silently resolved.
+**Status.** Draft 0.5. It formalises draft 0.2, the version described and
+implemented in `design/sprig-draft-0.2.html`. Draft 0.4 tightened three rules of
+it: `due` is the one deadline field (§9.1), a future `start:` blocks (§7.5), and
+grafted content appears once in a tree (§8.8). Draft 0.5 rules on every
+ambiguity [Appendix B](#appendix-b-known-ambiguities) listed and on the cases
+the conformance suite found the text silent on, and makes one change of
+meaning: a dropped item no longer holds up what waits on it (§5.7).
 
 **Rules are numbered.** Each rule has a number such as §3.1, so conformance
 examples, diagnostics and discussions can cite it. A number never changes
@@ -25,6 +26,9 @@ meaning once published; a rule that is removed leaves its number unused.
 **Words.** *Must* and *must not* are requirements on an implementation. *Should*
 is a strong recommendation that tools may depart from with a reason. A *tool* is
 anything that reads Sprig: a parser, an editor, a renderer, an agent.
+*Whitespace* is any Unicode `White_Space` character, such as a space, a tab or
+a no-break space. *Letters* and *digits* are those of any script, as Unicode
+defines them, so `@jón` and `#café` are names.
 
 **Examples** are complete, valid Sprig files unless marked otherwise.
 
@@ -33,8 +37,8 @@ anything that reads Sprig: a parser, an editor, a renderer, an agent.
 ### 1.1 Encoding
 
 A Sprig file is UTF-8 text. Lines end with LF; a tool must read CRLF as LF, and a
-byte order mark at the start of the file must be ignored. The file extension is
-`.sprig`.
+byte order mark at the start of the file must be ignored: it is neither
+indentation nor part of the first line's text. The file extension is `.sprig`.
 
 ```sprig
 Groceries
@@ -45,10 +49,15 @@ Groceries
 
 ### 1.2 The title
 
-The first line that is not blank, not a comment (§2.7), not indented, and not an
-item (§2.3) is the **title**. The title is the file's root item: its text names
-the file, and its tokens (§4) apply to the whole file, the way an item's tokens
-apply to its children.
+The first line that is not blank and not a comment (§2.7) is the **title**,
+unless it is indented, an item (§2.3) or an answer (§2.5). The title is the
+file's root item: its text names the file, and its tokens (§4) are the file's.
+Its people own the whole file (§6.1), and its due date and priority reach every
+item that has none of its own (§9.6, §4.4).
+
+A title that would start with a mark is written with a backslash, which is
+dropped as in an escaped note (§2.8): `\x marks the spot` is the title
+*x marks the spot*.
 
 ```sprig
 Open the bakery  @dana  due:2026-12-05  where:"41 Mill Street"
@@ -57,11 +66,12 @@ Open the bakery  @dana  due:2026-12-05  where:"41 Mill Street"
 ```
 
 Here the title is *Open the bakery*, the file's owner is `dana`, and the file has
-two fields, `target` and `where`.
+two fields, `due` and `where`.
 
 ### 1.3 A file without a title
 
-If the first qualifying line is an item or is indented, the file has no title.
+If the first line that is not blank or a comment is indented, an item or an
+answer, the file has no title.
 Its items still form a tree under an implicit root. Tools may show the file name
 in place of a title.
 
@@ -126,7 +136,8 @@ There are eight marks for items and one for answers.
 
 A mark is only a mark when whitespace or the end of the line follows it. `#tag`
 at the start of a line is a note; `# heading` is a group. `x-ray` is a note; `x ray`
-is a done item.
+is a done item. The marks are exactly these characters: `X` and `*` are not
+marks, and a line starting with them is a note.
 
 ```sprig
 Marks
@@ -172,10 +183,15 @@ Supply run
 ### 2.5 Questions and answers
 
 A line starting with `? ` is a question. A line starting with `= ` is an answer:
-it attaches to the nearest item above it with less indentation, exactly as a note
-does (§2.6), and carries tokens (§4). A question with at least one answer is
-**answered**, and counts as done (§5.2). An answer attached to any other kind of
-item records a decision about that item and changes nothing else.
+it attaches to the nearest item above it with less indentation, or to the root
+if there is none, exactly as a note does (§2.6), and carries tokens (§4). A
+question with at least one answer, even an empty `=`, is **answered**, and
+counts as done (§5.2). An answer attached to any other kind of item records a
+decision about that item and changes nothing else.
+
+An answer is one line. It is not an item, so nothing attaches to it: a deeper
+line below an answer belongs to the answer's item, as it would without the
+answer.
 
 ```sprig
 Naming
@@ -188,8 +204,9 @@ Naming
 
 Any other line is a note. A note attaches to the nearest item above it with less
 indentation, or to the root if there is none. Consecutive note lines of one item
-form a paragraph, joined with single spaces; a blank line between them starts a
-new paragraph.
+form a paragraph, joined with single spaces. A blank line between them starts a
+new paragraph, and so does a child item: notes either side of one are two
+paragraphs.
 
 Notes carry no tokens. An `@name` or a `[[link]]` in a note may be displayed as
 one, but it assigns nobody and grafts nothing.
@@ -224,7 +241,8 @@ Comments
 ### 2.8 Escaped notes
 
 A line whose first character after indentation is `\` is a note whose text is the
-rest of the line after the backslash, even if that text starts with a mark.
+rest of the line after the backslash, even if that text starts with a mark. A
+backslash on its own is a note with no text.
 
 ```sprig
 Escapes
@@ -251,10 +269,12 @@ Blank lines
 
 ### 3.1 Relative indentation
 
-A line's **indentation** is the number of spaces before its first other
-character, where each leading tab counts as two spaces. A line belongs to the
-nearest item above it with strictly less indentation, or to the root if there is
-none. Only relative indentation matters.
+A line's **indentation** is the number of spaces and tabs before its first other
+character, where each tab counts as two spaces, wherever it falls among them.
+A line belongs to the nearest item above it with strictly less indentation, or
+to the root if there is none. Only relative indentation matters. Other
+whitespace before the first character adds nothing to the indentation, but
+still makes the line indented for §1.2.
 
 ```sprig
 Relative
@@ -298,8 +318,11 @@ Formatted
 
 An item's text, after its mark, is split on whitespace into **tokens**. A token
 that contains a double-quoted run, such as `where:"41 Mill Street"`, keeps the
-spaces inside the quotes. Tokens are classified by §4.2 to §4.8; whatever is left
-is the item's text (§4.9).
+spaces inside the quotes: when a `"` comes before a token's first whitespace,
+the token runs to the next `"` and on to the whitespace after it. A token holds
+at most one quoted run, and a `"` with no partner later on the line is an
+ordinary character. Tokens are classified by §4.2 to §4.8; whatever is left is
+the item's text (§4.9).
 
 ```sprig
 Splitting
@@ -318,7 +341,10 @@ People
 - Move the sofa  @me @jo
 ```
 
-`@jo,` with a trailing comma is not a person; it is a word.
+`@jo,` with a trailing comma is not a person; it is a word. So is an email
+address, with or without a leading `@`: `@dana@example.org` and
+`dana@example.org` are both words, since `@` is not a name character. A person
+is a handle; matching handles to addresses is not the file's job.
 
 ### 4.3 Tags
 
@@ -333,7 +359,9 @@ Tags
 ### 4.4 Priority
 
 A token that is exactly `!`, `!!` or `!!!` sets the item's priority to 1, 2 or 3.
-If several appear, the highest wins.
+If several appear, the highest wins. Priority reaches down: an item's
+**effective priority** is the highest written on it or on any item above it,
+the title included, and tools that order work use it.
 
 ```sprig
 Priority
@@ -345,8 +373,10 @@ Priority
 ### 4.5 Anchors
 
 A token that is `^` followed by letters, digits, `_` or `-` gives the item an
-**anchor**: a name other lines can refer to (§7.2, §8.3). Anchors are unique
-within a file.
+**anchor**: a name other lines can refer to (§7.2, §8.3). Anchors should be
+unique within a file. An item that writes several is named by the last, and
+when two items write the same anchor, references and grafts name the first.
+A tool should warn about both.
 
 ```sprig
 Anchors
@@ -358,12 +388,21 @@ Anchors
 ### 4.6 Fields
 
 A token of the form `key:value` is a field when the key starts with a letter and
-continues with letters, digits, `_` or `-`, and the value is not empty. Keys are
-case-insensitive. A value in double quotes loses its quotes. A value starting
-with `//` is not a field, so URLs stay words. If a key appears twice, the last
-value wins, except for `after` (§4.7).
+continues with letters, digits, `_` or `-`, and the value is not empty. The
+token splits at its first colon, so `key:a:b` has the value `a:b`. Keys are
+case-insensitive. A value that starts and ends with a double quote loses them,
+so `vendor:""` is a field whose value is empty. A value starting with `//` is
+not a field, so URLs stay words. If a key appears twice, the last value wins,
+except for `after` (§4.7).
 
 The keys `due`, `start` (§9), `est` and `every` (§10) have defined meanings. Any other key is kept and shown.
+
+The key `sprig` is reserved: on the title it names the major version of the
+format a file is written for, and nowhere else does it mean anything. A file
+needs no version, and one without is read by the current version. Every 1.x
+file means the same to every 1.x tool, so `sprig:1` changes nothing. A tool
+that meets a version it does not read should warn, then read the file as best
+it can.
 
 ```sprig
 Fields
@@ -388,10 +427,13 @@ After
 ### 4.8 Links
 
 `[[file]]` refers to another file and `[[file^anchor]]` to an anchored item in
-it. The file name is resolved relative to the file containing the link; `.sprig`
-is appended when absent, and a leading `./` is ignored. A link may appear inside
-a longer token. In an item's text a link is shown as a link; it has meaning only
-in a graft (§8) or an `after:` value (§7).
+it. The file name is resolved relative to the directory of the file containing
+the link, with `/` between directories and `..` for the one above; `.sprig` is
+appended when absent, and a leading `./` is ignored. A link names a file, so
+`[[^anchor]]` is not a link, and its path cannot contain whitespace, since
+tokens split there first (§4.1). A link may appear inside a longer token. In an
+item's text a link is shown as a link; it has meaning only in a graft (§8) or
+an `after:` value (§7).
 
 ```sprig
 Links
@@ -403,7 +445,9 @@ Links
 ### 4.9 Text
 
 The item's text is its remaining tokens joined by single spaces. In the plain
-text of an item, link brackets are dropped: `[[kitchen]]` reads as `kitchen`.
+text of an item, a link loses its brackets: `[[kitchen]]` reads as `kitchen`.
+Brackets that do not make a link (§4.8), such as `[[my notes]]` or `[[^a]]`,
+are kept, so the text shows that nothing is linked.
 
 ```sprig
 Text
@@ -448,8 +492,10 @@ Both children count as done.
 
 A leaf, an item with no child items, counts toward progress when its status
 after settling is to do, doing, done or question. Dropped and later leaves do not
-count. Neither do groups or grafts with no children, nor any item with an
-`every:` field (§10.3), which is upkeep rather than progress.
+count. Neither do groups or grafts with no children, nor any leaf with an
+`every:` field (§10.3), which is upkeep rather than progress. A recurring item
+with children is a checklist that recurs: it is a parent like any other, and its
+children count.
 
 ```sprig
 Counting
@@ -482,7 +528,8 @@ Kitchen's progress: 1 of 3 done, 1 doing.
 
 Groups, grafts and the root take their status from their progress: **empty** if
 nothing beneath them counts, **done** if everything counted is done, **doing** if
-anything is done or doing, and otherwise **to do**.
+anything is done or doing, and otherwise **to do**. Empty is not done: nothing
+has been finished.
 
 ```sprig
 Derived
@@ -512,10 +559,13 @@ Ready to close
 
 *Design* is still to do, and ready to close.
 
-### 5.7 Done, for references
+### 5.7 Finished, for references
 
-A node is **done**, for the purposes of §7, when its status after settling (§5.2)
-or derivation (§5.5) is done. An answered question is done.
+A node is **finished**, for the purposes of §7, when its status after settling
+(§5.2) or derivation (§5.5) is done or dropped. An answered question is done. A
+dropped item was decided against, so nothing waits on it any longer; a later
+item has only been put off, so what waits on it still waits. An empty node
+(§5.5) is never finished, and a reference to one should be warned about.
 
 ```sprig
 Done
@@ -526,6 +576,15 @@ Done
 ```
 
 The question is answered, so *Pricing page* is not waiting.
+
+```sprig
+Dropped
+
+/ Custom domain  ^domain
+- Launch  after:^domain
+```
+
+The domain was decided against, so *Launch* is not waiting either.
 
 ## 6. People
 
@@ -582,9 +641,9 @@ References
 
 ### 7.3 Blocked
 
-An open item is **blocked** when any of its own references is unfinished (not done
-by §5.7, or unknown), when its `start:` is after today (§7.5), or when any
-ancestor is blocked. Blocking passes to every open descendant of a blocked item.
+An open item is **blocked** when any of its own references is unfinished (not
+finished by §5.7, or unknown), when its `start:` is after today (§7.5), or when
+any ancestor is blocked. Blocking passes to every open descendant of a blocked item.
 
 ```sprig
 Blocked
@@ -672,13 +731,21 @@ Dana, this week  @dana
 A graft whose file is already being resolved above it would loop. It is an error
 reported on that graft line, and the graft has no grafted children.
 
+Loops are found once for the whole workspace, so the same line is reported
+whichever file a tool opens: files are visited in order of their paths and
+grafts in document order, and the graft that reaches a file still being
+visited closes the loop. That graft is refused in every tree, and with it taken
+out no file's tree loops.
+
 ```sprig
 A
 
 + [[b]]
 ```
 
-If `b.sprig` grafts `[[a]]`, one of the two graft lines reports a loop.
+If this is `a.sprig` and `b.sprig` grafts `[[a]]`, path order visits `a.sprig`
+first, and the graft in `b.sprig` closes the loop. Read on its own, `a.sprig`
+still shows what `b.sprig` writes; `b.sprig` does not show `a.sprig`.
 
 ### 8.5 Missing targets
 
@@ -752,7 +819,9 @@ Dates
 ### 9.2 Stored form
 
 A stored date is `YYYY-MM-DD`. A tool that writes a date must write this form, so a
-file means the same thing on every day it is read.
+file means the same thing on every day it is read. A date has no time of day:
+a plan's grain is the day, and a time would need a time zone to mean one
+instant. A value such as `2027-03-01T14:00` is unreadable (§9.5).
 
 ```sprig
 Stored
@@ -773,7 +842,12 @@ A parser should also read these forms, resolved against a *today* supplied to it
 | `oct3`, `oct-3`, `3oct` | that month and day; next year's if more than 120 days past |
 | `mon` to `sun`, or full names | the next such weekday, today included |
 
-Month and weekday names match on a prefix of at least three letters.
+Month and weekday names match on a prefix of at least three letters, and
+shortcuts ignore case: `Fri`, `OCT3` and `Q4` read like `fri`, `oct3` and
+`q4`. A count is written in digits and may be zero: `+0d` is today. A month and
+day that do not exist, such as `feb30`, are not a date. `feb29` follows the
+120-day rule as if the day existed this year, and is a date only when the year
+it lands in has one.
 
 ```sprig
 Typed
@@ -796,7 +870,8 @@ Expanded
 ### 9.5 Unreadable dates
 
 A date field whose value is neither form is kept as written and shown as text. A
-tool should warn about it.
+tool should warn about it. A stored date for a day that does not exist, such as
+`2026-02-30`, is unreadable too.
 
 ```sprig
 Unreadable
@@ -804,12 +879,29 @@ Unreadable
 - Sometime  due:soonish
 ```
 
+### 9.6 Due dates reach down
+
+An item without a `due:` of its own is due when the nearest item above it with
+one is, the title included. Tools that order or flag work by due date use this
+**effective due date**; an item's own `due:` always wins over one above it.
+
+```sprig
+Launch  due:2026-12-05
+
+- Print the menus
+- Window lettering  due:2026-11-20
+```
+
+*Print the menus* is due on 5 December, *Window lettering* on 20 November.
+
 ## 10. Estimates and recurrence
 
 ### 10.1 Estimates
 
 `est:` takes a number and a unit: `h` hours, `d` days of 8 hours, `w` weeks of 40
-hours. A value in any other form is ignored, and a tool should warn about it.
+hours. The number is one or more digits, optionally followed by a point and more
+digits (`2`, `0.5`, but not `.5`), and the unit's case does not matter. A value
+in any other form is ignored, and a tool should warn about it.
 
 ```sprig
 Estimates
@@ -839,8 +931,10 @@ Kitchen has 7 days left; its own `est:10d` is not used.
 ### 10.3 Recurrence
 
 `every:` makes an item recurring. Its value is `day` or `daily`, `week` or
-`weekly`, `month` or `monthly`, a count such as `3d` or `2w`, or a weekday name.
-Recurring items are upkeep and never count toward progress (§5.3).
+`weekly`, `month` or `monthly`, a count of one or more such as `3d` or `2w`, or
+a weekday name; case does not matter. A recurring leaf is upkeep and never
+counts toward progress (§5.3). An item whose `every:` is none of these is still
+recurring, has no next occurrence, and a tool should warn about it.
 
 ```sprig
 Upkeep
@@ -854,7 +948,10 @@ Upkeep
 Ticking an open recurring item must not mark it done. Instead a tool moves its
 `due:` to the next occurrence after the later of its current due date and today,
 and leaves it open. For a weekday rule the next occurrence is strictly after that
-date. An item with no `due:` gets one.
+date. A month later is the same day of the next month, or its last day when the
+month is shorter; only the due date is stored, so the day does not come back
+(31 January, 28 February, 28 March). An item with no `due:` gets one. An item
+whose `every:` has no next occurrence (§10.3) is marked done.
 
 ```sprig
 After ticking on 2026-10-02
@@ -867,84 +964,70 @@ After ticking on 2026-10-02
 Informal; the rules above are authoritative.
 
 ```
-file    = [ title ] { line }
-title   = { token }                        ; §1.2
+file    = [ bom ] [ title ] { line }   ; §1.1
+title   = [ "\" ] { token }            ; §1.2, never indented
 line    = indent ( item | answer | note | comment | blank )
-indent  = { " " | tab }                    ; §3.1, a leading tab counts as two
-item    = mark ( ws { token } | eol )      ; §2.3
+indent  = { " " | tab }                ; §3.1, each tab counts as two
+item    = mark ( ws { token } | eol )  ; §2.3
 mark    = "-" | "~" | "x" | "/" | ">" | "?" | "#" | "+"
-answer  = "=" ws { token }                 ; §2.5
-comment = "//" text                        ; §2.7
-note    = [ "\" ] text                     ; §2.6, §2.8
-token   = "@" name | "#" name | "^" name   ; §4.2, §4.3, §4.5
-        | "!" | "!!" | "!!!"               ; §4.4
-        | key ":" ( value | '"' text '"' ) ; §4.6
-        | link | word                      ; §4.8, §4.9
-link    = "[[" path [ "^" name ] "]]"
+answer  = "=" ( ws { token } | eol )   ; §2.5
+comment = "//" text                    ; §2.7
+note    = [ "\" ] text                 ; §2.6, §2.8
+token   = "@" name | "#" name | "^" name                  ; §4.2, §4.3, §4.5
+        | "!" | "!!" | "!!!"                              ; §4.4
+        | key ":" ( value | '"' text '"' )                ; §4.6
+        | link | word                                     ; §4.8, §4.9
+key     = letter { letter | digit | "_" | "-" }
+link    = "[[" path [ "^" name ] "]]"  ; path has no whitespace
+est     = digits [ "." digits ] ( "h" | "d" | "w" )       ; §10.1
 ```
 
 ## Appendix B. Known ambiguities
 
-Places where draft 0.2's reference parser and this text disagree, or where
-neither says enough. Each needs a ruling and conformance examples before 1.0.
+Places where draft 0.2's reference parser and the text disagreed, or where
+neither said enough. Draft 0.5 rules on every one; the rulings now live in the
+numbered rules, and each entry keeps its number so that citations stay stable.
+A new ambiguity takes the next number and stays open until a draft rules on it.
 
-1. **Byte order mark.** §1.1 says a BOM is ignored. The reference parser treats
-   it as whitespace, so the first line counts as indented: it becomes a note on
-   the root and the file has no title. sprig-core follows §1.1
-   (`tests/conformance/lines/012-bom-is-ignored`).
-2. **Tabs after spaces.** §3.1 counts leading tabs as two spaces. The reference
-   parser expands only a run of tabs at the very start of a line; a tab after a
-   space is counted as one character. sprig-core counts every tab in the
-   indentation as two (`lines/049-a-tab-after-spaces-counts-as-two`).
-3. **Several anchors on one item.** §4.5 says anchors are unique in a file but not
-   how many one item may carry. The reference parser keeps the last, and so
-   does sprig-core, which also warns (S0003).
-4. **Duplicate anchors.** When two items in a file share an anchor, the reference
-   parser resolves references to the first and reports nothing. sprig-core
-   resolves to the first too, and warns on the later one (S0004).
-5. **Empty groups and references.** An empty group (§5.5) is not done, so
-   `after:` pointing at it waits forever. That may be the wrong answer.
-6. **Recurring parents.** §5.3 excludes any item with `every:` from progress. The
-   reference parser excludes only recurring leaves; a recurring parent's children
-   still count. sprig-core follows the reference parser until this is ruled on,
-   so a recurring file such as `examples/bakery/groceries.sprig` still counts
-   its items.
+1. **Byte order mark.** The reference parser treated a BOM as whitespace, so the
+   first line counted as indented and the file had no title. Resolved: a BOM is
+   neither indentation nor text (§1.1; `lines/012`).
+2. **Tabs after spaces.** The reference parser expanded only a run of tabs at
+   the very start of a line. Resolved: every tab in the indentation counts as
+   two spaces (§3.1; `lines/049`).
+3. **Several anchors on one item.** Resolved: the last names the item, and a
+   tool should warn (§4.5; `tokens/019`).
+4. **Duplicate anchors.** Resolved: references and grafts name the first item,
+   and a tool should warn about the later one (§4.5; `tokens/020`).
+5. **Empty groups and references.** Resolved: empty is not done, so an `after:`
+   naming something empty waits until it has something finished, and a tool
+   should warn (§5.5, §5.7; `graph/016`).
+6. **Recurring parents.** §5.3 excluded any item with `every:`, the reference
+   parser only recurring leaves. Resolved for the parser: a recurring item with
+   children is a checklist, and its children count (§5.3; `graph/019`).
 7. **Grafting a grafted branch.** Resolved in draft 0.4: `[[file^anchor]]`
-   reaches only anchors `file` writes itself (§8.7).
-8. **File names with spaces.** Links (§4.8) cannot name a file containing spaces:
-   tokens split on whitespace first (§4.1), so `[[my file]]` becomes two words.
-9. **Directories.** The reference parser has a flat namespace of file names, so
-   relative paths in links and grafts (§4.8, §8.2) have never been exercised.
-   sprig-core resolves them from the linking file's directory and refuses any
-   that climb above the directory it was asked to read.
-10. **Loop reporting.** When two files graft each other (§8.4), which graft line
-   reports the loop depends, in the reference parser, on which file is read
-   first. sprig-core walks files in path order and grafts in document order,
-   and reports the graft that closes the loop, so the answer is the same
-   whichever file a tool opens (`spec/diagnostics.md`, S0103).
-11. **An answer on the first line.** §1.2 rules out an item as the title but
-   says nothing of an answer. The reference parser does not take a `= ` line as
-   the title, and neither does sprig-core
-   (`lines/007-first-line-answer-means-no-title`).
-12. **Notes either side of an item.** §2.6 joins *consecutive* note lines into
-   a paragraph. When a child item comes between two notes of the same item, the
-   reference parser joins them into one paragraph anyway; sprig-core starts a
-   new one (`lines/052-an-item-between-note-lines-ends-the-paragraph`).
-13. **Letters in names.** §4.2, §4.3 and §4.5 allow letters and digits in
-   people, tags and anchors. The reference parser accepts only ASCII, so
-   `@jón` is a word; sprig-core accepts any Unicode letter or digit
-   (`lines/010-utf8-text`).
-14. **An escape on its own.** A line that is only `\` is a note with no text
-   (§2.8). The reference parser stores an empty note line, which its renderer
-   shows as a paragraph break; sprig-core keeps it as an empty note
-   (`lines/042-an-escape-on-its-own`).
-15. **Days that do not exist.** §9.3 does not say what `feb30` or, outside a
-   leap year, `feb29` means. The reference parser rolls them into the next
-   month (`feb30` is 2 March, and so is `2026-02-30`); sprig-core reads them as
-   no date and warns (S0001). A bare `feb29` follows the 120-day rule as if the
-   day existed this year, so read in October 2027 it is 2028-02-29
-   (`tokens/050-a-day-that-does-not-exist-is-not-a-date`,
-   `tokens/051-february-29-in-a-leap-year`).
+   reaches only anchors `file` writes itself (§8.7; `graph/052`).
+8. **File names with spaces.** Resolved: a link cannot name a file whose path
+   contains whitespace (§4.8).
+9. **Directories.** The reference parser had a flat namespace of file names.
+   Resolved: links resolve from the linking file's directory, and a path that
+   leaves the workspace is refused (§4.8, §8.2; `graph/042`, `graph/043`).
+10. **Loop reporting.** In the reference parser, which graft line reported a
+   loop depended on which file was read first. Resolved: loops are found once
+   for the workspace, in path order (§8.4; `graph/045`).
+11. **An answer on the first line.** Resolved: an answer is not a title (§1.2;
+   `lines/007`).
+12. **Notes either side of an item.** The reference parser joined them into one
+   paragraph. Resolved: a child item ends a paragraph (§2.6; `lines/052`).
+13. **Letters in names.** The reference parser accepted only ASCII. Resolved:
+   letters and digits of any script (Words; `lines/010`).
+14. **An escape on its own.** Resolved: a note with no text (§2.8; `lines/042`).
+15. **Days that do not exist.** The reference parser rolled `feb30` and
+   `2026-02-30` into March. Resolved: they are not dates, and a bare `feb29`
+   follows the 120-day rule (§9.3, §9.5; `tokens/050`, `tokens/051`).
+16. **Brackets that are not a link.** The reference parser dropped the brackets
+   of any `[[...]]` in an item's text, link or not. Resolved: only a link loses
+   them (§4.9; `tokens/057`, `tokens/058`).
 
 ## Appendix C. Settled arguments
 

@@ -1,0 +1,32 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Plan",
+    "root": {
+      "line": 1,
+      "span": [0, 13],
+      "text": "Plan",
+      "fields": {
+        "sprig": "2"
+      },
+      "children": [
+        {
+          "line": 3,
+          "span": [15, 20],
+          "mark": "-",
+          "text": "One"
+        }
+      ]
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "S0007",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 1,
+      "col": 7,
+      "span": [6, 13]
+    }
+  ]
+}

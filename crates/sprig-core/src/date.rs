@@ -240,6 +240,16 @@ fn month_day(v: &str) -> Option<(u8, u8)> {
     Some((month, day.parse().ok()?))
 }
 
+/// Whether an `every:` value names a recurrence (§10.3).
+pub fn recurs(every: &str) -> bool {
+    let anchor = Date {
+        year: 2024,
+        month: 1,
+        day: 1,
+    };
+    next_occurrence(None, every, anchor).is_some()
+}
+
 /// The next due date of a recurring item ticked on `today` (§10.4): the next
 /// occurrence after the later of its current due date and today. For a weekday
 /// rule that is strictly after; an item with no due date counts from today.

@@ -1,0 +1,7 @@
+Dropped
+
+/ Custom domain  ^domain
+  - Register it  ^register
+- Launch  after:^domain  after:^register
+> Printed flyers  ^flyers
+- Hand them out  after:^flyers

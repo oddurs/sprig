@@ -37,6 +37,8 @@ lease.sprig:13:31: error[S0201]: no item ^permt in lease.sprig
 | S0003 | warning | §4.5 | An item with more than one anchor |
 | S0004 | warning | §4.5 | An anchor already used in the same file |
 | S0005 | error | §8.1 | A graft line with no link |
+| S0006 | warning | §10.3 | An every: value that is not a recurrence |
+| S0007 | warning | §4.6 | A title naming a version of Sprig the tool does not read |
 | S0101 | error | §8.5 | A graft naming a file that does not exist |
 | S0102 | error | §8.5 | A graft naming an anchor its file does not write |
 | S0103 | error | §8.4 | A graft that would loop |
@@ -47,6 +49,7 @@ lease.sprig:13:31: error[S0201]: no item ^permt in lease.sprig
 | S0203 | error | §7.2 | A reference to an anchor its file does not write |
 | S0204 | error | §8.2 | A reference whose path leaves the workspace |
 | S0205 | error | §7.2 | An after: value that is not a reference |
+| S0206 | warning | §5.7 | A reference to something with nothing to do |
 
 ## Notes on each code
 
@@ -58,13 +61,22 @@ it sets no deadline and blocks nothing. The message quotes the value.
 is ignored when estimates are summed.
 
 **S0003.** An item names one anchor. When it writes several, the last one names
-it (Appendix B.3), and the others reach nothing.
+it (§4.5), and the others reach nothing.
 
-**S0004.** Anchors are unique within a file (§4.5). References to a repeated
-anchor reach the first item that writes it (Appendix B.4).
+**S0004.** Anchors should be unique within a file (§4.5). References to a
+repeated anchor reach the first item that writes it.
 
 **S0005.** A `+` line grafts the file or branch its link names (§8.1); without
 a link it grafts nothing. Reported on the line.
+
+**S0006.** `every:` takes `day`, `week`, `month`, a count such as `3d` or a
+weekday (§10.3). An item with any other value is still recurring, so it never
+counts toward progress, but it has no next occurrence, and ticking it marks it
+done (§10.4). The message quotes the value.
+
+**S0007.** A file needs no version: every 1.x tool reads every 1.x file. The
+title's `sprig:` field is reserved for a later major version (§4.6). A tool
+that meets one it does not know reads the file as best it can and says so.
 
 **S0101, S0102.** A graft whose target does not exist mounts nothing (§8.5).
 Reported on the link.
@@ -84,3 +96,7 @@ graft line in document order.
 **S0201, S0202, S0203, S0205.** A reference that names no existing file or
 anchor is unknown (§7.2), and the item that waits on it is blocked until it is
 fixed (§7.3).
+
+**S0206.** An empty group, graft or file has nothing to finish (§5.5), so an
+item that waits on it waits until something beneath it is added and finished
+(§5.7). That is usually a reference to a placeholder, or to the wrong thing.

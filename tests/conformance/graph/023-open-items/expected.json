@@ -118,12 +118,6 @@
             "line": 5
           },
           {
-            "after": "^e",
-            "label": "Fifth",
-            "file": "main.sprig",
-            "line": 7
-          },
-          {
             "after": "^f",
             "label": "Sixth",
             "file": "main.sprig",
