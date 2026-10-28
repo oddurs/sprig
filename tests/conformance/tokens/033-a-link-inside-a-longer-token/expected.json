@@ -1,0 +1,25 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Links",
+    "root": {
+      "line": 1,
+      "span": [0, 5],
+      "text": "Links",
+      "children": [
+        {
+          "line": 3,
+          "span": [7, 38],
+          "mark": "-",
+          "text": "Check (see kitchen) first",
+          "links": [
+            {
+              "path": "kitchen.sprig"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

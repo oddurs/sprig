@@ -1,0 +1,9 @@
+Done
+
+? Free tier?  ^tier
+  = Yes, capped at three.
+x Kitchen
+  - Tiling  ^tiling
+# Dairy  ^dairy
+  x Butter
+- Pricing page  after:^tier  after:^tiling  after:^dairy

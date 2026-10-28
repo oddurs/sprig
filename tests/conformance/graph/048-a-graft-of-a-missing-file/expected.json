@@ -1,0 +1,57 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Missing",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 1
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "+",
+        "label": "nowhere.sprig",
+        "status": "todo",
+        "graft": {
+          "path": "nowhere.sprig",
+          "title": "nowhere.sprig",
+          "mounted": false
+        },
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "-",
+            "label": "Kept",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": [
+    {
+      "code": "S0101",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 3,
+      "span": [11, 22]
+    }
+  ]
+}

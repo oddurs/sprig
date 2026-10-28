@@ -1,0 +1,46 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "References",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 1
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "Order",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "blocked": true,
+        "waits_on": [
+          {
+            "after": "design",
+            "label": "design",
+            "unknown": true
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": [
+    {
+      "code": "S0205",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 10,
+      "span": [21, 33]
+    }
+  ]
+}

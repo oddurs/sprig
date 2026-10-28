@@ -1,0 +1,161 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Derived",
+    "status": "doing",
+    "progress": {
+      "done": 3,
+      "doing": 0,
+      "total": 5
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "#",
+        "label": "Dairy",
+        "status": "done",
+        "progress": {
+          "done": 2,
+          "doing": 0,
+          "total": 2
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "x",
+            "label": "Butter",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          },
+          {
+            "file": "main.sprig",
+            "line": 5,
+            "mark": "x",
+            "label": "Milk",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 6,
+        "mark": "#",
+        "label": "Seeds",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 7,
+            "mark": "-",
+            "label": "Sesame",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 8,
+        "mark": "#",
+        "label": "Flour",
+        "status": "doing",
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 2
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 9,
+            "mark": "x",
+            "label": "Rye",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          },
+          {
+            "file": "main.sprig",
+            "line": 10,
+            "mark": "-",
+            "label": "Spelt",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 11,
+        "mark": "#",
+        "label": "Empty",
+        "status": "empty",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 12,
+        "mark": "#",
+        "label": "Dropped only",
+        "status": "empty",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 13,
+            "mark": "/",
+            "label": "Oat",
+            "status": "dropped",
+            "settled": true,
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

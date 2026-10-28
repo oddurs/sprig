@@ -1,0 +1,106 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Blocked",
+    "status": "doing",
+    "progress": {
+      "done": 1,
+      "doing": 0,
+      "total": 4
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "Design",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 4,
+        "mark": "-",
+        "label": "Build",
+        "status": "todo",
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 3
+        },
+        "blocked": true,
+        "waits_on": [
+          {
+            "after": "^design",
+            "label": "Design",
+            "file": "main.sprig",
+            "line": 3
+          }
+        ],
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 5,
+            "mark": "-",
+            "label": "Strip out",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "blocked": true
+          },
+          {
+            "file": "main.sprig",
+            "line": 6,
+            "mark": "x",
+            "label": "Old units",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          },
+          {
+            "file": "main.sprig",
+            "line": 7,
+            "mark": "-",
+            "label": "Tiling",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "blocked": true,
+            "children": [
+              {
+                "file": "main.sprig",
+                "line": 8,
+                "mark": "-",
+                "label": "Grout",
+                "status": "todo",
+                "progress": {
+                  "done": 0,
+                  "doing": 0,
+                  "total": 1
+                },
+                "blocked": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

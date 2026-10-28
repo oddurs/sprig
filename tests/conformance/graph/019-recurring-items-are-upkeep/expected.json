@@ -1,0 +1,81 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Upkeep",
+    "status": "doing",
+    "progress": {
+      "done": 1,
+      "doing": 0,
+      "total": 3
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "Numbers to the bank",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        },
+        "due": "2026-10-02"
+      },
+      {
+        "file": "main.sprig",
+        "line": 4,
+        "mark": "-",
+        "label": "Shop",
+        "status": "todo",
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 2
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 5,
+            "mark": "x",
+            "label": "Milk",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          },
+          {
+            "file": "main.sprig",
+            "line": 6,
+            "mark": "-",
+            "label": "Bread",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 7,
+        "mark": "-",
+        "label": "Pack",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      }
+    ]
+  },
+  "diagnostics": []
+}

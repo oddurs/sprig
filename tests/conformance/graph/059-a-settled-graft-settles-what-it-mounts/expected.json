@@ -1,0 +1,108 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "House",
+    "status": "done",
+    "progress": {
+      "done": 1,
+      "doing": 0,
+      "total": 1
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "Rooms",
+        "status": "todo",
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 1
+        },
+        "ready_to_close": true,
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "x",
+            "label": "Done here",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 5,
+        "mark": "/",
+        "label": "Garden",
+        "status": "dropped",
+        "settled": true,
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 6,
+            "mark": "+",
+            "label": "Garden",
+            "status": "dropped",
+            "settled": true,
+            "graft": {
+              "path": "garden.sprig",
+              "title": "Garden",
+              "mounted": true
+            },
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 0
+            },
+            "children": [
+              {
+                "file": "garden.sprig",
+                "line": 3,
+                "mark": "-",
+                "label": "Dig",
+                "status": "dropped",
+                "settled": true,
+                "grafted": true,
+                "progress": {
+                  "done": 0,
+                  "doing": 0,
+                  "total": 0
+                }
+              },
+              {
+                "file": "garden.sprig",
+                "line": 4,
+                "mark": "-",
+                "label": "Plant",
+                "status": "dropped",
+                "settled": true,
+                "grafted": true,
+                "progress": {
+                  "done": 0,
+                  "doing": 0,
+                  "total": 0
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

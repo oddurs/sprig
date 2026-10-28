@@ -1,0 +1,24 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Splitting",
+    "root": {
+      "line": 1,
+      "span": [0, 9],
+      "text": "Splitting",
+      "children": [
+        {
+          "line": 3,
+          "span": [11, 58],
+          "mark": "-",
+          "text": "Visit the unit",
+          "people": ["dana"],
+          "fields": {
+            "where": "41 Mill Street"
+          }
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

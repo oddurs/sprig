@@ -1,0 +1,6 @@
+Blocked
+
+- Design  ^design
+x Build  after:^design
+/ Paint  after:^design
+> Tile  after:^design

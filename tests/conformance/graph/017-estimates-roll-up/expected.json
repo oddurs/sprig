@@ -1,0 +1,99 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Rollup",
+    "status": "doing",
+    "progress": {
+      "done": 1,
+      "doing": 0,
+      "total": 4
+    },
+    "estimate": 60,
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "Kitchen",
+        "status": "todo",
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 3
+        },
+        "estimate": 56,
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "x",
+            "label": "Strip out",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          },
+          {
+            "file": "main.sprig",
+            "line": 5,
+            "mark": "-",
+            "label": "Tiling",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "estimate": 40
+          },
+          {
+            "file": "main.sprig",
+            "line": 6,
+            "mark": "-",
+            "label": "Paint",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "estimate": 16
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 7,
+        "mark": "-",
+        "label": "Garden",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "estimate": 4,
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 8,
+            "mark": "-",
+            "label": "Dig",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

@@ -180,12 +180,17 @@ pub fn resolve(value: &str, today: Date) -> Option<Date> {
         return Some(if d < today { last(today.year + 1) } else { d });
     }
     if let Some((month, day)) = month_day(&v) {
-        let d = Date::new(today.year, month, day)?;
         // A bare month and day more than four months back means next year.
-        if today.days_until(d) < -120 {
+        // Outside a leap year feb29 has no day this year, so measure from
+        // the 28th: read in the autumn, it means the coming leap day.
+        let this_year = Date::new(today.year, month, day);
+        let past = this_year
+            .or_else(|| Date::new(today.year, month, day.checked_sub(1)?))
+            .is_some_and(|d| today.days_until(d) < -120);
+        if past {
             return Date::new(today.year + 1, month, day);
         }
-        return Some(d);
+        return this_year;
     }
     let wd = named(&v, &WEEKDAYS)? as i64;
     Some(today.add_days((wd - i64::from(today.weekday())).rem_euclid(7)))
@@ -373,6 +378,14 @@ mod tests {
         assert_eq!(on("2027-01-10", "dec20").as_deref(), Some("2027-12-20"));
         assert_eq!(on("2028-02-28", "feb29").as_deref(), Some("2028-02-29"));
         assert_eq!(on("2028-02-28", "29-feb").as_deref(), Some("2028-02-29"));
+        assert_eq!(
+            on("2027-10-01", "feb29").as_deref(),
+            Some("2028-02-29"),
+            "past this year's would-be leap day, so the coming one"
+        );
+        assert_eq!(on("2026-10-01", "feb29"), None, "2027 has no leap day");
+        assert_eq!(on("2027-01-10", "feb29"), None, "not yet past, and no day");
+        assert_eq!(on("2026-10-01", "oct0"), None);
         assert_eq!(
             on("2028-02-28", "jan1").as_deref(),
             Some("2028-01-01"),

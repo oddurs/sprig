@@ -1,0 +1,30 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Anchors",
+    "root": {
+      "line": 1,
+      "span": [0, 7],
+      "text": "Anchors",
+      "children": [
+        {
+          "line": 3,
+          "span": [9, 34],
+          "mark": "-",
+          "text": "Book a van",
+          "anchor": "truck"
+        }
+      ]
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "S0003",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 20,
+      "span": [28, 34]
+    }
+  ]
+}

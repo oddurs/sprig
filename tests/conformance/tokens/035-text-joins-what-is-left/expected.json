@@ -1,0 +1,27 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Text",
+    "root": {
+      "line": 1,
+      "span": [0, 4],
+      "text": "Text",
+      "children": [
+        {
+          "line": 3,
+          "span": [6, 66],
+          "mark": "-",
+          "text": "Call the landlord",
+          "people": ["dana"],
+          "tags": ["urgent"],
+          "priority": 2,
+          "anchor": "call",
+          "fields": {
+            "about": "rent"
+          }
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

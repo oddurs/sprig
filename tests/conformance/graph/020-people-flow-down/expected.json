@@ -1,0 +1,102 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Owners",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 3
+    },
+    "people": ["dana"],
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "Money",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 2
+        },
+        "people": ["dana"],
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "-",
+            "label": "Loan paperwork",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "people": ["dana"]
+          },
+          {
+            "file": "main.sprig",
+            "line": 5,
+            "mark": "-",
+            "label": "Supplier credit",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "people": ["teo"],
+            "children": [
+              {
+                "file": "main.sprig",
+                "line": 6,
+                "mark": "-",
+                "label": "Call the bank",
+                "status": "todo",
+                "progress": {
+                  "done": 0,
+                  "doing": 0,
+                  "total": 1
+                },
+                "people": ["teo"]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 7,
+        "mark": "-",
+        "label": "Shared",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "people": ["dana", "jo"],
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 8,
+            "mark": "-",
+            "label": "Sign",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "people": ["dana", "jo"]
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

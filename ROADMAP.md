@@ -26,12 +26,10 @@ A public website that explains Sprig in ten seconds and lets a visitor edit a re
 
 ## v0.2 — Write plans in your editor
 
-`··········` 0% · 0 of 14 done · due 2027-01-29
+`··········` 0% · 0 of 12 done · due 2027-01-29
 
 VS Code highlights `.sprig` files, completes people, anchors and file links, shows `sprig check` diagnostics as you type, and ticks items with a code action. `sprig fmt` normalises a file without touching anything it doesn't mean to. In the terminal, `sprig tree`, `status` and `why` show a plan's shape and what holds it up, and every command completes in the shell.
 
-- [ ] [`0020`](https://github.com/oddurs/sprig/blob/main/cairn/items/0020-conformance-examples-tokens-fields-and-dates.md) Conformance examples: tokens, fields and dates <sup>feature · p1 · suite</sup>
-- [ ] [`0021`](https://github.com/oddurs/sprig/blob/main/cairn/items/0021-conformance-examples-grafts-rollups-and-blocking.md) Conformance examples: grafts, rollups and blocking <sup>feature · p1 · suite</sup>
 - [ ] [`0047`](https://github.com/oddurs/sprig/blob/main/cairn/items/0047-tree-sitter-grammar.md) Tree-sitter grammar <sup>feature · p0 · editors</sup>
 - [ ] [`0048`](https://github.com/oddurs/sprig/blob/main/cairn/items/0048-textmate-grammar.md) TextMate grammar <sup>feature · p1 · editors</sup>
 - [ ] [`0049`](https://github.com/oddurs/sprig/blob/main/cairn/items/0049-language-server-diagnostics-as-you-type.md) Language server: diagnostics as you type <sup>feature · p0 · lsp</sup>

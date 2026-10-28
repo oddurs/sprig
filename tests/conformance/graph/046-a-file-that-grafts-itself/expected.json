@@ -1,0 +1,81 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Self",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 1
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "One",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 4,
+        "mark": "+",
+        "label": "main.sprig",
+        "status": "empty",
+        "graft": {
+          "path": "main.sprig",
+          "title": "main.sprig",
+          "mounted": false
+        },
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 5,
+        "mark": "+",
+        "label": "main.sprig",
+        "status": "empty",
+        "graft": {
+          "path": "main.sprig",
+          "anchor": "one",
+          "title": "main.sprig",
+          "mounted": false
+        },
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        }
+      }
+    ]
+  },
+  "diagnostics": [
+    {
+      "code": "S0103",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 4,
+      "col": 3,
+      "span": [20, 28]
+    },
+    {
+      "code": "S0103",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 5,
+      "col": 3,
+      "span": [31, 43]
+    }
+  ]
+}

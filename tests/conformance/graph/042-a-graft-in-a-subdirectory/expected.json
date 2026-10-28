@@ -1,0 +1,82 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Resolution",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 2
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "+",
+        "label": "Kitchen",
+        "status": "todo",
+        "graft": {
+          "path": "rooms/kitchen.sprig",
+          "title": "Kitchen",
+          "mounted": true
+        },
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 2
+        },
+        "children": [
+          {
+            "file": "rooms/kitchen.sprig",
+            "line": 3,
+            "mark": "+",
+            "label": "Hall",
+            "status": "todo",
+            "grafted": true,
+            "graft": {
+              "path": "rooms/hall.sprig",
+              "title": "Hall",
+              "mounted": true
+            },
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "children": [
+              {
+                "file": "rooms/hall.sprig",
+                "line": 3,
+                "mark": "-",
+                "label": "Paint",
+                "status": "todo",
+                "grafted": true,
+                "progress": {
+                  "done": 0,
+                  "doing": 0,
+                  "total": 1
+                }
+              }
+            ]
+          },
+          {
+            "file": "rooms/kitchen.sprig",
+            "line": 4,
+            "mark": "-",
+            "label": "Tile",
+            "status": "todo",
+            "grafted": true,
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

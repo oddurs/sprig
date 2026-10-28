@@ -1,0 +1,20 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Tags",
+    "root": {
+      "line": 1,
+      "span": [0, 4],
+      "text": "Tags",
+      "children": [
+        {
+          "line": 3,
+          "span": [6, 26],
+          "mark": "-",
+          "text": "Issue gh#42 and C#"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

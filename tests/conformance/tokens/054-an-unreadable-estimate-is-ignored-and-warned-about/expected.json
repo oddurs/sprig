@@ -1,0 +1,78 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Estimates",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 3
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "Tiling",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 4,
+        "mark": "-",
+        "label": "Grout",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 5,
+        "mark": "-",
+        "label": "Seal",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      }
+    ]
+  },
+  "diagnostics": [
+    {
+      "code": "S0002",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 11,
+      "span": [21, 32]
+    },
+    {
+      "code": "S0002",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 4,
+      "col": 10,
+      "span": [42, 47]
+    },
+    {
+      "code": "S0002",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 5,
+      "col": 9,
+      "span": [56, 62]
+    }
+  ]
+}

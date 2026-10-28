@@ -1,0 +1,23 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Fields",
+    "root": {
+      "line": 1,
+      "span": [0, 6],
+      "text": "Fields",
+      "children": [
+        {
+          "line": 3,
+          "span": [8, 26],
+          "mark": "-",
+          "text": "Quote",
+          "fields": {
+            "vendor": ""
+          }
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

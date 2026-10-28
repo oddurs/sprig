@@ -1,0 +1,41 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Priority",
+    "root": {
+      "line": 1,
+      "span": [0, 8],
+      "text": "Priority",
+      "children": [
+        {
+          "line": 3,
+          "span": [10, 36],
+          "mark": "-",
+          "text": "Renew the insurance",
+          "priority": 3
+        },
+        {
+          "line": 4,
+          "span": [37, 56],
+          "mark": "-",
+          "text": "Call the bank",
+          "priority": 2
+        },
+        {
+          "line": 5,
+          "span": [57, 75],
+          "mark": "-",
+          "text": "Tidy the shed",
+          "priority": 1
+        },
+        {
+          "line": 6,
+          "span": [76, 82],
+          "mark": "-",
+          "text": "Read"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

@@ -1,0 +1,32 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Links",
+    "root": {
+      "line": 1,
+      "span": [0, 5],
+      "text": "Links",
+      "children": [
+        {
+          "line": 3,
+          "span": [7, 77],
+          "mark": "-",
+          "text": "See ./kitchen and rooms/hall.sprig and ../shared/notes^a",
+          "links": [
+            {
+              "path": "kitchen.sprig"
+            },
+            {
+              "path": "rooms/hall.sprig"
+            },
+            {
+              "path": "../shared/notes.sprig",
+              "anchor": "a"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

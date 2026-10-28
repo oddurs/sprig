@@ -1,0 +1,25 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Open the bakery",
+    "root": {
+      "line": 1,
+      "span": [0, 47],
+      "text": "Open the bakery",
+      "people": ["dana"],
+      "tags": ["launch"],
+      "fields": {
+        "due": "2026-12-05"
+      },
+      "children": [
+        {
+          "line": 3,
+          "span": [49, 55],
+          "mark": "-",
+          "text": "Sign"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}
