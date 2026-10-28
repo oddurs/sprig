@@ -167,6 +167,12 @@ pub fn resolved(n: &Resolved) -> Value {
     if !n.people.is_empty() {
         m.insert("people".into(), json!(n.people));
     }
+    if let Some(d) = n.due {
+        m.insert("due".into(), json!(d.to_string()));
+    }
+    if let Some(d) = n.start {
+        m.insert("start".into(), json!(d.to_string()));
+    }
     flag(&mut m, "blocked", n.blocked);
     if !n.waits_on.is_empty() {
         let waits: Vec<Value> = n
@@ -176,9 +182,23 @@ pub fn resolved(n: &Resolved) -> Value {
                 Wait::Reference {
                     value,
                     label,
-                    unknown: true,
-                } => json!({"after": value, "label": label, "unknown": true}),
-                Wait::Reference { value, label, .. } => json!({"after": value, "label": label}),
+                    unknown,
+                    target,
+                } => {
+                    let mut w = Map::new();
+                    w.insert("after".into(), json!(value));
+                    w.insert("label".into(), json!(label));
+                    if *unknown {
+                        w.insert("unknown".into(), json!(true));
+                    }
+                    if let Some((file, line)) = target {
+                        w.insert("file".into(), json!(file));
+                        if *line > 0 {
+                            w.insert("line".into(), json!(line));
+                        }
+                    }
+                    Value::Object(w)
+                }
                 Wait::Start(d) => json!({"start": d.to_string()}),
             })
             .collect();

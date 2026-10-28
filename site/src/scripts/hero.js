@@ -1,7 +1,7 @@
 // The landing page's live example. The page arrives with the example and its
-// computed view already rendered; this script only listens, and fetches the
-// parser the first time someone touches the demo. Until then no parser code
-// has loaded at all.
+// computed view already rendered; this script only listens, and fetches
+// sprig-core the first time someone touches the demo. Until then no parser
+// code has loaded at all.
 
 const demo = document.getElementById('demo');
 const src = /** @type {HTMLTextAreaElement} */ (document.getElementById('demo-src'));
@@ -11,9 +11,9 @@ const stats = document.getElementById('demo-stats');
 const editBtn = document.getElementById('demo-edit');
 const presets = JSON.parse(document.getElementById('demo-presets').textContent);
 
-/** @type {Promise<typeof import('../lib/sprig.js')> | undefined} */
+/** @type {Promise<typeof import('../lib/view.js')> | undefined} */
 let loading;
-const parser = () => (loading ??= import('../lib/sprig.js'));
+const parser = () => (loading ??= import('../lib/view.js').then(async (m) => (await m.ready, m)));
 
 const state = { vm: 'next', refs: [], collapsed: new Set() };
 
@@ -97,10 +97,9 @@ demo.addEventListener('click', async (e) => {
 	const node = state.refs[Number(act.dataset.k)];
 	if (act.dataset.act === 'toggle' && node) {
 		const lines = src.value.split('\n');
-		const line = lines[node.line];
-		const i = line.search(/\S/);
-		if (!sprig.TICKABLE.includes(line[i])) return;
-		lines[node.line] = line.slice(0, i) + (line[i] === 'x' ? '-' : 'x') + line.slice(i + 1);
+		const ticked = sprig.tickLine(lines[node.line]);
+		if (!ticked) return;
+		lines[node.line] = ticked.line;
 		src.value = lines.join('\n');
 		await paint();
 		await render();

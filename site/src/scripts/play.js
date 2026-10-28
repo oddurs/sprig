@@ -1,8 +1,8 @@
 // The playground: several files, an editor with highlighting, the computed
 // view, and links that carry the whole workspace in the URL fragment. It is the
-// design page's playground, moved onto the shared parser module.
+// design page's playground, running on sprig-core compiled to WebAssembly.
 import { shiftExamples } from '../lib/dates.js';
-import * as sprig from '../lib/sprig.js';
+import * as sprig from '../lib/view.js';
 
 const $ = (s) => document.querySelector(s);
 const seed = JSON.parse($('#examples').textContent);
@@ -133,10 +133,10 @@ function lineAt(v, pos) {
 	if (e < 0) e = v.length;
 	return [s, e];
 }
+// Fields, and so dates, live on the title and on lines that start with a mark.
 function carriesFields(v, s) {
-	const [, e] = lineAt(v, s);
-	if (sprig.LINE_RE.test(v.slice(s, e).trim())) return true;
-	return sprig.titleIndex(v.split('\n')) === v.slice(0, s).split('\n').length - 1;
+	const kind = sprig.lineKinds(v)[v.slice(0, s).split('\n').length - 1];
+	return kind === 'title' || sprig.isItemKind(kind);
 }
 
 function indentBy(dir) {
@@ -182,18 +182,20 @@ function continueLine() {
 		} else replace(a, a, ins, a + ins.length, a + ins.length);
 		return true;
 	};
-	const m = line.match(/^(\s*)([-~x/>?+#=])(?:(\s+)(.*))?$/);
-	if (m) {
-		if (a < s + m[1].length + 1) return false;
-		if (!(m[4] || '').trim()) {
+	const c = sprig.classify(line);
+	if (c.marker && sprig.isItemKind(c.kind)) {
+		const ind = line.slice(0, c.marker[0]);
+		const mark = line.slice(c.marker[0], c.marker[1]);
+		if (a < s + ind.length + 1) return false;
+		if (!line.slice(c.marker[1]).trim()) {
 			// Enter on an empty item steps out a level, like an outliner; at the left edge it ends the list.
-			const rep = m[1].length >= 2 ? m[1].slice(2) + m[2] + ' ' : '';
+			const rep = ind.length >= 2 ? ind.slice(2) + mark + ' ' : '';
 			replace(s, e, rep, s + rep.length, s + rep.length);
 			return true;
 		}
-		if (m[2] === '#') return put('\n' + m[1] + '  - ');
-		if (m[2] === '=') return put('\n' + m[1]);
-		return put('\n' + m[1] + (m[2] === '?' ? '?' : '-') + ' ');
+		if (mark === '#') return put('\n' + ind + '  - ');
+		if (mark === '=') return put('\n' + ind);
+		return put('\n' + ind + (mark === '?' ? '?' : '-') + ' ');
 	}
 	return put('\n' + line.match(/^\s*/)[0]);
 }
@@ -206,7 +208,7 @@ function cycleLine() {
 	const line = v.slice(s, e);
 	const i = line.search(/\S/);
 	if (i < 0) return;
-	if (sprig.LINE_RE.test(line.slice(i))) {
+	if (sprig.isItemKind(sprig.classify(line).kind)) {
 		const nx = { '-': '~', '~': 'x', x: '-', '/': '-', '>': '-', '?': '-' }[line[i]];
 		if (nx) replace(s + i, s + i + 1, nx, a, b);
 	} else replace(s + i, s + i, '- ', a + 2, b + 2);
@@ -229,8 +231,8 @@ ta.addEventListener('keydown', (e) => {
 // the same thing today, and redrawing mid-click would swallow the click.
 ta.addEventListener('blur', () => {
 	const lines = ta.value.split('\n');
-	const ti = sprig.titleIndex(lines);
-	const out = lines.map((l, i) => (i === ti || sprig.LINE_RE.test(l.trim()) ? sprig.expandDates(l) : l)).join('\n');
+	const kinds = sprig.lineKinds(ta.value);
+	const out = lines.map((l, i) => (kinds[i] === 'title' || sprig.isItemKind(kinds[i]) ? sprig.expandDates(l) : l)).join('\n');
 	if (out === ta.value) return;
 	ta.value = out;
 	files[active] = out;
@@ -419,22 +421,11 @@ function toggle(n) {
 	const lines = files[n.file].split('\n');
 	const ln = lines[n.line];
 	if (ln == null) return;
-	const i = ln.search(/\S/);
-	const ch = ln[i];
-	if (!ch || !sprig.TICKABLE.includes(ch)) return;
-	let next = null;
-	if (ch !== 'x' && n.meta.fields.every) {
-		// Recurring (spec §10.4): record what's next, not what happened.
-		const cur = sprig.parseDate(n.meta.fields.due);
-		const nd = sprig.nextDue(cur && cur >= sprig.TODAY ? cur : sprig.TODAY, n.meta.fields.every);
-		if (nd) {
-			const tok = 'due:' + sprig.iso(nd);
-			next = /(^|\s)due:\S+/.test(ln) ? ln.replace(/(^|\s)due:\S+/, `$1${tok}`) : ln.replace(/\s*$/, '  ' + tok);
-			next = next.slice(0, i) + '-' + next.slice(i + 1);
-		}
-	}
-	const recurred = next !== null;
-	if (!recurred) next = ln.slice(0, i) + (ch === 'x' ? '-' : 'x') + ln.slice(i + 1);
+	const ticked = sprig.tickLine(ln);
+	if (!ticked) return;
+	// Recurring (spec §10.4): the core records what's next, not what happened.
+	const recurred = ticked.movedTo !== null;
+	const next = ticked.line;
 	lines[n.line] = next;
 	files[n.file] = lines.join('\n');
 	if (n.file === active) {
@@ -559,4 +550,4 @@ async function start() {
 	resetExamples();
 	switchFile(active);
 }
-start();
+sprig.ready.then(start);

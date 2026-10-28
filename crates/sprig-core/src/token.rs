@@ -134,6 +134,84 @@ pub(crate) fn lift(text: &str, base: usize) -> Tokens {
     t
 }
 
+/// What a piece of a line is, for an editor to colour.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Piece {
+    Person,
+    Tag,
+    Priority,
+    Anchor,
+    /// A field's key and its colon.
+    Key,
+    /// A field's value: plain, a link or an anchor.
+    Value,
+    Link,
+}
+
+impl Piece {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Piece::Person => "person",
+            Piece::Tag => "tag",
+            Piece::Priority => "priority",
+            Piece::Anchor => "anchor",
+            Piece::Key => "key",
+            Piece::Value => "value",
+            Piece::Link => "link",
+        }
+    }
+}
+
+/// The coloured pieces of `text`, which starts at byte `base`. Words between
+/// them are plain and not listed. In a note (§2.6) only people and links are
+/// shown as such, and a person may carry trailing punctuation, since notes
+/// are prose.
+pub fn pieces(text: &str, base: usize, note: bool) -> Vec<(Piece, Span)> {
+    let mut out = Vec::new();
+    let add_links = |tok: &str, at: usize, out: &mut Vec<(Piece, Span)>| {
+        for (i, l) in links(tok) {
+            out.push((Piece::Link, Span::new(at + i, at + i + l.span.end)));
+        }
+    };
+    for (start, tok) in split(text) {
+        let at = base + start;
+        let span = Span::new(at, at + tok.len());
+        if note {
+            let bare = tok.trim_end_matches(['.', ',', ';', ':', '!', '?', ')']);
+            if bare.strip_prefix('@').is_some_and(|n| is_name(n, ".-_")) {
+                out.push((Piece::Person, span));
+            } else {
+                add_links(tok, at, &mut out);
+            }
+            continue;
+        }
+        if tok.strip_prefix('@').is_some_and(|n| is_name(n, ".-_")) {
+            out.push((Piece::Person, span));
+        } else if tok.strip_prefix('#').is_some_and(|n| is_name(n, "-_")) {
+            out.push((Piece::Tag, span));
+        } else if matches!(tok, "!" | "!!" | "!!!") {
+            out.push((Piece::Priority, span));
+        } else if tok.strip_prefix('^').is_some_and(|n| is_name(n, "-_")) {
+            out.push((Piece::Anchor, span));
+        } else if field(tok).is_some() {
+            let colon = tok.find(':').expect("a field has a colon") + 1;
+            out.push((Piece::Key, Span::new(at, at + colon)));
+            let value = &tok[colon..];
+            let kind = if value.starts_with("[[") {
+                Piece::Link
+            } else if value.starts_with('^') {
+                Piece::Anchor
+            } else {
+                Piece::Value
+            };
+            out.push((kind, Span::new(at + colon, span.end)));
+        } else {
+            add_links(tok, at, &mut out);
+        }
+    }
+    out
+}
+
 /// Whitespace-separated tokens, where a double-quoted run keeps its spaces.
 ///
 /// The same split as the reference parser's `[^\s"]*"[^"]*"\S*|\S+`: a token
@@ -198,7 +276,7 @@ fn field(tok: &str) -> Option<(String, String)> {
 
 /// Every well-formed link in a word, with its offset there. The span in each
 /// returned link is relative to that offset: `0..len`.
-pub(crate) fn links(word: &str) -> Vec<(usize, Link)> {
+pub fn links(word: &str) -> Vec<(usize, Link)> {
     let mut out = Vec::new();
     let mut from = 0;
     while let Some(found) = word[from..].find("[[") {
@@ -399,6 +477,35 @@ mod tests {
         for w in ["[[]]", "[[^x]]", "[[a^]]", "[[a", "[a]]", "[[a^b c]]"] {
             assert!(links(w).is_empty(), "{w}");
         }
+    }
+
+    #[test]
+    fn pieces_name_what_an_editor_colours() {
+        let text = "Sign  @dana #legal !! ^signed due:fri after:[[lease^terms]] see [[kitchen]]";
+        let got: Vec<(&str, &str)> = pieces(text, 0, false)
+            .into_iter()
+            .map(|(k, s)| (k.as_str(), &text[s.start..s.end]))
+            .collect();
+        assert_eq!(
+            got,
+            [
+                ("person", "@dana"),
+                ("tag", "#legal"),
+                ("priority", "!!"),
+                ("anchor", "^signed"),
+                ("key", "due:"),
+                ("value", "fri"),
+                ("key", "after:"),
+                ("link", "[[lease^terms]]"),
+                ("link", "[[kitchen]]"),
+            ]
+        );
+        let note = "Ask @teo, and #nottag see [[kitchen]].";
+        let got: Vec<&str> = pieces(note, 0, true)
+            .into_iter()
+            .map(|(_, s)| &note[s.start..s.end])
+            .collect();
+        assert_eq!(got, ["@teo,", "[[kitchen]]"]);
     }
 
     #[test]

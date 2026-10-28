@@ -85,7 +85,13 @@ export default defineConfig({
 						{ label: 'Playground', link: '/play/' },
 					],
 				},
-				{ label: 'Reference', items: [{ label: 'Specification', slug: 'spec' }] },
+				{
+					label: 'Reference',
+					items: [
+						{ label: 'Specification', slug: 'spec' },
+						{ label: 'Command line', slug: 'docs/reference/cli' },
+					],
+				},
 				{
 					label: 'Explanation',
 					items: [

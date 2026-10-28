@@ -1,0 +1,17 @@
+[package]
+name = "sprig-wasm"
+description = "sprig-core for the browser: the website's parser, compiled to WebAssembly"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+serde_json = { version = "1", features = ["preserve_order"] }
+sprig-core = { path = "../sprig-core", version = "0.0.0" }

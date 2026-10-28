@@ -9,8 +9,7 @@ This takes about five minutes and needs nothing installed. Each step is a
 complete Sprig file; open it in the playground to see what Sprig computes from
 it, then change it and watch the result move.
 
-The `sprig` command brings the same plans to the terminal in v0.1. This tutorial
-will gain those steps when it ships.
+The last step takes the same plan to the terminal with the `sprig` command.
 
 ## 1. A list
 
@@ -132,6 +131,7 @@ Move flats  @me
 When a plan grows, move a branch into its own file and graft it back with
 `+ [[name]]`. Progress and blockers carry across.
 
+{/* file: move.sprig */}
 ```sprig
 Move flats
 
@@ -139,6 +139,7 @@ Move flats
 - Book a van
 ```
 
+{/* file: packing.sprig */}
 ```sprig
 Packing
 
@@ -155,6 +156,45 @@ x Books
 x Books
 - Kitchen
 - Bathroom` }} label="Open both files in the playground" />
+
+## 7. In the terminal
+
+Install the `sprig` command, with Rust installed ([rustup.rs](https://rustup.rs)):
+
+```sh
+cargo install --locked --git https://github.com/oddurs/sprig sprig-cli
+```
+
+Save the two files from step 6 as `move.sprig` and `packing.sprig` in one
+folder, and ask what can be done now. Grafted items come with their file:
+
+```console
+$ sprig next move.sprig
+- Kitchen     Packing
+- Bathroom    Packing
+- Book a van  Move flats
+
+3 ready
+```
+
+`sprig check` reads the same files and prints nothing when the plan holds
+together. Misspell the graft and it says where:
+
+```console
+$ sprig check move.sprig
+```
+
+{/* edit: move.sprig: [[packing]] => [[pakcing]] */}
+```console
+$ sprig check move.sprig
+move.sprig:3:3: error[S0101]: no file named pakcing.sprig
+```
+
+It exits 1 on an error, so it can guard a repository. In GitHub Actions:
+
+```yaml
+- run: cargo install --locked --git https://github.com/oddurs/sprig sprig-cli && sprig check --strict .
+```
 
 That's the whole idea. From here:
 

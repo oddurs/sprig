@@ -10,13 +10,15 @@ import Inline from '../components/primitives/Inline.astro';
 import Stack from '../components/primitives/Stack.astro';
 import Text from '../components/primitives/Text.astro';
 import Base from '../layouts/Base.astro';
-import { blockers, find, fmtEst, highlight, render, slug } from '../lib/render.js';
+import { blockers, find, fmtEst, highlight, ready, render, slug } from '../lib/render.js';
 import { planFragment } from '../lib/share.js';
 import { screen } from '../lib/terminal.js';
 import Surfaces from '../components/Surfaces.astro';
 import Terminal from '../components/Terminal.astro';
 import examples from '../generated/examples.json';
 import facts from '../generated/facts.json';
+
+await ready;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const url = (path: string) => `${base}${path}`;
@@ -164,7 +166,7 @@ const faq = [
 				<div class="body sv" id="demo-body" set:html={hero.html} />
 			</div>
 		</div>
-		<Text size="sm" tone="muted">Tick <em>Migration guide</em>, or add an answer under the question, and watch <em>Announce</em> unblock. The Rust <code>sprig</code> command arrives with v0.1; until then this page runs the draft reference parser.</Text>
+		<Text size="sm" tone="muted">Tick <em>Migration guide</em>, or add an answer under the question, and watch <em>Announce</em> unblock. It runs the same Rust core as the <code>sprig</code> command, compiled to WebAssembly.</Text>
 	</section>
 
 	<Section id="computes-h" title="It works out what you’d track by hand." intro="Checklists record what you ticked. Sprig also works out what waits on what, how far along each branch is, and what can start now. None of it is written by hand, so none of it goes stale.">

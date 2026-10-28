@@ -24,6 +24,7 @@ usage: scripts/task <target>
   install    cargo install the CLI into target/install, as a stranger would, and run it
   check      fmt:check, lint, test, build, and backlog when cairn is installed
   backlog    cairn check --strict, and ROADMAP.md is up to date (needs cairn)
+  wasm       build sprig-core for the browser, into site/src/generated/sprig.wasm
   site       build the website, check tokens, contrast, links and accessibility (needs node, chrome)
 USAGE
 }
@@ -74,7 +75,16 @@ case "${1:-}" in
     cargo install --locked --path crates/sprig-cli --root target/install
     target/install/bin/sprig --version
     ;;
+  wasm)
+    # The site has no parser of its own: it runs this one (cairn 0109).
+    cargo build --locked -p sprig-wasm --target wasm32-unknown-unknown --profile wasm
+    mkdir -p site/src/generated
+    cp target/wasm32-unknown-unknown/wasm/sprig_wasm.wasm site/src/generated/sprig.wasm
+    ;;
   site)
+    "$0" wasm
+    # The command reference page is the binary's own --help.
+    cargo build --locked -p sprig-cli
     command -v npm >/dev/null 2>&1 || {
       printf 'scripts/task: npm is not installed; the site needs Node %s\n' "$(cat site/.node-version)" >&2
       exit 1

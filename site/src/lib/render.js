@@ -1,8 +1,10 @@
-// Build-time helpers around the reference parser: render a plan to HTML, and
-// the small facts the landing page states about its examples. Computing them
-// here is what keeps a sentence like "Ship waits on Tests" true: if the parser
-// disagrees, the page changes with it.
-import * as sprig from './sprig.js';
+// Build-time helpers around sprig-core: render a plan to HTML, and the small
+// facts the landing page states about its examples. Computing them here is
+// what keeps a sentence like "Ship waits on Tests" true: if the core
+// disagrees, the page changes with it. Pages `await ready` before calling.
+import * as sprig from './view.js';
+
+export const ready = sprig.ready;
 
 /**
  * @param {Record<string, string>} files

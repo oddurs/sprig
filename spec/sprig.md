@@ -938,6 +938,10 @@ neither says enough. Each needs a ruling and conformance examples before 1.0.
    (§2.8). The reference parser stores an empty note line, which its renderer
    shows as a paragraph break; sprig-core keeps it as an empty note
    (`lines/042-an-escape-on-its-own`).
+15. **Days that do not exist.** §9.3 does not say what `feb30` or, outside a
+   leap year, `feb29` means. The reference parser rolls them into the next
+   month (`feb30` is 2 March); sprig-core reads them as no date and warns
+   (S0001).
 
 ## Appendix C. Settled arguments
 
@@ -1030,8 +1034,9 @@ in.
 | `progress` | object | `done`, `doing` and `total` counting leaves beneath (§5.3, §5.4); a counting leaf counts itself. Required. |
 | `estimate` | number | Remaining estimate in hours (§10.1, §10.2). |
 | `people` | list of strings | The node's people after §6.1. |
+| `due`, `start` | date | Its own `due:` and `start:` read against `today`, typed shortcuts resolved (§9.3). Absent when not written or unreadable (§9.5). |
 | `blocked` | boolean | Blocked by §7.3, by its own waits or by an ancestor. |
-| `waits_on` | list | What this item itself waits on: `{"after", "label"}` for an unfinished reference, with `"unknown": true` when it names nothing (§7.2), or `{"start"}` for a start date still ahead (§7.5). Blocking inherited from an ancestor is shown by `blocked` alone. |
+| `waits_on` | list | What this item itself waits on: `{"after", "label"}` for an unfinished reference, with the `file` and `line` it names, or `"unknown": true` when it names nothing (§7.2), or `{"start"}` for a start date still ahead (§7.5). Blocking inherited from an ancestor is shown by `blocked` alone. |
 | `ready_to_close` | boolean | Written to do, doing or as a question, with every counting leaf beneath it done (§5.6). |
 | `children` | list of nodes | Written children, then grafted ones (§8.1). |
 

@@ -323,7 +323,7 @@ fn check_lines_read_file_line_col_severity_and_code() {
         lines,
         [
             "plan.sprig:3:3: error[S0101]: no file named nowhere.sprig",
-            "plan.sprig:4:9: warning[S0001]: due:soonish is not a date; it is kept as text",
+            "plan.sprig:4:9: warning[S0001]: due: \"soonish\" is not a date; it is kept as text",
             "plan.sprig:5:7: error[S0201]: no item ^gone in plan.sprig",
         ]
     );

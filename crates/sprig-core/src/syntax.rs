@@ -4,7 +4,7 @@
 //! file or at the date, so the parser can be tested on its own and a tree means
 //! the same thing wherever it was built.
 
-use crate::date::Date;
+use crate::date;
 use crate::diagnostic::{Code, Diagnostic, LineIndex, Span};
 use crate::token::{self, Tokens};
 
@@ -186,6 +186,210 @@ struct Building {
     kids: Vec<usize>,
 }
 
+/// What one line of a file is, for an editor that colours it.
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Lexed {
+    pub kind: LineKind,
+    /// The line after indentation, as in a node's span.
+    pub span: Span,
+    /// The mark, the `=`, the backslash or the `//`, when the line has one.
+    pub marker: Option<Span>,
+    pub pieces: Vec<(token::Piece, Span)>,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum LineKind {
+    Blank,
+    Title,
+    Comment,
+    Note,
+    /// A note written with a leading backslash (§2.8).
+    Escaped,
+    Item(Mark),
+    Answer,
+}
+
+impl LineKind {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            LineKind::Blank => "blank",
+            LineKind::Title => "title",
+            LineKind::Comment => "comment",
+            LineKind::Note => "note",
+            LineKind::Escaped => "escaped",
+            LineKind::Item(_) => "item",
+            LineKind::Answer => "answer",
+        }
+    }
+}
+
+/// Classifies every line the way [`parse`] does, with the pieces of each, so
+/// that an editor colours exactly what the parser reads.
+pub fn lex(src: &str) -> Vec<Lexed> {
+    let lines = lines(src);
+    let title = title_line(&lines);
+    lines
+        .iter()
+        .enumerate()
+        .map(|(i, l)| {
+            let span = Span::new(l.at, l.at + l.content.len());
+            let at = |n: usize| Span::new(l.at, l.at + n);
+            let rest = |marker: usize| {
+                let text = &l.content[marker..];
+                let lead = text.len() - text.trim_start().len();
+                (text.trim_start(), l.at + marker + lead)
+            };
+            if l.content.is_empty() {
+                return Lexed {
+                    kind: LineKind::Blank,
+                    span,
+                    marker: None,
+                    pieces: Vec::new(),
+                };
+            }
+            if Some(i) == title {
+                return Lexed {
+                    kind: LineKind::Title,
+                    span,
+                    marker: None,
+                    pieces: token::pieces(l.content, l.at, false),
+                };
+            }
+            if l.content.starts_with("//") {
+                return Lexed {
+                    kind: LineKind::Comment,
+                    span,
+                    marker: Some(span),
+                    pieces: Vec::new(),
+                };
+            }
+            if l.content.starts_with('\\') {
+                let (text, base) = rest(1);
+                return Lexed {
+                    kind: LineKind::Escaped,
+                    span,
+                    marker: Some(at(1)),
+                    pieces: token::pieces(text, base, true),
+                };
+            }
+            match mark_of(l.content) {
+                Some((c, _)) => {
+                    let (text, base) = rest(c.len_utf8());
+                    let kind = match Mark::from_char(c) {
+                        Some(m) => LineKind::Item(m),
+                        None => LineKind::Answer,
+                    };
+                    Lexed {
+                        kind,
+                        span,
+                        marker: Some(at(c.len_utf8())),
+                        pieces: token::pieces(text, base, false),
+                    }
+                }
+                None => Lexed {
+                    kind: LineKind::Note,
+                    span,
+                    marker: None,
+                    pieces: token::pieces(l.content, l.at, true),
+                },
+            }
+        })
+        .collect()
+}
+
+/// Rewrites typed date shortcuts in one line to the stored form (§9.4), and
+/// leaves every other byte alone. Only `due:` and `start:` on an item, an
+/// answer or a title are dates; a note's text is never touched.
+pub fn expand_dates(line: &str, today: crate::date::Date) -> String {
+    let lexed = lex(line);
+    let Some(first) = lexed.first() else {
+        return line.to_string();
+    };
+    let mut out = line.to_string();
+    let pieces = &first.pieces;
+    // From the end, so earlier spans stay valid as later ones change length.
+    for pair in pieces.windows(2).rev() {
+        let [(token::Piece::Key, key), (token::Piece::Value, value)] = pair else {
+            continue;
+        };
+        let k = line[key.start..key.end].to_ascii_lowercase();
+        let v = &line[value.start..value.end];
+        if (k == "due:" || k == "start:")
+            && crate::date::Date::parse_iso(v).is_none()
+            && let Some(d) = crate::date::resolve(v, today)
+        {
+            out.replace_range(value.start..value.end, &d.to_string());
+        }
+    }
+    out
+}
+
+/// One line, ticked (§10.4).
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Ticked {
+    pub line: String,
+    /// For a recurring item, the due date it moved to; it stays open.
+    pub moved_to: Option<crate::date::Date>,
+}
+
+/// Ticks the item on `line`, a body line of a file: a done item reopens as to
+/// do, an open recurring item moves its `due:` to the next occurrence and stays
+/// to do (§10.4), and anything else becomes done. Only the mark and the due
+/// date change. `None` when the line is not an item with a status.
+pub fn tick(line: &str, today: crate::date::Date) -> Option<Ticked> {
+    // Lexed under a stand-in title, so an unindented item reads as a body line.
+    let lexed = lex(&format!("_\n{line}"));
+    let l = lexed.get(1)?;
+    let LineKind::Item(mark) = l.kind else {
+        return None;
+    };
+    if mark.is_structure() {
+        return None;
+    }
+    let shift = 2;
+    let marker = l.marker?;
+    let at = marker.start - shift;
+    let mut out = line.to_string();
+    let lifted = token::lift(&line[marker.end - shift..], marker.end - shift);
+    let every = lifted.field("every").map(|f| f.value.clone());
+    if mark != Mark::Done
+        && let Some(every) = every
+    {
+        let due = lifted.field("due");
+        let current = due.and_then(|f| crate::date::resolve(&f.value, today));
+        if let Some(next) = crate::date::next_occurrence(current, &every, today) {
+            match due {
+                Some(f) => out.replace_range(f.span.start..f.span.end, &format!("due:{next}")),
+                None => {
+                    let end = out.trim_end().len();
+                    out.replace_range(end.., &format!("  due:{next}"));
+                }
+            }
+            out.replace_range(at..at + 1, "-");
+            return Some(Ticked {
+                line: out,
+                moved_to: Some(next),
+            });
+        }
+    }
+    let to = if mark == Mark::Done { "-" } else { "x" };
+    out.replace_range(at..at + 1, to);
+    Some(Ticked {
+        line: out,
+        moved_to: None,
+    })
+}
+
+/// §1.2: the first line that is not blank or a comment is the title, unless
+/// it is indented or starts like an item or an answer.
+fn title_line(lines: &[Line<'_>]) -> Option<usize> {
+    let i = lines
+        .iter()
+        .position(|l| !l.content.is_empty() && !l.content.starts_with("//"))?;
+    let l = &lines[i];
+    (!l.indented && mark_of(l.content).is_none()).then_some(i)
+}
+
 /// Reads one file. `file` names it in diagnostics and nowhere else.
 pub fn parse(file: &str, src: &str) -> Parsed {
     let index = LineIndex::new(src);
@@ -207,23 +411,16 @@ pub fn parse(file: &str, src: &str) -> Parsed {
     }];
     let mut title = None;
 
-    // §1.2: the first line that is not blank or a comment is the title, unless
-    // it is indented or starts like an item or an answer.
     let mut first_body = 0;
-    if let Some(i) = lines
-        .iter()
-        .position(|l| !l.content.is_empty() && !l.content.starts_with("//"))
-    {
+    if let Some(i) = title_line(&lines) {
         let l = &lines[i];
-        if !l.indented && mark_of(l.content).is_none() {
-            let tokens = token::lift(l.content, l.at);
-            title = Some(tokens.text.clone());
-            let root = &mut arena[0].node;
-            root.tokens = tokens;
-            root.line = i + 1;
-            root.span = Some(Span::new(l.at, l.at + l.content.len()));
-            first_body = i + 1;
-        }
+        let tokens = token::lift(l.content, l.at);
+        title = Some(tokens.text.clone());
+        let root = &mut arena[0].node;
+        root.tokens = tokens;
+        root.line = i + 1;
+        root.span = Some(Span::new(l.at, l.at + l.content.len()));
+        first_body = i + 1;
     }
 
     // The indentation stack holds arena indices; the root is never popped.
@@ -351,15 +548,16 @@ fn check_tokens(file: &str, index: &LineIndex, node: &Node, out: &mut Vec<Diagno
     let mut check = |tokens: &Tokens| {
         for key in ["due", "start"] {
             if let Some(f) = tokens.field(key)
-                && Date::parse_iso(&f.value).is_none()
+                && !date::readable(&f.value)
             {
                 let mut d = index.diagnostic(
                     file,
                     Code::UnreadableDate,
                     f.span,
-                    format!("{key}:{} is not a date; it is kept as text", f.value),
+                    format!("{key}: \"{}\" is not a date; it is kept as text", f.value),
                 );
-                d.help = Some("write dates as YYYY-MM-DD".into());
+                d.help =
+                    Some("write YYYY-MM-DD, or a shortcut such as fri, +2w, oct3 or q4".into());
                 out.push(d);
             }
         }
@@ -551,6 +749,77 @@ mod tests {
     }
 
     #[test]
+    fn lexing_classifies_lines_as_the_parser_does() {
+        let src = "// c\nPlan  @dana\n- Book  ^van\n  = yes\n  a note with @teo.\n  \\- escaped\n\n# Group\n";
+        let kinds: Vec<&str> = lex(src).iter().map(|l| l.kind.as_str()).collect();
+        assert_eq!(
+            kinds,
+            [
+                "comment", "title", "item", "answer", "note", "escaped", "blank", "item", "blank"
+            ]
+        );
+        let item = &lex(src)[2];
+        let m = item.marker.unwrap();
+        assert_eq!(&src[m.start..m.end], "-");
+        let (_, a) = item.pieces[0];
+        assert_eq!(&src[a.start..a.end], "^van");
+    }
+
+    #[test]
+    fn typed_dates_expand_and_nothing_else_moves() {
+        let today = crate::date::Date::parse_iso("2026-10-01").unwrap();
+        assert_eq!(
+            expand_dates("  - Call  due:fri   start:Today  every:fri  #x", today),
+            "  - Call  due:2026-10-02   start:2026-10-01  every:fri  #x"
+        );
+        assert_eq!(
+            expand_dates("- Ok  due:2026-10-09", today),
+            "- Ok  due:2026-10-09"
+        );
+        assert_eq!(
+            expand_dates("- Odd  due:soonish", today),
+            "- Odd  due:soonish"
+        );
+        assert_eq!(
+            expand_dates("  a note, due:fri", today),
+            "  a note, due:fri"
+        );
+    }
+
+    #[test]
+    fn ticking_changes_the_mark_and_moves_a_recurring_due_date() {
+        let today = crate::date::Date::parse_iso("2026-10-02").unwrap();
+        let t = |l| tick(l, today).map(|t| t.line);
+        assert_eq!(t("  - Paint  @jo").as_deref(), Some("  x Paint  @jo"));
+        assert_eq!(t("x Paint").as_deref(), Some("- Paint"));
+        assert_eq!(t("? Name?").as_deref(), Some("x Name?"));
+        assert_eq!(
+            t("  - Weekly numbers  every:fri  due:2026-10-02  !").as_deref(),
+            Some("  - Weekly numbers  every:fri  due:2026-10-09  !")
+        );
+        assert_eq!(
+            t("~ Water  every:3d").as_deref(),
+            Some("- Water  every:3d  due:2026-10-05")
+        );
+        assert_eq!(
+            t("x Water  every:3d").as_deref(),
+            Some("- Water  every:3d"),
+            "a done one reopens"
+        );
+        assert_eq!(t("# Group"), None);
+        assert_eq!(t("+ [[kitchen]]"), None);
+        assert_eq!(t("  a note"), None);
+        assert_eq!(
+            tick("- Water  every:3d", today)
+                .unwrap()
+                .moved_to
+                .unwrap()
+                .to_string(),
+            "2026-10-05"
+        );
+    }
+
+    #[test]
     fn estimates_read_as_hours() {
         assert_eq!(estimate_hours("2h"), Some(2.0));
         assert_eq!(estimate_hours("0.5d"), Some(4.0));
@@ -570,7 +839,7 @@ mod tests {
         assert_eq!(codes, ["S0001", "S0002", "S0003", "S0004", "S0005"]);
         assert_eq!(
             p.diagnostics[0].to_string(),
-            "t.sprig:2:6: warning[S0001]: due:soonish is not a date; it is kept as text"
+            "t.sprig:2:6: warning[S0001]: due: \"soonish\" is not a date; it is kept as text"
         );
     }
 }

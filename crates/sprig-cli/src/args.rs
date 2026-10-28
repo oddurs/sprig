@@ -31,7 +31,7 @@ Exit codes:
 )]
 pub struct Cli {
     /// The date to answer for, as YYYY-MM-DD [default: the system date]
-    #[arg(long, global = true, value_name = "DATE", env = "SPRIG_TODAY", value_parser = parse_date)]
+    #[arg(long, global = true, value_name = "DATE", env = "SPRIG_TODAY", hide_env_values = true, value_parser = parse_date)]
     pub today: Option<Date>,
 
     #[command(subcommand)]

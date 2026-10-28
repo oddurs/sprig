@@ -9,14 +9,16 @@ import Stack from '../components/primitives/Stack.astro';
 import Text from '../components/primitives/Text.astro';
 import examples from '../generated/examples.json';
 import Base from '../layouts/Base.astro';
-import { screen } from '../lib/terminal.js';
+import { ready, screen } from '../lib/terminal.js';
 import { frame, initialState } from '../lib/tui.js';
+
+await ready;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const url = (path: string) => `${base}${path}`;
 const repo = 'https://github.com/oddurs/sprig';
 
-// Every screen is the reference parser's reading of examples/bakery, with the
+// Every screen is sprig-core's reading of examples/bakery, with the
 // date pinned, so nothing here is drawn by hand.
 const files: Record<string, string> = examples;
 const next = screen('next', files, { limit: 6, compact: true });
@@ -143,7 +145,7 @@ const strip = ['k', 'j', 'h', 'l', 'x', '~', '1', '2', '3', '/', '?'];
 		<div class="narrow"><Surfaces /></div>
 	</Section>
 
-	<Section id="cli-h" title="Small verbs, one question each." intro="Every command reads a folder of plans and answers one thing, in text a person can read and a pipe can parse. The screens below are the reference parser’s output for the example bakery plans, with the date pinned by --today the way the tests will run.">
+	<Section id="cli-h" title="Small verbs, one question each." intro="Every command reads a folder of plans and answers one thing, in text a person can read and a pipe can parse. The screens below are sprig-core’s output for the example bakery plans, with the date pinned by --today the way the tests will run.">
 		<Grid cols={2} gap={7} rowGap={7}>
 			{
 				groups.map((g) => (
@@ -217,7 +219,7 @@ const strip = ['k', 'j', 'h', 'l', 'x', '~', '1', '2', '3', '/', '?'];
 		</div>
 	</Section>
 
-	<Section id="tui-h" title="The same verbs, on one screen." intro="sprig tui shows the tree, what’s next and the agenda, with vim keys. Its writes go through the same one-line edits as the commands, and it reloads when an editor or an agent changes a file underneath it. This one runs the reference parser: focus it and use the keys.">
+	<Section id="tui-h" title="The same verbs, on one screen." intro="sprig tui shows the tree, what’s next and the agenda, with vim keys. Its writes go through the same one-line edits as the commands, and it reloads when an editor or an agent changes a file underneath it. This one runs sprig-core in the browser: focus it and use the keys.">
 		<div class="tui-wrap">
 			<Stack gap={3}>
 				<div class="tui" id="tui" tabindex="0" role="application" aria-label="sprig tui demo" aria-describedby="tui-help" set:html={tui} />

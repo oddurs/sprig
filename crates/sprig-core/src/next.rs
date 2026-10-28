@@ -16,16 +16,12 @@ pub struct Entry<'t> {
     pub path: Vec<&'t str>,
     /// The label of the tree's root: the plan it was found in.
     pub plan: &'t str,
-    /// Its own `due:`, or the nearest one above it.
+    /// Its own `due:` as written, or the nearest one above it.
     pub due: Option<&'t str>,
+    /// That due date read against today, when it reads as one.
+    pub due_date: Option<Date>,
     /// The highest priority on it or above it.
     pub priority: u8,
-}
-
-impl Entry<'_> {
-    pub fn due_date(&self) -> Option<Date> {
-        self.due.and_then(Date::parse_iso)
-    }
 }
 
 #[derive(Clone, Debug, Default)]
@@ -54,7 +50,10 @@ pub fn next<'t>(trees: &[&'t Tree], who: Option<&str>) -> Next<'t> {
     let mut seen = std::collections::HashSet::new();
     for tree in trees {
         let root = &tree.root;
-        let due = root.tokens.field("due").map(|f| f.value.as_str());
+        let due = root
+            .tokens
+            .field("due")
+            .map(|f| (f.value.as_str(), root.due));
         walk(root, &root.label, &mut Vec::new(), due, 0, &mut |e| {
             // Ownership is judged in each tree, since a graft can give a
             // branch a new owner (§6.1), and only then is a repeat dropped.
@@ -76,7 +75,7 @@ pub fn next<'t>(trees: &[&'t Tree], who: Option<&str>) -> Next<'t> {
         (
             e.node.status != Status::Doing,
             std::cmp::Reverse(e.priority),
-            e.due_date().map_or((1, None), |d| (0, Some(d))),
+            e.due_date.map_or((1, None), |d| (0, Some(d))),
         )
     });
     out
@@ -86,12 +85,17 @@ fn walk<'t>(
     n: &'t Resolved,
     plan: &'t str,
     path: &mut Vec<&'t str>,
-    due: Option<&'t str>,
+    due: Option<(&'t str, Option<Date>)>,
     priority: u8,
     f: &mut impl FnMut(Entry<'t>),
 ) {
     for c in &n.children {
-        let due = c.tokens.field("due").map(|f| f.value.as_str()).or(due);
+        // The nearest due: written, whether or not it reads as a date.
+        let due = c
+            .tokens
+            .field("due")
+            .map(|f| (f.value.as_str(), c.due))
+            .or(due);
         let priority = priority.max(c.tokens.priority);
         if c.is_leaf() {
             if c.status.is_open() {
@@ -99,7 +103,8 @@ fn walk<'t>(
                     node: c,
                     path: path.clone(),
                     plan,
-                    due,
+                    due: due.map(|d| d.0),
+                    due_date: due.and_then(|d| d.1),
                     priority,
                 });
             }
