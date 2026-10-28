@@ -37,6 +37,23 @@ jobs:
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
       - run: ./scripts/task check
 
+  install:
+    # The README's install line, on the three platforms v0.1 promises: a clean
+    # install that runs. Once the crate is published this installs from
+    # crates.io instead (cairn 0027).
+    name: install (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+      - run: ./scripts/task install
+
   backlog:
     # The plan is part of the repository, so a broken plan fails like broken
     # code. cairn is a pinned release binary, verified against its checksum.
@@ -79,13 +96,17 @@ jobs:
   required:
     name: required
     if: always()
-    needs: [check, backlog, site]
+    needs: [check, install, backlog, site]
     runs-on: ubuntu-latest
     steps:
       - name: Every job succeeded
         run: |
           if [ "${{ needs.check.result }}" != "success" ]; then
             echo "check: ${{ needs.check.result }}"
+            exit 1
+          fi
+          if [ "${{ needs.install.result }}" != "success" ]; then
+            echo "install: ${{ needs.install.result }}"
             exit 1
           fi
           if [ "${{ needs.backlog.result }}" != "success" ]; then
