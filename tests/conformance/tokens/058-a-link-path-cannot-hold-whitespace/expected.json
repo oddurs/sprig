@@ -1,0 +1,20 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Links",
+    "root": {
+      "line": 1,
+      "span": [0, 5],
+      "text": "Links",
+      "children": [
+        {
+          "line": 3,
+          "span": [7, 32],
+          "mark": "-",
+          "text": "Read [[my notes]] first"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

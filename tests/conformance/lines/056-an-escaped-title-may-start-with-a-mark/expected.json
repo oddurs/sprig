@@ -1,0 +1,21 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "x marks the spot",
+    "root": {
+      "line": 1,
+      "span": [0, 24],
+      "text": "x marks the spot",
+      "people": ["dana"],
+      "children": [
+        {
+          "line": 3,
+          "span": [26, 31],
+          "mark": "-",
+          "text": "Dig"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

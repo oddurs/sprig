@@ -1,0 +1,36 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Ovens",
+    "root": {
+      "line": 1,
+      "span": [0, 5],
+      "text": "Ovens",
+      "children": [
+        {
+          "line": 3,
+          "span": [7, 20],
+          "mark": "?",
+          "text": "Which oven?",
+          "notes": ["with a note"],
+          "answers": [
+            {
+              "line": 4,
+              "span": [23, 29],
+              "text": "Mono"
+            }
+          ],
+          "children": [
+            {
+              "line": 5,
+              "span": [34, 53],
+              "mark": "-",
+              "text": "Book the delivery"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

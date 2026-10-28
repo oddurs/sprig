@@ -130,7 +130,12 @@ pub(crate) fn lift(text: &str, base: usize) -> Tokens {
             t.words.push(tok.to_string());
         }
     }
-    t.text = plain(&t.words.join(" "));
+    t.text = t
+        .words
+        .iter()
+        .map(|w| plain(w))
+        .collect::<Vec<_>>()
+        .join(" ");
     t
 }
 
@@ -342,23 +347,17 @@ pub(crate) fn file_key(path: &str) -> String {
     }
 }
 
-/// `[[kitchen]]` reads as `kitchen` in an item's plain text (§4.9).
-fn plain(text: &str) -> String {
-    let mut out = String::with_capacity(text.len());
-    let mut rest = text;
-    while let Some(at) = rest.find("[[") {
-        let after = &rest[at + 2..];
-        let inner = after.find(']').unwrap_or(0);
-        if inner > 0 && after[inner..].starts_with("]]") {
-            out.push_str(&rest[..at]);
-            out.push_str(&after[..inner]);
-            rest = &after[inner + 2..];
-        } else {
-            out.push_str(&rest[..at + 1]);
-            rest = &rest[at + 1..];
-        }
+/// A word as plain text (§4.9): each link loses its brackets. Anything else
+/// that looks like one keeps them, so a writer can see it is not a link.
+fn plain(word: &str) -> String {
+    let mut out = String::with_capacity(word.len());
+    let mut at = 0;
+    for (start, link) in links(word) {
+        out.push_str(&word[at..start]);
+        out.push_str(&word[start + 2..start + link.span.end - 2]);
+        at = start + link.span.end;
     }
-    out.push_str(rest);
+    out.push_str(&word[at..]);
     out
 }
 

@@ -6,7 +6,7 @@ type: docs
 status: planned
 milestone: v1.0
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-10-28
 priority: p0
 effort: s
 area: community
@@ -25,3 +25,7 @@ Anyone deciding whether to build on Sprig, and needing to know what won't change
 - [ ] Linked from the README, the spec and the crate documentation.
 - [ ] Every promise can be tested, and says what test holds it.
 - [ ] The `--plain` columns of every command are listed, each with the snapshot test that holds it.
+
+## 2026-10-28
+
+From spike 0070: the policy should promise that no 1.x release changes what a valid 1.x file means. That promise is why files carry no version, and the title's `sprig:` field is reserved for a 2.0 (§4.6, S0007).

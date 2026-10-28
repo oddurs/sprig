@@ -46,5 +46,14 @@
       }
     ]
   },
-  "diagnostics": []
+  "diagnostics": [
+    {
+      "code": "S0206",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 4,
+      "col": 9,
+      "span": [31, 43]
+    }
+  ]
 }

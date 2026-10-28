@@ -1,0 +1,21 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Marks",
+    "root": {
+      "line": 1,
+      "span": [0, 5],
+      "text": "Marks",
+      "notes": ["X is not done * nor is a star"],
+      "children": [
+        {
+          "line": 5,
+          "span": [37, 46],
+          "mark": "-",
+          "text": "an item"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

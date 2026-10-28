@@ -1,0 +1,91 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Dropped",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 2
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "/",
+        "label": "Custom domain",
+        "status": "dropped",
+        "settled": true,
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "-",
+            "label": "Register it",
+            "status": "dropped",
+            "settled": true,
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 0
+            }
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 5,
+        "mark": "-",
+        "label": "Launch",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 6,
+        "mark": ">",
+        "label": "Printed flyers",
+        "status": "later",
+        "settled": true,
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 7,
+        "mark": "-",
+        "label": "Hand them out",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "blocked": true,
+        "waits_on": [
+          {
+            "after": "^flyers",
+            "label": "Printed flyers",
+            "file": "main.sprig",
+            "line": 6
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}
