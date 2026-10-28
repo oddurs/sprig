@@ -1,0 +1,21 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Comments",
+    "root": {
+      "line": 1,
+      "span": [0, 8],
+      "text": "Comments",
+      "children": [
+        {
+          "line": 3,
+          "span": [10, 26],
+          "mark": "-",
+          "text": "Paint the hall",
+          "notes": ["Two coats."]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

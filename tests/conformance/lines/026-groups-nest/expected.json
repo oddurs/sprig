@@ -1,0 +1,56 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Supply run",
+    "root": {
+      "line": 1,
+      "span": [0, 10],
+      "text": "Supply run",
+      "children": [
+        {
+          "line": 3,
+          "span": [12, 19],
+          "mark": "#",
+          "text": "Flour",
+          "children": [
+            {
+              "line": 4,
+              "span": [22, 36],
+              "mark": "-",
+              "text": "Rye, 4 sacks"
+            },
+            {
+              "line": 5,
+              "span": [39, 48],
+              "mark": "#",
+              "text": "Organic",
+              "children": [
+                {
+                  "line": 6,
+                  "span": [53, 68],
+                  "mark": "x",
+                  "text": "Spelt, 1 sack"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "line": 7,
+          "span": [69, 76],
+          "mark": "#",
+          "text": "Dairy",
+          "children": [
+            {
+              "line": 8,
+              "span": [79, 87],
+              "mark": "x",
+              "text": "Butter"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

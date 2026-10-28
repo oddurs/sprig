@@ -1,0 +1,28 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Comments",
+    "root": {
+      "line": 1,
+      "span": [0, 8],
+      "text": "Comments",
+      "children": [
+        {
+          "line": 3,
+          "span": [10, 18],
+          "mark": "-",
+          "text": "Parent",
+          "children": [
+            {
+              "line": 5,
+              "span": [38, 53],
+              "mark": "-",
+              "text": "still a child"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

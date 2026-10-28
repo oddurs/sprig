@@ -1,0 +1,26 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Plan",
+    "root": {
+      "line": 1,
+      "span": [0, 4],
+      "text": "Plan",
+      "children": [
+        {
+          "line": 2,
+          "span": [9, 20],
+          "mark": "-",
+          "text": "deep item"
+        },
+        {
+          "line": 3,
+          "span": [23, 39],
+          "mark": "-",
+          "text": "shallower item"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

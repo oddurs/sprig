@@ -1,0 +1,18 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": null,
+    "root": {
+      "notes": ["Not a title, a note"],
+      "children": [
+        {
+          "line": 2,
+          "span": [22, 28],
+          "mark": "-",
+          "text": "milk"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

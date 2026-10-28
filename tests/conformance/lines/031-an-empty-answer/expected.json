@@ -1,0 +1,27 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Naming",
+    "root": {
+      "line": 1,
+      "span": [0, 6],
+      "text": "Naming",
+      "children": [
+        {
+          "line": 3,
+          "span": [8, 15],
+          "mark": "?",
+          "text": "Name?",
+          "answers": [
+            {
+              "line": 4,
+              "span": [18, 19],
+              "text": ""
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

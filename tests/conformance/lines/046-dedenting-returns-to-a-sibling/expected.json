@@ -1,0 +1,48 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Relative",
+    "root": {
+      "line": 1,
+      "span": [0, 8],
+      "text": "Relative",
+      "children": [
+        {
+          "line": 3,
+          "span": [10, 13],
+          "mark": "-",
+          "text": "A",
+          "children": [
+            {
+              "line": 4,
+              "span": [16, 20],
+              "mark": "-",
+              "text": "A1",
+              "children": [
+                {
+                  "line": 5,
+                  "span": [25, 30],
+                  "mark": "-",
+                  "text": "A1a"
+                }
+              ]
+            },
+            {
+              "line": 6,
+              "span": [33, 37],
+              "mark": "-",
+              "text": "A2"
+            }
+          ]
+        },
+        {
+          "line": 7,
+          "span": [38, 41],
+          "mark": "-",
+          "text": "B"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

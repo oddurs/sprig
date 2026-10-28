@@ -1,0 +1,23 @@
+~ Break clause at year three              Lease › Negotiate terms                   due 2026-10-05 (in 4d)   !!!
+~ Equipment loan paperwork                Money                                     due 2026-10-07 (in 6d)   !!
+~ Ventilation plan with the engineer      Kitchen fit-out › Design                  due 2026-10-12 (in 11d)
+~ Logo, second round                      Opening week › Brand                      due 2026-10-14 (in 13d)
+? Who pays for the grease trap?           Lease › Negotiate terms                   due 2026-10-05 (in 4d)   !!!
+- Get a third quote                       …ut › Equipment › Deck oven, three decks  due 2026-10-02 (in 1d)   !!
+- Free loaf for the first 50 through th…  Opening week › Opening day                due 2026-12-09 (in 69d)  !!
+- Photos for the local paper              Opening week › Opening day                due 2026-12-09 (in 69d)  !!
+- Flaky sea salt                          …pening › Stock the shelves › Supply run  due 2026-12-02 (in 62d)  !
+- Weekly numbers to the bank              Money                                     due 2026-10-02 (in 1d)
+- Call the insurer about public liabili…  Dana, this week                           due 2026-10-03 (in 2d)
+- Two counter staff                       Opening week › Hiring                     due 2026-11-05 (in 35d)
+- Rye, 4 sacks                            … Stock the shelves › Supply run › Flour  due 2026-12-02 (in 62d)
+- Strong white, 6 sacks                   … Stock the shelves › Supply run › Flour  due 2026-12-02 (in 62d)
+- Whole milk, 12 L                        … Stock the shelves › Supply run › Dairy  due 2026-12-02 (in 62d)
+- Sesame                                  … Stock the shelves › Supply run › Seeds  due 2026-12-02 (in 62d)
+- Nigella                                 … Stock the shelves › Supply run › Seeds  due 2026-12-02 (in 62d)
+- Paper bags, 1000                        …pening › Stock the shelves › Supply run  due 2026-12-02 (in 62d)
+- Change-of-use permit                    Lease                                     due 2026-12-09 (in 69d)
+- Spiral mixer, 40 litres                 Kitchen fit-out › Equipment               due 2026-12-09 (in 69d)
+? Kiln & Crumb, or Mill Street Bread?     Open the bakery                           due 2026-12-09 (in 69d)
+
+21 ready · 12 waiting on something, not shown · 2 open questions

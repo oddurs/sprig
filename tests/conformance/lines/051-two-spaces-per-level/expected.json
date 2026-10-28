@@ -1,0 +1,36 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Formatted",
+    "root": {
+      "line": 1,
+      "span": [0, 9],
+      "text": "Formatted",
+      "children": [
+        {
+          "line": 3,
+          "span": [11, 16],
+          "mark": "-",
+          "text": "Two",
+          "children": [
+            {
+              "line": 4,
+              "span": [19, 27],
+              "mark": "-",
+              "text": "spaces",
+              "children": [
+                {
+                  "line": 5,
+                  "span": [32, 43],
+                  "mark": "-",
+                  "text": "per level"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

@@ -12,3 +12,8 @@ publish.workspace = true
 [[bin]]
 name = "sprig"
 path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4", features = ["derive", "env"] }
+jiff = "0.2"
+sprig-core = { path = "../sprig-core", version = "0.0.0" }

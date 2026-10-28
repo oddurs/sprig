@@ -1,0 +1,21 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Classification",
+    "root": {
+      "line": 1,
+      "span": [0, 14],
+      "text": "Classification",
+      "children": [
+        {
+          "line": 3,
+          "span": [16, 25],
+          "mark": "-",
+          "text": "an item",
+          "notes": ["a note on it - a note that starts with a mark"]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

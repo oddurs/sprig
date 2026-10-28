@@ -1,0 +1,26 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Items",
+    "root": {
+      "line": 1,
+      "span": [0, 5],
+      "text": "Items",
+      "children": [
+        {
+          "line": 3,
+          "span": [7, 19],
+          "mark": "-",
+          "text": "Book a van"
+        },
+        {
+          "line": 4,
+          "span": [20, 27],
+          "mark": "x",
+          "text": "done"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

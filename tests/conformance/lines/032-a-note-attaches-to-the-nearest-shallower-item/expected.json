@@ -1,0 +1,31 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Kitchen",
+    "root": {
+      "line": 1,
+      "span": [0, 7],
+      "text": "Kitchen",
+      "notes": ["Root note."],
+      "children": [
+        {
+          "line": 3,
+          "span": [9, 15],
+          "mark": "-",
+          "text": "Oven",
+          "notes": ["Ventilation first."],
+          "children": [
+            {
+              "line": 4,
+              "span": [18, 25],
+              "mark": "-",
+              "text": "Quote",
+              "notes": ["Rondo 14.2k."]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

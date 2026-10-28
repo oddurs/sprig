@@ -1,0 +1,21 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Kitchen",
+    "root": {
+      "line": 1,
+      "span": [0, 7],
+      "text": "Kitchen",
+      "children": [
+        {
+          "line": 3,
+          "span": [9, 15],
+          "mark": "-",
+          "text": "Oven",
+          "notes": ["Ask @teo about [[kitchen]] #urgent !! due:2026-10-02 ^flue"]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

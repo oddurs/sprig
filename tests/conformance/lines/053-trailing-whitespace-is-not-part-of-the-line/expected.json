@@ -1,0 +1,21 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Trailing",
+    "root": {
+      "line": 1,
+      "span": [0, 8],
+      "text": "Trailing",
+      "children": [
+        {
+          "line": 3,
+          "span": [10, 16],
+          "mark": "-",
+          "text": "milk",
+          "notes": ["a note"]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

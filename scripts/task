@@ -21,6 +21,7 @@ usage: scripts/task <target>
   lint       clippy with warnings denied, and the core purity guard
   test       the full test suite
   build      compile everything, including the tests
+  install    cargo install the CLI into target/install, as a stranger would, and run it
   check      fmt:check, lint, test, build, and backlog when cairn is installed
   backlog    cairn check --strict, and ROADMAP.md is up to date (needs cairn)
   site       build the website, check tokens, contrast, links and accessibility (needs node, chrome)
@@ -34,6 +35,13 @@ purity() {
   if grep -rnE 'std::(fs|env|net|process)|SystemTime|Instant::now' crates/sprig-core/src; then
     printf '\nlint: sprig-core must not touch the filesystem, environment, network or clock.\n' >&2
     printf '      Take the value as a parameter; the CLI supplies it.\n' >&2
+    exit 1
+  fi
+  # Every answer depends on the date only through --today, so the system date
+  # is read in one place: the CLI's argument parser.
+  if grep -rnE 'SystemTime|Instant::now|Zoned::now|Timestamp::now|chrono::|Local::' crates/*/src \
+    | grep -v '^crates/sprig-cli/src/args.rs:'; then
+    printf '\nlint: only crates/sprig-cli/src/args.rs may read the clock; take --today instead.\n' >&2
     exit 1
   fi
 }
@@ -59,6 +67,12 @@ case "${1:-}" in
     ;;
   build)
     cargo build --all-targets
+    ;;
+  install)
+    # What the README tells a stranger to run, from this checkout, into a
+    # directory of its own so nothing on the machine is touched.
+    cargo install --locked --path crates/sprig-cli --root target/install
+    target/install/bin/sprig --version
     ;;
   site)
     command -v npm >/dev/null 2>&1 || {

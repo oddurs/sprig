@@ -1,0 +1,21 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Marks",
+    "root": {
+      "line": 1,
+      "span": [0, 5],
+      "text": "Marks",
+      "notes": ["x-ray #tag -dash ~tilde ?why +plus =equals /slash >arrow"],
+      "children": [
+        {
+          "line": 12,
+          "span": [64, 69],
+          "mark": "x",
+          "text": "ray"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

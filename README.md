@@ -3,68 +3,110 @@
 [![ci](https://github.com/oddurs/sprig/actions/workflows/ci.yml/badge.svg)](https://github.com/oddurs/sprig/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-A plain-text format for plans. A shopping list and an eighteen-month build use
-the same handful of marks, nest as deep as they need to, and link across files,
-so small plans add up to a big one. People and coding agents read, edit and
-check the same file.
+Sprig is a plain-text format for plans, one item per line, where the first
+character says what a line is and indentation says where it belongs. The
+`sprig` command reads a folder of them and tells you what can be done now and
+what is broken, for people and for the coding agents working beside them.
 
-```
-Open the bakery  @dana  due:2026-12-05
+## Install
 
-# Money
-  Budget is 180k. Over 10k needs two quotes.
-  x Business plan
-  ~ Equipment loan  due:2026-10-03  !!
-  - Supplier credit  @teo  after:[[lease^signed]]
-+ [[kitchen]]  @teo
-? Kiln & Crumb, or Mill Street Bread?
-  = Kiln & Crumb. Trademark search is clear.
-```
-
-`-` to do, `~` doing, `x` done, `/` dropped, `>` later, `?` a question, `=` its
-answer, `#` a group, `+` another file grafted in as a branch. Indentation is
-structure. Progress, estimates and what's blocked are computed, never written.
-
-## Status
-
-Sprig is a draft (0.4) with a plan. The Rust parser isn't written yet, so there
-is nothing to install. What exists today:
-
-- **The website**, [oddurs.github.io/sprig](https://oddurs.github.io/sprig/):
-  the idea in one page, a [playground](https://oddurs.github.io/sprig/play/)
-  with six linked example files, the spec, and the settled arguments. It runs
-  the draft reference parser until the Rust core replaces it. Source in
-  [`site/`](site).
-- [`spec/sprig.md`](spec/sprig.md): the specification, every rule numbered,
-  each with an example.
-- [`examples/bakery/`](examples/bakery): six plans that graft into one.
-- [`design/`](design): the draft 0.2 page with its reference parser, the
-  ecosystem plan, and the website plan.
-- [`ROADMAP.md`](ROADMAP.md): the backlog from v0.1 to 1.0, generated from the
-  [cairn](https://oddurs.github.io/cairn) items in [`cairn/items/`](cairn/items).
-- A Rust workspace (`crates/sprig-core`, `crates/sprig-cli`) with a `sprig`
-  binary that so far only answers `--help` and `--version`.
-
-## Quickstart
-
-Try the language in the [playground](https://oddurs.github.io/sprig/play/), or
-work through [your first plan](https://oddurs.github.io/sprig/docs/first-plan/)
-in five minutes.
-
-Build the CLI from source (Rust 1.98, installed automatically by rustup from
-`rust-toolchain.toml`):
+With Rust installed ([rustup.rs](https://rustup.rs)):
 
 ```sh
-cargo install --path crates/sprig-cli
+cargo install --locked --git https://github.com/oddurs/sprig sprig-cli
 sprig --version
 ```
 
-See what's ready to work on, with [cairn](https://oddurs.github.io/cairn)
-installed:
+## A first plan
 
-```sh
-cairn next
+Save this as `plan.sprig`:
+
+<!-- file: plan.sprig -->
+```sprig
+Move flats  @me
+
+- Book a van  ^van  !!
+~ Pack
+  x Books
+  - Kitchen  est:3h
+- Move  after:^van  @me @jo
+- Change address
+  - Bank
+  - Doctor
+? Keep the old sofa?
 ```
+
+Ask what can be done now:
+
+```console
+$ sprig next plan.sprig
+- Book a van          Move flats        !!
+- Kitchen             Pack
+- Bank                Change address
+- Doctor              Change address
+? Keep the old sofa?  Move flats
+
+5 ready · 1 waiting on something, not shown · 1 open question
+```
+
+*Move* is left out because it waits on the van (`after:^van`); it appears once
+*Book a van* is ticked `x`. The most urgent work comes first: in progress, then
+priority (`!` to `!!!`), then the nearest due date. `--who jo` shows only Jo's
+work, and `--limit 3` the top three.
+
+Then check it, as CI would:
+
+```console
+$ sprig check plan.sprig
+```
+
+Nothing printed, exit 0. Misspell the anchor on line 7 and check again:
+
+<!-- edit: plan.sprig: after:^van => after:^vna -->
+```console
+$ sprig check plan.sprig
+plan.sprig:7:9: error[S0201]: no item ^vna in plan.sprig
+```
+
+Every problem has a code from [`spec/diagnostics.md`](spec/diagnostics.md), and
+the exit code is 1, so a CI job fails. In GitHub Actions it is one step:
+
+```yaml
+- run: cargo install --locked --git https://github.com/oddurs/sprig sprig-cli && sprig check --strict .
+```
+
+## The nine line starts
+
+| Line | Means | Example |
+| --- | --- | --- |
+| `-` | to do | `- Book a van  due:2026-10-17` |
+| `~` | doing | `~ Pack` |
+| `x` | done | `x Books` |
+| `/` | dropped, kept for the record | `/ Hire movers` |
+| `>` | later, parked on purpose | `> Paint the new place` |
+| `?` | a question | `? Keep the old sofa?` |
+| `=` | the answer to the item above | `  = Yes, it fits the van.` |
+| `#` | a group | `# Kitchen` |
+| `+` | another file or branch grafted in | `+ [[kitchen]]` or `+ [[kitchen^oven]]` |
+
+Anything else is a note on the item above it, and `//` starts a comment. On an
+item, `@name` is who owns it, `^anchor` names it, `after:^anchor` makes it wait,
+`due:2026-10-17` dates it, `est:3h` sizes it, and `#tag` tags it. Progress,
+estimates and what is blocked are computed from the text and never written
+into it.
+
+## Going further
+
+- [`examples/bakery/`](examples/bakery): six plans for opening a bakery that
+  graft into one. Try `sprig next examples/bakery`.
+- [`spec/sprig.md`](spec/sprig.md): the specification, every rule numbered,
+  each with an example, and [`tests/conformance/`](tests/conformance) holding
+  the implementation to it.
+- [The website](https://oddurs.github.io/sprig/), with a
+  [playground](https://oddurs.github.io/sprig/play/) and a
+  [first-plan tutorial](https://oddurs.github.io/sprig/docs/first-plan/).
+- [`ROADMAP.md`](ROADMAP.md): what comes next, generated from the
+  [cairn](https://oddurs.github.io/cairn) items in [`cairn/items/`](cairn/items).
 
 ## Development
 
@@ -82,6 +124,5 @@ has the whole loop.
 
 ## License
 
-Code is [MIT](LICENSE). The specification, which `spec/` will hold from item
-0007 on, is dedicated to the public domain under [CC0](spec/LICENSE), so anyone
-can implement it without asking.
+Code is [MIT](LICENSE). The specification in `spec/` is dedicated to the public
+domain under [CC0](spec/LICENSE), so anyone can implement it without asking.

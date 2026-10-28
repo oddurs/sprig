@@ -1,0 +1,20 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Weekend",
+    "root": {
+      "line": 4,
+      "span": [20, 27],
+      "text": "Weekend",
+      "children": [
+        {
+          "line": 5,
+          "span": [28, 37],
+          "mark": "-",
+          "text": "Laundry"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}
