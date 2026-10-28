@@ -41,7 +41,7 @@ VS Code highlights `.sprig` files, completes people, anchors and file links, sho
 
 ## v0.3 — Agents work the plan
 
-`··········` 0% · 0 of 22 done · due 2027-04-02
+`··········` 0% · 0 of 19 done · due 2027-04-02
 
 `sprig mcp` lets a coding agent read a repository's `PLAN.sprig`, find ready work, tick, add and answer items, where every change is an ordinary file edit a person can review. Plans export to calendars and JSON, and existing checklists import. From the shell, `mark`, `add`, `answer`, `find`, `agenda` and `graph` cover the everyday writes and questions, through the same edit API the agents use.
 
@@ -56,9 +56,6 @@ VS Code highlights `.sprig` files, completes people, anchors and file links, sho
 - [ ] [`0065`](https://github.com/oddurs/sprig/blob/main/cairn/items/0065-sprig-import-markdown-checklists-and-todo-txt.md) sprig import: Markdown checklists and todo.txt <sup>feature · p1 · interop</sup>
 - [ ] [`0066`](https://github.com/oddurs/sprig/blob/main/cairn/items/0066-import-github-issues-from-gh-json.md) Import GitHub Issues from gh JSON <sup>feature · p2 · interop</sup>
 - [ ] [`0067`](https://github.com/oddurs/sprig/blob/main/cairn/items/0067-github-action-check-plans-and-summarise-progress-in-pull-requests.md) GitHub Action: check plans and summarise progress in pull requests <sup>feature · p1 · interop</sup>
-- [ ] [`0068`](https://github.com/oddurs/sprig/blob/main/cairn/items/0068-dates-only-or-times-of-day-too.md) Dates only, or times of day too? <sup>spike · p1 · spec</sup>
-- [ ] [`0069`](https://github.com/oddurs/sprig/blob/main/cairn/items/0069-can-a-person-be-an-email-address.md) Can a person be an email address? <sup>spike · p1 · spec</sup>
-- [ ] [`0070`](https://github.com/oddurs/sprig/blob/main/cairn/items/0070-should-a-file-declare-its-spec-version.md) Should a file declare its spec version? <sup>spike · p1 · spec</sup>
 - [ ] [`0071`](https://github.com/oddurs/sprig/blob/main/cairn/items/0071-release-v0-3.md) Release v0.3 <sup>chore · p0 · release</sup>
 - [ ] [`0123`](https://github.com/oddurs/sprig/blob/main/cairn/items/0123-sprig-mark-and-sprig-answer.md) sprig mark and sprig answer <sup>feature · p1 · cli</sup>
 - [ ] [`0124`](https://github.com/oddurs/sprig/blob/main/cairn/items/0124-sprig-add-append-an-item-from-the-shell.md) sprig add: append an item from the shell <sup>feature · p1 · cli</sup>
@@ -101,7 +98,7 @@ A frozen spec under CC0, a conformance suite that covers every rule, and package
 
 ## later — Later
 
-`··········` 0% · 0 of 15 done
+`··········` 0% · 0 of 16 done
 
 Good ideas that are not on the path to 1.0: the phone app, bindings for other languages, the web viewer, tracker sync and stewardship work that needs adoption first. Items land here instead of being argued about.
 
@@ -120,4 +117,5 @@ Good ideas that are not on the path to 1.0: the phone app, bindings for other la
 - [ ] [`0095`](https://github.com/oddurs/sprig/blob/main/cairn/items/0095-conformance-badge-for-compatible-tools.md) Conformance badge for compatible tools <sup>feature · p3 · community</sup>
 - [ ] [`0096`](https://github.com/oddurs/sprig/blob/main/cairn/items/0096-template-gallery.md) Template gallery <sup>docs · p2 · docs</sup>
 - [ ] [`0097`](https://github.com/oddurs/sprig/blob/main/cairn/items/0097-invite-a-second-independent-parser.md) Invite a second, independent parser <sup>chore · p1 · community</sup>
+- [ ] [`0146`](https://github.com/oddurs/sprig/blob/main/cairn/items/0146-map-people-s-handles-to-identities-outside-plan-files.md) Map people's handles to identities outside plan files <sup>feature · p3 · spec</sup>
 

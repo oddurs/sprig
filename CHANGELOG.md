@@ -8,6 +8,19 @@ All notable changes to this project are recorded here. The format follows
 
 ### Added
 
+- Spec draft 0.5:
+  - It rules on every ambiguity Appendix B listed, folded into the numbered
+    rules.
+  - It states what the text left silent: quoted runs, escaped titles, links
+    that must name a file, answers, indentation whitespace, date shortcuts,
+    `est:` and `every:`, month-end recurrence, and due dates and priority
+    that reach down.
+  - New warnings: S0006 for an `every:` that is not a recurrence, S0206 for an
+    `after:` naming something with nothing to do, and S0007 for a title naming
+    a version of Sprig the tool does not read.
+  - Dates have no time of day, an email address is not a person, and the
+    title's `sprig:` key is reserved for a future major version.
+
 - `sprig next`: open, unblocked work across a folder of plans, in progress
   first, then priority, then due date, with `--who` and `--limit`.
 - `sprig check`: every problem as `file:line:col: severity[code]: message`,
@@ -47,3 +60,10 @@ All notable changes to this project are recorded here. The format follows
   - It formats documents.
 - `sprig completions bash|zsh|fish|powershell|elvish`, completing refs from
   the current folder, and `sprig man`.
+
+### Changed
+
+- A dropped item no longer holds up what waits on it: `after:` is satisfied by
+  a done or a dropped target (spec §5.7). A later item still blocks.
+- An item's text drops the brackets only of real links; `[[my notes]]` and
+  `[[^a]]` stay as written.

@@ -1,0 +1,43 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Links",
+    "root": {
+      "line": 1,
+      "span": [0, 5],
+      "text": "Links",
+      "children": [
+        {
+          "line": 3,
+          "span": [7, 17],
+          "mark": "-",
+          "text": "Base",
+          "anchor": "a"
+        },
+        {
+          "line": 4,
+          "span": [18, 39],
+          "mark": "-",
+          "text": "See [[^a]] and [[]]"
+        },
+        {
+          "line": 5,
+          "span": [40, 60],
+          "mark": "-",
+          "text": "Next",
+          "after": ["[[^a]]"]
+        }
+      ]
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "S0205",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 5,
+      "col": 9,
+      "span": [48, 60]
+    }
+  ]
+}

@@ -248,11 +248,14 @@ pub fn lex(src: &str) -> Vec<Lexed> {
                 };
             }
             if Some(i) == title {
+                // A backslash lets a title start with a mark (§1.2).
+                let escaped = l.content.starts_with('\\');
+                let (text, base) = if escaped { rest(1) } else { (l.content, l.at) };
                 return Lexed {
                     kind: LineKind::Title,
                     span,
-                    marker: None,
-                    pieces: token::pieces(l.content, l.at, false),
+                    marker: escaped.then(|| at(1)),
+                    pieces: token::pieces(text, base, false),
                 };
             }
             if l.content.starts_with("//") {
@@ -422,7 +425,14 @@ pub fn parse(file: &str, src: &str) -> Parsed {
     let mut first_body = 0;
     if let Some(i) = title_line(&lines) {
         let l = &lines[i];
-        let tokens = token::lift(l.content, l.at);
+        let tokens = match l.content.strip_prefix('\\') {
+            // A backslash lets a title start with a mark (§1.2).
+            Some(rest) => {
+                let lead = rest.len() - rest.trim_start().len();
+                token::lift(rest.trim_start(), l.at + 1 + lead)
+            }
+            None => token::lift(l.content, l.at),
+        };
         title = Some(tokens.text.clone());
         let root = &mut arena[0].node;
         root.tokens = tokens;
@@ -500,6 +510,7 @@ pub fn parse(file: &str, src: &str) -> Parsed {
 
     let root = assemble(&mut arena, 0);
     check_tokens(file, &index, &root, &mut diagnostics);
+    check_version(file, &index, &root, &mut diagnostics);
     check_anchors(file, &index, &root, &mut diagnostics);
     diagnostics.sort_by(|a, b| a.sort_key().cmp(&b.sort_key()));
     Parsed {
@@ -552,6 +563,30 @@ pub fn estimate_hours(value: &str) -> Option<f64> {
 
 // Problems a single line can have on its own: unreadable dates and estimates,
 // several anchors, a graft with nothing to graft.
+/// The version of Sprig this tool reads, for a title's `sprig:` field (§4.6).
+pub const VERSION: &str = "1";
+
+/// A title that names a version of Sprig this tool does not read (§4.6).
+fn check_version(file: &str, index: &LineIndex, root: &Node, out: &mut Vec<Diagnostic>) {
+    let Some(f) = root.tokens.field("sprig") else {
+        return;
+    };
+    if root.span.is_none() || f.value == VERSION {
+        return;
+    }
+    let mut d = index.diagnostic(
+        file,
+        Code::UnknownVersion,
+        f.span,
+        format!(
+            "this file is written for Sprig {}, and this tool reads Sprig {VERSION}; it may misread it",
+            f.value
+        ),
+    );
+    d.help = Some(format!("upgrade the tool, or remove sprig:{}", f.value));
+    out.push(d);
+}
+
 fn check_tokens(file: &str, index: &LineIndex, node: &Node, out: &mut Vec<Diagnostic>) {
     let mut check = |tokens: &Tokens| {
         for key in ["due", "start"] {
@@ -579,6 +614,21 @@ fn check_tokens(file: &str, index: &LineIndex, node: &Node, out: &mut Vec<Diagno
                 format!("est:{} is not an estimate; it is ignored", f.value),
             );
             d.help = Some("write a number and a unit: est:4h, est:2d, est:1w".into());
+            out.push(d);
+        }
+        if let Some(f) = tokens.field("every")
+            && !date::recurs(&f.value)
+        {
+            let mut d = index.diagnostic(
+                file,
+                Code::UnreadableRecurrence,
+                f.span,
+                format!(
+                    "every:{} is not a recurrence; ticking marks it done instead of moving it",
+                    f.value
+                ),
+            );
+            d.help = Some("write day, week, month, a count such as 3d or 2w, or a weekday".into());
             out.push(d);
         }
         if tokens.anchors.len() > 1 {

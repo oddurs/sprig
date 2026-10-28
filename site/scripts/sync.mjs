@@ -41,13 +41,16 @@ const dropTitle = (md) => md.replace(/^# .*\n+/, '');
 
 /* spec: rendered at /spec/, and served raw at /spec.md byte for byte */
 const spec = read('spec/sprig.md');
+// The draft named in the spec's own title, so the description cannot lag it.
+const draft = spec.match(/^# .*draft (\S+)/m)?.[1];
+if (!draft) throw new Error('spec/sprig.md: no "draft N" in its title');
 write(join(site, 'public/spec.md'), spec);
 write(
 	join(docs, 'spec.md'),
 	page(
 		{
 			title: 'Specification',
-			description: 'The Sprig format, rule by rule. Draft 0.4, dedicated to the public domain.',
+			description: `The Sprig format, rule by rule. Draft ${draft}, dedicated to the public domain.`,
 			editUrl: `${edit}/spec/sprig.md`,
 			tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 3 },
 		},

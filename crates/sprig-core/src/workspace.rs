@@ -864,10 +864,19 @@ fn roll(e: &Expanded<'_>, inherited: Option<Status>, people: &[String]) -> Resol
 // References and blocking.
 
 struct Target {
-    done: bool,
+    /// Done or dropped (§5.7): nothing waits on it any longer.
+    finished: bool,
+    /// Nothing beneath it counts (§5.5), so it can never finish.
+    empty: bool,
     label: String,
     file: String,
     line: usize,
+}
+
+/// Whether a reference to a node with this status is satisfied (§5.7): done,
+/// or dropped, since a dropped item was decided against.
+fn finishes(status: Status) -> bool {
+    matches!(status, Status::Done | Status::Dropped)
 }
 
 /// What every anchor and every file resolves to, in its own file's tree.
@@ -892,7 +901,8 @@ impl<'a> Lookup<'a> {
             files.insert(
                 file.to_string(),
                 Target {
-                    done: root.status == Status::Done,
+                    finished: finishes(root.status),
+                    empty: root.status == Status::Empty,
                     label: root.label.clone(),
                     file: root.file.clone(),
                     line: root.line,
@@ -902,7 +912,8 @@ impl<'a> Lookup<'a> {
                 for c in n.children.iter().filter(|c| !c.grafted) {
                     if let Some(a) = c.tokens.anchor() {
                         out.entry(a.name.clone()).or_insert_with(|| Target {
-                            done: c.status == Status::Done,
+                            finished: finishes(c.status),
+                            empty: c.status == Status::Empty,
                             label: c.label.clone(),
                             file: c.file.clone(),
                             line: c.line,
@@ -976,7 +987,23 @@ fn check_references(
 ) {
     let mut check = |tokens: &Tokens| {
         for a in &tokens.after {
-            if let Outcome::Unknown(code, message) = lookup.resolve(file, &a.value) {
+            let outcome = lookup.resolve(file, &a.value);
+            if let Outcome::Found(t) = outcome
+                && t.empty
+            {
+                let mut d = index.diagnostic(
+                    file,
+                    Code::EmptyReference,
+                    a.span,
+                    format!(
+                        "{} has nothing to do yet, so this item waits on it until it does",
+                        t.label
+                    ),
+                );
+                d.help = Some("add items under it, or remove the after:".into());
+                out.push(d);
+            }
+            if let Outcome::Unknown(code, message) = outcome {
                 let mut d = index.diagnostic(file, code, a.span, message);
                 if code == Code::NotAReference {
                     d.help =
@@ -1021,7 +1048,7 @@ fn block(n: &mut Resolved, inherited: bool, today: Date, lookup: &Lookup) {
             }
             for a in &c.tokens.after {
                 match lookup.resolve(&c.file, &a.value) {
-                    Outcome::Found(t) if t.done => {}
+                    Outcome::Found(t) if t.finished => {}
                     Outcome::Found(t) => waits.push(Wait::Reference {
                         value: a.value.clone(),
                         label: t.label.clone(),

@@ -1,0 +1,29 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Spaces",
+    "root": {
+      "line": 1,
+      "span": [0, 6],
+      "text": "Spaces",
+      "children": [
+        {
+          "line": 3,
+          "span": [8, 16],
+          "mark": "-",
+          "text": "Parent",
+          "children": [
+            {
+              "line": 4,
+              "span": [19, 30],
+              "mark": "-",
+              "text": "a b",
+              "people": ["jo"]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

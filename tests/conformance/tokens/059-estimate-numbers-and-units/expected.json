@@ -1,0 +1,97 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Estimates",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 5
+    },
+    "estimate": 12,
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "One",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "estimate": 2
+      },
+      {
+        "file": "main.sprig",
+        "line": 4,
+        "mark": "-",
+        "label": "Two",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "estimate": 10
+      },
+      {
+        "file": "main.sprig",
+        "line": 5,
+        "mark": "-",
+        "label": "Three",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 6,
+        "mark": "-",
+        "label": "Four",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 7,
+        "mark": "-",
+        "label": "Five",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      }
+    ]
+  },
+  "diagnostics": [
+    {
+      "code": "S0002",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 5,
+      "col": 10,
+      "span": [51, 58]
+    },
+    {
+      "code": "S0002",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 6,
+      "col": 9,
+      "span": [67, 74]
+    }
+  ]
+}
