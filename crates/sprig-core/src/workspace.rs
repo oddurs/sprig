@@ -15,7 +15,7 @@
 
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 
-use crate::date::Date;
+use crate::date::{self, Date};
 use crate::diagnostic::{Code, Diagnostic, LineIndex, Span};
 use crate::syntax::{self, Answer, Mark, Node, Paragraph, Parsed};
 use crate::token::{self, Tokens};
@@ -122,6 +122,7 @@ impl Workspace {
         let mut trees: BTreeMap<String, Tree> = BTreeMap::new();
         for file in parsed.keys() {
             let mut root = b.rolled[file.as_str()].clone();
+            dates(&mut root, today);
             block(&mut root, false, today, &lookup);
             trees.insert(
                 file.clone(),
@@ -249,6 +250,11 @@ pub struct Graft {
     pub answers: Vec<String>,
     /// False when the graft is an error and mounted nothing.
     pub mounted: bool,
+    /// The first person of what it mounts, which a graft line naming nobody
+    /// takes as its owner (§6.1).
+    pub owner: Option<String>,
+    /// For a branch graft, the anchored item's line in `path`.
+    pub source_line: Option<usize>,
 }
 
 /// Something an open item waits on (§7.3, §7.5).
@@ -261,6 +267,8 @@ pub enum Wait {
         label: String,
         /// Names no existing file or anchor (§7.2).
         unknown: bool,
+        /// The file and line of what it names, when it names something.
+        target: Option<(String, usize)>,
     },
     Start(Date),
 }
@@ -290,6 +298,10 @@ pub struct Resolved {
     /// Remaining estimate in hours (§10.2).
     pub estimate: f64,
     pub people: Vec<String>,
+    /// Its own `due:` and `start:`, read against today; `None` when absent
+    /// or unreadable.
+    pub due: Option<Date>,
+    pub start: Option<Date>,
     pub blocked: bool,
     /// What this item itself waits on; inherited blocking is in `blocked`.
     pub waits_on: Vec<Wait>,
@@ -798,6 +810,8 @@ fn roll(e: &Expanded<'_>, inherited: Option<Status>, people: &[String]) -> Resol
         notes: g.notes.iter().map(Paragraph::text).collect(),
         answers: g.answers.iter().map(|a| a.tokens.text.clone()).collect(),
         mounted: g.key.is_some(),
+        owner: g.owner.clone(),
+        source_line: g.key.as_ref().and_then(|k| k.1),
     });
     let label = if syn.mark.is_none() && syn.tokens.text.is_empty() {
         e.file.to_string()
@@ -818,6 +832,8 @@ fn roll(e: &Expanded<'_>, inherited: Option<Status>, people: &[String]) -> Resol
         progress,
         estimate,
         people,
+        due: None,
+        start: None,
         blocked: false,
         waits_on: Vec::new(),
         ready_to_close,
@@ -831,6 +847,8 @@ fn roll(e: &Expanded<'_>, inherited: Option<Status>, people: &[String]) -> Resol
 struct Target {
     done: bool,
     label: String,
+    file: String,
+    line: usize,
 }
 
 /// What every anchor and every file resolves to, in its own file's tree.
@@ -841,7 +859,8 @@ struct Lookup<'a> {
 }
 
 enum Outcome {
-    Found(bool, String),
+    /// Done, and what it is: the label, file and line.
+    Found(bool, String, String, usize),
     Unknown(Code, String),
 }
 
@@ -855,6 +874,8 @@ impl<'a> Lookup<'a> {
                 Target {
                     done: root.status == Status::Done,
                     label: root.label.clone(),
+                    file: root.file.clone(),
+                    line: root.line,
                 },
             );
             fn walk(n: &Resolved, file: &str, out: &mut HashMap<(String, String), Target>) {
@@ -864,6 +885,8 @@ impl<'a> Lookup<'a> {
                             .or_insert_with(|| Target {
                                 done: c.status == Status::Done,
                                 label: c.label.clone(),
+                                file: c.file.clone(),
+                                line: c.line,
                             });
                     }
                     walk(c, file, out);
@@ -886,7 +909,7 @@ impl<'a> Lookup<'a> {
                 .all(|c| c.is_alphanumeric() || c == '_' || c == '-')
         {
             return match self.anchors.get(&(from.to_string(), name.to_string())) {
-                Some(t) => Outcome::Found(t.done, t.label.clone()),
+                Some(t) => Outcome::Found(t.done, t.label.clone(), t.file.clone(), t.line),
                 None => Outcome::Unknown(
                     Code::UnknownLocalAnchor,
                     format!("no item ^{name} in {from}"),
@@ -910,12 +933,12 @@ impl<'a> Lookup<'a> {
         }
         match &link.anchor {
             Some(a) => match self.anchors.get(&(path.clone(), a.clone())) {
-                Some(t) => Outcome::Found(t.done, t.label.clone()),
+                Some(t) => Outcome::Found(t.done, t.label.clone(), t.file.clone(), t.line),
                 None => Outcome::Unknown(Code::UnknownAnchor, format!("no item ^{a} in {path}")),
             },
             None => {
                 let t = &self.files[&path];
-                Outcome::Found(t.done, t.label.clone())
+                Outcome::Found(t.done, t.label.clone(), t.file.clone(), t.line)
             }
         }
     }
@@ -950,33 +973,44 @@ fn check_references(
     });
 }
 
+/// Reads `due:` and `start:` against today (§9.3).
+fn dates(n: &mut Resolved, today: Date) {
+    let read = |key| {
+        n.tokens
+            .field(key)
+            .and_then(|f| date::resolve(&f.value, today))
+    };
+    n.due = read("due");
+    n.start = read("start");
+}
+
 /// §7.3: an open item is blocked by its own unfinished references and future
 /// start date, and by any blocked ancestor.
 fn block(n: &mut Resolved, inherited: bool, today: Date, lookup: &Lookup) {
     for c in &mut n.children {
+        dates(c, today);
         let open = c.status.is_open();
         let mut waits = Vec::new();
         if open {
-            if let Some(start) = c
-                .tokens
-                .field("start")
-                .and_then(|f| Date::parse_iso(&f.value))
+            if let Some(start) = c.start
                 && start > today
             {
                 waits.push(Wait::Start(start));
             }
             for a in &c.tokens.after {
                 match lookup.resolve(&c.file, &a.value) {
-                    Outcome::Found(true, _) => {}
-                    Outcome::Found(false, label) => waits.push(Wait::Reference {
+                    Outcome::Found(true, ..) => {}
+                    Outcome::Found(false, label, file, line) => waits.push(Wait::Reference {
                         value: a.value.clone(),
                         label,
                         unknown: false,
+                        target: Some((file, line)),
                     }),
                     Outcome::Unknown(..) => waits.push(Wait::Reference {
                         value: a.value.clone(),
                         label: a.value.clone(),
                         unknown: true,
+                        target: None,
                     }),
                 }
             }
@@ -1320,7 +1354,8 @@ mod tests {
             [Wait::Reference {
                 value: "[[b^signed]]".into(),
                 label: "Sign".into(),
-                unknown: false
+                unknown: false,
+                target: Some(("b.sprig".into(), 3)),
             }]
         );
     }

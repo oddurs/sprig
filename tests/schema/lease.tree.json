@@ -113,6 +113,7 @@
           "total": 3
         },
         "people": ["dana"],
+        "due": "2026-10-05",
         "children": [
           {
             "file": "lease.sprig",
@@ -186,11 +187,15 @@
         "waits_on": [
           {
             "after": "^terms",
-            "label": "Negotiate terms"
+            "label": "Negotiate terms",
+            "file": "lease.sprig",
+            "line": 6
           },
           {
             "after": "^permit",
-            "label": "Change-of-use permit"
+            "label": "Change-of-use permit",
+            "file": "lease.sprig",
+            "line": 11
           }
         ]
       }

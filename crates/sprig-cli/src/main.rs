@@ -181,7 +181,7 @@ fn table(entries: &[&Entry], today: Date) -> Vec<String> {
             } else {
                 e.path.join(" › ")
             };
-            let due = match (e.due, e.due_date()) {
+            let due = match (e.due, e.due_date) {
                 (_, Some(d)) => format!("due {d} ({})", relative(today.days_until(d))),
                 (Some(raw), None) => format!("due {raw}"),
                 (None, None) => String::new(),

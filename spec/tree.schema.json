@@ -144,6 +144,8 @@
         },
         "estimate": { "type": "number", "exclusiveMinimum": 0 },
         "people": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "due": { "$ref": "#/$defs/date" },
+        "start": { "$ref": "#/$defs/date" },
         "blocked": { "type": "boolean" },
         "waits_on": {
           "type": "array",
@@ -156,7 +158,9 @@
                 "properties": {
                   "after": { "type": "string" },
                   "label": { "type": "string" },
-                  "unknown": { "type": "boolean" }
+                  "unknown": { "type": "boolean" },
+                  "file": { "$ref": "#/$defs/path" },
+                  "line": { "$ref": "#/$defs/line" }
                 }
               },
               {

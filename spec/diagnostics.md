@@ -52,8 +52,7 @@ lease.sprig:13:31: error[S0201]: no item ^permt in lease.sprig
 
 **S0001.** `due:` and `start:` hold dates (§9.1). A value in neither the stored
 form nor a typed shortcut (§9.3) is kept as text and does not count as a date:
-it sets no deadline and blocks nothing. Typed shortcuts are not read before
-v0.2, so until then they are reported here too.
+it sets no deadline and blocks nothing. The message quotes the value.
 
 **S0002.** An estimate is a number and `h`, `d` or `w` (§10.1). Anything else
 is ignored when estimates are summed.
