@@ -37,5 +37,13 @@ All notable changes to this project are recorded here. The format follows
 - `sprig tree`, `sprig why` and `sprig status` (with `--oneline` for prompts).
 - `--plain` on every reading command, tab-separated with a ref first, and
   `--color auto|always|never`, which respects `NO_COLOR`.
+- `sprig lsp`, a language server built on `lsp-server`:
+  - It republishes diagnostics for every file a change affects, so deleting an
+    anchor flags the files that name it.
+  - It completes people, anchors, file links and field keys.
+  - It offers go to definition and references for anchors and links.
+  - Hover shows progress, the work left, the owner and what an item waits on.
+  - Code actions tick an item, cycle its mark and write out a typed date.
+  - It formats documents.
 - `sprig completions bash|zsh|fish|powershell|elvish`, completing refs from
   the current folder, and `sprig man`.

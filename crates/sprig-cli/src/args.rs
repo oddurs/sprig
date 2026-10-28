@@ -73,6 +73,8 @@ pub enum Command {
     Completions(CompletionsArgs),
     /// Print the manual page, in roff
     Man,
+    /// Run the language server on stdin and stdout, for editors
+    Lsp,
     /// Candidates for shell completion: refs and people in the current folder
     #[command(name = "__complete", hide = true)]
     Complete(CompleteArgs),
@@ -210,9 +212,19 @@ fn parse_date(s: &str) -> Result<Date, String> {
 
 /// `--today`, or the system's local date when it is not given.
 pub fn today(cli: &Cli) -> Date {
-    cli.today.unwrap_or_else(|| {
-        let d = jiff::Zoned::now().date();
-        Date::new(i32::from(d.year()), d.month() as u8, d.day() as u8)
-            .expect("the system clock gives a real date")
-    })
+    cli.today.unwrap_or_else(system_date)
+}
+
+/// Today, asked again each time: a language server runs past midnight, and
+/// a start date that was ahead yesterday is not today. `--today` still fixes
+/// it, so an editor session can be reproduced.
+pub fn clock(cli: &Cli) -> impl Fn() -> Date + use<> {
+    let fixed = cli.today;
+    move || fixed.unwrap_or_else(system_date)
+}
+
+fn system_date() -> Date {
+    let d = jiff::Zoned::now().date();
+    Date::new(i32::from(d.year()), d.month() as u8, d.day() as u8)
+        .expect("the system clock gives a real date")
 }

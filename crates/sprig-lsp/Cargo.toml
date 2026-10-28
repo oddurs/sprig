@@ -1,0 +1,21 @@
+[package]
+name = "sprig-lsp"
+description = "The Sprig language server: diagnostics, completion and navigation in any editor"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+publish.workspace = true
+
+[dependencies]
+lsp-server = "0.7"
+lsp-types = "0.97"
+serde = "1"
+serde_json = "1"
+url = "2"
+sprig-core = { path = "../sprig-core", version = "0.0.0" }
+
+[dev-dependencies]
+tempfile = "3"

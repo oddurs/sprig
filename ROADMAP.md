@@ -26,21 +26,17 @@ A public website that explains Sprig in ten seconds and lets a visitor edit a re
 
 ## v0.2 — Write plans in your editor
 
-`··········` 0% · 0 of 12 done · due 2027-01-29
+`··········` 0% · 0 of 8 done · due 2027-01-29
 
 VS Code highlights `.sprig` files, completes people, anchors and file links, shows `sprig check` diagnostics as you type, and ticks items with a code action. `sprig fmt` normalises a file without touching anything it doesn't mean to. In the terminal, `sprig tree`, `status` and `why` show a plan's shape and what holds it up, and every command completes in the shell.
 
 - [ ] [`0047`](https://github.com/oddurs/sprig/blob/main/cairn/items/0047-tree-sitter-grammar.md) Tree-sitter grammar <sup>feature · p0 · editors</sup>
 - [ ] [`0048`](https://github.com/oddurs/sprig/blob/main/cairn/items/0048-textmate-grammar.md) TextMate grammar <sup>feature · p1 · editors</sup>
-- [ ] [`0049`](https://github.com/oddurs/sprig/blob/main/cairn/items/0049-language-server-diagnostics-as-you-type.md) Language server: diagnostics as you type <sup>feature · p0 · lsp</sup>
-- [ ] [`0050`](https://github.com/oddurs/sprig/blob/main/cairn/items/0050-completion-for-people-anchors-files-and-fields.md) Completion for people, anchors, files and fields <sup>feature · p0 · lsp</sup>
-- [ ] [`0051`](https://github.com/oddurs/sprig/blob/main/cairn/items/0051-go-to-definition-and-references.md) Go to definition and references <sup>feature · p1 · lsp</sup>
-- [ ] [`0052`](https://github.com/oddurs/sprig/blob/main/cairn/items/0052-hover-progress-and-what-an-item-waits-on.md) Hover: progress and what an item waits on <sup>feature · p1 · lsp</sup>
-- [ ] [`0053`](https://github.com/oddurs/sprig/blob/main/cairn/items/0053-code-actions-tick-cycle-expand-a-date.md) Code actions: tick, cycle, expand a date <sup>feature · p0 · lsp</sup>
 - [ ] [`0054`](https://github.com/oddurs/sprig/blob/main/cairn/items/0054-vs-code-extension.md) VS Code extension <sup>feature · p0 · editors</sup>
 - [ ] [`0055`](https://github.com/oddurs/sprig/blob/main/cairn/items/0055-editor-setup-guide-neovim-helix-zed.md) Editor setup guide: Neovim, Helix, Zed <sup>docs · p1 · docs</sup>
 - [ ] [`0056`](https://github.com/oddurs/sprig/blob/main/cairn/items/0056-performance-baseline-and-regression-gate.md) Performance baseline and regression gate <sup>chore · p1 · core</sup>
 - [ ] [`0057`](https://github.com/oddurs/sprig/blob/main/cairn/items/0057-release-v0-2.md) Release v0.2 <sup>chore · p0 · release</sup>
+- [ ] [`0049`](https://github.com/oddurs/sprig/blob/main/cairn/items/0049-language-server-diagnostics-as-you-type.md) Language server: diagnostics as you type <sup>feature · p0 · lsp</sup>
 - [ ] [`0122`](https://github.com/oddurs/sprig/blob/main/cairn/items/0122-shell-completions-and-a-man-page.md) Shell completions and a man page <sup>feature · p1 · cli</sup>
 
 ## v0.3 — Agents work the plan
