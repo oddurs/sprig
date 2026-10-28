@@ -72,6 +72,9 @@ pub enum EditError {
     NoStatus(usize),
     /// The text to add is not one line, or does not start with a mark.
     BadText(String),
+    /// The edit would not read back as written, such as a quoted value on a
+    /// line with an unclosed quote, which would pair with it (§4.1).
+    WouldNotRead(usize),
 }
 
 impl fmt::Display for EditError {
@@ -83,6 +86,10 @@ impl fmt::Display for EditError {
                 "line {l} is a group or a graft, whose status comes from its children"
             ),
             EditError::BadText(t) => write!(f, "{t:?} is not one item line"),
+            EditError::WouldNotRead(l) => write!(
+                f,
+                "line {l} has an unclosed quote, so the field would not read back; close it first"
+            ),
         }
     }
 }
@@ -263,7 +270,21 @@ pub fn set_field(
             });
         }
     }
-    Ok(Change::new(src, edits))
+    let change = Change::new(src, edits);
+    // Refuse rather than write a line that means something else.
+    let reread = syntax::parse("", &change.source).document;
+    let reads_back = find_item(&reread.root, line).is_some_and(|n| {
+        if key == "after" {
+            // after: values are collected, not overwritten (§4.7).
+            value.is_none_or(|v| n.tokens.after.last().is_some_and(|a| a.value == v))
+        } else {
+            n.tokens.field(&key).map(|f| f.value.as_str()) == value
+        }
+    });
+    if !reads_back {
+        return Err(EditError::WouldNotRead(line));
+    }
+    Ok(change)
 }
 
 /// Where an added line goes, relative to an item.
