@@ -1,0 +1,21 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Priority",
+    "root": {
+      "line": 1,
+      "span": [0, 8],
+      "text": "Priority",
+      "children": [
+        {
+          "line": 3,
+          "span": [10, 27],
+          "mark": "-",
+          "text": "Renew",
+          "priority": 3
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

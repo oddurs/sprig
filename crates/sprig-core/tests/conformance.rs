@@ -341,8 +341,9 @@ fn every_example_matches_its_expected_tree() {
     );
 }
 
-#[test]
-fn the_lines_section_cites_every_line_and_indentation_rule() {
+/// The rule headings (`§2.6`) of the spec's numbered sections that no
+/// example in one section of the suite cites.
+fn uncited(section: &str, chapters: &[&str]) -> Vec<String> {
     let spec =
         fs::read_to_string(Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/sprig.md"))
             .unwrap();
@@ -350,15 +351,32 @@ fn the_lines_section_cites_every_line_and_indentation_rule() {
         .lines()
         .filter_map(|l| l.strip_prefix("### "))
         .filter_map(|h| h.split_once(' ').map(|(n, _)| n))
-        .filter(|n| n.starts_with("1.") || n.starts_with("2.") || n.starts_with("3."))
+        .filter(|n| chapters.iter().any(|c| n.split('.').next() == Some(c)))
         .map(|n| format!("§{n}"))
         .collect();
-    assert!(rules.len() > 10, "the spec's rule headings were not found");
+    assert!(rules.len() > 4, "the spec's rule headings were not found");
     let mut cited = std::collections::BTreeSet::new();
-    for dir in sorted_dirs(&suite().join("lines")) {
+    for dir in sorted_dirs(&suite().join(section)) {
         let m = meta(&dir).unwrap_or_else(|e| panic!("{}: {e}", dir.display()));
         cited.extend(m.rules);
     }
-    let missing: Vec<&String> = rules.iter().filter(|r| !cited.contains(*r)).collect();
+    rules.into_iter().filter(|r| !cited.contains(r)).collect()
+}
+
+#[test]
+fn the_lines_section_cites_every_line_and_indentation_rule() {
+    let missing = uncited("lines", &["1", "2", "3"]);
     assert!(missing.is_empty(), "no lines example cites {missing:?}");
+}
+
+#[test]
+fn the_tokens_section_cites_every_token_and_date_rule() {
+    let missing = uncited("tokens", &["4", "9"]);
+    assert!(missing.is_empty(), "no tokens example cites {missing:?}");
+}
+
+#[test]
+fn the_graph_section_cites_every_status_people_blocking_and_graft_rule() {
+    let missing = uncited("graph", &["5", "6", "7", "8"]);
+    assert!(missing.is_empty(), "no graph example cites {missing:?}");
 }

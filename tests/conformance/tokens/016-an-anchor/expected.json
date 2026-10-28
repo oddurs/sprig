@@ -1,0 +1,28 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Anchors",
+    "root": {
+      "line": 1,
+      "span": [0, 7],
+      "text": "Anchors",
+      "children": [
+        {
+          "line": 3,
+          "span": [9, 27],
+          "mark": "-",
+          "text": "Book a van",
+          "anchor": "van"
+        },
+        {
+          "line": 4,
+          "span": [28, 46],
+          "mark": "-",
+          "text": "Move",
+          "after": ["^van"]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

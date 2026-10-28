@@ -1,0 +1,26 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Fields",
+    "root": {
+      "line": 1,
+      "span": [0, 6],
+      "text": "Fields",
+      "children": [
+        {
+          "line": 3,
+          "span": [8, 80],
+          "mark": "-",
+          "text": "Kitchen quote",
+          "fields": {
+            "due": "2026-10-02",
+            "est": "2h",
+            "budget": "64k",
+            "vendor": "Mono Ovens"
+          }
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

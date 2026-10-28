@@ -1,0 +1,21 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Tags",
+    "root": {
+      "line": 1,
+      "span": [0, 4],
+      "text": "Tags",
+      "children": [
+        {
+          "line": 3,
+          "span": [6, 51],
+          "mark": "-",
+          "text": "Coffee beans",
+          "tags": ["market", "weekly", "2026_q4", "a-b"]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

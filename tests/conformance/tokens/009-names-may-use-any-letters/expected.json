@@ -1,0 +1,22 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "People",
+    "root": {
+      "line": 1,
+      "span": [0, 6],
+      "text": "People",
+      "children": [
+        {
+          "line": 3,
+          "span": [8, 35],
+          "mark": "-",
+          "text": "Þorrablót",
+          "people": ["jón"],
+          "tags": ["matur"]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

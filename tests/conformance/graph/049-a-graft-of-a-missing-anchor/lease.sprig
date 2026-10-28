@@ -1,0 +1,6 @@
+Lease  @dana
+
+- Negotiate  ^terms
+  x Rent
+  - Break clause
+- Sign  ^signed

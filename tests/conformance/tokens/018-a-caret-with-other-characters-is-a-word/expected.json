@@ -1,0 +1,20 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Anchors",
+    "root": {
+      "line": 1,
+      "span": [0, 7],
+      "text": "Anchors",
+      "children": [
+        {
+          "line": 3,
+          "span": [9, 36],
+          "mark": "-",
+          "text": "Square x^2 and ^ and ^a.b"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

@@ -1,0 +1,146 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Anchors across files",
+    "status": "doing",
+    "progress": {
+      "done": 1,
+      "doing": 0,
+      "total": 5
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "+",
+        "label": "Lease",
+        "status": "doing",
+        "graft": {
+          "path": "lease.sprig",
+          "title": "Lease",
+          "mounted": true
+        },
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 3
+        },
+        "people": ["dana"],
+        "children": [
+          {
+            "file": "lease.sprig",
+            "line": 3,
+            "mark": "-",
+            "label": "Negotiate",
+            "status": "todo",
+            "grafted": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 2
+            },
+            "people": ["dana"],
+            "children": [
+              {
+                "file": "lease.sprig",
+                "line": 4,
+                "mark": "x",
+                "label": "Rent",
+                "status": "done",
+                "settled": true,
+                "grafted": true,
+                "progress": {
+                  "done": 1,
+                  "doing": 0,
+                  "total": 1
+                },
+                "people": ["dana"]
+              },
+              {
+                "file": "lease.sprig",
+                "line": 5,
+                "mark": "-",
+                "label": "Break clause",
+                "status": "todo",
+                "grafted": true,
+                "progress": {
+                  "done": 0,
+                  "doing": 0,
+                  "total": 1
+                },
+                "people": ["dana"]
+              }
+            ]
+          },
+          {
+            "file": "lease.sprig",
+            "line": 6,
+            "mark": "-",
+            "label": "Sign",
+            "status": "todo",
+            "grafted": true,
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "people": ["dana"]
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 4,
+        "mark": "-",
+        "label": "Supplier credit",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "blocked": true,
+        "waits_on": [
+          {
+            "after": "[[lease^signed]]",
+            "label": "Sign",
+            "file": "lease.sprig",
+            "line": 6
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 5,
+        "mark": "-",
+        "label": "Wrong",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "blocked": true,
+        "waits_on": [
+          {
+            "after": "^signed",
+            "label": "^signed",
+            "unknown": true
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": [
+    {
+      "code": "S0201",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 5,
+      "col": 10,
+      "span": [85, 98]
+    }
+  ]
+}

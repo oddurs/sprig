@@ -1,0 +1,41 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Links",
+    "root": {
+      "line": 1,
+      "span": [0, 5],
+      "text": "Links",
+      "children": [
+        {
+          "line": 3,
+          "span": [7, 48],
+          "mark": "-",
+          "text": "Supplier credit",
+          "after": ["[[lease^signed]]"]
+        },
+        {
+          "line": 4,
+          "span": [49, 86],
+          "mark": "-",
+          "text": "Read the notes in kitchen first",
+          "links": [
+            {
+              "path": "kitchen.sprig"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "S0202",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 20,
+      "span": [26, 48]
+    }
+  ]
+}

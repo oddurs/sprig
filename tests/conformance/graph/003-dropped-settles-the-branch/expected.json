@@ -1,0 +1,70 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Settling",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 1
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "/",
+        "label": "Proofing cabinet",
+        "status": "dropped",
+        "settled": true,
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "-",
+            "label": "Quotes",
+            "status": "dropped",
+            "settled": true,
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 0
+            }
+          },
+          {
+            "file": "main.sprig",
+            "line": 5,
+            "mark": "x",
+            "label": "Measure",
+            "status": "dropped",
+            "settled": true,
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 0
+            }
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 6,
+        "mark": "-",
+        "label": "Oven",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      }
+    ]
+  },
+  "diagnostics": []
+}

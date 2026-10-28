@@ -1,0 +1,155 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Ready to close",
+    "status": "done",
+    "progress": {
+      "done": 5,
+      "doing": 0,
+      "total": 5
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "Design",
+        "status": "todo",
+        "progress": {
+          "done": 2,
+          "doing": 0,
+          "total": 2
+        },
+        "ready_to_close": true,
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "x",
+            "label": "Layout sketch",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          },
+          {
+            "file": "main.sprig",
+            "line": 5,
+            "mark": "x",
+            "label": "Ventilation plan",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 6,
+        "mark": "~",
+        "label": "Build",
+        "status": "doing",
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 1
+        },
+        "ready_to_close": true,
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 7,
+            "mark": "x",
+            "label": "Frame",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 8,
+        "mark": "?",
+        "label": "Name?",
+        "status": "question",
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 1
+        },
+        "ready_to_close": true,
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 9,
+            "mark": "x",
+            "label": "Ask Dana",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 10,
+        "mark": "-",
+        "label": "Paint",
+        "status": "todo",
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 1
+        },
+        "ready_to_close": true,
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 11,
+            "mark": "x",
+            "label": "Primer",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          },
+          {
+            "file": "main.sprig",
+            "line": 12,
+            "mark": "/",
+            "label": "Gloss",
+            "status": "dropped",
+            "settled": true,
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

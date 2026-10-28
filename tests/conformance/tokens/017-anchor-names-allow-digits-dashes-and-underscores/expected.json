@@ -1,0 +1,35 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Anchors",
+    "root": {
+      "line": 1,
+      "span": [0, 7],
+      "text": "Anchors",
+      "children": [
+        {
+          "line": 3,
+          "span": [9, 23],
+          "mark": "-",
+          "text": "One",
+          "anchor": "step-1"
+        },
+        {
+          "line": 4,
+          "span": [24, 38],
+          "mark": "-",
+          "text": "Two",
+          "anchor": "step_2"
+        },
+        {
+          "line": 5,
+          "span": [39, 50],
+          "mark": "-",
+          "text": "Three",
+          "anchor": "3"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

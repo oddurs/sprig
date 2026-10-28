@@ -1,0 +1,4 @@
+Blocked
+
+- Permit  ^permit
++ [[kitchen]]  after:^permit

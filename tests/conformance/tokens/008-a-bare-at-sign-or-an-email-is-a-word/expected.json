@@ -1,0 +1,20 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "People",
+    "root": {
+      "line": 1,
+      "span": [0, 6],
+      "text": "People",
+      "children": [
+        {
+          "line": 3,
+          "span": [8, 38],
+          "mark": "-",
+          "text": "Mail dana@example.org @ noon"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

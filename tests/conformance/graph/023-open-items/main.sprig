@@ -1,0 +1,9 @@
+Open
+
+- First  ^a
+~ Second  ^b
+? Third  ^c
+x Fourth  ^d
+/ Fifth  ^e
+> Sixth  ^f
+- Waits  after:^a after:^b after:^c after:^d after:^e after:^f

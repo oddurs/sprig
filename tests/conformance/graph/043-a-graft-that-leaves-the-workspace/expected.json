@@ -1,0 +1,93 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Resolution",
+    "status": "empty",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 0
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "+",
+        "label": "../secrets.sprig",
+        "status": "empty",
+        "graft": {
+          "path": "",
+          "title": "../secrets.sprig",
+          "mounted": false
+        },
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 4,
+        "mark": "+",
+        "label": "rooms/../../etc/passwd.sprig",
+        "status": "empty",
+        "graft": {
+          "path": "",
+          "title": "rooms/../../etc/passwd.sprig",
+          "mounted": false
+        },
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 5,
+        "mark": "+",
+        "label": "/etc/passwd.sprig",
+        "status": "empty",
+        "graft": {
+          "path": "",
+          "title": "/etc/passwd.sprig",
+          "mounted": false
+        },
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        }
+      }
+    ]
+  },
+  "diagnostics": [
+    {
+      "code": "S0104",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 3,
+      "span": [14, 28]
+    },
+    {
+      "code": "S0104",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 4,
+      "col": 3,
+      "span": [31, 57]
+    },
+    {
+      "code": "S0104",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 5,
+      "col": 3,
+      "span": [60, 75]
+    }
+  ]
+}

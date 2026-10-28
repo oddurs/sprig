@@ -1,0 +1,46 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Unreadable",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 1
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "Sometime",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      }
+    ]
+  },
+  "diagnostics": [
+    {
+      "code": "S0001",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 13,
+      "span": [24, 35]
+    },
+    {
+      "code": "S0001",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 26,
+      "span": [37, 48]
+    }
+  ]
+}

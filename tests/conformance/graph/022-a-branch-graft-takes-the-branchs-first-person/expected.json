@@ -1,0 +1,88 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Week",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 2
+    },
+    "people": ["sam"],
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "+",
+        "label": "Negotiate",
+        "status": "todo",
+        "graft": {
+          "path": "lease.sprig",
+          "anchor": "terms",
+          "title": "Negotiate",
+          "mounted": true
+        },
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "people": ["teo"],
+        "children": [
+          {
+            "file": "lease.sprig",
+            "line": 4,
+            "mark": "-",
+            "label": "Rent",
+            "status": "todo",
+            "grafted": true,
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "people": ["teo"]
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 4,
+        "mark": "+",
+        "label": "Sign",
+        "status": "todo",
+        "graft": {
+          "path": "lease.sprig",
+          "anchor": "signed",
+          "title": "Sign",
+          "mounted": true
+        },
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "people": ["dana"],
+        "children": [
+          {
+            "file": "lease.sprig",
+            "line": 6,
+            "mark": "-",
+            "label": "Witness",
+            "status": "todo",
+            "grafted": true,
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "people": ["dana"]
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

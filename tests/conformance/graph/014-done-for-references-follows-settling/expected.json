@@ -1,0 +1,98 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Done",
+    "status": "doing",
+    "progress": {
+      "done": 3,
+      "doing": 0,
+      "total": 4
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "?",
+        "label": "Free tier?",
+        "status": "done",
+        "answered": true,
+        "settled": true,
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 5,
+        "mark": "x",
+        "label": "Kitchen",
+        "status": "done",
+        "settled": true,
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 1
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 6,
+            "mark": "-",
+            "label": "Tiling",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 7,
+        "mark": "#",
+        "label": "Dairy",
+        "status": "done",
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 1
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 8,
+            "mark": "x",
+            "label": "Butter",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      },
+      {
+        "file": "main.sprig",
+        "line": 9,
+        "mark": "-",
+        "label": "Pricing page",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      }
+    ]
+  },
+  "diagnostics": []
+}
