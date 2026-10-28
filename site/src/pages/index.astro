@@ -95,8 +95,14 @@ const decisions = [
 	{ mark: 'dropped', ruling: 'Rejected', title: 'No Markdown checkboxes in the parser', body: 'Two spellings for every status, forever. An importer converts them once.' },
 ] as const;
 
-// Numbers in running prose read better as words.
-const words: Record<number, string> = { 12: 'twelve', 13: 'thirteen', 14: 'fourteen', 15: 'fifteen', 16: 'sixteen', 17: 'seventeen', 18: 'eighteen', 19: 'nineteen', 20: 'twenty' };
+// Numbers in running prose read better as words, up to ninety-nine.
+const ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+const tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+const inWords = (n: number) =>
+	n < 20 ? ones[n] || String(n) : n < 100 ? tens[Math.floor(n / 10)] + (n % 10 ? `-${ones[n % 10]}` : '') : String(n);
+// A quoted mark in a ruling's title is code, and never breaks across lines.
+const titled = (s: string) =>
+	s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/'([^']+)'/g, (_, c) => `<code class="nowrap">${c.trim()}</code>`);
 
 const tools = screen('next', examples as Record<string, string>, { limit: 5, compact: true });
 
@@ -229,14 +235,14 @@ const faq = [
 						<Mark kind={d.mark} size="md" />
 						<Text size="sm" tone="muted">{d.ruling}</Text>
 					</Inline>
-					<Text as="h3" size="md" weight="bold">{d.title}</Text>
+					<Text as="h3" size="md" weight="bold"><Fragment set:html={titled(d.title)} /></Text>
 					<Text tone="muted">{d.body}</Text>
 					<a class="text-link small" href={url(`/decisions/#${slug(d.title)}`)}>The full argument</a>
 				</Stack>
 			))}
 		</Grid>
 		<Inline gap={4}>
-			<a class="text-link" href={url('/decisions/')}>All {words[facts.decisions] ?? facts.decisions} settled arguments</a>
+			<a class="text-link" href={url('/decisions/')}>All {inWords(facts.decisions)} settled arguments</a>
 			<a class="text-link" href={url('/compare/')}>How Sprig compares</a>
 		</Inline>
 	</Section>
@@ -259,6 +265,9 @@ const faq = [
 </Base>
 
 <style>
+	:global(code.nowrap) {
+		white-space: nowrap;
+	}
 	.hero {
 		padding-block: var(--space-10) var(--space-9);
 	}

@@ -8,6 +8,7 @@ import Inline from '../components/primitives/Inline.astro';
 import Stack from '../components/primitives/Stack.astro';
 import Text from '../components/primitives/Text.astro';
 import examples from '../generated/examples.json';
+import facts from '../generated/facts.json';
 import Base from '../layouts/Base.astro';
 import { ready, screen } from '../lib/terminal.js';
 import { frame, initialState } from '../lib/tui.js';
@@ -37,6 +38,10 @@ const check = screen('check', broken);
 const tui = frame(initialState(), files);
 
 type Cmd = { sig: string; when: string; body: string };
+// A command the built binary has is here today, whatever milestone it was
+// planned for; the list comes from `sprig --help`, so this cannot go stale.
+const have = new Set<string>(facts.commands);
+const today = (c: Cmd) => have.has(c.sig.split(' ')[1]);
 const groups: { name: string; note: string; cmds: Cmd[] }[] = [
 	{
 		name: 'Read',
@@ -76,6 +81,7 @@ const groups: { name: string; note: string; cmds: Cmd[] }[] = [
 			{ sig: 'sprig export', when: 'v0.3', body: 'The resolved tree as JSON; due dates as an iCalendar feed.' },
 			{ sig: 'sprig import', when: 'v0.3', body: 'Markdown checkboxes in, a Sprig file out.' },
 			{ sig: 'sprig graph', when: 'v0.3', body: 'The dependency graph for Graphviz or Mermaid.' },
+			{ sig: 'sprig lsp', when: 'v0.2', body: 'A language server for any editor: problems as you type, completion, go to definition, hover and ticking.' },
 			{ sig: 'sprig mcp', when: 'v0.3', body: 'The plans, served to coding agents.' },
 			{ sig: 'sprig completions', when: 'v0.2', body: 'Completion that knows your anchors and people, and a man page.' },
 		],
@@ -95,7 +101,7 @@ const code = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').repla
 const rules = [
 	['The file is the truth', 'Tools compute progress and blockers; they never store them. Delete every tool and the plan still reads.'],
 	['A write touches one line', '`tick`, `add` and `answer` change only the bytes they mean to, so `git diff` shows exactly what happened.'],
-	['Three kinds of output', 'Aligned for people, tab-separated with `--plain`, the whole tree with `--json`. The `--plain` columns are covered by the stability policy.'],
+	['Three kinds of output', 'Aligned for people, tab-separated with `--plain`, and the whole resolved tree as JSON from `sprig export`. The `--plain` columns are covered by the stability policy.'],
 	['Exit codes mean something', '`0` fine, `1` the answer is no, `2` you asked wrong. Scripts branch on them.'],
 	['Every answer is reproducible', '`--today` pins the date, so any output can be tested, diffed and pasted into a bug report.'],
 	['Nothing to set up', 'No config file, no daemon, no plugins, no network. Flags and environment variables only.'],
@@ -131,7 +137,8 @@ const strip = ['k', 'j', 'h', 'l', 'x', '~', '1', '2', '3', '/', '?'];
 				<Text size="sm" tone="muted">The toolchain</Text>
 				<Text as="h1" id="tools-h" size="2xl" weight="bold">A toolbelt, not an app.</Text>
 				<Text size="md" tone="muted" measure>Sprig is a file format first. The tools around it are small, read the same files, and agree with each other because they share one parser. None of them needs an account, a server or a config file.</Text>
-				<Text size="sm" measure>Nothing here is installable yet. The first release, v0.1, ships <code>sprig next</code> and <code>sprig check</code>; the rest arrive milestone by milestone.</Text>
+				<Text size="sm" measure>No release is published yet, but the command line installs from source with Rust today. Commands marked <em>Today</em> are in it; the rest arrive milestone by milestone.</Text>
+				<pre class="install"><code>cargo install --locked --git {repo} sprig-cli</code></pre>
 			</Stack>
 			<Inline gap={3}>
 				<Button href={url('/roadmap/')}>The roadmap</Button>
@@ -159,7 +166,7 @@ const strip = ['k', 'j', 'h', 'l', 'x', '~', '1', '2', '3', '/', '?'];
 								<div class="cmd">
 									<dt>
 										<code>{c.sig}</code>
-										<span class="when">{c.when}</span>
+										<span class:list={['when', { now: today(c) }]}>{today(c) ? 'Today' : c.when}</span>
 									</dt>
 									<dd>{c.body}</dd>
 								</div>
@@ -298,6 +305,25 @@ const strip = ['k', 'j', 'h', 'l', 'x', '~', '1', '2', '3', '/', '?'];
 		font-size: var(--text-xs);
 		color: var(--text-muted);
 		white-space: nowrap;
+	}
+	.when.now {
+		color: var(--text);
+	}
+	.install code {
+		padding: 0;
+		background: none;
+	}
+	.install {
+		margin: 0;
+		padding: var(--space-3) var(--space-4);
+		max-width: 100%;
+		/* Wrapped, not scrolled: a command is copied whole, and should be read whole. */
+		white-space: pre-wrap;
+		overflow-wrap: anywhere;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-md);
+		background: var(--surface-raised);
+		font-size: var(--text-sm);
 	}
 	.cmd dd {
 		margin: var(--space-1) 0 0;
