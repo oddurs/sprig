@@ -1,0 +1,50 @@
+name: vscode
+
+# One VS Code extension package per platform, each with that platform's
+# `sprig` binary bundled as its language server, so it works offline with
+# nothing else installed. Packages are uploaded as artifacts; publishing to
+# the Marketplace waits on the name (cairn 0006, 0054).
+on:
+  push:
+    branches: [main]
+    paths: ["editors/**", "crates/**", "Cargo.lock", ".github/workflows/vscode.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    name: package (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { target: darwin-arm64, os: macos-latest, rust: aarch64-apple-darwin }
+          - { target: darwin-x64, os: macos-latest, rust: x86_64-apple-darwin }
+          - { target: linux-x64, os: ubuntu-latest, rust: x86_64-unknown-linux-gnu }
+          - { target: linux-arm64, os: ubuntu-24.04-arm, rust: aarch64-unknown-linux-gnu }
+          - { target: win32-x64, os: windows-latest, rust: x86_64-pc-windows-msvc }
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: site/.node-version
+      - run: rustup target add ${{ matrix.rust }}
+      - run: cargo build --locked --release -p sprig-cli --target ${{ matrix.rust }}
+      - name: Package
+        working-directory: editors/vscode
+        run: |
+          set -eu
+          exe=sprig; case "${{ matrix.target }}" in win32-*) exe=sprig.exe;; esac
+          npm ci --no-audit --no-fund
+          SPRIG_SERVER="$GITHUB_WORKSPACE/target/${{ matrix.rust }}/release/$exe" node scripts/prepare.js
+          npx vsce package --target ${{ matrix.target }} -o sprig-${{ matrix.target }}.vsix
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sprig-${{ matrix.target }}.vsix
+          path: editors/vscode/sprig-${{ matrix.target }}.vsix

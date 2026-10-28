@@ -1,0 +1,391 @@
+===========================
+001-title-is-the-first-line
+===========================
+
+Groceries
+
+- milk
+- bread
+
+---
+
+(source_file
+  (title
+    (word))
+  (item
+    (mark)
+    (word))
+  (item
+    (mark)
+    (word)))
+
+========================================
+002-title-after-blank-lines-and-comments
+========================================
+
+
+// planning notes
+
+Weekend
+- Laundry
+
+---
+
+(source_file
+  (comment)
+  (title
+    (word))
+  (item
+    (mark)
+    (word)))
+
+===================================
+003-title-tokens-belong-to-the-root
+===================================
+
+Open the bakery  @dana  due:2026-12-05  where:"41 Mill Street"
+
+- Sign the lease
+
+---
+
+(source_file
+  (title
+    (word)
+    (word)
+    (word)
+    (person)
+    (field)
+    (field))
+  (item
+    (mark)
+    (word)
+    (word)
+    (word)))
+
+==================================
+004-first-line-item-means-no-title
+==================================
+
+- milk
+- bread
+
+---
+
+(source_file
+  (item
+    (mark)
+    (word))
+  (item
+    (mark)
+    (word)))
+
+======================================
+005-indented-first-line-means-no-title
+======================================
+
+  Not a title, a note
+- milk
+
+---
+
+(source_file
+  (note)
+  (item
+    (mark)
+    (word)))
+
+===================================
+006-first-line-group-means-no-title
+===================================
+
+# Dairy
+  - milk
+
+---
+
+(source_file
+  (item
+    (mark)
+    (word))
+  (item
+    (mark)
+    (word)))
+
+====================================
+007-first-line-answer-means-no-title
+====================================
+
+= settled already
+- milk
+
+---
+
+(source_file
+  (answer
+    (mark)
+    (word)
+    (word))
+  (item
+    (mark)
+    (word)))
+
+============================
+009-only-blanks-and-comments
+============================
+
+
+// nothing yet
+   
+
+---
+
+(source_file
+  (comment))
+
+=============
+010-utf8-text
+=============
+
+Þorrablót  @jón
+
+- Hákarl, 2 kg
+- Brennivín ☃
+
+---
+
+(source_file
+  (title
+    (word)
+    (person))
+  (item
+    (mark)
+    (word)
+    (word)
+    (word))
+  (item
+    (mark)
+    (word)
+    (word)))
+
+=======================================
+013-unindented-note-belongs-to-the-root
+=======================================
+
+Weekend
+
+- Laundry
+Remember the dry cleaning.
+
+---
+
+(source_file
+  (title
+    (word))
+  (item
+    (mark)
+    (word))
+  (note))
+
+========================
+014-classification-order
+========================
+
+Classification
+
+- an item
+  a note on it
+  // a comment, never shown
+  \- a note that starts with a mark
+
+---
+
+(source_file
+  (title
+    (word))
+  (item
+    (mark)
+    (word)
+    (word))
+  (note)
+  (comment)
+  (escaped_note))
+
+=============
+015-mark-todo
+=============
+
+Marks
+
+- to do
+
+---
+
+(source_file
+  (title
+    (word))
+  (item
+    (mark)
+    (word)
+    (word)))
+
+==============
+016-mark-doing
+==============
+
+Marks
+
+~ doing
+
+---
+
+(source_file
+  (title
+    (word))
+  (item
+    (mark)
+    (word)))
+
+=============
+017-mark-done
+=============
+
+Marks
+
+x done
+
+---
+
+(source_file
+  (title
+    (word))
+  (item
+    (mark)
+    (word)))
+
+================
+018-mark-dropped
+================
+
+Marks
+
+/ dropped
+
+---
+
+(source_file
+  (title
+    (word))
+  (item
+    (mark)
+    (word)))
+
+==============
+019-mark-later
+==============
+
+Marks
+
+> later
+
+---
+
+(source_file
+  (title
+    (word))
+  (item
+    (mark)
+    (word)))
+
+=================
+020-mark-question
+=================
+
+Marks
+
+? a question
+
+---
+
+(source_file
+  (title
+    (word))
+  (item
+    (mark)
+    (word)
+    (word)))
+
+==============
+021-mark-group
+==============
+
+Marks
+
+# a group
+  - inside it
+
+---
+
+(source_file
+  (title
+    (word))
+  (item
+    (mark)
+    (word)
+    (word))
+  (item
+    (mark)
+    (word)
+    (word)))
+
+==============
+022-mark-graft
+==============
+
+Marks
+
++ [[kitchen]]
+
+---
+
+(source_file
+  (title
+    (word))
+  (item
+    (mark)
+    (link)))
+
+====================================
+023-a-mark-needs-whitespace-after-it
+====================================
+
+Marks
+
+x-ray
+#tag
+-dash
+~tilde
+?why
++plus
+=equals
+/slash
+>arrow
+x ray
+
+---
+
+(source_file
+  (title
+    (word))
+  (note)
+  (note)
+  (note)
+  (note)
+  (note)
+  (note)
+  (note)
+  (note)
+  (note)
+  (item
+    (mark)
+    (word)))

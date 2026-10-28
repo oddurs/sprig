@@ -1,0 +1,32 @@
+{
+  "parser-directories": [
+    ".."
+  ],
+  "theme": {
+    "comment": 8,
+    "keyword": 5,
+    "markup.heading": {
+      "bold": true
+    },
+    "markup.link": {
+      "underline": true
+    },
+    "markup.strikethrough": {
+      "italic": true
+    },
+    "markup.list.checked": 2,
+    "markup.list.unchecked": 7,
+    "markup.list": 3,
+    "markup.italic": {
+      "italic": true
+    },
+    "variable": 6,
+    "tag": 4,
+    "label": 3,
+    "property": 4,
+    "punctuation.special": {
+      "bold": true
+    },
+    "string.escape": 8
+  }
+}

@@ -393,6 +393,33 @@ fn the_zsh_script_loads_where_zsh_is_installed() {
 }
 
 #[test]
+fn pressing_tab_in_zsh_offers_the_folders_anchors() {
+    if Command::new("zsh").arg("--version").output().is_err() {
+        eprintln!("zsh is not installed here; Tab completion was not tried");
+        return;
+    }
+    // An interactive zsh under zpty, the way a person types: the script is
+    // autoloaded from fpath, as a package manager installs it.
+    let dir = scratch("zsh-tab");
+    fs::write(dir.join("_sprig"), stdout(&sprig(&["completions", "zsh"]))).unwrap();
+    let bin = Path::new(env!("CARGO_BIN_EXE_sprig")).parent().unwrap();
+    let out = Command::new("zsh")
+        .arg("-f")
+        .arg(Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/zsh-tab.zsh"))
+        .arg(&dir)
+        .arg(bin)
+        .arg(repo("examples/bakery"))
+        .arg("sprig tick ^")
+        .output()
+        .unwrap();
+    let screen = String::from_utf8_lossy(&out.stdout);
+    assert!(!screen.contains("command not found"), "{screen}");
+    for a in ["^signed", "^terms", "^loan", "^oven"] {
+        assert!(screen.contains(a), "zsh does not offer {a}:\n{screen}");
+    }
+}
+
+#[test]
 fn completion_candidates_are_the_folders_anchors_and_people() {
     let refs = stdout(&run(&repo("examples/bakery"), &["__complete", "refs"], &[]));
     assert!(refs.lines().any(|l| l == "^signed"));

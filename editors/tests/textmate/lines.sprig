@@ -1,0 +1,15 @@
+Open the bakery  @dana  due:2026-12-05  where:"41 Mill Street"
+
+Corner unit, 62 m². A note carries no @tokens or #tags.
+// A comment, never shown
+- to do  ^lease
+~ doing  !!
+x done
+/ dropped
+> later
+? a question
+  = its answer  @dana
+# a group  #finance
+  + [[kitchen]]  @teo
+  \- an escaped note
+x-ray is a note, and so is #tag at the start

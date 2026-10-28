@@ -95,9 +95,15 @@ fn completions(shell: clap_complete::Shell) -> Result<ExitCode> {
                     "'*::refs -- Items to tick:_default'",
                     "'*::refs -- Items to tick:_sprig_refs'",
                 );
-            script.push_str(
-                "\n_sprig_refs() {\n    local -a refs\n    refs=(${(f)\"$(sprig __complete refs 2>/dev/null)\"})\n    _describe 'ref' refs\n}\n",
-            );
+            // Defined before clap's dispatch at the end of the file: when zsh
+            // autoloads the file from fpath, that dispatch runs the completion
+            // at once, and a helper defined after it would not exist yet.
+            let helper = "_sprig_refs() {\n    local -a refs\n    refs=(${(f)\"$(sprig __complete refs 2>/dev/null)\"})\n    _describe 'ref' refs\n}\n\n";
+            let dispatch = "if [ \"$funcstack[1]\" = \"_sprig\" ]";
+            match script.find(dispatch) {
+                Some(at) => script.insert_str(at, helper),
+                None => script.push_str(helper),
+            }
         }
         _ => {}
     }

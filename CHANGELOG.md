@@ -58,6 +58,16 @@ All notable changes to this project are recorded here. The format follows
   - Hover shows progress, the work left, the owner and what an item waits on.
   - Code actions tick an item, cycle its mark and write out a typed date.
   - It formats documents.
+- Editors:
+  - a tree-sitter grammar in `editors/tree-sitter-sprig`, held to the core's
+    reading of every conformance input;
+  - TextMate grammar snapshots;
+  - a VS Code extension that bundles the language server;
+  - a Neovim setup tested in CI;
+  - a guide to setting up each editor.
+- A performance gate: parse, resolve and check on 5,000 lines must stay
+  within twice a committed baseline. Re-inserting a file whose text is
+  unchanged keeps its parse, so a keystroke reparses one file.
 - `sprig completions bash|zsh|fish|powershell|elvish`, completing refs from
   the current folder, and `sprig man`.
 
