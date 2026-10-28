@@ -1,0 +1,21 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Blank lines",
+    "root": {
+      "line": 1,
+      "span": [0, 11],
+      "text": "Blank lines",
+      "children": [
+        {
+          "line": 3,
+          "span": [13, 20],
+          "mark": "-",
+          "text": "First",
+          "notes": ["one", "two"]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

@@ -1,0 +1,19 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Naming",
+    "root": {
+      "line": 1,
+      "span": [0, 6],
+      "text": "Naming",
+      "answers": [
+        {
+          "line": 3,
+          "span": [8, 22],
+          "text": "Kiln & Crumb"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

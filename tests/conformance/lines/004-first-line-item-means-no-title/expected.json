@@ -1,0 +1,23 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": null,
+    "root": {
+      "children": [
+        {
+          "line": 1,
+          "span": [0, 6],
+          "mark": "-",
+          "text": "milk"
+        },
+        {
+          "line": 2,
+          "span": [7, 14],
+          "mark": "-",
+          "text": "bread"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

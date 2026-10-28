@@ -1,0 +1,28 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Marks",
+    "root": {
+      "line": 1,
+      "span": [0, 5],
+      "text": "Marks",
+      "children": [
+        {
+          "line": 3,
+          "span": [7, 16],
+          "mark": "#",
+          "text": "a group",
+          "children": [
+            {
+              "line": 4,
+              "span": [19, 30],
+              "mark": "-",
+              "text": "inside it"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

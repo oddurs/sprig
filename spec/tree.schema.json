@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/oddurs/sprig/blob/main/spec/tree.schema.json",
+  "title": "Sprig tree",
+  "description": "One Sprig file read and resolved, version 1. Appendix D of spec/sprig.md documents every field. Keys whose value would be empty, zero or false may be left out, and a reader treats a missing key as that value.",
+  "type": "object",
+  "required": ["sprig_tree"],
+  "additionalProperties": false,
+  "properties": {
+    "sprig_tree": { "const": 1 },
+    "file": { "$ref": "#/$defs/path" },
+    "today": { "$ref": "#/$defs/date" },
+    "syntax": { "$ref": "#/$defs/syntax" },
+    "resolved": { "$ref": "#/$defs/resolved" },
+    "diagnostics": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/diagnostic" }
+    }
+  },
+  "$defs": {
+    "path": {
+      "description": "Relative to the workspace root, with / between components.",
+      "type": "string",
+      "pattern": "^[^/].*\\.sprig$"
+    },
+    "date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "line": { "type": "integer", "minimum": 1 },
+    "span": {
+      "description": "Byte offsets into the file, end exclusive.",
+      "type": "array",
+      "items": { "type": "integer", "minimum": 0 },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "mark": { "enum": ["-", "~", "x", "/", ">", "?", "#", "+"] },
+    "tokens": {
+      "description": "The tokens of §4, lifted from a line.",
+      "type": "object",
+      "properties": {
+        "people": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "tags": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "priority": { "enum": [1, 2, 3] },
+        "anchor": { "type": "string", "minLength": 1 },
+        "fields": {
+          "type": "object",
+          "propertyNames": { "pattern": "^[^A-Z:]+$" },
+          "additionalProperties": { "type": "string" }
+        },
+        "after": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["path"],
+            "additionalProperties": false,
+            "properties": {
+              "path": { "type": "string", "minLength": 1 },
+              "anchor": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      }
+    },
+    "syntax": {
+      "description": "What one file says. Nothing in it depends on another file or on the date.",
+      "type": "object",
+      "required": ["title", "root"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": ["string", "null"] },
+        "root": { "$ref": "#/$defs/syntax_node" }
+      }
+    },
+    "syntax_node": {
+      "type": "object",
+      "allOf": [{ "$ref": "#/$defs/tokens" }],
+      "unevaluatedProperties": false,
+      "properties": {
+        "line": { "$ref": "#/$defs/line" },
+        "span": { "$ref": "#/$defs/span" },
+        "mark": { "$ref": "#/$defs/mark" },
+        "text": { "type": "string" },
+        "notes": { "type": "array", "items": { "type": "string" } },
+        "answers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/answer" }
+        },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/syntax_node" }
+        }
+      }
+    },
+    "answer": {
+      "type": "object",
+      "required": ["line", "span", "text"],
+      "allOf": [{ "$ref": "#/$defs/tokens" }],
+      "unevaluatedProperties": false,
+      "properties": {
+        "line": { "$ref": "#/$defs/line" },
+        "span": { "$ref": "#/$defs/span" },
+        "text": { "type": "string" }
+      }
+    },
+    "resolved": {
+      "description": "A node of the resolved tree: grafts mounted, and status, progress, people and blocking computed.",
+      "type": "object",
+      "required": ["file", "label", "status", "progress"],
+      "additionalProperties": false,
+      "properties": {
+        "file": { "$ref": "#/$defs/path" },
+        "line": { "$ref": "#/$defs/line" },
+        "mark": { "$ref": "#/$defs/mark" },
+        "label": { "type": "string" },
+        "status": { "enum": ["todo", "doing", "done", "dropped", "later", "question", "empty"] },
+        "answered": { "type": "boolean" },
+        "settled": { "type": "boolean" },
+        "grafted": { "type": "boolean" },
+        "graft": {
+          "type": "object",
+          "required": ["path", "title", "mounted"],
+          "additionalProperties": false,
+          "properties": {
+            "path": { "type": "string" },
+            "anchor": { "type": "string", "minLength": 1 },
+            "title": { "type": "string" },
+            "mounted": { "type": "boolean" },
+            "notes": { "type": "array", "items": { "type": "string" } },
+            "answers": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "progress": {
+          "type": "object",
+          "required": ["done", "doing", "total"],
+          "additionalProperties": false,
+          "properties": {
+            "done": { "type": "integer", "minimum": 0 },
+            "doing": { "type": "integer", "minimum": 0 },
+            "total": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "estimate": { "type": "number", "exclusiveMinimum": 0 },
+        "people": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "blocked": { "type": "boolean" },
+        "waits_on": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": ["after", "label"],
+                "additionalProperties": false,
+                "properties": {
+                  "after": { "type": "string" },
+                  "label": { "type": "string" },
+                  "unknown": { "type": "boolean" }
+                }
+              },
+              {
+                "type": "object",
+                "required": ["start"],
+                "additionalProperties": false,
+                "properties": { "start": { "$ref": "#/$defs/date" } }
+              }
+            ]
+          }
+        },
+        "ready_to_close": { "type": "boolean" },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/resolved" }
+        }
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "required": ["code", "file", "line"],
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string", "pattern": "^S[0-9]{4}$" },
+        "severity": { "enum": ["error", "warning"] },
+        "file": { "$ref": "#/$defs/path" },
+        "line": { "$ref": "#/$defs/line" },
+        "col": { "type": "integer", "minimum": 1 },
+        "span": { "$ref": "#/$defs/span" },
+        "message": { "type": "string" },
+        "help": { "type": "string" }
+      }
+    }
+  }
+}

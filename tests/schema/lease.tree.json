@@ -1,0 +1,200 @@
+{
+  "sprig_tree": 1,
+  "file": "lease.sprig",
+  "today": "2026-10-01",
+  "syntax": {
+    "title": "Lease",
+    "root": {
+      "line": 1,
+      "span": [0, 12],
+      "text": "Lease",
+      "people": ["dana"],
+      "children": [
+        {
+          "line": 3,
+          "span": [14, 46],
+          "mark": "x",
+          "text": "Shortlist three spaces",
+          "fields": {
+            "est": "2d"
+          },
+          "notes": ["41 Mill Street won. Corner frontage, three-phase power already in, and the landlord will split the cost of a new shopfront."]
+        },
+        {
+          "line": 6,
+          "span": [175, 221],
+          "mark": "~",
+          "text": "Negotiate terms",
+          "priority": 3,
+          "anchor": "terms",
+          "fields": {
+            "due": "2026-10-05"
+          },
+          "children": [
+            {
+              "line": 7,
+              "span": [224, 263],
+              "mark": "x",
+              "text": "Eight weeks rent-free for the fit-out"
+            },
+            {
+              "line": 8,
+              "span": [266, 294],
+              "mark": "~",
+              "text": "Break clause at year three"
+            },
+            {
+              "line": 9,
+              "span": [297, 328],
+              "mark": "?",
+              "text": "Who pays for the grease trap?",
+              "notes": ["Landlord says us. Our lawyer says it's a fixture."]
+            }
+          ]
+        },
+        {
+          "line": 11,
+          "span": [383, 422],
+          "mark": "-",
+          "text": "Change-of-use permit",
+          "anchor": "permit",
+          "fields": {
+            "est": "3w"
+          },
+          "notes": ["Class E covers a bakery, but seating for more than 12 needs a variation."]
+        },
+        {
+          "line": 13,
+          "span": [498, 552],
+          "mark": "-",
+          "text": "Sign the lease",
+          "anchor": "signed",
+          "after": ["^terms", "^permit"]
+        }
+      ]
+    }
+  },
+  "resolved": {
+    "file": "lease.sprig",
+    "line": 1,
+    "label": "Lease",
+    "status": "doing",
+    "progress": {
+      "done": 2,
+      "doing": 1,
+      "total": 6
+    },
+    "estimate": 120,
+    "people": ["dana"],
+    "children": [
+      {
+        "file": "lease.sprig",
+        "line": 3,
+        "mark": "x",
+        "label": "Shortlist three spaces",
+        "status": "done",
+        "settled": true,
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 1
+        },
+        "people": ["dana"]
+      },
+      {
+        "file": "lease.sprig",
+        "line": 6,
+        "mark": "~",
+        "label": "Negotiate terms",
+        "status": "doing",
+        "progress": {
+          "done": 1,
+          "doing": 1,
+          "total": 3
+        },
+        "people": ["dana"],
+        "children": [
+          {
+            "file": "lease.sprig",
+            "line": 7,
+            "mark": "x",
+            "label": "Eight weeks rent-free for the fit-out",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            },
+            "people": ["dana"]
+          },
+          {
+            "file": "lease.sprig",
+            "line": 8,
+            "mark": "~",
+            "label": "Break clause at year three",
+            "status": "doing",
+            "progress": {
+              "done": 0,
+              "doing": 1,
+              "total": 1
+            },
+            "people": ["dana"]
+          },
+          {
+            "file": "lease.sprig",
+            "line": 9,
+            "mark": "?",
+            "label": "Who pays for the grease trap?",
+            "status": "question",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "people": ["dana"]
+          }
+        ]
+      },
+      {
+        "file": "lease.sprig",
+        "line": 11,
+        "mark": "-",
+        "label": "Change-of-use permit",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "estimate": 120,
+        "people": ["dana"]
+      },
+      {
+        "file": "lease.sprig",
+        "line": 13,
+        "mark": "-",
+        "label": "Sign the lease",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "people": ["dana"],
+        "blocked": true,
+        "waits_on": [
+          {
+            "after": "^terms",
+            "label": "Negotiate terms"
+          },
+          {
+            "after": "^permit",
+            "label": "Change-of-use permit"
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

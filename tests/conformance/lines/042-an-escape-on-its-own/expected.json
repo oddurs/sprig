@@ -1,0 +1,21 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Escapes",
+    "root": {
+      "line": 1,
+      "span": [0, 7],
+      "text": "Escapes",
+      "children": [
+        {
+          "line": 3,
+          "span": [9, 15],
+          "mark": "-",
+          "text": "Pack",
+          "notes": [""]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

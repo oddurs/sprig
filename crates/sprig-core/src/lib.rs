@@ -6,9 +6,13 @@
 
 pub mod date;
 pub mod diagnostic;
+pub mod json;
+pub mod next;
 pub mod syntax;
 pub mod token;
+pub mod workspace;
 
 pub use date::Date;
 pub use diagnostic::{Code, Diagnostic, Severity, Span};
 pub use syntax::{Document, Mark, Node, Parsed, parse};
+pub use workspace::{Resolution, Resolved, Status, Tree, Wait, Workspace};

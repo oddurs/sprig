@@ -1,0 +1,25 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Open the bakery",
+    "root": {
+      "line": 1,
+      "span": [0, 62],
+      "text": "Open the bakery",
+      "people": ["dana"],
+      "fields": {
+        "due": "2026-12-05",
+        "where": "41 Mill Street"
+      },
+      "children": [
+        {
+          "line": 3,
+          "span": [64, 80],
+          "mark": "-",
+          "text": "Sign the lease"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

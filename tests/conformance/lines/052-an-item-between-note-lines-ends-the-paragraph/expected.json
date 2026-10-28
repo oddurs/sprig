@@ -1,0 +1,29 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Kitchen",
+    "root": {
+      "line": 1,
+      "span": [0, 7],
+      "text": "Kitchen",
+      "children": [
+        {
+          "line": 3,
+          "span": [9, 15],
+          "mark": "-",
+          "text": "Oven",
+          "notes": ["first note", "second note"],
+          "children": [
+            {
+              "line": 5,
+              "span": [31, 38],
+              "mark": "-",
+              "text": "Quote"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

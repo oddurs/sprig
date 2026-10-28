@@ -1,0 +1,34 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Blank lines",
+    "root": {
+      "line": 1,
+      "span": [0, 11],
+      "text": "Blank lines",
+      "children": [
+        {
+          "line": 3,
+          "span": [13, 20],
+          "mark": "-",
+          "text": "First",
+          "children": [
+            {
+              "line": 5,
+              "span": [24, 43],
+              "mark": "-",
+              "text": "still under First"
+            }
+          ]
+        },
+        {
+          "line": 7,
+          "span": [45, 53],
+          "mark": "-",
+          "text": "Second"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

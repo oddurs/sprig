@@ -1,0 +1,20 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Groceries",
+    "root": {
+      "line": 1,
+      "span": [3, 12],
+      "text": "Groceries",
+      "children": [
+        {
+          "line": 3,
+          "span": [14, 20],
+          "mark": "-",
+          "text": "milk"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

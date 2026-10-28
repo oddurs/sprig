@@ -1,0 +1,21 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Plan",
+    "root": {
+      "line": 1,
+      "span": [0, 4],
+      "text": "Plan",
+      "notes": ["an indented first body line"],
+      "children": [
+        {
+          "line": 3,
+          "span": [35, 41],
+          "mark": "-",
+          "text": "item"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

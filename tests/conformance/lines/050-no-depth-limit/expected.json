@@ -1,0 +1,60 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Deep",
+    "root": {
+      "line": 1,
+      "span": [0, 4],
+      "text": "Deep",
+      "children": [
+        {
+          "line": 3,
+          "span": [6, 15],
+          "mark": "-",
+          "text": "Company",
+          "children": [
+            {
+              "line": 4,
+              "span": [18, 24],
+              "mark": "-",
+              "text": "Team",
+              "children": [
+                {
+                  "line": 5,
+                  "span": [29, 38],
+                  "mark": "-",
+                  "text": "Project",
+                  "children": [
+                    {
+                      "line": 6,
+                      "span": [45, 51],
+                      "mark": "-",
+                      "text": "Task",
+                      "children": [
+                        {
+                          "line": 7,
+                          "span": [60, 66],
+                          "mark": "-",
+                          "text": "Step",
+                          "children": [
+                            {
+                              "line": 8,
+                              "span": [77, 86],
+                              "mark": "-",
+                              "text": "Substep"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

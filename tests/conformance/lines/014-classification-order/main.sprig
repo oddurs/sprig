@@ -1,0 +1,6 @@
+Classification
+
+- an item
+  a note on it
+  // a comment, never shown
+  \- a note that starts with a mark

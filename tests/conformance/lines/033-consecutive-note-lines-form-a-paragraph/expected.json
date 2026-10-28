@@ -1,0 +1,21 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Kitchen",
+    "root": {
+      "line": 1,
+      "span": [0, 7],
+      "text": "Kitchen",
+      "children": [
+        {
+          "line": 3,
+          "span": [9, 20],
+          "mark": "-",
+          "text": "Deck oven",
+          "notes": ["Rondo quoted 14.2k, Mono 12.9k. Mono's lead time is ten weeks."]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

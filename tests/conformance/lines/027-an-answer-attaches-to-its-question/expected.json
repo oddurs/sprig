@@ -1,0 +1,28 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Naming",
+    "root": {
+      "line": 1,
+      "span": [0, 6],
+      "text": "Naming",
+      "children": [
+        {
+          "line": 3,
+          "span": [8, 45],
+          "mark": "?",
+          "text": "Kiln & Crumb, or Mill Street Bread?",
+          "answers": [
+            {
+              "line": 4,
+              "span": [48, 97],
+              "text": "Kiln & Crumb. Trademark search is clear.",
+              "people": ["dana"]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

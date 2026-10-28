@@ -890,31 +890,155 @@ neither says enough. Each needs a ruling and conformance examples before 1.0.
 
 1. **Byte order mark.** §1.1 says a BOM is ignored. The reference parser treats
    it as whitespace, so the first line counts as indented: it becomes a note on
-   the root and the file has no title.
+   the root and the file has no title. sprig-core follows §1.1
+   (`tests/conformance/lines/012-bom-is-ignored`).
 2. **Tabs after spaces.** §3.1 counts leading tabs as two spaces. The reference
    parser expands only a run of tabs at the very start of a line; a tab after a
-   space is counted as one character.
+   space is counted as one character. sprig-core counts every tab in the
+   indentation as two (`lines/049-a-tab-after-spaces-counts-as-two`).
 3. **Several anchors on one item.** §4.5 says anchors are unique in a file but not
-   how many one item may carry. The reference parser keeps the last.
+   how many one item may carry. The reference parser keeps the last, and so
+   does sprig-core, which also warns (S0003).
 4. **Duplicate anchors.** When two items in a file share an anchor, the reference
-   parser resolves references to the first and reports nothing. A diagnostic is
-   planned (cairn 0012).
+   parser resolves references to the first and reports nothing. sprig-core
+   resolves to the first too, and warns on the later one (S0004).
 5. **Empty groups and references.** An empty group (§5.5) is not done, so
    `after:` pointing at it waits forever. That may be the wrong answer.
 6. **Recurring parents.** §5.3 excludes any item with `every:` from progress. The
    reference parser excludes only recurring leaves; a recurring parent's children
-   still count.
+   still count. sprig-core follows the reference parser until this is ruled on,
+   so a recurring file such as `examples/bakery/groceries.sprig` still counts
+   its items.
 7. **Grafting a grafted branch.** Resolved in draft 0.4: `[[file^anchor]]`
    reaches only anchors `file` writes itself (§8.7).
 8. **File names with spaces.** Links (§4.8) cannot name a file containing spaces:
    tokens split on whitespace first (§4.1), so `[[my file]]` becomes two words.
 9. **Directories.** The reference parser has a flat namespace of file names, so
    relative paths in links and grafts (§4.8, §8.2) have never been exercised.
+   sprig-core resolves them from the linking file's directory and refuses any
+   that climb above the directory it was asked to read.
 10. **Loop reporting.** When two files graft each other (§8.4), which graft line
-   reports the loop depends on which file is read first.
+   reports the loop depends, in the reference parser, on which file is read
+   first. sprig-core walks files in path order and grafts in document order,
+   and reports the graft that closes the loop, so the answer is the same
+   whichever file a tool opens (`spec/diagnostics.md`, S0103).
+11. **An answer on the first line.** §1.2 rules out an item as the title but
+   says nothing of an answer. The reference parser does not take a `= ` line as
+   the title, and neither does sprig-core
+   (`lines/007-first-line-answer-means-no-title`).
+12. **Notes either side of an item.** §2.6 joins *consecutive* note lines into
+   a paragraph. When a child item comes between two notes of the same item, the
+   reference parser joins them into one paragraph anyway; sprig-core starts a
+   new one (`lines/052-an-item-between-note-lines-ends-the-paragraph`).
+13. **Letters in names.** §4.2, §4.3 and §4.5 allow letters and digits in
+   people, tags and anchors. The reference parser accepts only ASCII, so
+   `@jón` is a word; sprig-core accepts any Unicode letter or digit
+   (`lines/010-utf8-text`).
+14. **An escape on its own.** A line that is only `\` is a note with no text
+   (§2.8). The reference parser stores an empty note line, which its renderer
+   shows as a paragraph break; sprig-core keeps it as an empty note
+   (`lines/042-an-escape-on-its-own`).
 
 ## Appendix C. Settled arguments
 
 The design decisions behind these rules are recorded as cairn items of type
 `decision` in this repository, each with the case for, the case against, and when
 to revisit it: `cairn list --view decisions`.
+
+## Appendix D. The tree format
+
+A tool that hands a Sprig file to another program, and every expected result in
+the conformance suite (`tests/conformance/`), uses one JSON shape. Its schema is
+`spec/tree.schema.json`, in JSON Schema 2020-12.
+
+**Version.** A document carries `"sprig_tree": 1`. The number changes only when
+a reader written for the old version would misread the new one: a key removed,
+renamed, or given a new meaning. Adding an optional key does not change it, so
+a reader must ignore keys it does not know.
+
+**Missing keys.** A key whose value would be an empty list, an empty object, `0`
+or `false` may be left out, and a reader treats a missing key as that value.
+
+**Two layers.** The *syntax* layer is what one file says, and contains nothing
+that depends on another file or on the date. The *resolved* layer adds what is
+computed: grafts mounted (§8), status (§5), progress, estimates, people (§6) and
+blocking (§7). Keeping them apart lets a parser and a resolver be tested on
+their own.
+
+### D.1 The document
+
+| Key | Type | Meaning |
+| --- | --- | --- |
+| `sprig_tree` | `1` | The format version. Required. |
+| `file` | path | The file this document describes. |
+| `today` | date | The day the resolved layer was computed for (§7.5). |
+| `syntax` | object | The syntax layer, D.2. |
+| `resolved` | node | The root of the resolved tree, D.3. |
+| `diagnostics` | list | Every problem found, D.4. |
+
+A *path* is relative to the workspace root, with `/` between components, and
+ends in `.sprig`. A *date* is `YYYY-MM-DD`. A *span* is a pair of byte offsets
+into the file, start inclusive and end exclusive. A *line* counts from 1.
+
+### D.2 The syntax layer
+
+`syntax` has `title`, the title's text or `null` when the file has none (§1.3),
+and `root`, a syntax node for the file's root.
+
+A **syntax node** is the root or one item.
+
+| Key | Type | Meaning |
+| --- | --- | --- |
+| `line` | line | The item's line, or the title's. Absent on the root of a file without a title. |
+| `span` | span | The line after its indentation, without the line ending or trailing whitespace. Absent when `line` is. |
+| `mark` | string | The item's mark (§2.2): one of `-` `~` `x` `/` `>` `?` `#` `+`. Absent on the root. |
+| `text` | string | The item's text (§4.9), or the title's. Absent on the root of a file without a title. |
+| `notes` | list of strings | Note paragraphs (§2.6), each one's lines joined by single spaces. |
+| `answers` | list | Answer lines (§2.5), each with `line`, `span`, `text` and tokens. |
+| `children` | list of nodes | Child items in written order. |
+
+and the **tokens** of §4, on items, the root and answers alike:
+
+| Key | Type | Meaning |
+| --- | --- | --- |
+| `people` | list of strings | Names after `@` (§4.2), in order. |
+| `tags` | list of strings | Names after `#` (§4.3), in order. |
+| `priority` | 1, 2 or 3 | The highest of `!`, `!!` and `!!!` (§4.4). |
+| `anchor` | string | The anchor that names the item (§4.5, Appendix B.3). |
+| `fields` | object | Each field's key, lower-cased, to the value that counts (§4.6), in order of first use. Quotes are removed. |
+| `after` | list of strings | `after:` values as written, in order (§4.7). |
+| `links` | list | Links in the item's words (§4.8): each has `path`, with `./` dropped and `.sprig` added but still relative to this file, and `anchor` when the link names one. |
+
+### D.3 The resolved layer
+
+Resolution reads every file of a workspace and builds one tree per file: the
+file as it reads when opened on its own, with its grafts mounted. A **resolved
+node** is the root or one item of that tree, including items a graft brought
+in.
+
+| Key | Type | Meaning |
+| --- | --- | --- |
+| `file` | path | The file that writes this line. For a grafted item, the grafted file. |
+| `line` | line | The line in that file. Absent on the root of a file without a title. |
+| `mark` | string | As in D.2. Absent on the root. |
+| `label` | string | The item's text; for a graft, the title of what it mounts (§8.3); for the root, the title, or the file's path when there is none. |
+| `status` | string | After settling (§5.2) and derivation (§5.5): `todo`, `doing`, `done`, `dropped`, `later`, `question`, or `empty` for a group, graft or root with nothing beneath it that counts. Required. |
+| `answered` | boolean | A question with at least one answer (§2.5). |
+| `settled` | boolean | The status came from an `x`, `/` or `>` on this item or above it, or from an answer (§5.2). |
+| `grafted` | boolean | Brought into this tree by a graft. |
+| `graft` | object | On a `+` line: `path`, the grafted file, empty if the link is missing or refused; `anchor` for a branch graft; `title`; `mounted`, false when the graft is an error and mounted nothing; and the mounted branch's `notes` and, for a branch, `answers`. |
+| `progress` | object | `done`, `doing` and `total` counting leaves beneath (§5.3, §5.4); a counting leaf counts itself. Required. |
+| `estimate` | number | Remaining estimate in hours (§10.1, §10.2). |
+| `people` | list of strings | The node's people after §6.1. |
+| `blocked` | boolean | Blocked by §7.3, by its own waits or by an ancestor. |
+| `waits_on` | list | What this item itself waits on: `{"after", "label"}` for an unfinished reference, with `"unknown": true` when it names nothing (§7.2), or `{"start"}` for a start date still ahead (§7.5). Blocking inherited from an ancestor is shown by `blocked` alone. |
+| `ready_to_close` | boolean | Written to do, doing or as a question, with every counting leaf beneath it done (§5.6). |
+| `children` | list of nodes | Written children, then grafted ones (§8.1). |
+
+### D.4 Diagnostics
+
+Each has `code` (from `spec/diagnostics.md`), `severity` (`error` or
+`warning`), `file`, `line`, `col` (in characters, from 1), `span`, `message`,
+and sometimes `help`. A conformance example states only the keys it means to
+test, and never `message` or `help`: wording may improve without changing what
+is reported.
