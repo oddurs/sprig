@@ -7,7 +7,7 @@
 
 use std::path::PathBuf;
 
-use clap::{Args, Parser, Subcommand};
+use clap::{Args, Parser, Subcommand, ValueEnum};
 use sprig_core::Date;
 
 const AFTER_HELP: &str = "\
@@ -34,6 +34,14 @@ pub struct Cli {
     #[arg(long, global = true, value_name = "DATE", env = "SPRIG_TODAY", hide_env_values = true, value_parser = parse_date)]
     pub today: Option<Date>,
 
+    /// When to colour the marks [default: auto, which is off when NO_COLOR is set]
+    #[arg(long, global = true, value_name = "WHEN", value_enum, default_value_t = ColorChoice::Auto, hide_default_value = true)]
+    pub color: ColorChoice,
+
+    /// Tab-separated output for scripts: a ref first, no colour, nothing cut
+    #[arg(long, global = true)]
+    pub plain: bool,
+
     #[command(subcommand)]
     pub command: Command,
 }
@@ -52,6 +60,84 @@ pub enum Command {
     /// Mark items done, or reopen them; a recurring item moves its due date
     #[command(after_help = TICK_HELP)]
     Tick(TickArgs),
+    /// A plan as a tree, with progress, dates and what each item waits on
+    #[command(after_help = AFTER_HELP)]
+    Tree(TreeArgs),
+    /// Why an item is blocked, all the way down, with the file and line of each link
+    #[command(after_help = WHY_HELP)]
+    Why(WhyArgs),
+    /// The whole folder on one screen: progress, waiting and late per file
+    #[command(after_help = AFTER_HELP)]
+    Status(StatusArgs),
+    /// Print a shell completion script
+    Completions(CompletionsArgs),
+    /// Print the manual page, in roff
+    Man,
+    /// Candidates for shell completion: refs and people in the current folder
+    #[command(name = "__complete", hide = true)]
+    Complete(CompleteArgs),
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, ValueEnum)]
+pub enum ColorChoice {
+    Auto,
+    Always,
+    Never,
+}
+
+const WHY_HELP: &str = "\
+Exit codes:
+  0  the item is not blocked
+  1  the item is blocked; the chain says by what
+  2  usage error, or a ref that names no item or several";
+
+#[derive(Debug, Args)]
+pub struct TreeArgs {
+    /// Plans to show
+    #[arg(value_name = "PATH")]
+    pub paths: Vec<PathBuf>,
+
+    /// Show N levels at most
+    #[arg(long, value_name = "N")]
+    pub depth: Option<usize>,
+
+    /// Leave out done and dropped items
+    #[arg(long)]
+    pub hide_done: bool,
+}
+
+#[derive(Debug, Args)]
+pub struct WhyArgs {
+    /// The item to explain
+    #[arg(value_name = "REF")]
+    pub item: String,
+
+    /// The plans the ref is in
+    #[arg(long = "in", value_name = "PATH", default_value = ".")]
+    pub plans: PathBuf,
+}
+
+#[derive(Debug, Args)]
+pub struct StatusArgs {
+    /// Plans to summarise
+    #[arg(value_name = "PATH")]
+    pub paths: Vec<PathBuf>,
+
+    /// One short line for a shell prompt or a status bar; exit 1 if anything is late
+    #[arg(long)]
+    pub oneline: bool,
+}
+
+#[derive(Debug, Args)]
+pub struct CompletionsArgs {
+    #[arg(value_enum)]
+    pub shell: clap_complete::Shell,
+}
+
+#[derive(Debug, Args)]
+pub struct CompleteArgs {
+    /// What to list: refs or people
+    pub what: String,
 }
 
 const TICK_HELP: &str = "\

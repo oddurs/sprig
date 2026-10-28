@@ -33,3 +33,8 @@ All notable changes to this project are recorded here. The format follows
   `file:line` or words from an item, and `-` reads them from standard input.
 - `sprig_core::edit`, a byte-preserving edit API, and `spec/tools.md`, which
   states how refs, formatting and edits behave for other implementations.
+- `sprig tree`, `sprig why` and `sprig status` (with `--oneline` for prompts).
+- `--plain` on every reading command, tab-separated with a ref first, and
+  `--color auto|always|never`, which respects `NO_COLOR`.
+- `sprig completions bash|zsh|fish|powershell|elvish`, completing refs from
+  the current folder, and `sprig man`.
