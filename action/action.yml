@@ -28,7 +28,8 @@ runs:
           echo "$PWD/target/install/bin" >>"$GITHUB_PATH"
         fi
 
-    # Before the check, so a failing check still leaves the summary.
+    # Before the check, so a failing check still leaves the summary; in the
+    # log as well, where it can be read without the web page.
     - name: Summarise progress
       shell: bash
       env:
@@ -41,11 +42,11 @@ runs:
         if [ -n "$BASE" ]; then
           git fetch --no-tags --depth=1 origin "$BASE"
           git worktree add --detach "$RUNNER_TEMP/sprig-base" "$BASE"
-          bash "$GITHUB_ACTION_PATH/summary.sh" "$RUNNER_TEMP/sprig-base" . "${paths[@]}" >>"$GITHUB_STEP_SUMMARY"
+          bash "$GITHUB_ACTION_PATH/summary.sh" "$RUNNER_TEMP/sprig-base" . "${paths[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
           git worktree remove --force "$RUNNER_TEMP/sprig-base"
         else
           # Not a pull request: the head compared with itself.
-          bash "$GITHUB_ACTION_PATH/summary.sh" . . "${paths[@]}" >>"$GITHUB_STEP_SUMMARY"
+          bash "$GITHUB_ACTION_PATH/summary.sh" . . "${paths[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
         fi
 
     - name: Check

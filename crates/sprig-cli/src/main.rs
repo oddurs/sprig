@@ -3,9 +3,11 @@ use std::process::ExitCode;
 
 use clap::{CommandFactory, Parser};
 
+mod agent;
 mod args;
 mod data;
 mod load;
+mod mcp;
 mod out;
 mod verbs;
 mod views;
@@ -52,6 +54,15 @@ fn run() -> ExitCode {
         Command::Lsp => sprig_lsp::stdio(&args::clock(&cli))
             .map(|()| ExitCode::SUCCESS)
             .map_err(|e| e.to_string().into()),
+        Command::Mcp(a) if a.config => data::print_json(&mcp::config(&a.plans)).map(|()| {
+            eprintln!(
+                "Add this to your agent's MCP configuration, such as .mcp.json in the project."
+            );
+            ExitCode::SUCCESS
+        }),
+        Command::Mcp(a) => mcp::stdio(a.plans.clone(), &args::clock(&cli), a.max_new_items)
+            .map(|()| ExitCode::SUCCESS),
+        Command::Agent(a) => agent::agent(a),
         Command::Complete(a) => views::candidates(&a.what, today),
     };
     match result {

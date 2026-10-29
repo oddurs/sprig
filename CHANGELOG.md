@@ -8,6 +8,18 @@ All notable changes to this project are recorded here. The format follows
 
 ### Added
 
+- `sprig mcp`: the plans for coding agents, over the Model Context Protocol.
+  - Five read tools return what the matching `--json` command prints.
+  - Five write tools go through the edit API, refuse a change that would add
+    a `check` error, and return the diff they applied and what stopped
+    waiting.
+  - `--max-new-items`, 20 by default, caps how many items a session may add.
+  - `--config` prints the snippet that registers the server with a client.
+- `sprig agent` prints the convention for AGENTS.md or CLAUDE.md, and
+  `--write FILE` keeps it in a marked block there.
+- `status --json` and `check --json`.
+- `spec/tools.md` T6, and a guide to plans for coding agents with a worked
+  session.
 - Tools for the shell, each sharing the core's edit API or tree:
   - `sprig find` searches by words, `@who`, `#tag`, `is:STATE` and
     `due:<DATE`.

@@ -194,3 +194,58 @@ is. Tokens in the imported text keep their meaning, so a title such as
 | Markdown | Its first heading is the title. Later headings become groups, and checklist items become items, nested as they were, with `[x]` as done. Other prose is kept as notes. |
 | todo.txt | `x` is done. Priorities `(A)`, `(B)` and `(C)` or below become `!!!`, `!!` and `!`. `+project` and `@context` become tags. Creation and completion dates are dropped; `key:value` pairs are kept as fields. |
 | GitHub issues (`gh issue list --json number,title,state,stateReason,labels,assignees,milestone`, or `gh pr list` with the same fields) | Milestones become groups, labels tags, and assignees people. Closed and merged become done, and closed as not planned dropped. Each item carries `issue:NUMBER`. |
+
+## T6. Agents
+
+### T6.1 The convention
+
+A repository's plan for the work in progress is `PLAN.sprig` at its root. An
+agent reads it before starting, writes its steps into it before changing code,
+ticks each step in the same change as the work, and asks a person by adding a
+`?` item that names them, which it does not answer itself. `sprig agent`
+prints these instructions; `sprig agent --write FILE` keeps them in FILE
+between the lines `<!-- sprig:start: ... -->` and `<!-- sprig:end -->`,
+replacing only what is between them.
+
+### T6.2 The MCP server
+
+`sprig mcp` speaks the Model Context Protocol (revision 2025-11-25, and
+2025-06-18 and 2025-03-26 to a client that asks for one of those) over stdio,
+one JSON-RPC message per line. It serves one folder, `--in PATH`, and paths in
+its results are relative to that folder, as refs are (T1). It reads the files
+again for every call.
+
+The read tools return exactly what the matching command prints with `--json`,
+as text and, wrapped in `{"items": ...}` when it is a list, as structured
+content:
+
+| Tool | Arguments | Same as |
+| --- | --- | --- |
+| `list_plans` | none | `status --json` |
+| `show_tree` | `file` | that file's document in `export --format json` |
+| `next_items` | `who`, `limit`, both optional | `next --json` |
+| `find_items` | `query` (T5.1) | `find --json` |
+| `check_plans` | none | `check --json` |
+
+The write tools take refs (T1) and return the lines they wrote, `diff` (a
+unified diff of every file they changed) and `no_longer_waiting`, the open
+items that wait on less than before, each with `now`: `unblocked`, or what it
+still waits on:
+
+| Tool | Arguments |
+| --- | --- |
+| `tick_items` | `refs`: a list |
+| `mark_item` | `ref`, `mark`: a mark or its name |
+| `add_items` | `items`: a list of lines; `under` or `after`, a ref, or neither for the end of `PLAN.sprig` |
+| `answer_question` | `ref`, `text` |
+| `set_field` | `ref`, `key`, `value`, empty to remove the field |
+
+Each write is all or nothing. It is refused, and nothing is written, when it
+would add an error that `check` reports; the message names each one as
+`check` prints it. Typed dates in added lines are written out (§9.4).
+`add_items` adds at most `--max-new-items` items, 20 by default, in a
+session, counting every call. A call that would pass the limit is refused
+with a message that names the limit and the flag.
+
+A tool that fails reports it in its result with `isError` and a message the
+model can act on. An unknown tool is a protocol error (`-32602`).

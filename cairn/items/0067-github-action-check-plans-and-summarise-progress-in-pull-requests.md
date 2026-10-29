@@ -27,3 +27,7 @@ A composite action that installs a released binary, runs `sprig check`, and writ
 
 - [ ] This repository's CI uses the action.
 - [ ] The summary shows done counts for base and head and lists newly unblocked items, verified on a test pull request.
+
+## 2026-10-29
+
+The action now also writes its summary to the job log, so a reviewer, or a script reading the logs, can see it without the summary page. The summary's unblocked list is tested in crates/sprig-cli/tests/tools.rs on two copies of the bakery. It still needs one pull request that unblocks something, read by a person.

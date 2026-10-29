@@ -1,0 +1,12 @@
+{
+  "name": "sprig-mcp-session",
+  "private": true,
+  "description": "A scripted session with sprig mcp through the official MCP client, for CI",
+  "type": "module",
+  "scripts": {
+    "test": "node session.mjs"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1"
+  }
+}

@@ -113,17 +113,35 @@ fn resolve_with(g: &Loaded, file: &str, change: &Change, today: Date) -> Resolut
     ws.resolve(today)
 }
 
-/// Prints the open items that wait on less after a change than before it,
-/// and what, if anything, each still waits on. An item freed of one of two
-/// waits is listed too, since that is what the change did for it; calling it
-/// unblocked would say more than the file does. `moved` maps a line before
-/// the change to the same line after it.
-fn report_freed(
-    g: &Loaded,
+/// An open item that waits on less after a change than before it.
+pub(crate) struct Freed<'r> {
+    pub node: &'r Resolved,
+    /// What it still waits on; empty when it is unblocked.
+    pub still: Vec<String>,
+}
+
+impl Freed<'_> {
+    /// `unblocked`, or what it still waits on. An item freed of one of two
+    /// waits is listed too, since that is what the change did for it; calling
+    /// it unblocked would say more than the file does.
+    pub fn rest(&self) -> String {
+        if self.still.is_empty() && !self.node.blocked {
+            "unblocked".to_string()
+        } else if self.still.is_empty() {
+            "still blocked above it".to_string()
+        } else {
+            format!("still waits on {}", self.still.join(", "))
+        }
+    }
+}
+
+/// The open items that wait on less after a change than before it. `moved`
+/// maps a line before the change to the same line after it.
+pub(crate) fn freed<'r>(
     before: &Resolution,
-    after: &Resolution,
+    after: &'r Resolution,
     moved: impl Fn(&str, usize) -> usize,
-) -> Result<()> {
+) -> Vec<Freed<'r>> {
     fn walk<'r>(n: &'r Resolved, out: &mut Vec<&'r Resolved>) {
         for c in n.children.iter().filter(|c| !c.grafted) {
             out.push(c);
@@ -150,41 +168,53 @@ fn report_freed(
         })
         .collect();
     freed.dedup_by_key(|n| (n.file.clone(), n.line));
+    freed
+        .into_iter()
+        .map(|node| Freed {
+            node,
+            still: node
+                .waits_on
+                .iter()
+                .map(|w| match w {
+                    Wait::Reference { label, .. } => label.clone(),
+                    Wait::Start(d) => format!("its start, {d}"),
+                })
+                .collect(),
+        })
+        .collect()
+}
+
+/// Prints what [`freed`] finds, under a heading, after the changed line.
+fn report_freed(
+    g: &Loaded,
+    before: &Resolution,
+    after: &Resolution,
+    moved: impl Fn(&str, usize) -> usize,
+) -> Result<()> {
+    let freed = freed(before, after, moved);
     if freed.is_empty() {
         return Ok(());
     }
     let mut out = io::stdout().lock();
     writeln!(out, "\nNo longer waiting on it:")?;
-    for n in freed {
-        let still: Vec<String> = n
-            .waits_on
-            .iter()
-            .map(|w| match w {
-                Wait::Reference { label, .. } => label.clone(),
-                Wait::Start(d) => format!("its start, {d}"),
-            })
-            .collect();
-        let rest = if still.is_empty() && !n.blocked {
-            "unblocked".to_string()
-        } else if still.is_empty() {
-            "still blocked above it".to_string()
-        } else {
-            format!("still waits on {}", still.join(", "))
-        };
+    for f in freed {
+        let n = f.node;
         writeln!(
             out,
-            "  {}:{}  {}  ({rest})",
+            "  {}:{}  {}  ({})",
             g.display(&n.file),
             n.line,
-            n.label
+            n.label,
+            f.rest()
         )?;
     }
     Ok(())
 }
 
-pub fn add(a: &AddArgs, today: Date) -> Result<ExitCode> {
-    // A line without a mark is a to-do; typed dates are written out (§9.4).
-    let text = a.text.trim();
+/// An item's line as typed: without a mark it is a to-do, and typed dates
+/// are written out (§9.4).
+pub(crate) fn item_line(text: &str, today: Date) -> String {
+    let text = text.trim();
     let marked = syntax::lex(&format!("_\n{text}"))
         .get(1)
         .is_some_and(|l| matches!(l.kind, syntax::LineKind::Item(_)));
@@ -193,7 +223,11 @@ pub fn add(a: &AddArgs, today: Date) -> Result<ExitCode> {
     } else {
         format!("- {text}")
     };
-    let text = syntax::expand_dates(&text, today);
+    syntax::expand_dates(&text, today)
+}
+
+pub fn add(a: &AddArgs, today: Date) -> Result<ExitCode> {
+    let text = item_line(&a.text, today);
 
     let (r, place) = match (&a.under, &a.after) {
         (Some(r), _) => (r, Place::Child),
@@ -225,6 +259,18 @@ pub fn add(a: &AddArgs, today: Date) -> Result<ExitCode> {
     }
 }
 
+/// `src` with `text` as a new last line, in the file's own line ending.
+pub(crate) fn appended(src: &str, text: &str) -> String {
+    let eol = if src.contains("\r\n") { "\r\n" } else { "\n" };
+    let mut out = src.to_string();
+    if !out.is_empty() && !out.ends_with('\n') {
+        out.push_str(eol);
+    }
+    out.push_str(text);
+    out.push_str(eol);
+    out
+}
+
 /// Without a parent, a new item goes at the end of the folder's PLAN.sprig,
 /// the plan an agent reads first.
 fn add_to_plan(a: &AddArgs, text: &str) -> Result<ExitCode> {
@@ -239,13 +285,7 @@ fn add_to_plan(a: &AddArgs, text: &str) -> Result<ExitCode> {
             return Ok(ExitCode::from(2));
         }
     };
-    let eol = if src.contains("\r\n") { "\r\n" } else { "\n" };
-    let mut out = src.clone();
-    if !out.is_empty() && !out.ends_with('\n') {
-        out.push_str(eol);
-    }
-    out.push_str(text);
-    out.push_str(eol);
+    let out = appended(&src, text);
     save(&path, &out).map_err(|e| write_error(&path, e))?;
     let line = out.lines().count();
     let shown = if a.plans == Path::new(".") {
