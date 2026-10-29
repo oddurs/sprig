@@ -3,13 +3,14 @@ id: 65
 uid: 3a9d1534-ea5d-4a16-ab08-f353b032954d
 title: 'sprig import: Markdown checklists and todo.txt'
 type: feature
-status: planned
+status: done
 milestone: v0.3
 depends_on:
 - 22
 - 44
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-10-29
+closed_at: 2026-10-29
 priority: p1
 effort: m
 area: interop
@@ -25,5 +26,9 @@ Convert nested `- [ ]` and `- [x]` lists and todo.txt files to `.sprig`. todo.tx
 
 ## Acceptance criteria
 
-- [ ] Round-trip fixtures under `tests/import/` cover nesting, done items, priorities and due dates.
-- [ ] Imported files pass `sprig check` and are unchanged by `sprig fmt`.
+- [x] Round-trip fixtures under `tests/import/` cover nesting, done items, priorities and due dates.
+- [x] Imported files pass `sprig check` and are unchanged by `sprig fmt`.
+
+## Result
+
+sprig import reads Markdown checklists and todo.txt (by extension, or --from). Fixtures under tests/import/ cover nesting, done items, priorities and due dates; a test converts each, compares it with the expected .sprig, and runs check and fmt --check on the result.

@@ -4,8 +4,10 @@ use std::process::ExitCode;
 use clap::{CommandFactory, Parser};
 
 mod args;
+mod data;
 mod load;
 mod out;
+mod verbs;
 mod views;
 mod write;
 
@@ -34,6 +36,15 @@ fn run() -> ExitCode {
         Command::Tree(a) => views::tree(a, today, out),
         Command::Why(a) => views::why(a, today, out),
         Command::Status(a) => views::status(a, today, out),
+        Command::Find(a) => data::find(a, today, out),
+        Command::Agenda(a) => data::agenda(a, today, out),
+        Command::Mark(a) => verbs::mark(a, today),
+        Command::Answer(a) => verbs::answer(a, today),
+        Command::Add(a) => verbs::add(a, today),
+        Command::Edit(a) => verbs::edit(a, today),
+        Command::Graph(a) => data::graph(a, today),
+        Command::Export(a) => data::export(a, today),
+        Command::Import(a) => data::import(a),
         Command::Fmt(a) => write::fmt(a, today),
         Command::Tick(a) => write::tick(a, today),
         Command::Completions(a) => completions(a.shell),

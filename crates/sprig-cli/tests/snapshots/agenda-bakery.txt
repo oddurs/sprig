@@ -1,0 +1,18 @@
+Fri 2 Oct · tomorrow
+  - Weekly numbers to the bank                 every:fri  bakery.sprig:16
+  - Get a third quote                                     kitchen.sprig:11
+
+Sat 3 Oct
+  - Call the insurer about public liability               dana.sprig:9
+
+Mon 5 Oct
+  ~ Negotiate terms                                       lease.sprig:6
+
+Wed 7 Oct
+  ~ Equipment loan paperwork                              bakery.sprig:13
+
+Mon 12 Oct
+  ~ Ventilation plan with the engineer                    kitchen.sprig:5
+
+Wed 14 Oct
+  ~ Logo, second round                                    launch.sprig:4

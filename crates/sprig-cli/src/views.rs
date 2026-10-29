@@ -17,7 +17,7 @@ use crate::{Result, plural};
 
 /// The ref `--plain` puts first: an anchor where there is one, since it
 /// survives edits, and the line otherwise.
-fn key(n: &Resolved) -> String {
+pub(crate) fn key(n: &Resolved) -> String {
     match n.tokens.anchor() {
         Some(a) => format!("{}^{}", n.file, a.name),
         None => format!("{}:{}", n.file, n.line),
@@ -26,7 +26,7 @@ fn key(n: &Resolved) -> String {
 
 /// The character a node shows: its mark, or, where an `x`, `/` or `>` above
 /// settled it, the status that settled it (§5.2).
-fn glyph(n: &Resolved) -> char {
+pub(crate) fn glyph(n: &Resolved) -> char {
     match n.mark {
         Some(m) if m.is_structure() => m.as_char(),
         _ if n.answered => '?',
@@ -41,7 +41,7 @@ fn glyph(n: &Resolved) -> char {
     }
 }
 
-fn relative(days: i64) -> String {
+pub(crate) fn relative(days: i64) -> String {
     match days {
         0 => "today".into(),
         d if d > 0 => format!("in {d}d"),
@@ -65,7 +65,7 @@ fn hours(h: f64) -> String {
     }
 }
 
-fn resolve_all(
+pub(crate) fn resolve_all(
     paths: &[std::path::PathBuf],
     today: Date,
 ) -> Result<(Vec<Loaded>, Vec<Resolution>)> {
@@ -76,7 +76,7 @@ fn resolve_all(
 
 /// The trees a folder or a set of files stands for: the files named, or the
 /// plans no file grafts whole.
-fn entry_trees<'r>(g: &Loaded, r: &'r Resolution) -> Vec<&'r Tree> {
+pub(crate) fn entry_trees<'r>(g: &Loaded, r: &'r Resolution) -> Vec<&'r Tree> {
     match &g.entries {
         Some(files) => files.iter().filter_map(|f| r.tree(f)).collect(),
         None => r.roots().into_iter().filter_map(|f| r.tree(f)).collect(),
@@ -115,6 +115,14 @@ pub fn next(a: &NextArgs, today: Date, out: Out) -> Result<ExitCode> {
         .collect();
     let n = next::next(&trees, who);
     let shown: Vec<&Entry> = n.ready.iter().take(a.limit.unwrap_or(usize::MAX)).collect();
+    if a.json {
+        let items: Vec<serde_json::Value> = shown
+            .iter()
+            .map(|e| crate::data::item_json(e.node, &e.path))
+            .collect();
+        println!("{}", serde_json::to_string_pretty(&items)?);
+        return Ok(ExitCode::SUCCESS);
+    }
 
     // Text and paths are capped even in a pipe, so a line stays a line.
     const WIDE: usize = 40;

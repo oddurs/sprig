@@ -3,7 +3,7 @@ id: 129
 uid: ce36df8a-71b0-487b-8f5c-c40ed27139d4
 title: 'Guide: Sprig in the shell'
 type: docs
-status: planned
+status: doing
 milestone: v0.3
 depends_on:
 - 64
@@ -12,7 +12,7 @@ depends_on:
 - 126
 - 128
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-10-29
 priority: p2
 effort: s
 area: docs

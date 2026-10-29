@@ -17,7 +17,8 @@ under it. With no path, the current directory.
 Exit codes:
   0  fine
   1  findings: `check` found errors (or warnings, with --strict), `next`
-     found nothing ready, or `fmt --check` found files to change
+     found nothing ready, `find` matched nothing, or `fmt --check` found
+     files to change
   2  usage error, or a path that could not be read";
 
 #[derive(Debug, Parser)]
@@ -69,6 +70,33 @@ pub enum Command {
     /// The whole folder on one screen: progress, waiting and late per file
     #[command(after_help = AFTER_HELP)]
     Status(StatusArgs),
+    /// Search items by text, @who, #tag, is:STATE and due:DATE
+    #[command(after_help = FIND_HELP)]
+    Find(FindArgs),
+    /// Dated work by day across every file, late work first
+    #[command(after_help = AFTER_HELP)]
+    Agenda(AgendaArgs),
+    /// Set an item's status mark: - ~ x / > or ?
+    #[command(after_help = WRITE_HELP)]
+    Mark(MarkArgs),
+    /// Settle a question with an answer line, and show what it unblocked
+    #[command(after_help = WRITE_HELP)]
+    Answer(AnswerArgs),
+    /// Add an item under a parent or after a sibling, indented to match
+    #[command(after_help = WRITE_HELP)]
+    Add(AddArgs),
+    /// Open $VISUAL or $EDITOR at an item's line
+    #[command(after_help = WRITE_HELP)]
+    Edit(EditArgs),
+    /// The dependency graph, for Graphviz or Mermaid
+    #[command(after_help = AFTER_HELP)]
+    Graph(GraphArgs),
+    /// The plans as data: the tree as JSON, dated work as iCalendar, items as CSV
+    #[command(after_help = AFTER_HELP)]
+    Export(ExportArgs),
+    /// Convert a Markdown checklist, a todo.txt file or GitHub issues to Sprig
+    #[command(after_help = IMPORT_HELP)]
+    Import(ImportArgs),
     /// Print a shell completion script
     Completions(CompletionsArgs),
     /// Print the manual page, in roff
@@ -158,6 +186,207 @@ Exit codes:
   2  usage error, a ref that names no item or several, or a path that could
      not be read or written";
 
+const FIND_HELP: &str = "\
+A query is words and filters, all of which an item must match:
+  oven               words from the item's text, ignoring case
+  @teo  #kitchen     its people (inherited ones included) and its tags
+  is:open            open, todo, doing, done, dropped, later, ask or blocked
+  due:<fri           its own due date: <, <=, >, >= or exactly, as a date
+                     or a shortcut such as fri, +2w or oct3
+
+Exit codes:
+  0  something matched
+  1  nothing matched
+  2  usage error, an unknown filter, or a path that could not be read";
+
+const WRITE_HELP: &str = "\
+A ref names one item: ^anchor, file^anchor, file.sprig:LINE, or words from
+its text that match exactly one item. The change touches only the line it
+means to, and the file is replaced in one step.
+
+Exit codes:
+  0  written
+  2  usage error, a ref that names no item or several, an item that cannot
+     take the change, or a path that could not be read or written";
+
+const IMPORT_HELP: &str = "\
+The format comes from the file's extension unless --from names it: .md is a
+Markdown checklist, .txt is todo.txt, and .json is the output of
+  gh issue list --json number,title,state,labels,assignees,milestone
+The Sprig file is printed; redirect it where it belongs. Nothing is read from
+the network.
+
+Exit codes:
+  0  converted
+  2  usage error, or a file that could not be read or understood";
+
+#[derive(Debug, Args)]
+pub struct FindArgs {
+    /// Words and filters
+    #[arg(value_name = "QUERY", required = true)]
+    pub query: Vec<String>,
+
+    /// The plans to search
+    #[arg(long = "in", value_name = "PATH", default_value = ".")]
+    pub plans: PathBuf,
+
+    /// Matches as JSON: a ref, a path and a node of the tree format each
+    #[arg(long)]
+    pub json: bool,
+}
+
+#[derive(Debug, Args)]
+pub struct AgendaArgs {
+    /// Plans to read
+    #[arg(value_name = "PATH")]
+    pub paths: Vec<PathBuf>,
+
+    /// How many days ahead to show
+    #[arg(long, value_name = "N", default_value_t = 14)]
+    pub days: u32,
+}
+
+/// The marks `sprig mark` sets, as characters or words.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct MarkValue(pub sprig_core::Mark);
+
+fn parse_mark(s: &str) -> Result<MarkValue, String> {
+    use sprig_core::Mark;
+    Ok(MarkValue(match s {
+        "-" | "todo" => Mark::Todo,
+        "~" | "doing" => Mark::Doing,
+        "x" | "done" => Mark::Done,
+        "/" | "dropped" => Mark::Dropped,
+        ">" | "later" => Mark::Later,
+        "?" | "ask" | "question" => Mark::Question,
+        _ => {
+            return Err(format!(
+                "{s} is not a status mark; use - ~ x / > or ? (or todo, doing, done, dropped, later, ask)"
+            ));
+        }
+    }))
+}
+
+#[derive(Debug, Args)]
+pub struct MarkArgs {
+    /// The item to mark
+    #[arg(value_name = "REF")]
+    pub item: String,
+
+    /// The mark: - ~ x / > or ?, or todo, doing, done, dropped, later, ask
+    #[arg(value_name = "MARK", value_parser = parse_mark, allow_hyphen_values = true)]
+    pub mark: MarkValue,
+
+    /// The plans the ref is in
+    #[arg(long = "in", value_name = "PATH", default_value = ".")]
+    pub plans: PathBuf,
+}
+
+#[derive(Debug, Args)]
+pub struct AnswerArgs {
+    /// The question, or any item, to answer
+    #[arg(value_name = "REF")]
+    pub item: String,
+
+    /// The answer, written as an `= ` line under it
+    #[arg(value_name = "TEXT")]
+    pub text: String,
+
+    /// The plans the ref is in
+    #[arg(long = "in", value_name = "PATH", default_value = ".")]
+    pub plans: PathBuf,
+}
+
+#[derive(Debug, Args)]
+pub struct AddArgs {
+    /// The item, with tokens; a line without a mark becomes a to-do
+    #[arg(value_name = "TEXT")]
+    pub text: String,
+
+    /// Add it as the last child of this item
+    #[arg(long, value_name = "REF", conflicts_with = "after")]
+    pub under: Option<String>,
+
+    /// Add it right after this item's branch, at its level
+    #[arg(long, value_name = "REF")]
+    pub after: Option<String>,
+
+    /// The plans the ref is in; without a ref, the item goes at the end of PLAN.sprig there
+    #[arg(long = "in", value_name = "PATH", default_value = ".")]
+    pub plans: PathBuf,
+}
+
+#[derive(Debug, Args)]
+pub struct EditArgs {
+    /// The item to open
+    #[arg(value_name = "REF")]
+    pub item: String,
+
+    /// The plans the ref is in
+    #[arg(long = "in", value_name = "PATH", default_value = ".")]
+    pub plans: PathBuf,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, ValueEnum)]
+pub enum GraphFormat {
+    Dot,
+    Mermaid,
+}
+
+#[derive(Debug, Args)]
+pub struct GraphArgs {
+    /// Plans to read
+    #[arg(value_name = "PATH")]
+    pub paths: Vec<PathBuf>,
+
+    /// Graphviz or Mermaid
+    #[arg(long, value_enum, default_value_t = GraphFormat::Dot)]
+    pub format: GraphFormat,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, ValueEnum)]
+pub enum ExportFormat {
+    /// Each plan's tree, in the tree format (spec Appendix D)
+    Json,
+    /// An all-day event per dated item, for a calendar to subscribe to
+    Ics,
+    /// Every item, one row each
+    Csv,
+}
+
+#[derive(Debug, Args)]
+pub struct ExportArgs {
+    /// Plans to read
+    #[arg(value_name = "PATH")]
+    pub paths: Vec<PathBuf>,
+
+    /// What to write
+    #[arg(long, value_enum)]
+    pub format: ExportFormat,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, ValueEnum)]
+pub enum ImportFormat {
+    Markdown,
+    Todotxt,
+    Github,
+}
+
+#[derive(Debug, Args)]
+pub struct ImportArgs {
+    /// The file to convert, or - for standard input
+    #[arg(value_name = "FILE")]
+    pub file: PathBuf,
+
+    /// The file's format [default: from its extension]
+    #[arg(long, value_enum)]
+    pub from: Option<ImportFormat>,
+
+    /// The title for a format that has none [default: from the file name]
+    #[arg(long, value_name = "TEXT")]
+    pub title: Option<String>,
+}
+
 #[derive(Debug, Args)]
 pub struct FmtArgs {
     /// Plans to format
@@ -193,6 +422,10 @@ pub struct NextArgs {
     /// Show at most N items
     #[arg(long, value_name = "N")]
     pub limit: Option<usize>,
+
+    /// Ready work as JSON: a ref, a path and a node of the tree format each
+    #[arg(long)]
+    pub json: bool,
 }
 
 #[derive(Debug, Args)]

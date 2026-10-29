@@ -3,14 +3,15 @@ id: 126
 uid: a8e65646-d694-40b6-b8dd-498314f9dc3a
 title: 'sprig find: search by text and by token'
 type: feature
-status: planned
+status: done
 milestone: v0.3
 depends_on:
 - 24
 - 118
 - 119
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-10-29
+closed_at: 2026-10-29
 priority: p2
 effort: m
 area: cli
@@ -26,6 +27,10 @@ area: cli
 
 ## Acceptance criteria
 
-- [ ] Each filter has a test over `examples/bakery/`.
-- [ ] `sprig find is:blocked --json` includes, for each item, what it waits on.
-- [ ] An unknown filter exits 2 and lists the valid ones.
+- [x] Each filter has a test over `examples/bakery/`.
+- [x] `sprig find is:blocked --json` includes, for each item, what it waits on.
+- [x] An unknown filter exits 2 and lists the valid ones.
+
+## Result
+
+sprig find: words, @who, #tag, is:STATE and due: with <, <=, >, >= or an exact date. Each filter is tested over the bakery; --json carries waits_on; an unknown filter exits 2 and lists the filters. Defined in spec/tools.md T5.1.

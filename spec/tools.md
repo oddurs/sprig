@@ -113,6 +113,10 @@ only at the end. The first field is always a ref (T1) or a path, so
 | `check` | file, line, column, severity, code, message |
 | `tree` | ref, depth, mark, text, status, done, total |
 | `status` | file, done, total, ready, waiting, late, errors |
+| `find` | ref, mark, text, path through the tree, due date, status |
+| `agenda` | ref, due date, mark, text, `every:` value |
+
+`next`, `find` and `export --format json` also print JSON (T5.5).
 
 A ref here is `file^anchor` when the item has an anchor, since that survives
 edits, and `file:line` otherwise.
@@ -121,3 +125,72 @@ Colour follows the convention at no-color.org: `--color always` or `never`
 decides; otherwise a non-empty `NO_COLOR` turns it off, and it is on only
 when output goes to a terminal. Colour only ever repeats what a mark already
 says.
+
+## T5. Queries, calendars and conversions
+
+### T5.1 Queries
+
+A query is a list of terms, and an item matches when it matches all of them.
+A term is one of:
+
+| Term | Matches an item |
+| --- | --- |
+| a word | whose text contains it, ignoring case |
+| `@name` | whose people include `name` after §6.1, so inherited people count |
+| `#tag` | that writes the tag itself; tags do not reach down (§4.3) |
+| `is:STATE` | whose status is `open`, `todo`, `doing`, `done`, `dropped`, `later` or `ask`, or that is `blocked` (§7.4) |
+| `due:DATE` | whose own `due:` is that date; `<`, `<=`, `>` or `>=` before the date compares instead |
+
+`open` is every status that is not settled: todo, doing and ask. A date in a
+query reads as one in a file (§9.4), against the same today. A term that looks
+like a filter (`key:` with a key other than `is` or `due`) and is not one is
+an error that names the filters, rather than a word that matches nothing.
+
+### T5.2 Agenda
+
+The agenda is the open items with a `due:` of their own, by date: those
+before today as late, then one heading for each day of the window that has
+any. A grafted copy of an item is not listed again. A recurring item appears
+once, on the date its `due:` names; the dates after it are the next tick's.
+
+### T5.3 Calendars
+
+An iCalendar export (RFC 5545) has one all-day `VEVENT` for each item the
+agenda would list, without a window. Its `UID` is `file^anchor@sprig` for an
+item with an anchor, so renaming the item keeps the event, and
+`file:words@sprig` otherwise, from the item's text in lowercase with
+hyphens. `DTSTAMP` is today at midnight UTC, so the same files and the same
+today give the same bytes. A recurring item's `every:` is in the
+description, not an `RRULE`: the file, not the calendar, decides when it
+next falls.
+
+### T5.4 Graphs
+
+A dependency graph has a node for each open item with an `after:` that names
+something, and one for each thing named, whatever its status, grouped by
+file. An edge runs from what is named to the item that waits on it, so the
+graph reads in the order work can happen. A node's id is the file name
+without `.sprig`, then `_` and the anchor when there is one or `l` and the
+line otherwise, with every character that is not an ASCII letter or digit as
+`_`: `bakery_loan`, `launch_l6`. The same files give the same output, and a
+diff shows only what changed.
+
+### T5.5 JSON
+
+Each item in `next --json` and `find --json` is an object with `ref` (T1),
+`path` (the labels from the top of its tree to its parent) and `node`: a
+resolved node in the tree format (`spec/tree.schema.json`) without
+`children`. `export --format json` is a list of tree documents, one for each
+tree that is not grafted into another.
+
+### T5.6 Conversions
+
+An import writes a file that `sprig check` accepts and `sprig fmt` leaves as it
+is. Tokens in the imported text keep their meaning, so a title such as
+`Fix #12` gets the tag `12`.
+
+| From | To |
+| --- | --- |
+| Markdown | Its first heading is the title. Later headings become groups, and checklist items become items, nested as they were, with `[x]` as done. Other prose is kept as notes. |
+| todo.txt | `x` is done. Priorities `(A)`, `(B)` and `(C)` or below become `!!!`, `!!` and `!`. `+project` and `@context` become tags. Creation and completion dates are dropped; `key:value` pairs are kept as fields. |
+| GitHub issues (`gh issue list --json number,title,state,stateReason,labels,assignees,milestone`, or `gh pr list` with the same fields) | Milestones become groups, labels tags, and assignees people. Closed and merged become done, and closed as not planned dropped. Each item carries `issue:NUMBER`. |

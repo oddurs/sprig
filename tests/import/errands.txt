@@ -1,0 +1,7 @@
+(A) Call the plumber +house @phone due:2026-10-05
+x 2026-09-30 2026-09-20 Book the van +move
+Buy tape +move
+(B) 2026-09-28 Write the inventory
+x (C) Return the keys due:2026-10-12
+
+(D) Water the plants rec:1w
