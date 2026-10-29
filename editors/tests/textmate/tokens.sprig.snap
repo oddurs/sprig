@@ -1,0 +1,105 @@
+>Tokens
+#^^^^^^ source.sprig markup.heading.title.sprig
+>
+>- People  @dana @jo-ann @t_eo @dana.k
+#^ source.sprig keyword.mark.todo.sprig
+# ^^^^^^^^^ source.sprig
+#          ^^^^^ source.sprig variable.other.person.sprig
+#               ^ source.sprig
+#                ^^^^^^^ source.sprig variable.other.person.sprig
+#                       ^ source.sprig
+#                        ^^^^^ source.sprig variable.other.person.sprig
+#                             ^ source.sprig
+#                              ^^^^^^^ source.sprig variable.other.person.sprig
+>- Not people  @jo, dana@example.org
+#^ source.sprig keyword.mark.todo.sprig
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.sprig
+>- Tags  #market #2026_q4 #café
+#^ source.sprig keyword.mark.todo.sprig
+# ^^^^^^^ source.sprig
+#        ^^^^^^^ source.sprig entity.name.tag.sprig
+#               ^ source.sprig
+#                ^^^^^^^^ source.sprig entity.name.tag.sprig
+#                        ^ source.sprig
+#                         ^^^^^ source.sprig entity.name.tag.sprig
+>- Priority  ! !! !!!
+#^ source.sprig keyword.mark.todo.sprig
+# ^^^^^^^^^^^ source.sprig
+#            ^ source.sprig keyword.other.priority.sprig
+#             ^ source.sprig
+#              ^^ source.sprig keyword.other.priority.sprig
+#                ^ source.sprig
+#                 ^^^ source.sprig keyword.other.priority.sprig
+>- Not priority  !!!! !important
+#^ source.sprig keyword.mark.todo.sprig
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.sprig
+>- Anchors  ^van ^step-1
+#^ source.sprig keyword.mark.todo.sprig
+# ^^^^^^^^^^ source.sprig
+#           ^^^^ source.sprig entity.name.label.anchor.sprig
+#               ^ source.sprig
+#                ^^^^^^^ source.sprig entity.name.label.anchor.sprig
+>- Fields  due:fri  est:2h  Budget:64k  vendor:"Mono Ovens"  vendor:""
+#^ source.sprig keyword.mark.todo.sprig
+# ^^^^^^^^^ source.sprig
+#          ^^^ source.sprig support.type.property-name.sprig
+#             ^ source.sprig punctuation.separator.key-value.sprig
+#              ^^^ source.sprig string.unquoted.value.sprig
+#                 ^^ source.sprig
+#                   ^^^ source.sprig support.type.property-name.sprig
+#                      ^ source.sprig punctuation.separator.key-value.sprig
+#                       ^^ source.sprig string.unquoted.value.sprig
+#                         ^^ source.sprig
+#                           ^^^^^^ source.sprig support.type.property-name.sprig
+#                                 ^ source.sprig punctuation.separator.key-value.sprig
+#                                  ^^^ source.sprig string.unquoted.value.sprig
+#                                     ^^ source.sprig
+#                                       ^^^^^^ source.sprig support.type.property-name.sprig
+#                                             ^ source.sprig punctuation.separator.key-value.sprig
+#                                              ^^^^^^^^^^^^ source.sprig string.unquoted.value.sprig
+#                                                          ^^ source.sprig
+#                                                            ^^^^^^ source.sprig support.type.property-name.sprig
+#                                                                  ^ source.sprig punctuation.separator.key-value.sprig
+#                                                                   ^^ source.sprig string.unquoted.value.sprig
+>- Not fields  https://example.org  2:30  key:
+#^ source.sprig keyword.mark.todo.sprig
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.sprig
+>- After  after:^van  after:[[lease^signed]]  after:[[kitchen]]
+#^ source.sprig keyword.mark.todo.sprig
+# ^^^^^^^^ source.sprig
+#         ^^^^^ source.sprig support.type.property-name.sprig
+#              ^ source.sprig punctuation.separator.key-value.sprig
+#               ^^^^ source.sprig string.unquoted.value.sprig
+#                   ^^ source.sprig
+#                     ^^^^^ source.sprig support.type.property-name.sprig
+#                          ^ source.sprig punctuation.separator.key-value.sprig
+#                           ^^^^^^^^^^^^^^^^ source.sprig string.unquoted.value.sprig markup.underline.link.sprig
+#                                           ^^ source.sprig
+#                                             ^^^^^ source.sprig support.type.property-name.sprig
+#                                                  ^ source.sprig punctuation.separator.key-value.sprig
+#                                                   ^^^^^^^^^^^ source.sprig string.unquoted.value.sprig markup.underline.link.sprig
+>- Links  see [[kitchen]] and [[rooms/hall^a]], not [[my notes]]
+#^ source.sprig keyword.mark.todo.sprig
+# ^^^^^^^^^^^^ source.sprig
+#             ^^^^^^^^^^^ source.sprig markup.underline.link.sprig
+#                        ^^^^^ source.sprig
+#                             ^^^^^^^^^^^^^^^^ source.sprig markup.underline.link.sprig
+#                                             ^^^^^^^^^^^^^^^^^^ source.sprig
+>- Unclosed  where:"41 Mill Street
+#^ source.sprig keyword.mark.todo.sprig
+# ^^^^^^^^^^^ source.sprig
+#            ^^^^^ source.sprig support.type.property-name.sprig
+#                 ^ source.sprig punctuation.separator.key-value.sprig
+#                  ^^^ source.sprig string.unquoted.value.sprig
+#                     ^^^^^^^^^^^^ source.sprig
+>- Unicode  @jón  ^þing  lykill:gildi
+#^ source.sprig keyword.mark.todo.sprig
+# ^^^^^^^^^^ source.sprig
+#           ^^^^ source.sprig variable.other.person.sprig
+#               ^^ source.sprig
+#                 ^^^^^ source.sprig entity.name.label.anchor.sprig
+#                      ^^ source.sprig
+#                        ^^^^^^ source.sprig support.type.property-name.sprig
+#                              ^ source.sprig punctuation.separator.key-value.sprig
+#                               ^^^^^ source.sprig string.unquoted.value.sprig
+>

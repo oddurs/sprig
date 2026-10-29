@@ -1,0 +1,9 @@
+>\x marks the spot  @dana
+#^ source.sprig constant.character.escape.sprig
+# ^^^^^^^^^^^^^^^^^^ source.sprig markup.heading.title.sprig
+#                   ^^^^^ source.sprig markup.heading.title.sprig variable.other.person.sprig
+>
+>- Dig
+#^ source.sprig keyword.mark.todo.sprig
+# ^^^^ source.sprig
+>

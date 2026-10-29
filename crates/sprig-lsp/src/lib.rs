@@ -112,6 +112,7 @@ pub fn run(conn: &Connection, today: &dyn Fn() -> Date) -> Result<(), Error> {
         uris: BTreeMap::new(),
         published: BTreeMap::new(),
         snapshot: None,
+        ws: Workspace::new(),
         stale: false,
     };
     // initialize_finish has already waited for `initialized`, after which a
@@ -161,6 +162,7 @@ struct Server<'a> {
     /// What was last published for each file, so only changes are sent.
     published: BTreeMap<String, Vec<lsp::Diagnostic>>,
     snapshot: Option<Snapshot>,
+    ws: Workspace,
     /// Something changed since diagnostics were last published.
     stale: bool,
 }
@@ -236,12 +238,22 @@ impl Server<'_> {
         if self.snapshot.is_none() {
             let mut files = self.disk.clone();
             files.extend(self.open.iter().map(|(k, v)| (k.clone(), v.clone())));
-            let mut ws = Workspace::new();
+            // One workspace for the whole session: inserting a file whose text
+            // is unchanged keeps its parse, so a keystroke parses one file.
+            let gone: Vec<String> = self
+                .ws
+                .files()
+                .map(|(k, _)| k.to_string())
+                .filter(|k| !files.contains_key(k))
+                .collect();
+            for k in gone {
+                self.ws.remove(&k);
+            }
             for (k, v) in &files {
-                ws.insert(k.clone(), v.clone());
+                self.ws.insert(k.clone(), v.clone());
             }
             let today = (self.today)();
-            let res = ws.resolve(today);
+            let res = self.ws.resolve(today);
             self.snapshot = Some(Snapshot { files, res, today });
         }
         self.snapshot.as_ref().expect("just built")

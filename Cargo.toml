@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["crates/sprig-core", "crates/sprig-cli", "crates/sprig-lsp", "crates/sprig-wasm"]
+members = ["crates/sprig-core", "crates/sprig-cli", "crates/sprig-lsp", "crates/sprig-wasm", "editors/tree-sitter-sprig"]
 
 [workspace.package]
 version = "0.0.0"

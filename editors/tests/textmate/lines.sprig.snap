@@ -1,0 +1,59 @@
+>Open the bakery  @dana  due:2026-12-05  where:"41 Mill Street"
+#^^^^^^^^^^^^^^^^^ source.sprig markup.heading.title.sprig
+#                 ^^^^^ source.sprig markup.heading.title.sprig variable.other.person.sprig
+#                      ^^ source.sprig markup.heading.title.sprig
+#                        ^^^ source.sprig markup.heading.title.sprig support.type.property-name.sprig
+#                           ^ source.sprig markup.heading.title.sprig punctuation.separator.key-value.sprig
+#                            ^^^^^^^^^^ source.sprig markup.heading.title.sprig string.unquoted.value.sprig
+#                                      ^^ source.sprig markup.heading.title.sprig
+#                                        ^^^^^ source.sprig markup.heading.title.sprig support.type.property-name.sprig
+#                                             ^ source.sprig markup.heading.title.sprig punctuation.separator.key-value.sprig
+#                                              ^^^^^^^^^^^^^^^^ source.sprig markup.heading.title.sprig string.unquoted.value.sprig
+>
+>Corner unit, 62 m². A note carries no @tokens or #tags.
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.sprig
+>// A comment, never shown
+#^^^^^^^^^^^^^^^^^^^^^^^^^ source.sprig comment.line.double-slash.sprig
+>- to do  ^lease
+#^ source.sprig keyword.mark.todo.sprig
+# ^^^^^^^^ source.sprig
+#         ^^^^^^ source.sprig entity.name.label.anchor.sprig
+>~ doing  !!
+#^ source.sprig keyword.mark.doing.sprig
+# ^^^^^^^^ source.sprig
+#         ^^ source.sprig keyword.other.priority.sprig
+>x done
+#^ source.sprig keyword.mark.done.sprig
+# ^^^^^ source.sprig markup.done.sprig
+>/ dropped
+#^ source.sprig keyword.mark.dropped.sprig
+# ^^^^^^^^ source.sprig markup.strikethrough.sprig
+>> later
+#^ source.sprig keyword.mark.later.sprig
+# ^^^^^^ source.sprig
+>? a question
+#^ source.sprig keyword.mark.ask.sprig
+# ^^^^^^^^^^^ source.sprig
+>  = its answer  @dana
+#^^ source.sprig
+#  ^ source.sprig keyword.mark.answer.sprig
+#   ^^^^^^^^^^^^^ source.sprig markup.italic.answer.sprig
+#                ^^^^^ source.sprig markup.italic.answer.sprig variable.other.person.sprig
+># a group  #finance
+#^ source.sprig keyword.mark.group.sprig
+# ^^^^^^^^^^ source.sprig markup.heading.group.sprig
+#           ^^^^^^^^ source.sprig markup.heading.group.sprig entity.name.tag.sprig
+>  + [[kitchen]]  @teo
+#^^ source.sprig
+#  ^ source.sprig keyword.mark.graft.sprig
+#   ^ source.sprig
+#    ^^^^^^^^^^^ source.sprig markup.underline.link.sprig
+#               ^^ source.sprig
+#                 ^^^^ source.sprig variable.other.person.sprig
+>  \- an escaped note
+#^^ source.sprig
+#  ^ source.sprig constant.character.escape.sprig
+#   ^^^^^^^^^^^^^^^^^ source.sprig
+>x-ray is a note, and so is #tag at the start
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.sprig
+>

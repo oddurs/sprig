@@ -23,9 +23,13 @@ use crate::syntax::{self, Answer, Mark, Node, Paragraph, Parsed};
 use crate::token::{self, Tokens};
 
 /// A set of files, by workspace-relative path.
+///
+/// Each file is parsed when it is inserted, and resolution reuses the parse,
+/// so a caller that keeps one workspace and re-inserts only the file that
+/// changed (an editor, on every keystroke) parses one file, not all of them.
 #[derive(Clone, Debug, Default)]
 pub struct Workspace {
-    files: BTreeMap<String, String>,
+    files: BTreeMap<String, (String, Arc<Parsed>)>,
     absent: BTreeSet<String>,
 }
 
@@ -38,8 +42,18 @@ impl Workspace {
     /// ends in `.sprig`.
     pub fn insert(&mut self, path: impl Into<String>, source: impl Into<String>) {
         let path = path.into();
+        let source = source.into();
         self.absent.remove(&path);
-        self.files.insert(path, source.into());
+        if self.files.get(&path).is_some_and(|(s, _)| *s == source) {
+            return;
+        }
+        let parsed = Arc::new(syntax::parse(&path, &source));
+        self.files.insert(path, (source, parsed));
+    }
+
+    /// Takes a file out, as when it is deleted.
+    pub fn remove(&mut self, path: &str) {
+        self.files.remove(path);
     }
 
     /// Records that a file [`Workspace::wanted`] asked for does not exist, so
@@ -49,7 +63,9 @@ impl Workspace {
     }
 
     pub fn files(&self) -> impl Iterator<Item = (&str, &str)> {
-        self.files.iter().map(|(p, s)| (p.as_str(), s.as_str()))
+        self.files
+            .iter()
+            .map(|(p, (s, _))| (p.as_str(), s.as_str()))
     }
 
     /// Files that grafts and references name but that have not been added or
@@ -57,8 +73,7 @@ impl Workspace {
     /// marks the rest absent, and asks again until nothing is wanted.
     pub fn wanted(&self) -> BTreeSet<String> {
         let mut out = BTreeSet::new();
-        for (path, src) in &self.files {
-            let parsed = syntax::parse(path, src);
+        for (path, (_, parsed)) in &self.files {
             let mut want = |link: &str| {
                 if let Ok(p) = join(path, link)
                     && !self.files.contains_key(&p)
@@ -86,17 +101,17 @@ impl Workspace {
     /// Parses and resolves every file. `today` decides which start dates are
     /// still ahead (§7.5); nothing else depends on it.
     pub fn resolve(&self, today: Date) -> Resolution {
-        let parsed: BTreeMap<String, Parsed> = self
+        let parsed: BTreeMap<String, Arc<Parsed>> = self
             .files
             .iter()
-            .map(|(p, s)| (p.clone(), syntax::parse(p, s)))
+            .map(|(p, (_, parsed))| (p.clone(), Arc::clone(parsed)))
             .collect();
         let mut b = Builder {
             parsed: &parsed,
             index: self
                 .files
                 .iter()
-                .map(|(p, s)| (p.as_str(), LineIndex::new(s)))
+                .map(|(p, (s, _))| (p.as_str(), LineIndex::new(s)))
                 .collect(),
             loops: HashSet::new(),
             expanded: HashMap::new(),
@@ -151,7 +166,7 @@ impl Workspace {
 /// Every file, parsed and resolved.
 #[derive(Clone, Debug)]
 pub struct Resolution {
-    pub parsed: BTreeMap<String, Parsed>,
+    pub parsed: BTreeMap<String, Arc<Parsed>>,
     trees: BTreeMap<String, Tree>,
     /// Every problem in every file, sorted by place.
     pub diagnostics: Vec<Diagnostic>,
@@ -413,7 +428,7 @@ impl Expanded<'_> {
 }
 
 struct Builder<'a> {
-    parsed: &'a BTreeMap<String, Parsed>,
+    parsed: &'a BTreeMap<String, Arc<Parsed>>,
     index: HashMap<&'a str, LineIndex<'a>>,
     /// Graft lines, by file and line, that close a loop.
     loops: HashSet<(&'a str, usize)>,
@@ -881,7 +896,7 @@ fn finishes(status: Status) -> bool {
 
 /// What every anchor and every file resolves to, in its own file's tree.
 struct Lookup<'a> {
-    parsed: &'a BTreeMap<String, Parsed>,
+    parsed: &'a BTreeMap<String, Arc<Parsed>>,
     /// By file, then anchor, so a lookup borrows rather than allocates: it
     /// runs for every `after:` in every tree.
     anchors: HashMap<String, HashMap<String, Target>>,
@@ -894,7 +909,10 @@ enum Outcome<'l> {
 }
 
 impl<'a> Lookup<'a> {
-    fn new(parsed: &'a BTreeMap<String, Parsed>, rolled: &HashMap<&str, Resolved>) -> Lookup<'a> {
+    fn new(
+        parsed: &'a BTreeMap<String, Arc<Parsed>>,
+        rolled: &HashMap<&str, Resolved>,
+    ) -> Lookup<'a> {
         let mut anchors = HashMap::new();
         let mut files = HashMap::new();
         for (file, root) in rolled {
