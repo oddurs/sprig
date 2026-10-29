@@ -249,3 +249,46 @@ with a message that names the limit and the flag.
 
 A tool that fails reports it in its result with `isError` and a message the
 model can act on. An unknown tool is a protocol error (`-32602`).
+
+## T7. The terminal interface
+
+`sprig tui [PATH]` shows a folder's plans in three views on one screen:
+- **the tree,** with grafts mounted;
+- **next up,** the items `next` lists, in its order;
+- **the agenda,** the items `agenda` lists for the next fourteen days.
+
+A detail pane shows the item under the cursor. The pane hides below 80
+columns, where nothing wraps.
+
+| Keys | Do |
+| --- | --- |
+| `j` `k`, arrows | move |
+| `h` `l` | fold and unfold; `h` on a leaf goes to its parent |
+| `g` `G` | first and last item |
+| `x` | tick, as `sprig tick` does, recurrence included |
+| `~` | mark as doing |
+| `a` `A` | add a sibling after the item, or a child under it, as `sprig add` does |
+| `e` | open the editor at the item's line, as `sprig edit` does |
+| `u` | undo this session's last write |
+| `1` `2` `3` | tree, next up, agenda |
+| `/` | filter by text as it is typed, keeping the ancestors of every match in the tree; `Esc` clears |
+| `r` | read the files again |
+| `?` | the keys |
+| `q` | quit |
+
+Every write goes through the same edit API as the command it names, and
+reads its file again first. A write aimed at a line is made only if that
+line still says what the TUI showed; otherwise it is refused, nothing is
+written, and the files are read again. A change elsewhere in the file does
+not stop it. An undo is made only if the whole file is still what this
+session last wrote.
+
+The TUI reads the files again whenever anything under the folder changes,
+including a save that renames a new file into place, and keeps the cursor on
+its item: by anchor, else by text, else by the nearest line.
+
+`--screenshot WIDTHxHEIGHT` prints one frame as text and exits, with
+`--keys` to press keys first through the same core and the same writes.
+In `--keys`, characters are typed as they are, and `<Esc>`, `<Enter>`,
+`<BS>`, the arrows, `<Home>`, `<End>` and `<lt>` name the rest. A
+character marks the cursor's row, so a frame without colour still shows it.

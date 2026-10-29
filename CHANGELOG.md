@@ -8,6 +8,15 @@ All notable changes to this project are recorded here. The format follows
 
 ### Added
 
+- `sprig tui`: the tree, next up and the agenda on one screen.
+  - Vim keys, a detail pane, and a filter that keeps every match's ancestors.
+  - Ticks, marks, adds and undo through the edit API.
+  - Live reload when a file changes, keeping the cursor on its item.
+  - A write is refused if its line changed on disk since the TUI showed it,
+    so an editor's or an agent's save is never overwritten.
+  - `--screenshot WxH` prints a frame as text, and `--keys` presses keys
+    first.
+- `spec/tools.md` T7, and a guide to the TUI.
 - `sprig mcp`: the plans for coding agents, over the Model Context Protocol.
   - Five read tools return what the matching `--json` command prints.
   - Five write tools go through the edit API, refuse a change that would add
