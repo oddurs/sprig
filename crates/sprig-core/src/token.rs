@@ -1,4 +1,25 @@
 //! Inline tokens (§4): what an item's line says besides its text.
+//!
+//! # Example
+//!
+//! ```
+//! use sprig_core::parse;
+//! use sprig_core::token::{self, Piece};
+//!
+//! let p = parse("plan.sprig", "Plan\n\n- Visit  ^visit  where:\"Mill St\"  due:fri  due:sat  @dana\n");
+//! let t = &p.document.root.children[0].tokens;
+//! assert_eq!(t.anchor().unwrap().name, "visit");
+//! assert_eq!(t.field("where").unwrap().value, "Mill St");
+//! // The last value of a repeated key counts, in the place it was first used.
+//! assert_eq!(t.field("due").unwrap().value, "sat");
+//! assert_eq!(t.effective_fields().len(), 2);
+//!
+//! let pieces = token::pieces("Call @dana #lease", 0, false);
+//! assert_eq!(pieces[0].0, Piece::Person);
+//! assert_eq!(pieces[1].0.as_str(), "tag");
+//! let links = token::links("see[[lease^signed]]");
+//! assert_eq!((links[0].1.path.as_str(), links[0].1.anchor.as_deref()), ("lease.sprig", Some("signed")));
+//! ```
 
 use crate::diagnostic::Span;
 
@@ -10,13 +31,16 @@ pub struct Field {
     pub key: String,
     /// Without its quotes, if it had them.
     pub value: String,
+    /// The whole `key:value` token.
     pub span: Span,
 }
 
 /// One `after:` value (§4.7), exactly as written.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct After {
+    /// The value after `after:`.
     pub value: String,
+    /// The whole `after:` token.
     pub span: Span,
 }
 
@@ -26,6 +50,7 @@ pub struct Link {
     /// The file as written, with a leading `./` dropped and `.sprig` appended
     /// when absent. Still relative to the file that contains the link.
     pub path: String,
+    /// The anchor after `^`, when the link names one.
     pub anchor: Option<String>,
     /// The `[[...]]` itself.
     pub span: Span,
@@ -34,7 +59,9 @@ pub struct Link {
 /// A token carrying an anchor (§4.5).
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Anchor {
+    /// The name after `^`.
     pub name: String,
+    /// The `^name` token.
     pub span: Span,
 }
 
@@ -45,14 +72,18 @@ pub struct Tokens {
     pub text: String,
     /// The words that make up the text, as written.
     pub words: Vec<String>,
+    /// Names after `@` (§4.2), in order.
     pub people: Vec<String>,
+    /// Names after `#` (§4.3), in order.
     pub tags: Vec<String>,
     /// 0 when unset, else 1 to 3.
     pub priority: u8,
     /// Every anchor written, in order. The last one names the item (Appendix
     /// B.3); more than one is reported.
     pub anchors: Vec<Anchor>,
+    /// Every `key:value` field (§4.6), in order, repeats included; [`Tokens::field`] gives the one that counts.
     pub fields: Vec<Field>,
+    /// The `after:` fields (§7), in order.
     pub after: Vec<After>,
     /// Links inside words. A graft uses the first; `after:` links are in
     /// [`Tokens::after`], not here.
@@ -80,6 +111,7 @@ impl Tokens {
         out
     }
 
+    /// The anchor that names the item: the last written (§4.5).
     pub fn anchor(&self) -> Option<&Anchor> {
         self.anchors.last()
     }
@@ -87,7 +119,7 @@ impl Tokens {
     /// The link a graft line grafts: the first link of its first word that
     /// contains `[[`. A word with `[[` but no well-formed link means the
     /// graft has none, as in the reference parser.
-    pub fn graft_link(&self) -> Option<&Link> {
+    pub(crate) fn graft_link(&self) -> Option<&Link> {
         let word = self.graft_word?;
         let i = self.link_words.iter().position(|&w| w == word)?;
         self.links.get(i)
@@ -141,19 +173,26 @@ pub(crate) fn lift(text: &str, base: usize) -> Tokens {
 
 /// What a piece of a line is, for an editor to colour.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum Piece {
+    /// An `@person`.
     Person,
+    /// A `#tag`.
     Tag,
+    /// A `!`, `!!` or `!!!`.
     Priority,
+    /// A `^anchor`.
     Anchor,
     /// A field's key and its colon.
     Key,
     /// A field's value: plain, a link or an anchor.
     Value,
+    /// A `[[link]]` in the text.
     Link,
 }
 
 impl Piece {
+    /// The kind as a word, such as `person`, for an editor's scopes.
     pub fn as_str(self) -> &'static str {
         match self {
             Piece::Person => "person",

@@ -5,7 +5,9 @@ fn main() {
     #[cfg(target_env = "msvc")]
     c.flag("-utf-8");
     c.file(src.join("parser.c"));
+    c.file(src.join("scanner.c"));
     c.warnings(false);
     c.compile("tree-sitter-sprig");
     println!("cargo:rerun-if-changed=src/parser.c");
+    println!("cargo:rerun-if-changed=src/scanner.c");
 }

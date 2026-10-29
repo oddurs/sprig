@@ -94,6 +94,8 @@ export default defineConfig({
 					items: [
 						{ label: 'Specification', slug: 'spec' },
 						{ label: 'Command line', slug: 'docs/reference/cli' },
+						{ label: 'MCP tools', slug: 'docs/reference/mcp' },
+						{ label: 'Diagnostics', slug: 'docs/reference/diagnostics' },
 					],
 				},
 				{

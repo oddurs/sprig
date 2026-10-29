@@ -9,7 +9,7 @@ depends_on:
 - 47
 - 49
 created: 2026-09-28
-updated: 2026-10-28
+updated: 2026-10-29
 priority: p1
 effort: s
 area: docs
@@ -25,7 +25,7 @@ A developer outside VS Code who wants highlighting and diagnostics for `.sprig` 
 
 ## Acceptance criteria
 
-- [x] Each editor's section was followed from scratch on a clean config, and diagnostics appeared.
+- [ ] Each editor's section was followed from scratch on a clean config, and diagnostics appeared.
 
 ## 2026-10-28
 
@@ -37,3 +37,7 @@ A developer outside VS Code who wants highlighting and diagnostics for `.sprig` 
 - **Zed:** reaches a grammar and a language server only through an extension, and there isn't one (0147), so the guide says so.
 
 The criterion stays open until someone follows the Helix section on a clean config.
+
+## 2026-10-29
+
+Unticked: the criterion was ticked while the Helix section was still unfollowed, which this item's own note said keeps it open. Helix can't be installed here: there is no package, crates.io has only a placeholder, and building it from source wasn't permitted in this environment. Someone with Helix needs to follow the section on a clean config (hx --health sprig, then open examples/bakery/lease.sprig, delete ^signed, and see bakery.sprig report S0203).

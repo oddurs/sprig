@@ -8,6 +8,47 @@ All notable changes to this project are recorded here. The format follows
 
 ### Added
 
+- The conformance suite holds 417 examples, with every numbered rule of the
+  spec cited:
+  - Dates, shortcuts and estimates are checked against an oracle written
+    from the spec, not from the parser.
+  - Edit examples hold ticking (§10.4) and formatting (§3.3, §9.4) to exact
+    bytes.
+  - A coverage report in `tests/conformance/README.md` lists each rule's
+    examples, and CI fails when a rule has none.
+- `docs/stability.md`, the stability policy. Every promise names the test
+  that keeps it, and a test fails if that test disappears.
+- `--plain` snapshots for `next`, `check`, `tree`, `status`, `find` and
+  `agenda`.
+- `rfcs/`, the process for changing the spec, with its template. The rulings
+  on times of day, email addresses and file versions are RFCs 0001 to 0003.
+  CONTRIBUTING says who decides and how long review stays open.
+- Fuzz targets for the parser and the edit API (`scripts/task fuzz`), seeded
+  from the suite, and a minute of each in CI.
+- The site's reference gains the MCP tools and the diagnostics, generated
+  from the server and the catalogue. CI fails on a command, option or
+  diagnostic without documentation.
+- The tutorial ends with ticking the plan and handing it to an agent.
+
+### Changed
+
+- `sprig-core`'s public API, reviewed for 1.0:
+  - Every public item is documented, and every public function has an
+    example that runs as a test.
+  - These are now `#[non_exhaustive]`, so a later version can add to them:
+    `Code`, `Wait`, `Piece`, `query::Is`, `QueryError`, `RefError` and
+    `EditError`.
+  - These are no longer public, as nothing outside the crate used them:
+    `syntax::estimate_hours`, `date::recurs`, `Date::add_month` and
+    `Tokens::graft_link`.
+- §10.3 says what a count in `every:` counts: days or weeks.
+
+### Fixed
+
+- The tree-sitter grammar reads a file whose last line has no line ending,
+  which the new conformance examples found. An external scanner ends a line
+  at a newline or at the end of the file.
+
 - `sprig tui`: the tree, next up and the agenda on one screen.
   - Vim keys, a detail pane, and a filter that keeps every match's ancestors.
   - Ticks, marks, adds and undo through the edit API.

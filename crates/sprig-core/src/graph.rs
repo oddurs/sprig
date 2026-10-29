@@ -1,6 +1,19 @@
 //! The dependency graph, for Graphviz and Mermaid (spec/tools.md T5): every
 //! open item that waits on something through `after:`, and everything it
 //! waits on, grouped by file.
+//!
+//! # Example
+//!
+//! ```
+//! use sprig_core::{Date, Workspace, graph};
+//!
+//! let mut ws = Workspace::new();
+//! ws.insert("plan.sprig", "Plan\n\n- Logo  ^logo\n- Menus  after:^logo\n");
+//! let res = ws.resolve(Date::new(2026, 10, 1).unwrap());
+//! // An edge runs from what is waited on to what waits.
+//! assert!(graph::dot(&res).contains("plan_logo -> plan_l4;"));
+//! assert!(graph::mermaid(&res).starts_with("flowchart LR\n"));
+//! ```
 
 use std::collections::{BTreeMap, BTreeSet, HashMap};
 

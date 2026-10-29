@@ -11,7 +11,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use serde_json::Value;
-use sprig_core::{Date, Workspace, json};
+use sprig_core::{Date, Workspace, edit, json};
 
 /// The `today` of an example that does not set one: a fixed day, so no
 /// example depends on when it runs.
@@ -50,6 +50,11 @@ fn sorted_dirs(dir: &Path) -> Vec<PathBuf> {
 struct Meta {
     today: Option<String>,
     rules: Vec<String>,
+    /// Lines of main.sprig to tick, in order (§10.4); `after.sprig` holds
+    /// the file that results.
+    tick: Vec<usize>,
+    /// Format main.sprig (§3.3, §9.4); `after.sprig` holds the result.
+    format: bool,
 }
 
 fn meta(dir: &Path) -> Result<Meta, String> {
@@ -71,6 +76,15 @@ fn meta(dir: &Path) -> Result<Meta, String> {
                     }
                 }
             }
+            ("tick", toml::Value::Array(a)) => {
+                for l in a {
+                    match l {
+                        toml::Value::Integer(n) if n > 0 => m.tick.push(n as usize),
+                        other => return Err(format!("meta.toml: tick {other} is not a line")),
+                    }
+                }
+            }
+            ("format", toml::Value::Boolean(b)) => m.format = b,
             (k, v) => return Err(format!("meta.toml: unexpected key {k} = {v}")),
         }
     }
@@ -94,7 +108,10 @@ fn sources(dir: &Path) -> BTreeMap<String, String> {
                 // Read as bytes: an example may hold any bytes the parser
                 // must survive, and git may not leave line endings alone.
                 let src = String::from_utf8(fs::read(&p).unwrap()).expect("examples are UTF-8");
-                out.insert(rel.join("/"), src);
+                // An edit example's expected result is not part of its plan.
+                if rel != ["after.sprig"] {
+                    out.insert(rel.join("/"), src);
+                }
             }
         }
     }
@@ -282,7 +299,27 @@ fn run(dir: &Path, validator: &jsonschema::Validator, bless: bool) -> Result<(),
         );
     }
 
+    // An edit example: the file after the edits, byte for byte.
+    let mut edited = None;
+    if meta.format || !meta.tick.is_empty() {
+        let mut src = String::from_utf8(fs::read(dir.join("main.sprig")).unwrap())
+            .map_err(|_| "main.sprig is not UTF-8".to_string())?;
+        for &line in &meta.tick {
+            src = edit::tick(&src, line, today)
+                .map_err(|e| format!("tick {line}: {e}"))?
+                .0
+                .source;
+        }
+        if meta.format {
+            src = edit::format(&src, today).source;
+        }
+        edited = Some(src);
+    }
+
     if bless {
+        if let Some(src) = &edited {
+            fs::write(dir.join("after.sprig"), src).unwrap();
+        }
         let mut out = serde_json::Map::new();
         out.insert("sprig_tree".into(), actual["sprig_tree"].clone());
         for l in &layers {
@@ -299,6 +336,16 @@ fn run(dir: &Path, validator: &jsonschema::Validator, bless: bool) -> Result<(),
     }
 
     let mut found = Vec::new();
+    if let Some(src) = &edited {
+        match fs::read(dir.join("after.sprig")) {
+            Ok(want) if want == src.as_bytes() => {}
+            Ok(want) => found.push(format!(
+                "after the edits:\n--- after.sprig\n{}\n+++ produced\n{src}",
+                String::from_utf8_lossy(&want)
+            )),
+            Err(_) => found.push("an edit example needs after.sprig".into()),
+        }
+    }
     for l in layers {
         let a = if l == "diagnostics" {
             project_diagnostics(&expected[l], &actual[l])
@@ -341,26 +388,71 @@ fn every_example_matches_its_expected_tree() {
     );
 }
 
-/// The rule headings (`§2.6`) of the spec's numbered sections that no
-/// example in one section of the suite cites.
-fn uncited(section: &str, chapters: &[&str]) -> Vec<String> {
-    let spec =
-        fs::read_to_string(Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/sprig.md"))
-            .unwrap();
-    let rules: Vec<String> = spec
-        .lines()
+fn spec() -> String {
+    fs::read_to_string(Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/sprig.md")).unwrap()
+}
+
+/// The spec's numbered rules, `§2.6`, with their headings, in order: every
+/// `### N.M` heading of chapters 1 to 10. The appendices are not rules.
+fn rules(spec: &str) -> Vec<(String, String)> {
+    spec.lines()
         .filter_map(|l| l.strip_prefix("### "))
-        .filter_map(|h| h.split_once(' ').map(|(n, _)| n))
-        .filter(|n| chapters.iter().any(|c| n.split('.').next() == Some(c)))
-        .map(|n| format!("§{n}"))
+        .filter_map(|h| h.split_once(' '))
+        .filter(|(n, _)| {
+            n.split('.')
+                .next()
+                .is_some_and(|c| c.parse::<u32>().is_ok())
+        })
+        .map(|(n, title)| (format!("§{n}"), title.to_string()))
+        .collect()
+}
+
+/// Each rule and the examples, as `section/NNN`, that cite it.
+fn coverage(spec: &str, cited: &[(String, Vec<String>)]) -> Vec<(String, String, Vec<String>)> {
+    rules(spec)
+        .into_iter()
+        .map(|(rule, title)| {
+            let by: Vec<String> = cited
+                .iter()
+                .filter(|(_, rules)| rules.contains(&rule))
+                .map(|(name, _)| name.clone())
+                .collect();
+            (rule, title, by)
+        })
+        .collect()
+}
+
+/// Every example as `section/NNN`, with the rules its meta.toml cites.
+fn citations() -> Vec<(String, Vec<String>)> {
+    examples()
+        .iter()
+        .map(|dir| {
+            let section = dir.parent().unwrap().file_name().unwrap().to_string_lossy();
+            let name = dir.file_name().unwrap().to_string_lossy();
+            let m = meta(dir).unwrap_or_else(|e| panic!("{}: {e}", dir.display()));
+            (format!("{section}/{}", &name[..3]), m.rules)
+        })
+        .collect()
+}
+
+/// The rule headings of some chapters that no example in one section of the
+/// suite cites.
+fn uncited(section: &str, chapters: &[&str]) -> Vec<String> {
+    let in_section: Vec<(String, Vec<String>)> = citations()
+        .into_iter()
+        .filter(|(name, _)| name.starts_with(&format!("{section}/")))
         .collect();
-    assert!(rules.len() > 4, "the spec's rule headings were not found");
-    let mut cited = std::collections::BTreeSet::new();
-    for dir in sorted_dirs(&suite().join(section)) {
-        let m = meta(&dir).unwrap_or_else(|e| panic!("{}: {e}", dir.display()));
-        cited.extend(m.rules);
-    }
-    rules.into_iter().filter(|r| !cited.contains(r)).collect()
+    let cov = coverage(&spec(), &in_section);
+    assert!(cov.len() > 4, "the spec's rule headings were not found");
+    cov.into_iter()
+        .filter(|(rule, _, _)| {
+            chapters
+                .iter()
+                .any(|c| rule[2..].split('.').next() == Some(c))
+        })
+        .filter(|(_, _, by)| by.is_empty())
+        .map(|(rule, _, _)| rule)
+        .collect()
 }
 
 #[test]
@@ -370,8 +462,8 @@ fn the_lines_section_cites_every_line_and_indentation_rule() {
 }
 
 #[test]
-fn the_tokens_section_cites_every_token_and_date_rule() {
-    let missing = uncited("tokens", &["4", "9"]);
+fn the_tokens_section_cites_every_token_date_estimate_and_recurrence_rule() {
+    let missing = uncited("tokens", &["4", "9", "10"]);
     assert!(missing.is_empty(), "no tokens example cites {missing:?}");
 }
 
@@ -379,4 +471,80 @@ fn the_tokens_section_cites_every_token_and_date_rule() {
 fn the_graph_section_cites_every_status_people_blocking_and_graft_rule() {
     let missing = uncited("graph", &["5", "6", "7", "8"]);
     assert!(missing.is_empty(), "no graph example cites {missing:?}");
+}
+
+#[test]
+fn every_rule_in_the_spec_has_an_example() {
+    let missing: Vec<String> = coverage(&spec(), &citations())
+        .into_iter()
+        .filter(|(_, _, by)| by.is_empty())
+        .map(|(rule, title, _)| format!("{rule} {title}"))
+        .collect();
+    assert!(
+        missing.is_empty(),
+        "no example cites:\n  {}",
+        missing.join("\n  ")
+    );
+}
+
+#[test]
+fn a_rule_with_no_example_is_reported() {
+    // The check above, on a spec with a rule nothing cites, as a new rule
+    // would be until its example is written.
+    let spec = "### 1.1 Old\n\n### 1.2 New\n\n## Appendix A\n\n### A.1 Not a rule\n";
+    let cited = vec![("lines/001".to_string(), vec!["§1.1".to_string()])];
+    let cov = coverage(spec, &cited);
+    let missing: Vec<&str> = cov
+        .iter()
+        .filter(|c| c.2.is_empty())
+        .map(|c| c.0.as_str())
+        .collect();
+    assert_eq!(missing, ["§1.2"]);
+    assert_eq!(cov.len(), 2, "appendix headings are not rules");
+}
+
+const START: &str = "<!-- coverage:start -->";
+const END: &str = "<!-- coverage:end -->";
+
+/// The coverage report as the conformance README holds it.
+fn report() -> String {
+    let cov = coverage(&spec(), &citations());
+    let total = examples().len();
+    let mut out = format!(
+        "{START}\n\n{} rules, {total} examples. Generated by the conformance test; `SPRIG_BLESS=1` rewrites it.\n\n| Rule | | Examples |\n| --- | --- | --- |\n",
+        cov.len()
+    );
+    for (rule, title, by) in cov {
+        out.push_str(&format!(
+            "| {rule} | {title} | {}: {} |\n",
+            by.len(),
+            by.join(", ")
+        ));
+    }
+    out.push_str(&format!("\n{END}"));
+    out
+}
+
+#[test]
+fn the_readme_holds_the_current_coverage_report() {
+    let path = suite().join("README.md");
+    let readme = fs::read_to_string(&path).unwrap().replace("\r\n", "\n");
+    let (s, e) = (readme.find(START), readme.find(END));
+    let want = report();
+    if std::env::var_os("SPRIG_BLESS").is_some() {
+        let new = match (s, e) {
+            (Some(s), Some(e)) => format!("{}{want}{}", &readme[..s], &readme[e + END.len()..]),
+            _ => format!("{}\n\n## Coverage\n\n{want}\n", readme.trim_end()),
+        };
+        fs::write(&path, new).unwrap();
+        return;
+    }
+    let (Some(s), Some(e)) = (s, e) else {
+        panic!("the conformance README has no coverage report; run with SPRIG_BLESS=1");
+    };
+    assert_eq!(
+        &readme[s..e + END.len()],
+        want,
+        "the coverage report is out of date; run with SPRIG_BLESS=1"
+    );
 }

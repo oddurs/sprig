@@ -1,0 +1,9 @@
+Dates on 2026-10-01
+
+- Item 1  due:+d
+- Item 2  due:+3
+- Item 3  due:+3m
+- Item 4  due:+-1d
+- Item 5  due:3d
+- Item 6  due:+1.5d
+- Item 7  due:+3y

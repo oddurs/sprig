@@ -27,6 +27,10 @@ module.exports = grammar({
   // Whitespace is meaningful: it ends tokens and indents lines.
   extras: (_) => [],
 
+  // The end of a line with something on it, which may be the end of the
+  // file (src/scanner.c).
+  externals: ($) => [$._eol],
+
   rules: {
     // Blank lines and comments, then the first line that says something:
     // the title when it is not indented and not an item (§1.2).
@@ -44,22 +48,22 @@ module.exports = grammar({
         $._note_line,
       ),
 
-    title: ($) => seq(optional(alias(token(prec(3, '\\')), $.escape)), $._token, content($), $._nl),
+    title: ($) => seq(optional(alias(token(prec(3, '\\')), $.escape)), $._token, content($), $._eol),
 
     _blank_line: ($) => seq(optional($._ws), $._nl),
-    _comment_line: ($) => seq(optional($._ws), $.comment, $._nl),
+    _comment_line: ($) => seq(optional($._ws), $.comment, $._eol),
     _item_line: ($) => seq(optional($._ws), $.item),
     _answer_line: ($) => seq(optional($._ws), $.answer),
-    _escaped_line: ($) => seq(optional($._ws), $.escaped_note, $._nl),
-    _note_line: ($) => seq(optional($._ws), $.note, $._nl),
+    _escaped_line: ($) => seq(optional($._ws), $.escaped_note, $._eol),
+    _note_line: ($) => seq(optional($._ws), $.note, $._eol),
     // An indented first line is never the title (§1.3).
     _indented_line: ($) =>
-      seq($._ws, choice($.escaped_note, $.note), $._nl),
+      seq($._ws, choice($.escaped_note, $.note), $._eol),
 
     // §2.2: a mark is a mark only with whitespace or the end of the line after it.
     item: ($) =>
       choice(
-        seq(field('mark', $.mark), content($), $._nl),
+        seq(field('mark', $.mark), content($), $._eol),
         field('mark', alias($._bare_mark, $.mark)),
       ),
     mark: (_) => token(prec(2, /[-~x\/>?#+][^\S\r\n]+/)),
@@ -69,7 +73,7 @@ module.exports = grammar({
 
     answer: ($) =>
       choice(
-        seq(field('mark', alias($._answer_mark, $.mark)), content($), $._nl),
+        seq(field('mark', alias($._answer_mark, $.mark)), content($), $._eol),
         field('mark', alias($._bare_answer, $.mark)),
       ),
     _answer_mark: (_) => token(prec(2, /=[^\S\r\n]+/)),

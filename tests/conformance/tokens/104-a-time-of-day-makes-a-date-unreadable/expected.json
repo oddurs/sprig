@@ -1,0 +1,58 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Dates on 2026-10-01",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 2
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "Item 1",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 4,
+        "mark": "-",
+        "label": "Item 2",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      }
+    ]
+  },
+  "diagnostics": [
+    {
+      "code": "S0001",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 11,
+      "span": [31, 51]
+    },
+    {
+      "code": "S0001",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 4,
+      "col": 11,
+      "span": [62, 83]
+    }
+  ]
+}

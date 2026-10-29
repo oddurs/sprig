@@ -1,0 +1,20 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Tokens",
+    "root": {
+      "line": 1,
+      "span": [0, 6],
+      "text": "Tokens",
+      "children": [
+        {
+          "line": 3,
+          "span": [8, 19],
+          "mark": "-",
+          "text": "See #v1.2"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

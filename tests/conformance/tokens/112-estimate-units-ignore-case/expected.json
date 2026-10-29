@@ -1,0 +1,57 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Estimates",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 3
+    },
+    "estimate": 59,
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "Task 1",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "estimate": 3
+      },
+      {
+        "file": "main.sprig",
+        "line": 4,
+        "mark": "-",
+        "label": "Task 2",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "estimate": 16
+      },
+      {
+        "file": "main.sprig",
+        "line": 5,
+        "mark": "-",
+        "label": "Task 3",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "estimate": 40
+      }
+    ]
+  },
+  "diagnostics": []
+}

@@ -1,0 +1,40 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "label": "main.sprig",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 2
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 1,
+        "mark": "-",
+        "label": "One",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 2,
+        "mark": "-",
+        "label": "Two",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      }
+    ]
+  },
+  "diagnostics": []
+}

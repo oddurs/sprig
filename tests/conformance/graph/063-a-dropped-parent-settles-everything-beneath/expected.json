@@ -1,0 +1,58 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Settle",
+    "status": "empty",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 0
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "/",
+        "label": "Room",
+        "status": "dropped",
+        "settled": true,
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "-",
+            "label": "Walls",
+            "status": "dropped",
+            "settled": true,
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 0
+            }
+          },
+          {
+            "file": "main.sprig",
+            "line": 5,
+            "mark": "~",
+            "label": "Floor",
+            "status": "dropped",
+            "settled": true,
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

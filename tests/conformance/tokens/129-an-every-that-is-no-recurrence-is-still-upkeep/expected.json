@@ -1,0 +1,90 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Upkeep",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 1
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "Real work",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 4,
+        "mark": "-",
+        "label": "Chore 1",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 5,
+        "mark": "-",
+        "label": "Chore 2",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 6,
+        "mark": "-",
+        "label": "Chore 3",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        }
+      }
+    ]
+  },
+  "diagnostics": [
+    {
+      "code": "S0006",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 4,
+      "col": 12,
+      "span": [31, 48]
+    },
+    {
+      "code": "S0006",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 5,
+      "col": 12,
+      "span": [60, 71]
+    },
+    {
+      "code": "S0006",
+      "severity": "warning",
+      "file": "main.sprig",
+      "line": 6,
+      "col": 12,
+      "span": [83, 90]
+    }
+  ]
+}

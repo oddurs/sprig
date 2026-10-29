@@ -1,0 +1,56 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Groups",
+    "status": "doing",
+    "progress": {
+      "done": 1,
+      "doing": 0,
+      "total": 2
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "#",
+        "label": "Shop",
+        "status": "doing",
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 2
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "x",
+            "label": "Milk",
+            "status": "done",
+            "settled": true,
+            "progress": {
+              "done": 1,
+              "doing": 0,
+              "total": 1
+            }
+          },
+          {
+            "file": "main.sprig",
+            "line": 5,
+            "mark": "-",
+            "label": "Bread",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

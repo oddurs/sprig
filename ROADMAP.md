@@ -36,7 +36,7 @@ VS Code highlights `.sprig` files, completes people, anchors and file links, sho
 
 ## v0.3 — Agents work the plan
 
-`··········` 0% · 0 of 6 done · due 2027-04-02
+`··········` 0% · 0 of 5 done · due 2027-04-02
 
 `sprig mcp` lets a coding agent read a repository's `PLAN.sprig`, find ready work, tick, add and answer items, where every change is an ordinary file edit a person can review. Plans export to calendars and JSON, and existing checklists import. From the shell, `mark`, `add`, `answer`, `find`, `agenda` and `graph` cover the everyday writes and questions, through the same edit API the agents use.
 
@@ -45,7 +45,6 @@ VS Code highlights `.sprig` files, completes people, anchors and file links, sho
 - [ ] [`0064`](https://github.com/oddurs/sprig/blob/main/cairn/items/0064-sprig-export-json-and-icalendar.md) sprig export: JSON and iCalendar <sup>feature · p1 · interop</sup>
 - [ ] [`0067`](https://github.com/oddurs/sprig/blob/main/cairn/items/0067-github-action-check-plans-and-summarise-progress-in-pull-requests.md) GitHub Action: check plans and summarise progress in pull requests <sup>feature · p1 · interop</sup>
 - [ ] [`0128`](https://github.com/oddurs/sprig/blob/main/cairn/items/0128-sprig-graph-the-dependency-graph-for-graphviz-and-mermaid.md) sprig graph: the dependency graph for Graphviz and Mermaid <sup>feature · p2 · interop</sup>
-- [ ] [`0129`](https://github.com/oddurs/sprig/blob/main/cairn/items/0129-guide-sprig-in-the-shell.md) Guide: Sprig in the shell <sup>docs · p2 · docs</sup>
 
 ## v0.4 — Work the plan from one screen
 
@@ -58,21 +57,16 @@ VS Code highlights `.sprig` files, completes people, anchors and file links, sho
 
 ## v1.0 — Sprig 1.0
 
-`··········` 0% · 0 of 11 done · due 2027-07-02
+`··········` 0% · 0 of 6 done · due 2027-07-02
 
 A frozen spec under CC0, a conformance suite that covers every rule, and packaged tools a stranger installs in one command on macOS, Linux and Windows. No new surface: this milestone makes promises about what already exists.
 
-- [ ] [`0072`](https://github.com/oddurs/sprig/blob/main/cairn/items/0072-rfc-process-and-contributing.md) RFC process and CONTRIBUTING <sup>docs · p0 · community</sup>
-- [ ] [`0073`](https://github.com/oddurs/sprig/blob/main/cairn/items/0073-stability-policy.md) Stability policy <sup>docs · p0 · community</sup>
-- [ ] [`0074`](https://github.com/oddurs/sprig/blob/main/cairn/items/0074-conformance-coverage-report.md) Conformance coverage report <sup>feature · p0 · suite</sup>
-- [ ] [`0075`](https://github.com/oddurs/sprig/blob/main/cairn/items/0075-cover-every-spec-rule-with-examples.md) Cover every spec rule with examples <sup>feature · p0 · suite</sup>
 - [ ] [`0076`](https://github.com/oddurs/sprig/blob/main/cairn/items/0076-spec-1-0-release-candidate-and-public-review.md) Spec 1.0 release candidate and public review <sup>docs · p0 · spec</sup>
 - [ ] [`0077`](https://github.com/oddurs/sprig/blob/main/cairn/items/0077-freeze-and-publish-spec-1-0-under-cc0.md) Freeze and publish spec 1.0 under CC0 <sup>docs · p0 · spec</sup>
 - [ ] [`0078`](https://github.com/oddurs/sprig/blob/main/cairn/items/0078-prebuilt-binaries-and-one-command-install-on-three-platforms.md) Prebuilt binaries and one-command install on three platforms <sup>chore · p0 · release</sup>
-- [ ] [`0079`](https://github.com/oddurs/sprig/blob/main/cairn/items/0079-core-api-documentation-and-public-api-review.md) Core API documentation and public API review <sup>docs · p1 · core</sup>
+- [ ] [`0082`](https://github.com/oddurs/sprig/blob/main/cairn/items/0082-release-1-0.md) Release 1.0 <sup>chore · p0 · release</sup>
 - [ ] [`0080`](https://github.com/oddurs/sprig/blob/main/cairn/items/0080-fuzz-the-parser-and-the-edit-api.md) Fuzz the parser and the edit API <sup>chore · p1 · core</sup>
 - [ ] [`0081`](https://github.com/oddurs/sprig/blob/main/cairn/items/0081-five-minute-tutorial-and-reference-site.md) Five-minute tutorial and reference site <sup>docs · p0 · docs</sup>
-- [ ] [`0082`](https://github.com/oddurs/sprig/blob/main/cairn/items/0082-release-1-0.md) Release 1.0 <sup>chore · p0 · release</sup>
 
 ## later — Later
 

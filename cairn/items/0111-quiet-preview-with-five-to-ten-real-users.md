@@ -9,7 +9,7 @@ depends_on:
 - 101
 - 110
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-10-29
 priority: p1
 effort: s
 area: community
@@ -27,3 +27,7 @@ A week before the launch, ask five to ten people who would use Sprig on a real p
 
 - [ ] At least five people tried it on a real plan, and every problem they found is an item.
 - [ ] Nobody was asked for votes or launch-day comments.
+
+## 2026-10-29
+
+Waits on the name (0006) and on 1.0 (0082); the launch needs people: testers for the preview, and someone to post.

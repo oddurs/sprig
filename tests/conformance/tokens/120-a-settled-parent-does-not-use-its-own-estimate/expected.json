@@ -1,0 +1,45 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Rollup",
+    "status": "empty",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 0
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": ">",
+        "label": "Room",
+        "status": "later",
+        "settled": true,
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "-",
+            "label": "Walls",
+            "status": "later",
+            "settled": true,
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

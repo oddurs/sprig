@@ -1,0 +1,14 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "label": "main.sprig",
+    "status": "empty",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 0
+    }
+  },
+  "diagnostics": []
+}

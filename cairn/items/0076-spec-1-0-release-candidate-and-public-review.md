@@ -9,7 +9,7 @@ depends_on:
 - 72
 - 75
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-10-29
 priority: p0
 effort: m
 area: spec
@@ -27,3 +27,7 @@ Publish the 1.0 release candidate with the spike answers folded in. Hold a four-
 
 - [ ] The review window was announced with a closing date and ran its full length.
 - [ ] Every comment has a recorded outcome.
+
+## 2026-10-29
+
+Ready to start once the name is settled. The spec is draft 0.5, every rule has an example (417), and rfcs/ says how comments become rulings. The review needs a public announcement with a closing date, which is a person's call.

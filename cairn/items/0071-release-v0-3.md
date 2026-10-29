@@ -10,7 +10,7 @@ depends_on:
 - 60
 - 62
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-10-29
 priority: p0
 effort: s
 area: release
@@ -27,3 +27,7 @@ CHANGELOG entry, `v0.3.0` tag, crates and extension published, release notes wit
 ## Acceptance criteria
 
 - [ ] The v0.3 milestone's Done-when list is fully ticked.
+
+## 2026-10-29
+
+Waits on the name (0006): the crate cannot be published, and a GitHub release would fix a name that may change. Everything a release needs from the code is in place: the install job runs the README's command on all three platforms, and CHANGELOG.md has the entries.

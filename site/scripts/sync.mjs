@@ -172,9 +172,72 @@ write(
 	),
 );
 
+/* the MCP reference: the tools as the built server lists them to a client */
+const session = [
+	{ jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-11-25', capabilities: {}, clientInfo: { name: 'site', version: '0' } } },
+	{ jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} },
+]
+	.map((m) => JSON.stringify(m))
+	.join('\n');
+const replies = execFileSync(exe, ['mcp', '--in', join(repo, 'examples/bakery')], { input: session + '\n', encoding: 'utf8', env })
+	.trim()
+	.split('\n')
+	.map((l) => JSON.parse(l));
+const tools = replies.find((r) => r.id === 2)?.result?.tools ?? [];
+if (!tools.length) {
+	console.error('sync: `sprig mcp` lists no tools');
+	process.exit(1);
+}
+const cell = (s) => String(s).replaceAll('|', '\\|').replaceAll('\n', ' ');
+const argRows = (schema) => {
+	const props = Object.entries(schema.properties ?? {});
+	if (!props.length) return 'No arguments.';
+	const required = new Set(schema.required ?? []);
+	return (
+		'| Argument | Type | | |\n| --- | --- | --- | --- |\n' +
+		props
+			.map(([k, v]) => {
+				const type = v.type === 'array' ? `list of ${v.items?.type ?? 'values'}` : v.enum ? v.enum.map((e) => `\`${e}\``).join(' ') : v.type;
+				return `| \`${k}\` | ${cell(type)} | ${required.has(k) ? 'required' : 'optional'} | ${cell(v.description ?? '')} |`;
+			})
+			.join('\n')
+	);
+};
+write(
+	join(docs, 'docs/reference/mcp.md'),
+	page(
+		{
+			title: 'MCP tools',
+			description: 'Every tool sprig mcp offers an agent, with its arguments, from the server itself.',
+			editUrl: false,
+		},
+		`:::note[Generated]\nThis page is what \`sprig mcp\` answers to \`tools/list\`, from the build of \`crates/sprig-cli\` this site was built with. \`spec/tools.md\` T6 is the contract, and the [agents guide](/docs/agents/) shows a session.\n:::\n\n` +
+			tools
+				.map((t) => {
+					const kind = t.annotations?.readOnlyHint ? 'Reads.' : 'Writes, through the edit API, and returns the diff.';
+					return `## ${t.name}\n\n**${t.title}.** ${t.description} ${kind}\n\n${argRows(t.inputSchema)}`;
+				})
+				.join('\n\n'),
+	),
+);
+
+/* the diagnostics reference: the catalogue the core is tested against */
+write(
+	join(docs, 'docs/reference/diagnostics.md'),
+	page(
+		{
+			title: 'Diagnostics',
+			description: 'Every code a Sprig tool reports, its severity, the rule it enforces and what it means.',
+			editUrl: `${edit}/spec/diagnostics.md`,
+		},
+		`:::note[Generated]\nThis page is \`spec/diagnostics.md\`. A test holds it and the core to each other: every code the core can report has a row and a note here.\n:::\n\n` +
+			dropTitle(read('spec/diagnostics.md')),
+	),
+);
+
 /* counts the pages state in prose, so a sentence like "all fifteen" can't go stale */
-write(join(generated, 'facts.json'), JSON.stringify({ decisions: decisions.length, commands: commands.map((c) => c.name) }, null, '\t'));
+write(join(generated, 'facts.json'), JSON.stringify({ decisions: decisions.length, commands: commands.map((c) => c.name), tools: tools.map((t) => t.name) }, null, '\t'));
 
 console.log(
-	`sync: spec, ${decisions.length} decisions, roadmap, changelog (${releases.length} releases), ${Object.keys(examples).length} examples, ${commands.length} commands`,
+	`sync: spec, ${decisions.length} decisions, roadmap, changelog (${releases.length} releases), ${Object.keys(examples).length} examples, ${commands.length} commands, ${tools.length} MCP tools`,
 );

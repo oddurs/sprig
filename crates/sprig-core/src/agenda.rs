@@ -1,6 +1,29 @@
 //! Dated work: every open item with its own due date, the walk that `sprig
 //! agenda` and the iCalendar export share, so they always list the same
 //! items (spec/tools.md T5).
+//!
+//! # Example
+//!
+//! ```
+//! use sprig_core::{Date, Workspace, agenda, export};
+//!
+//! let mut ws = Workspace::new();
+//! ws.insert("plan.sprig", "Plan\n\n- Call  due:2026-10-02\n- Pay  due:2026-09-20\n- Bins  every:fri  due:2026-10-02\n");
+//! let today = Date::new(2026, 10, 1).unwrap();
+//! let res = ws.resolve(today);
+//!
+//! let w = agenda::window(agenda::dated(&res), today, 14);
+//! assert_eq!(w.late[0].node.label, "Pay");
+//! let friday = &w.days[&Date::new(2026, 10, 2).unwrap()];
+//! assert_eq!(friday.len(), 2);
+//! assert_eq!(friday[1].every, Some("fri"));
+//!
+//! // The same items as a calendar, each with a UID that survives edits.
+//! let ics = export::ics(&agenda::dated(&res), today);
+//! assert!(ics.starts_with("BEGIN:VCALENDAR\r\n"));
+//! assert_eq!(export::uid(friday[0].node), "plan.sprig:call@sprig");
+//! assert!(export::csv(&res).starts_with("file,line,mark,text,status"));
+//! ```
 
 use std::collections::BTreeMap;
 
@@ -10,7 +33,9 @@ use crate::workspace::{Resolution, Resolved};
 /// An open item and the day it is due.
 #[derive(Clone, Debug)]
 pub struct Dated<'r> {
+    /// The item, as its own file writes it.
     pub node: &'r Resolved,
+    /// Its own `due:`, read against today; for a recurring item, the next occurrence.
     pub due: Date,
     /// The `every:` rule of a recurring item (§10.3). Its due date is the
     /// next occurrence, and it is listed on that day only.
@@ -50,10 +75,14 @@ pub fn dated(res: &Resolution) -> Vec<Dated<'_>> {
 /// The items due before `today`, and those due on each day from `today`
 /// for `days` days.
 pub struct Window<'r> {
+    /// Open items due before today, earliest first.
     pub late: Vec<Dated<'r>>,
+    /// The days of the window that have something due, each with its items in file order.
     pub days: BTreeMap<Date, Vec<Dated<'r>>>,
 }
 
+/// Sorts dated items into what is late and what falls on each of the `days`
+/// days from `today`, today included. Items due later are left out.
 pub fn window<'r>(items: Vec<Dated<'r>>, today: Date, days: i64) -> Window<'r> {
     let end = today.add_days(days);
     let mut w = Window {

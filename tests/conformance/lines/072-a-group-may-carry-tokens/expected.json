@@ -1,0 +1,71 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Groups",
+    "root": {
+      "line": 1,
+      "span": [0, 6],
+      "text": "Groups",
+      "children": [
+        {
+          "line": 3,
+          "span": [8, 28],
+          "mark": "#",
+          "text": "Shop",
+          "people": ["jo"],
+          "tags": ["weekly"],
+          "children": [
+            {
+              "line": 4,
+              "span": [31, 38],
+              "mark": "-",
+              "text": "Bread"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Groups",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 1
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "#",
+        "label": "Shop",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "people": ["jo"],
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "-",
+            "label": "Bread",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "people": ["jo"]
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

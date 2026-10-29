@@ -1,0 +1,29 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Tokens",
+    "root": {
+      "line": 1,
+      "span": [0, 6],
+      "text": "Tokens",
+      "children": [
+        {
+          "line": 3,
+          "span": [8, 51],
+          "mark": "-",
+          "text": "Read notes and kitchen^oven first",
+          "links": [
+            {
+              "path": "notes.sprig"
+            },
+            {
+              "path": "kitchen.sprig",
+              "anchor": "oven"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

@@ -1,0 +1,57 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Indent",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 1
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "Parent",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "-",
+            "label": "Child",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "children": [
+              {
+                "file": "main.sprig",
+                "line": 5,
+                "mark": "-",
+                "label": "Grandchild",
+                "status": "todo",
+                "progress": {
+                  "done": 0,
+                  "doing": 0,
+                  "total": 1
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

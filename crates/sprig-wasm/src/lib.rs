@@ -245,6 +245,8 @@ fn blockers(n: &Resolved) -> Value {
                 }
                 Value::Object(m)
             }
+            // A kind of wait a later core adds: shown without detail.
+            _ => json!({ "label": "something not yet finished" }),
         })
         .collect();
     Value::Array(list)

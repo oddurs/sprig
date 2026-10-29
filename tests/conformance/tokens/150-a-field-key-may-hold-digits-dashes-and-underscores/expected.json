@@ -1,0 +1,25 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Tokens",
+    "root": {
+      "line": 1,
+      "span": [0, 6],
+      "text": "Tokens",
+      "children": [
+        {
+          "line": 3,
+          "span": [8, 45],
+          "mark": "-",
+          "text": "Pay",
+          "fields": {
+            "vat-rate": "20",
+            "q3_total": "9k",
+            "k9": "x"
+          }
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

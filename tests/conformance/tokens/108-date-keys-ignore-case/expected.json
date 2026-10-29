@@ -1,0 +1,37 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Keys",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 1
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "One",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "due": "2026-10-05",
+        "start": "2026-10-02",
+        "blocked": true,
+        "waits_on": [
+          {
+            "start": "2026-10-02"
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

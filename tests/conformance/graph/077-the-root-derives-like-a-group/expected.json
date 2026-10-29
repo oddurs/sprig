@@ -1,0 +1,43 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Derive",
+    "status": "done",
+    "progress": {
+      "done": 2,
+      "doing": 0,
+      "total": 2
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "x",
+        "label": "One",
+        "status": "done",
+        "settled": true,
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 1
+        }
+      },
+      {
+        "file": "main.sprig",
+        "line": 4,
+        "mark": "x",
+        "label": "Two",
+        "status": "done",
+        "settled": true,
+        "progress": {
+          "done": 1,
+          "doing": 0,
+          "total": 1
+        }
+      }
+    ]
+  },
+  "diagnostics": []
+}

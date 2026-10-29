@@ -12,6 +12,38 @@
 //! Every operation returns a [`Change`]: the new source, and the replacements
 //! that produce it from the old one, in the old one's byte offsets, so an
 //! editor can send exactly those as text edits.
+//!
+//! # Example
+//!
+//! ```
+//! use sprig_core::edit::{self, Place, Replace};
+//! use sprig_core::{Date, Mark, Span};
+//!
+//! let today = Date::new(2026, 10, 1).unwrap();
+//! let src = "Plan\n\n- Logo\n    - Sketch\n";
+//!
+//! // Each edit returns the new text and the replacements that made it, and
+//! // leaves every other byte alone.
+//! let (c, _) = edit::tick(src, 3, today).unwrap();
+//! assert_eq!(c.source, "Plan\n\nx Logo\n    - Sketch\n");
+//! let c = edit::set_mark(src, 4, Mark::Doing).unwrap();
+//! assert_eq!(c.edits.len(), 1);
+//! let c = edit::set_field(src, 3, "due", Some("2026-10-09")).unwrap();
+//! assert!(c.source.contains("- Logo  due:2026-10-09"));
+//! // A new child takes its siblings' indentation.
+//! let c = edit::add_item(src, 3, Place::Child, "- Colours").unwrap();
+//! assert!(c.source.ends_with("    - Sketch\n    - Colours\n"));
+//! let c = edit::add_answer("Q\n\n? Which?\n", 3, "This one").unwrap();
+//! assert!(c.source.ends_with("  = This one\n"));
+//!
+//! // Formatting writes two spaces a level and writes typed dates out.
+//! let c = edit::format("Plan\n\n- Logo  due:fri\n    - Sketch\n", today);
+//! assert_eq!(c.source, "Plan\n\n- Logo  due:2026-10-02\n  - Sketch\n");
+//! assert!(edit::format(&c.source, today).is_empty());
+//!
+//! let same = edit::apply("abc", &[Replace { span: Span::new(1, 2), text: "B".into() }]);
+//! assert_eq!(same, "aBc");
+//! ```
 
 use std::fmt;
 
@@ -23,13 +55,16 @@ use crate::token;
 /// One replacement, in the original source's bytes.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Replace {
+    /// The bytes of the original source it replaces.
     pub span: Span,
+    /// What goes there instead.
     pub text: String,
 }
 
 /// The result of an edit.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Change {
+    /// The whole file after the change.
     pub source: String,
     /// Sorted, and never overlapping. Empty when nothing changed.
     pub edits: Vec<Replace>,
@@ -45,6 +80,7 @@ impl Change {
         }
     }
 
+    /// Whether the change leaves the file as it was.
     pub fn is_empty(&self) -> bool {
         self.edits.is_empty()
     }
@@ -65,6 +101,7 @@ pub fn apply(src: &str, edits: &[Replace]) -> String {
 
 /// Why an edit could not be made.
 #[derive(Clone, Debug, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum EditError {
     /// No item starts on that line.
     NotAnItem(usize),
