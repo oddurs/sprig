@@ -161,6 +161,7 @@ fn workspace(r: &Resolution) -> Value {
                 "line": d.line,
                 "col": d.col,
                 "message": d.message,
+                "help": d.help,
             })
         })
         .collect();
@@ -594,6 +595,11 @@ mod tests {
         let g = &out["docs"]["a.sprig"]["root"]["children"][0];
         assert_eq!(g["error"], "no file named nowhere.sprig");
         assert_eq!(out["diagnostics"][0]["code"], "S0101");
+        // Where it is, for a problems list to jump to, and what to do, when
+        // there is something obvious; null when there is not.
+        assert_eq!(out["diagnostics"][0]["file"], "a.sprig");
+        assert_eq!(out["diagnostics"][0]["line"], 3);
+        assert!(out["diagnostics"][0].get("help").is_some());
     }
 
     #[test]

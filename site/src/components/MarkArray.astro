@@ -149,10 +149,19 @@ const groups = markGroups.map((g) => ({ ...g, marks: marks.filter((m) => m.group
 		font-weight: var(--weight-regular);
 	}
 
-	/* Narrow: five status marks don't fit with their meanings, so they wrap to three. */
+	/* Narrow: five status marks don't fit with their meanings, so every group
+	   takes the full width and the same three columns, and the glyphs line up
+	   down the page instead of squeezing two groups into half a phone each. */
 	@container (max-width: 479px) {
-		.sp-full .sp-g-status .sp-marks {
+		.sp-full {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.sp-full .sp-marks {
 			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+		.sp-full .sp-g-structure {
+			border-left: 0;
+			padding-left: 0;
 		}
 		.sp-compact .sp-name {
 			display: none;

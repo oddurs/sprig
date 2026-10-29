@@ -9,7 +9,7 @@ import Mark from '../../../components/Mark.astro';
 import MarkArray from '../../../components/MarkArray.astro';
 import Plan from '../../../components/Plan.astro';
 import Swatches from '../../../components/Swatches.astro';
-import { marks, space, type, weight, radius, motion, breakpoints } from '../../../design/tokens.mjs';
+import { marks, space, type, weight, radius, motion, breakpoints, target } from '../../../design/tokens.mjs';
 
 The site is built from a small system: tokens, a few layout primitives, the
 components the site actually uses, and three rules. Everything on this page is
@@ -87,6 +87,9 @@ largest steps, which is most of what "letting it breathe" means in practice.
 - Breakpoints: {Object.values(breakpoints).join('px, ')}px. Media queries can't
   read custom properties, so these three are the only widths a media query may
   use, and the build checks it.
+- Target: {target}, the smallest a control is by touch, below the
+  {breakpoints.md}px breakpoint or on a coarse pointer. The build checks every
+  page at a phone's width for a smaller one.
 - No shadows. Elevation is a change of surface, not a drop shadow.
 
 ## Components

@@ -25,7 +25,7 @@ usage: scripts/task <target>
   check      fmt:check, lint, test, build, and backlog when cairn is installed
   backlog    cairn check --strict, and ROADMAP.md is up to date (needs cairn)
   wasm       build sprig-core for the browser, into site/src/generated/sprig.wasm
-  site       build the website, check tokens, contrast, links and accessibility (needs node, chrome)
+  site       build the website; check tokens, contrast, links, accessibility, touch and the playground (needs node, chrome)
   editors    test the TextMate and tree-sitter grammars and the VS Code extension (needs node, a display)
   perf       time parse, resolve and check against the committed baseline, in release builds
   mcp        a scripted session with sprig mcp through the official MCP client (needs node)
@@ -124,6 +124,10 @@ case "${1:-}" in
     npm --prefix site run build
     # axe in both themes; GitHub's runners ship Chrome, locally set CHROME_PATH if needed
     npm --prefix site run a11y
+    # Every page at a phone's width and a tablet's, then the playground driven
+    # wide and narrow: what the site is like to use by touch.
+    npm --prefix site run mobile
+    npm --prefix site run playground
     ;;
   editors)
     # The TextMate grammar's snapshots, the tree-sitter grammar's corpus and

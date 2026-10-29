@@ -413,6 +413,16 @@ const faq = [
 		color: var(--text);
 		font-size: var(--text-sm);
 	}
+	/* These links stand on their own, so by touch each is a full target tall. */
+	@media (max-width: 859px), (pointer: coarse) {
+		.text-link {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-height: var(--target);
+			min-width: var(--target);
+		}
+	}
 	.text-link.small {
 		font-size: var(--text-sm);
 		color: var(--text-muted);
@@ -440,15 +450,36 @@ const faq = [
 		}
 		.edit {
 			display: inline-flex;
+			align-items: center;
+		}
+	}
+	@media (max-width: 859px) {
+		/* One column: the view is as tall as what it shows, so the page is the
+		   only thing that scrolls. */
+		.body {
+			height: auto;
+		}
+	}
+	@media (max-width: 859px), (pointer: coarse) {
+		.tab,
+		.toggle {
+			min-height: var(--target);
+		}
+		.toggle {
+			min-width: var(--target);
 		}
 	}
 	@media (max-width: 559px) {
 		.hero {
 			padding-block: var(--space-8) var(--space-7);
 		}
+		/* A phone has no room to scroll sideways through a line: wrap it, the
+		   source and its highlighting the same way. */
 		.ed pre,
 		.ed textarea {
 			font-size: var(--text-base);
+			white-space: pre-wrap;
+			overflow-wrap: anywhere;
 		}
 	}
 </style>

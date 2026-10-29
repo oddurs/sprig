@@ -14,7 +14,7 @@ const { code, file } = Astro.props;
 
 <figure class="sp-code">
 	{file && <figcaption>{file}</figcaption>}
-	<pre class="sc" set:html={highlight(code)} />
+	<pre class="sc scroll-x" tabindex="0" set:html={highlight(code)} />
 </figure>
 
 <style>

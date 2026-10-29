@@ -51,6 +51,7 @@ export function find(doc, text) {
 }
 
 export const highlight = sprig.highlight;
+export const linesHTML = sprig.linesHTML;
 export const blockers = sprig.blockers;
 export const fmtEst = sprig.fmtEst;
 

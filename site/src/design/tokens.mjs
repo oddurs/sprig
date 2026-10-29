@@ -163,6 +163,8 @@ export const layer = { base: 0, sticky: 10, overlay: 20 };
 // widths a media query in site/src may use; scripts/lint-tokens.mjs holds it.
 export const breakpoints = { sm: 560, md: 860, lg: 1180 };
 export const measure = { prose: '64ch', page: '1120px' };
+// The smallest a control may be by touch: Apple's 44pt, and WCAG 2.5.5's 44px.
+export const target = '44px';
 
 /* ---------- emitters ---------- */
 
@@ -183,6 +185,7 @@ export function css() {
 		...Object.fromEntries(Object.entries(layer).map(([k, v]) => [`layer-${k}`, v])),
 		'measure-prose': measure.prose,
 		'measure-page': measure.page,
+		target,
 	};
 	return [
 		'/* Generated from src/design/tokens.mjs by scripts/sync.mjs. Edit the module, not this file. */',

@@ -211,6 +211,20 @@ export function highlight(src) {
 		.join('\n');
 }
 
+/**
+ * Highlighted source as one block per line, for an editor's overlay: a line
+ * can then carry a mark (`marks[i]` is a class, such as a problem's
+ * severity) and be scrolled to. The blocks wrap exactly as the textarea under
+ * them does, because they are the same text in the same box. An empty line
+ * holds a zero-width space so it keeps its height.
+ */
+export function linesHTML(src, marks = {}) {
+	return highlight(src)
+		.split('\n')
+		.map((h, i) => `<span class="ln${marks[i] ? ' ' + marks[i] : ''}" data-l="${i}">${h || '\u200b'}</span>`)
+		.join('');
+}
+
 /* ---------- rendering ---------- */
 
 let REF = [];
@@ -373,7 +387,9 @@ function markHTML(n, k) {
 	const inherited = n.inh && n.inh !== n.state && !n.answered;
 	const disp = n.answered ? 'answered' : inherited ? n.inh : n.state;
 	const label = n.state === 'done' ? 'Reopen' : n.meta.fields.every ? 'Done for now, move to next date' : 'Mark done';
-	return `<button type="button" class="mark m-${disp}${inherited ? ' inherited' : ''}" data-act="toggle" data-k="${k}" aria-label="${label}: ${esc(labelOf(n))}" title="${label}"></button>`;
+	// The button is the target and the mark inside it is the picture, so a
+	// phone can have a target the size of a fingertip around a 16px mark.
+	return `<button type="button" class="tick" data-act="toggle" data-k="${k}" aria-label="${label}: ${esc(labelOf(n))}" title="${label}"><span class="mark m-${disp}${inherited ? ' inherited' : ''}"></span></button>`;
 }
 
 export function nodeHTML(n, inhBlk) {

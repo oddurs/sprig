@@ -1,12 +1,11 @@
 ---
 import Plan from '../components/Plan.astro';
-import Inline from '../components/primitives/Inline.astro';
 import Stack from '../components/primitives/Stack.astro';
 import Text from '../components/primitives/Text.astro';
 import examples from '../generated/examples.json';
 import Base from '../layouts/Base.astro';
 import { shiftExamples } from '../lib/dates.js';
-import { highlight, ready, render } from '../lib/render.js';
+import { linesHTML, ready, render } from '../lib/render.js';
 
 await ready;
 
@@ -26,32 +25,58 @@ const view = render(files, order[0]);
 	<div class="intro">
 		<Stack gap={3}>
 			<Text as="h1" size="2xl" weight="bold">Playground</Text>
-			<Text size="md" tone="muted" measure>Six linked files for opening a bakery. Edit any of them, tick a mark in the view, or start a file of your own. Share copies a link that holds the whole workspace; nothing is uploaded.</Text>
+			<Text size="md" tone="muted" measure>Six linked files for opening a bakery. Edit any of them, tick a mark in the plan, or start a file of your own. Share makes a link that holds the whole workspace; nothing is uploaded.</Text>
 		</Stack>
 	</div>
 	<noscript><Plan files={files} active={order[0]} caption="bakery.sprig, as Sprig reads it. The editor needs JavaScript." /></noscript>
-	<div class="pg" id="pg">
-		<div class="src">
+	<div class="pg" id="pg" data-panel="src">
+		{/* Below the md breakpoint there is room for one panel at a time. */}
+		<div class="switch" role="tablist" aria-label="Panels">
+			<button type="button" role="tab" id="tab-src" data-panel="src" aria-controls="panel-src" aria-selected="true">Source</button>
+			<button type="button" role="tab" id="tab-view" data-panel="view" aria-controls="rv" aria-selected="false">Plan</button>
+			<button type="button" role="tab" id="tab-problems" data-panel="problems" aria-controls="problems" aria-selected="false">Problems <span class="count" id="pcount"></span></button>
+		</div>
+		<div class="src" id="panel-src" role="tabpanel" aria-labelledby="tab-src">
 			<div class="tabbar">
-				<div class="tabs" id="tabs" role="tablist" aria-label="Files">
+				<div class="tabs scroll-x" id="tabs" role="tablist" aria-label="Files">
 					{order.map((f, i) => <button type="button" class="tab" role="tab" data-file={f} aria-selected={i === 0 ? 'true' : 'false'}>{f}</button>)}
+				</div>
+				<div class="filectl" id="fileCtl">
+					<button type="button" class="tab icon" id="fileMenuBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="fileMenu" aria-label="File actions">⋯</button>
+					<div class="menu" id="fileMenu" role="menu" hidden>
+						<button type="button" role="menuitem" data-file-act="rename">Rename</button>
+						<button type="button" role="menuitem" data-file-act="download">Download</button>
+						<button type="button" role="menuitem" data-file-act="delete">Delete</button>
+					</div>
 				</div>
 				<div class="newfile" id="newFile"></div>
 			</div>
-			<div class="ed">
-				<pre class="sc" id="hl" aria-hidden="true" set:html={highlight(files[order[0]]) + '\n\n'} />
-				<textarea id="src" spellcheck="false" wrap="off" autocapitalize="off" autocomplete="off" aria-label="Sprig source">{files[order[0]]}</textarea>
+			{/* A phone has no Tab key: these stand in for the editor's shortcuts while it has focus. */}
+			<div class="keybar" id="keybar" role="toolbar" aria-label="Editing">
+				<button type="button" data-key="outdent" aria-label="Outdent">⇤</button>
+				<button type="button" data-key="indent" aria-label="Indent">⇥</button>
+				<button type="button" data-key="cycle" aria-label="Cycle the mark: - ~ x">- ~ x</button>
+				<button type="button" data-key="item" aria-label="New item below">+ item</button>
+				<button type="button" data-key="done" class="done">Done</button>
+			</div>
+			<div class="ed" id="ed">
+				<pre class="sc" id="hl" aria-hidden="true" set:html={linesHTML(files[order[0]]) + '<span class="ln">​</span>'} />
+				<textarea id="src" spellcheck="false" wrap="off" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Sprig source" aria-describedby="pcount">{files[order[0]]}</textarea>
 			</div>
 			<div class="edfoot">
 				<span class="keys"><kbd>Tab</kbd> indent · <kbd>⇧Tab</kbd> outdent · <kbd id="modkey">⌘</kbd><kbd>↵</kbd> cycle - ~ x · type <kbd>due:fri</kbd>, then <kbd>↵</kbd></span>
-				<Inline gap={2}>
+				<span class="actions">
 					<span class="toast" id="toast" role="status"></span>
 					<button class="small" id="share" type="button">Share</button>
 					<button class="small" id="reset" type="button">Reset</button>
-				</Inline>
+				</span>
 			</div>
 		</div>
-		<div class="rv" id="rv">
+		<section class="probs" id="problems" role="tabpanel" aria-labelledby="tab-problems" aria-label="Problems">
+			<div class="probs-head" id="probsHead">Checking…</div>
+			<ul class="probs-list" id="probsList"></ul>
+		</section>
+		<div class="rv" id="rv" role="tabpanel" aria-labelledby="tab-view">
 			<div class="rv-head" id="rvHead">
 				<div class="rv-file">{order[0]}</div>
 				<h2>{view.doc.title}</h2>
@@ -67,7 +92,7 @@ const view = render(files, order[0]);
 			<div class="rv-body sv" id="rvBody" set:html={view.html} />
 		</div>
 	</div>
-	<Text size="sm" tone="muted">Runs sprig-core, the parser in the <code>sprig</code> command, compiled to WebAssembly.</Text>
+	<Text size="sm" tone="muted">Runs sprig-core, the parser in the <code>sprig</code> command, compiled to WebAssembly. What <code>sprig check</code> would say appears under Problems, each with its code.</Text>
 	<script type="application/json" id="examples" set:html={JSON.stringify({ files: examples, order })} />
 	<script>
 		import '../scripts/play.js';
@@ -78,10 +103,17 @@ const view = render(files, order[0]);
 	.intro {
 		padding-block: var(--space-8) var(--space-6);
 	}
+	/*
+	 * Wide: the source and its problems on the left, the plan on the right, in
+	 * one frame as tall as the window allows. Each pane scrolls on its own,
+	 * which is what an editor beside a preview is.
+	 */
 	.pg {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-		height: min(760px, calc(100vh - 140px));
+		grid-template-rows: minmax(0, 1fr) auto;
+		grid-template-areas: 'src view' 'probs view';
+		height: min(780px, calc(100vh - 140px));
 		min-height: 560px;
 		border: 1px solid var(--border);
 		border-radius: var(--radius-md);
@@ -91,7 +123,11 @@ const view = render(files, order[0]);
 	noscript :global(.plan) {
 		margin-bottom: var(--space-5);
 	}
+	.switch {
+		display: none;
+	}
 	.src {
+		grid-area: src;
 		display: flex;
 		flex-direction: column;
 		min-height: 0;
@@ -100,9 +136,10 @@ const view = render(files, order[0]);
 		border-right: 1px solid var(--border);
 	}
 	.tabbar {
+		position: relative;
 		display: flex;
 		align-items: stretch;
-		gap: var(--space-4);
+		gap: var(--space-3);
 		padding: 0 var(--space-4);
 		border-bottom: 1px solid var(--border);
 		flex: none;
@@ -113,7 +150,9 @@ const view = render(files, order[0]);
 		gap: var(--space-4);
 		overflow-x: auto;
 		min-width: 0;
+		scrollbar-width: none;
 	}
+	.filectl,
 	.newfile {
 		display: flex;
 		align-items: center;
@@ -121,6 +160,9 @@ const view = render(files, order[0]);
 	}
 	.pg :global(.tab) {
 		flex: none;
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-1);
 		background: none;
 		border: 0;
 		border-bottom: 2px solid transparent;
@@ -138,6 +180,22 @@ const view = render(files, order[0]);
 		color: var(--text);
 		border-bottom-color: var(--text);
 	}
+	.pg :global(.tab.icon) {
+		justify-content: center;
+		min-width: var(--space-6);
+		font-family: var(--font-sans);
+		font-size: var(--text-md);
+	}
+	/* A file with a problem says so on its tab, in the problem's colour. */
+	.pg :global(.tab .dot) {
+		width: 6px;
+		height: 6px;
+		border-radius: var(--radius-full);
+		background: var(--mark-graft);
+	}
+	.pg :global(.tab .dot.warning) {
+		background: var(--mark-doing);
+	}
 	.pg :global(.tab-input) {
 		flex: none;
 		width: 140px;
@@ -149,6 +207,48 @@ const view = render(files, order[0]);
 		font-family: var(--font-mono);
 		font-size: var(--text-xs);
 		padding: var(--space-1) var(--space-2);
+	}
+	.menu {
+		position: absolute;
+		top: 100%;
+		right: var(--space-4);
+		z-index: var(--layer-overlay);
+		display: flex;
+		flex-direction: column;
+		min-width: 180px;
+		padding: var(--space-1);
+		background: var(--surface);
+		border: 1px solid var(--border-strong);
+		border-radius: var(--radius-md);
+	}
+	.menu[hidden] {
+		display: none;
+	}
+	.menu button {
+		text-align: left;
+		background: none;
+		border: 0;
+		border-radius: var(--radius-sm);
+		padding: var(--space-2) var(--space-3);
+		font: inherit;
+		font-size: var(--text-sm);
+		color: var(--text);
+		cursor: pointer;
+	}
+	.menu button:hover,
+	.menu button:focus-visible {
+		background: var(--surface-raised);
+	}
+	.menu button:disabled {
+		color: var(--text-muted);
+		cursor: not-allowed;
+	}
+	.pg :global(.menu button.armed) {
+		color: var(--surface);
+		background: var(--mark-graft);
+	}
+	.keybar {
+		display: none;
 	}
 	.ed {
 		position: relative;
@@ -169,12 +269,26 @@ const view = render(files, order[0]);
 		tab-size: 2;
 		white-space: pre;
 		overflow-wrap: normal;
+		/* The same gutter on both, so a scrollbar never makes them wrap apart. */
+		scrollbar-gutter: stable;
 	}
 	.ed pre {
 		overflow: hidden;
 		pointer-events: none;
 		padding-bottom: var(--space-8);
 		padding-right: var(--space-8);
+	}
+	/* A line with a problem is tinted, with a bar at the edge in its colour. */
+	.ed :global(.ln) {
+		display: block;
+		margin-inline: calc(-1 * var(--space-4)) calc(-1 * var(--space-8));
+		padding-inline: var(--space-4) var(--space-8);
+	}
+	.ed :global(.ln.l-error) {
+		background: linear-gradient(to right, var(--mark-graft) 2px, color-mix(in oklch, var(--mark-graft) 10%, transparent) 2px);
+	}
+	.ed :global(.ln.l-warning) {
+		background: linear-gradient(to right, var(--mark-doing) 2px, color-mix(in oklch, var(--mark-doing) 10%, transparent) 2px);
 	}
 	.ed textarea {
 		width: 100%;
@@ -202,6 +316,12 @@ const view = render(files, order[0]);
 		font-size: var(--text-xs);
 		color: var(--text-muted);
 	}
+	.actions {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		margin-left: auto;
+	}
 	kbd {
 		font-family: var(--font-mono);
 		color: var(--text);
@@ -227,7 +347,83 @@ const view = render(files, order[0]);
 		color: var(--text-muted);
 	}
 
+	.probs {
+		grid-area: probs;
+		max-height: 220px;
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+		background: var(--surface-raised);
+		border-top: 1px solid var(--border);
+		border-right: 1px solid var(--border);
+	}
+	.probs-head {
+		flex: none;
+		padding: var(--space-2) var(--space-4);
+		font-size: var(--text-xs);
+		color: var(--text-muted);
+	}
+	.pg :global(.probs-head b) {
+		color: var(--text);
+	}
+	.probs-list {
+		list-style: none;
+		margin: 0;
+		padding: 0 0 var(--space-2);
+		overflow: auto;
+	}
+	.pg :global(.prob) {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: start;
+		gap: var(--space-2);
+		padding: 0 var(--space-4);
+	}
+	.pg :global(.prob-go) {
+		display: grid;
+		grid-template-columns: var(--space-4) minmax(0, 1fr);
+		gap: var(--space-2);
+		text-align: left;
+		background: none;
+		border: 0;
+		border-radius: var(--radius-sm);
+		padding: var(--space-1) 0;
+		font: inherit;
+		font-size: var(--text-sm);
+		color: var(--text);
+		cursor: pointer;
+	}
+	.pg :global(.prob-go:hover .msg) {
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+	.pg :global(.prob .sev) {
+		font-family: var(--font-mono);
+		font-weight: var(--weight-bold);
+		color: var(--mark-graft);
+	}
+	.pg :global(.prob.warning .sev) {
+		color: var(--mark-doing);
+	}
+	.pg :global(.prob .where),
+	.pg :global(.prob .help) {
+		display: block;
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		color: var(--text-muted);
+	}
+	.pg :global(.prob .help) {
+		font-family: var(--font-sans);
+	}
+	.pg :global(.prob .code) {
+		font-family: var(--font-mono);
+		font-size: var(--text-xs);
+		color: var(--text-muted);
+		padding-top: var(--space-1);
+	}
+
 	.rv {
+		grid-area: view;
 		display: flex;
 		flex-direction: column;
 		min-height: 0;
@@ -346,20 +542,30 @@ const view = render(files, order[0]);
 		flex-wrap: wrap;
 		gap: var(--space-2);
 	}
+	/* The button is the target and the pill inside it is the picture, so by
+	   touch the target can grow without the pills turning into slabs. */
 	.pg :global(.pchip) {
+		display: inline-flex;
+		align-items: center;
 		background: none;
-		border: 1px solid var(--border);
-		border-radius: var(--radius-full);
-		padding: 0 var(--space-2);
+		border: 0;
+		padding: 0;
 		font-family: var(--font-mono);
 		font-size: var(--text-xs);
-		line-height: var(--leading-md);
 		color: var(--text-muted);
 		cursor: pointer;
 	}
+	.pg :global(.pchip span) {
+		border: 1px solid var(--border);
+		border-radius: var(--radius-full);
+		padding: 0 var(--space-2);
+		line-height: var(--leading-md);
+	}
 	.pg :global(.pchip[aria-pressed='true']) {
-		border-color: var(--text);
 		color: var(--text);
+	}
+	.pg :global(.pchip[aria-pressed='true'] span) {
+		border-color: var(--text);
 	}
 	.hd {
 		display: flex;
@@ -377,28 +583,177 @@ const view = render(files, order[0]);
 		padding: var(--space-2) var(--space-5) var(--space-6);
 	}
 
+	/* By touch, every control is a fingertip (--target), and the shortcuts that
+	   need a keyboard give way to the key bar. */
+	@media (max-width: 859px), (pointer: coarse) {
+		.pg :global(.tab),
+		.seg button,
+		.small,
+		.hd,
+		.pg :global(.pchip),
+		.pg :global(.prob-go),
+		.menu button {
+			min-height: var(--target);
+		}
+		.pg :global(.tab.icon),
+		.small,
+		.pg :global(.pchip) {
+			min-width: var(--target);
+		}
+		.pg :global(.pchip) {
+			justify-content: center;
+		}
+		.pg :global(.prob .code) {
+			display: inline-flex;
+			align-items: center;
+			min-height: var(--target);
+			padding-top: 0;
+		}
+		.hd input {
+			width: 20px;
+			height: 20px;
+		}
+		.keys {
+			display: none;
+		}
+		.pg.editing .keybar {
+			display: flex;
+		}
+	}
+
+	/*
+	 * Narrow: one panel at a time, chosen by the switch, and each as tall as
+	 * what it holds, so the page is the only thing that scrolls. The switch and
+	 * the file tabs stay at the top while it does.
+	 */
 	@media (max-width: 859px) {
 		.pg {
-			grid-template-columns: minmax(0, 1fr);
+			display: block;
 			height: auto;
+			min-height: 0;
+			overflow: visible;
+		}
+		.switch {
+			position: sticky;
+			top: 0;
+			z-index: var(--layer-sticky);
+			display: grid;
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			background: var(--surface);
+			border-bottom: 1px solid var(--border);
+			border-radius: var(--radius-md) var(--radius-md) 0 0;
+		}
+		.switch button {
+			min-height: var(--target);
+			background: none;
+			border: 0;
+			border-bottom: 2px solid transparent;
+			font: inherit;
+			font-size: var(--text-sm);
+			color: var(--text-muted);
+			cursor: pointer;
+		}
+		.switch button[aria-selected='true'] {
+			color: var(--text);
+			border-bottom-color: var(--text);
+		}
+		.count:not(:empty) {
+			display: inline-block;
+			min-width: var(--space-5);
+			padding: 0 var(--space-1);
+			border-radius: var(--radius-full);
+			background: var(--mark-graft);
+			color: var(--surface);
+			font-size: var(--text-xs);
+			font-variant-numeric: tabular-nums;
+		}
+		.count.warning:not(:empty) {
+			background: var(--mark-doing);
+		}
+		.pg[data-panel='src'] > :is(.probs, .rv),
+		.pg[data-panel='view'] > :is(.src, .probs),
+		.pg[data-panel='problems'] > :is(.src, .rv) {
+			display: none;
 		}
 		.src {
 			border-right: 0;
+		}
+		/* Above the key bar, so the file menu that opens from it is never under it. */
+		.tabbar {
+			position: sticky;
+			top: var(--target);
+			z-index: calc(var(--layer-sticky) + 1);
+			background: var(--surface-raised);
+		}
+		.keybar {
+			position: sticky;
+			top: calc(2 * var(--target) + 2px);
+			z-index: var(--layer-sticky);
+			gap: var(--space-2);
+			padding: var(--space-1) var(--space-4);
+			overflow-x: auto;
+			background: var(--surface-raised);
 			border-bottom: 1px solid var(--border);
 		}
+		.keybar button {
+			flex: none;
+			min-width: var(--target);
+			min-height: var(--target);
+			padding: 0 var(--space-3);
+			background: var(--surface);
+			border: 1px solid var(--border-strong);
+			border-radius: var(--radius-md);
+			font-family: var(--font-mono);
+			font-size: var(--text-sm);
+			color: var(--text);
+			cursor: pointer;
+		}
+		.keybar .done {
+			margin-left: auto;
+			font-family: var(--font-sans);
+		}
+		/* The editor grows with its text (play.js sets its height), and wraps. */
 		.ed {
 			flex: none;
-			height: 420px;
+			min-height: 50vh;
 		}
-		.rv-body {
-			flex: none;
-			max-height: 640px;
-		}
-	}
-	@media (max-width: 559px) {
+		/* 16px, or iOS zooms the page into the editor and leaves it there. */
 		.ed pre,
 		.ed textarea {
 			font-size: var(--text-base);
+			white-space: pre-wrap;
+			overflow-wrap: anywhere;
+			overflow: hidden;
+		}
+		.ed pre {
+			padding-right: var(--space-4);
+			padding-bottom: var(--space-4);
+		}
+		.ed :global(.ln) {
+			margin-inline-end: calc(-1 * var(--space-4));
+			padding-inline-end: var(--space-4);
+		}
+		.probs {
+			max-height: none;
+			border-right: 0;
+			border-top: 0;
+			background: var(--surface);
+		}
+		.probs-head {
+			padding-block: var(--space-3);
+			font-size: var(--text-sm);
+		}
+		.probs-list {
+			overflow: visible;
+		}
+		.rv-body {
+			flex: none;
+			overflow: visible;
+		}
+	}
+	@media (max-width: 559px) {
+		.intro {
+			padding-block: var(--space-6) var(--space-4);
 		}
 		.rv-head,
 		.rv-tools,

@@ -10,6 +10,8 @@
     "sync": "node scripts/sync.mjs",
     "check": "node scripts/check.mjs",
     "a11y": "node scripts/a11y.mjs",
+    "mobile": "node scripts/mobile.mjs",
+    "playground": "node scripts/playground.mjs",
     "assets": "node scripts/assets.mjs"
   },
   "dependencies": {

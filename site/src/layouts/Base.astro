@@ -103,6 +103,7 @@ const nav = [
 	.brand {
 		display: inline-flex;
 		align-items: center;
+		min-height: var(--target);
 		gap: var(--space-2);
 		text-decoration: none;
 		font-weight: var(--weight-bold);
@@ -111,10 +112,19 @@ const nav = [
 	nav {
 		display: flex;
 		flex-wrap: wrap;
-		gap: var(--space-1) var(--space-5);
+		gap: 0 var(--space-3);
 		font-size: var(--text-sm);
 	}
+	/* Each link is a touch target (WCAG 2.5.5) that looks like a word: the
+	   padding is the target, and the negative margin keeps the row in line. */
 	nav a {
+		display: inline-flex;
+		align-items: center;
+		min-height: var(--target);
+		min-width: var(--target);
+		justify-content: center;
+		padding-inline: var(--space-2);
+		margin-inline: calc(-1 * var(--space-2));
 		color: var(--text-muted);
 		text-decoration: none;
 	}
@@ -140,9 +150,28 @@ const nav = [
 	}
 	.foot nav {
 		font-size: var(--text-xs);
-		gap: var(--space-1) var(--space-4);
+		gap: 0 var(--space-4);
 	}
 	@media (max-width: 559px) {
+		.head .bar {
+			gap: 0;
+			padding-block: var(--space-1);
+		}
+		/* Five links in one row, spread to the edges, under the name. */
+		.head nav {
+			width: 100%;
+			justify-content: space-between;
+			gap: 0;
+		}
+		.head nav a {
+			margin-inline: 0;
+		}
+		.head nav a:first-child {
+			margin-left: calc(-1 * var(--space-2));
+		}
+		.head nav a:last-child {
+			margin-right: calc(-1 * var(--space-2));
+		}
 		.foot {
 			margin-top: var(--space-8);
 		}
