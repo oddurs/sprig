@@ -39,5 +39,9 @@ boundaries that matter:
 - **Nothing in a plan is executed.** No field, link or note ever reaches a shell
   or a network request.
 
+Dependencies are audited too. `scripts/task audit` checks every committed
+lockfile against the RustSec and npm advisory databases, CI runs it weekly and
+on any change to a dependency, and Dependabot watches the same lockfiles.
+
 Out of scope: anything requiring an attacker who can already run commands as
 you or write to the repository you are working in.
