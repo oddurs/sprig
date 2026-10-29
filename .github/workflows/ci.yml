@@ -35,7 +35,7 @@ jobs:
       # rustup installs the toolchain named in rust-toolchain.toml on the first
       # cargo invocation, so there is nothing to pin twice.
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
-      # `sprig graph | dot -Tsvg` and the shell guide's jq recipe are part of
+      # `sprig export --format dot | dot -Tsvg` and the shell guide's jq recipe are part of
       # the suite. Linux runs them for certain; elsewhere a test that lacks
       # the tool says it was skipped.
       - name: Install Graphviz

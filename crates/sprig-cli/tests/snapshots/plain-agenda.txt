@@ -1,7 +1,0 @@
-bakery.sprig:16	2026-10-02	-	Weekly numbers to the bank	every:fri
-kitchen.sprig:11	2026-10-02	-	Get a third quote	
-dana.sprig:9	2026-10-03	-	Call the insurer about public liability	
-lease.sprig^terms	2026-10-05	~	Negotiate terms	
-bakery.sprig^loan	2026-10-07	~	Equipment loan paperwork	
-kitchen.sprig:5	2026-10-12	~	Ventilation plan with the engineer	
-launch.sprig^logo	2026-10-14	~	Logo, second round	

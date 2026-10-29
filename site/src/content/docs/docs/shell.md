@@ -31,16 +31,19 @@ several at once.
 
 ## Change a plan without opening it
 
+The file is the truth, so most changes are a line typed in an editor. The one
+that is fiddly by hand has a command: ticking, which moves a recurring item to
+its next date and can set any mark.
+
 <!-- run -->
 ```sh
-sprig add "Call the plumber due:fri" --under ^design
-sprig mark ^logo x
-sprig answer ^name "Kiln & Crumb"
+sprig tick ^logo
+sprig tick ^design --mark '~'
 ```
 
-`add` writes typed dates out, so `due:fri` lands in the file as a date. `mark`
-and `answer` print the items that stopped waiting on the one they changed.
-`sprig edit ^oven` opens `$VISUAL` or `$EDITOR` at the item's line.
+Each prints the line it changed, and then, on standard error, the items that
+stopped waiting on it. `fmt` writes typed dates out, so `due:fri` typed in an
+editor lands in the file as a date.
 
 ## Your next task in the prompt
 
@@ -62,16 +65,16 @@ sprig next --who teo --limit 1 --plain | cut -f3
 
 ## The folder in a status bar
 
-`status --oneline` fits in tmux's status line, and exits 1 when anything is
-late, for a prompt that wants to turn red:
+`tree --summary --oneline` fits in tmux's status line, and exits 1 when
+anything is late, for a prompt that wants to turn red:
 
 ```sh
-set -g status-right '#(cd ~/plans && sprig status --oneline)'
+set -g status-right '#(cd ~/plans && sprig tree --summary --oneline)'
 ```
 
 <!-- run -->
 ```sh
-sprig status --oneline
+sprig tree --summary --oneline
 ```
 
 ## Gate a commit
@@ -122,8 +125,9 @@ sprig export --format ics > plans.ics
 ```
 
 Each event's UID comes from the item's anchor when it has one, so renaming an
-item moves its event rather than adding another. `sprig agenda` shows the same
-items by day, in the terminal.
+item moves its event rather than adding another. In the terminal,
+`sprig find is:open 'due:<=+2w'` lists the same work, and `sprig tui` shows it
+by day.
 
 ## The graph as a picture
 
@@ -131,7 +135,7 @@ items by day, in the terminal.
 
 <!-- run: needs dot -->
 ```sh
-sprig graph | dot -Tsvg > plan.svg
+sprig export --format dot | dot -Tsvg > plan.svg
 ```
 
 `--format mermaid` writes the same graph for a Markdown file on GitHub, inside a

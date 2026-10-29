@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/oddurs/sprig/blob/main/spec/tree.schema.json",
   "title": "Sprig tree",
-  "description": "One Sprig file read and resolved, version 1. Appendix D of spec/sprig.md documents every field. Keys whose value would be empty, zero or false may be left out, and a reader treats a missing key as that value.",
+  "description": "One Sprig file read and resolved, version 1. Appendix D of spec/annex.md documents every field. Keys whose value would be empty, zero or false may be left out, and a reader treats a missing key as that value.",
   "type": "object",
   "required": ["sprig_tree"],
   "additionalProperties": false,

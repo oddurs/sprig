@@ -89,18 +89,20 @@ The `sprig` binary. `main.rs` dispatches; `args.rs` is the command line, built
 with clap, and the only file in the repository allowed to read the clock.
 `load.rs` turns paths into a `Workspace`, reading only what the plan names.
 
-- `views.rs`: `next`, `check`, `tree`, `why`, `status`, the commands that read
-  and print.
-- `write.rs` and `verbs.rs`: `fmt`, `tick`, `mark`, `answer`, `add` and `edit`,
-  each a core edit applied to a file.
-- `data.rs`: `find`, `agenda`, `graph`, `export` and `import`.
+- `views.rs`: `next`, `check`, `tree` (and `tree --summary`) and `why`, the
+  commands that read and print.
+- `write.rs`: `fmt` and `tick`, each a core edit applied to a file. Every
+  other change to a plan is a line typed in an editor: the command answers
+  questions, and the editor writes (cairn 0154).
+- `data.rs`: `find`, `export` (JSON, iCalendar, CSV and the dependency graph)
+  and `import`.
 - `out.rs`: how output looks, in one place: widths, colour, and `--plain`,
   whose tab-separated columns are a promise (`docs/stability.md`).
 - `mcp.rs`: `sprig mcp`, the plans served to coding agents over the Model
   Context Protocol. It reads afresh on every call, because a person, an editor
   and an agent can all change a file between calls, and the file is the truth.
-- `agent.rs`: `sprig agent`, the instructions that tell an agent how to use
-  this.
+- `agent.rs`: `sprig mcp --instructions`, the instructions that tell an agent
+  how to use this.
 - `tui/`: `sprig tui`. `app.rs` is the state and what each key does, pure and
   tested without a terminal; `ui.rs` draws a frame; `mod.rs` owns the terminal
   and the file watcher. `--screenshot` renders a frame as text, which is how

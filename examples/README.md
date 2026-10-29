@@ -18,7 +18,7 @@ answers.
 
 ```sh
 sprig next examples/bakery            # what can be done now
-sprig status examples/bakery          # every file on one screen
+sprig tree --summary examples/bakery  # every file on one screen
 sprig why Build --in examples/bakery   # what the kitchen build waits on
 sprig tui examples/bakery
 ```

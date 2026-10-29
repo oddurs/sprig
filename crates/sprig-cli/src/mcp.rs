@@ -26,8 +26,8 @@ use sprig_core::{Date, Diagnostic, Severity, Workspace, json as tree, query, ref
 use crate::args::parse_mark;
 use crate::data::{check_json, find_json, next_json, status_json};
 use crate::load::{self, Loaded};
-use crate::verbs::{appended, freed, item_line};
 use crate::write::save;
+use crate::write::{appended, freed, item_line};
 
 /// The newest protocol revision this server speaks; it answers a client that
 /// asks for an older one it also speaks in that one.
@@ -518,7 +518,7 @@ pub fn tools() -> Vec<Value> {
             "title": "List plans",
             "description": "Every plan in the folder with its progress: done and total, how \
                 many items are ready and waiting, how many are late, and its errors. The same as \
-                `sprig status --json`.",
+                `sprig tree --summary --json`.",
             "inputSchema": none,
             "annotations": read,
         }),

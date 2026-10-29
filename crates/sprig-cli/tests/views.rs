@@ -1,5 +1,6 @@
 //! The read-only views and the output layer: `tree`, `why`, `status`,
-//! `--plain`, colour and widths, completions and the manual page.
+//! `--plain`, colour and widths, and what `generate` prints: completions and
+//! the manual page.
 //!
 //! `SPRIG_BLESS=1 cargo test -p sprig-cli` rewrites the snapshots.
 
@@ -68,7 +69,7 @@ fn no_color_and_color_never_print_the_same_bytes_with_no_escapes() {
     for args in [
         &["next", "examples/bakery"][..],
         &["tree", "examples/bakery/kitchen.sprig"],
-        &["status", "examples/bakery"],
+        &["tree", "--summary", "examples/bakery"],
     ] {
         let never = stdout(&run(
             &repo(""),
@@ -269,20 +270,20 @@ fn a_cycle_is_printed_once_and_marked() {
 // status
 
 #[test]
-fn status_for_the_bakery_matches_its_snapshot() {
-    let out = sprig(&["status", "examples/bakery", "--color", "never"]);
+fn the_summary_of_the_bakery_matches_its_snapshot() {
+    let out = sprig(&["tree", "--summary", "examples/bakery", "--color", "never"]);
     assert_eq!(out.status.code(), Some(0));
-    snapshot("status-bakery.txt", &stdout(&out));
+    snapshot("summary-bakery.txt", &stdout(&out));
 }
 
 #[test]
 fn status_oneline_is_short_and_exits_1_when_something_is_late() {
-    let on_time = sprig(&["status", "--oneline", "examples/bakery"]);
+    let on_time = sprig(&["tree", "--summary", "--oneline", "examples/bakery"]);
     assert_eq!(on_time.status.code(), Some(0));
     assert_eq!(stdout(&on_time), "sprig 21% · 21 ready · 12 waiting\n");
     let late = run(
         &repo(""),
-        &["status", "--oneline", "examples/bakery"],
+        &["tree", "--summary", "--oneline", "examples/bakery"],
         &[("SPRIG_TODAY", "2026-11-20")],
     );
     assert_eq!(late.status.code(), Some(1));
@@ -300,7 +301,7 @@ fn a_file_with_errors_still_gets_its_line() {
         "B\n\n+ [[nowhere]]\n+ [[gone]]\n- two\n",
     )
     .unwrap();
-    let out = stdout(&run(&dir, &["status", "--color", "never"], &[]));
+    let out = stdout(&run(&dir, &["tree", "--summary", "--color", "never"], &[]));
     let b = out
         .lines()
         .find(|l| l.starts_with('b'))
@@ -310,12 +311,12 @@ fn a_file_with_errors_still_gets_its_line() {
 }
 
 // ---------------------------------------------------------------------------
-// completions and the manual
+// sprig generate: completions and the manual
 
 #[test]
 fn every_shells_script_is_generated() {
     for shell in ["bash", "zsh", "fish", "powershell", "elvish"] {
-        let out = sprig(&["completions", shell]);
+        let out = sprig(&["generate", shell]);
         assert_eq!(out.status.code(), Some(0), "{shell}");
         assert!(stdout(&out).contains("tick"), "{shell}");
     }
@@ -323,13 +324,13 @@ fn every_shells_script_is_generated() {
 
 #[test]
 fn refs_complete_from_the_folder_in_bash_and_zsh() {
-    let bash = stdout(&sprig(&["completions", "bash"]));
+    let bash = stdout(&sprig(&["generate", "bash"]));
     assert_eq!(
         bash.matches("$(sprig __complete refs 2>/dev/null)").count(),
         2,
         "tick and why"
     );
-    let zsh = stdout(&sprig(&["completions", "zsh"]));
+    let zsh = stdout(&sprig(&["generate", "zsh"]));
     assert_eq!(zsh.matches(":_sprig_refs'").count(), 2, "tick and why");
     assert!(zsh.contains("_sprig_refs() {"));
 }
@@ -343,7 +344,7 @@ fn the_bash_script_loads_and_offers_the_folders_anchors() {
         return;
     }
     let script = scratch("bash").join("sprig.bash");
-    fs::write(&script, stdout(&sprig(&["completions", "bash"]))).unwrap();
+    fs::write(&script, stdout(&sprig(&["generate", "bash"]))).unwrap();
     let bin = Path::new(env!("CARGO_BIN_EXE_sprig"))
         .parent()
         .unwrap()
@@ -379,7 +380,7 @@ fn the_zsh_script_loads_where_zsh_is_installed() {
         return;
     }
     let script = scratch("zsh").join("_sprig");
-    fs::write(&script, stdout(&sprig(&["completions", "zsh"]))).unwrap();
+    fs::write(&script, stdout(&sprig(&["generate", "zsh"]))).unwrap();
     let probe = format!(
         "autoload -U compinit && compinit -u && source '{}'",
         script.display()
@@ -401,7 +402,7 @@ fn pressing_tab_in_zsh_offers_the_folders_anchors() {
     // An interactive zsh under zpty, the way a person types: the script is
     // autoloaded from fpath, as a package manager installs it.
     let dir = scratch("zsh-tab");
-    fs::write(dir.join("_sprig"), stdout(&sprig(&["completions", "zsh"]))).unwrap();
+    fs::write(dir.join("_sprig"), stdout(&sprig(&["generate", "zsh"]))).unwrap();
     let bin = Path::new(env!("CARGO_BIN_EXE_sprig")).parent().unwrap();
     let out = Command::new("zsh")
         .arg("-f")
@@ -434,13 +435,15 @@ fn completion_candidates_are_the_folders_anchors_and_people() {
 
 #[test]
 fn the_manual_covers_every_command_and_the_exit_codes() {
-    let page = stdout(&sprig(&["man"]));
+    let page = stdout(&sprig(&["generate", "man"]));
     assert!(
         page.starts_with(".ie") || page.starts_with(".TH"),
         "{}",
         &page[..40.min(page.len())]
     );
-    for cmd in ["NEXT", "CHECK", "FMT", "TICK", "TREE", "WHY", "STATUS"] {
+    for cmd in [
+        "NEXT", "CHECK", "FMT", "TICK", "TREE", "WHY", "FIND", "GENERATE",
+    ] {
         assert!(
             page.contains(&format!(".SH \"SPRIG {cmd}\"")),
             "no section for {cmd}"

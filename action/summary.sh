@@ -23,7 +23,7 @@ present() {
   done
 }
 
-# `status --plain`: file, done, total, ready, waiting, late, errors.
+# `tree --summary --plain`: file, done, total, ready, waiting, late, errors.
 status() {
   local dir=$1
   shift
@@ -31,7 +31,7 @@ status() {
   # Not mapfile: macOS still ships bash 3.2.
   while IFS= read -r p; do paths+=("$p"); done < <(present "$dir" "$@")
   if [ ${#paths[@]} -gt 0 ]; then
-    (cd "$dir" && "$sprig" status --plain "${paths[@]}")
+    (cd "$dir" && "$sprig" tree --summary --plain "${paths[@]}")
   fi
 }
 

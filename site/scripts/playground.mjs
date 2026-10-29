@@ -87,7 +87,10 @@ const click = async (el) => { el.click(); await wait(120); };
   const hash = p.w.location.hash;
   holds('share puts the workspace in the link', hash.startsWith('#plan='));
   const q = await open(1280, hash);
-  holds('a shared link opens the same workspace', q.$$('#tabs [data-file]').map((t) => t.dataset.file).join() === p.$$('#tabs [data-file]').map((t) => t.dataset.file).join());
+  // The link is read asynchronously, so give it time to replace the tabs.
+  const files = (x) => x.$$('#tabs [data-file]').map((t) => t.dataset.file).join();
+  for (let i = 0; i < 100 && files(q) !== files(p); i++) await wait(50);
+  holds('a shared link opens the same workspace', files(q) === files(p), files(q) + ', not ' + files(p) + '; ' + q.$('#toast')?.textContent);
   p.f.remove();
   q.f.remove();
 

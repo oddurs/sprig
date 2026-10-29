@@ -1,10 +1,26 @@
 # Contributing
 
-Sprig is a small project with a strict workflow. The strictness is what lets
-people and agents work in it at the same time without stepping on each other.
+## Your first change
 
-New to the code? [ARCHITECTURE.md](ARCHITECTURE.md) is the map: which crate does
-what, how a file becomes an answer, and the invariants a change must keep.
+You need Rust ([rustup.rs](https://rustup.rs)) and nothing else.
+
+```sh
+git clone https://github.com/oddurs/sprig && cd sprig
+git switch -c fix/what-it-fixes
+# ... change something ...
+scripts/task check          # format, lint, test, build: what CI runs
+git commit -m "fix(cli): say what it fixes"
+```
+
+Push the branch and open a pull request. That is all a first change needs:
+CI runs the same `scripts/task check`, and the pull request template asks the
+few questions a review starts from. [ARCHITECTURE.md](ARCHITECTURE.md) is the
+map of the code, and a fix to a typo or a test needs nothing more than the
+lines above.
+
+The rest of this file is for people who stay: the strict workflow that lets
+people and agents work in the repository at the same time without stepping on
+each other.
 
 ## Once, after cloning
 
@@ -41,6 +57,16 @@ scripts/agent done feat/0017-resolve-grafts
 `scripts/agent list` shows every worktree, its branch and its pull request.
 Worktrees live in `../.worktrees/sprig/<branch>/`, outside the repository, so
 two branches never share an index or a `target/` directory.
+
+## Keep it small
+
+Sprig's essence is simplicity, and `crates/sprig-cli/tests/budget.rs` holds it
+to that: the number of marks, commands, flags, fields with a meaning,
+diagnostic codes and MCP tools is pinned, and the card and the core of the
+spec have a ceiling. A change that adds one fails there until the number is
+raised in the same pull request, so the addition is a decision someone made,
+in view. Prefer a flag to a command, a filter to a flag, and a line in the file
+to any of them.
 
 ## `main` only advances through a merged pull request
 

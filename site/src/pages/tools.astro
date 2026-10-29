@@ -48,11 +48,9 @@ const groups: { name: string; note: string; cmds: Cmd[] }[] = [
 		note: 'answer a question, change nothing',
 		cmds: [
 			{ sig: 'sprig next', when: 'v0.1', body: 'Open, unblocked work: in progress first, then priority, then due date.' },
-			{ sig: 'sprig tree', when: 'v0.2', body: 'The plan as Sprig reads it, grafts expanded, progress rolled up.' },
-			{ sig: 'sprig status', when: 'v0.2', body: 'The whole folder on one screen; --oneline for a prompt or tmux.' },
+			{ sig: 'sprig tree', when: 'v0.2', body: 'The plan as Sprig reads it, grafts expanded, progress rolled up. --summary for the whole folder on one screen.' },
 			{ sig: 'sprig why <ref>', when: 'v0.2', body: 'What an item waits on, all the way down, with file and line.' },
 			{ sig: 'sprig find <query>', when: 'v0.3', body: 'Search by text, @who, #tag, is:blocked, due:<fri.' },
-			{ sig: 'sprig agenda', when: 'v0.3', body: 'Dated work by day across every file.' },
 		],
 	},
 	{
@@ -65,25 +63,20 @@ const groups: { name: string; note: string; cmds: Cmd[] }[] = [
 	},
 	{
 		name: 'Write',
-		note: 'one line at a time',
+		note: 'everything else is a line in your editor',
 		cmds: [
-			{ sig: 'sprig tick <ref>', when: 'v0.2', body: 'Done, or reopen. A recurring item moves its due date instead.' },
-			{ sig: 'sprig mark <ref> <mark>', when: 'v0.3', body: 'Set any status: started, parked for later, dropped.' },
-			{ sig: 'sprig answer <ref> "text"', when: 'v0.3', body: 'Settle a question, and see what it unblocked.' },
-			{ sig: 'sprig add "text" --under <ref>', when: 'v0.3', body: 'Append an item, indented to match the file.' },
-			{ sig: 'sprig edit <ref>', when: 'v0.3', body: 'Open $EDITOR at the item’s line.' },
+			{ sig: 'sprig tick <ref>', when: 'v0.2', body: 'Done, or reopen; --mark sets any status. A recurring item moves its due date instead.' },
 		],
 	},
 	{
 		name: 'Connect',
 		note: 'other tools, other formats',
 		cmds: [
-			{ sig: 'sprig export', when: 'v0.3', body: 'The resolved tree as JSON; due dates as an iCalendar feed.' },
+			{ sig: 'sprig export', when: 'v0.3', body: 'The resolved tree as JSON, due dates as an iCalendar feed, the dependency graph for Graphviz or Mermaid.' },
 			{ sig: 'sprig import', when: 'v0.3', body: 'Markdown checkboxes in, a Sprig file out.' },
-			{ sig: 'sprig graph', when: 'v0.3', body: 'The dependency graph for Graphviz or Mermaid.' },
 			{ sig: 'sprig lsp', when: 'v0.2', body: 'A language server for any editor: problems as you type, completion, go to definition, hover and ticking.' },
 			{ sig: 'sprig mcp', when: 'v0.3', body: 'The plans, served to coding agents.' },
-			{ sig: 'sprig completions', when: 'v0.2', body: 'Completion that knows your anchors and people, and a man page.' },
+			{ sig: 'sprig generate', when: 'v0.2', body: 'Completion that knows your anchors and people, and a man page.' },
 		],
 	},
 ];
@@ -92,7 +85,7 @@ const refs = [
 	['^signed', 'An anchor, searched across the folder', 'sprig tick ^signed'],
 	['lease^signed', 'An anchor in one file', 'sprig why lease^signed'],
 	['lease.sprig:13', 'A line, the way compilers print one', 'sprig tick lease.sprig:13'],
-	['"grease trap"', 'Words from exactly one item’s text', 'sprig answer "grease trap" "Landlord pays"'],
+	['"grease trap"', 'Words from exactly one item’s text', 'sprig tick "grease trap"'],
 	['-', 'Refs on stdin, one per line', 'sprig next --plain | cut -f1 | sprig tick -'],
 ];
 
@@ -100,7 +93,7 @@ const refs = [
 const code = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/`([^`]+)`/g, '<code>$1</code>');
 const rules = [
 	['The file is the truth', 'Tools compute progress and blockers; they never store them. Delete every tool and the plan still reads.'],
-	['A write touches one line', '`tick`, `add` and `answer` change only the bytes they mean to, so `git diff` shows exactly what happened.'],
+	['A write touches one line', '`tick`, the TUI and the MCP server change only the bytes they mean to, so `git diff` shows exactly what happened.'],
 	['Three kinds of output', 'Aligned for people, tab-separated with `--plain`, and the whole resolved tree as JSON from `sprig export`. The `--plain` columns are covered by the stability policy.'],
 	['Exit codes mean something', '`0` fine, `1` the answer is no, `2` you asked wrong. Scripts branch on them.'],
 	['Every answer is reproducible', '`--today` pins the date, so any output can be tested, diffed and pasted into a bug report.'],
@@ -152,7 +145,7 @@ const strip = ['k', 'j', 'h', 'l', 'x', '~', '1', '2', '3', '/', '?'];
 		<div class="narrow"><Surfaces /></div>
 	</Section>
 
-	<Section id="cli-h" title="Small verbs, one question each." intro="Every command reads a folder of plans and answers one thing, in text a person can read and a pipe can parse. The screens below are sprig-core’s output for the example bakery plans, with the date pinned by --today the way the tests will run.">
+	<Section id="cli-h" title="Small verbs, one question each." intro="Every command reads a folder of plans and answers one question, in text a person can read and a pipe can parse; writing is a line in your editor. The screens below are sprig-core’s output for the example bakery plans, with the date pinned by --today the way the tests will run.">
 		<Grid cols={2} gap={7} rowGap={7}>
 			{
 				groups.map((g) => (

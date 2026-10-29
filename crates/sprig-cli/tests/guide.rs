@@ -113,10 +113,9 @@ fn every_recipe_in_the_shell_guide_runs_against_the_bakery() {
     }
     // The recipes did what they say.
     let kitchen = fs::read_to_string(dir.join("kitchen.sprig")).unwrap();
-    assert!(
-        kitchen.contains("- Call the plumber due:2026-10-02"),
-        "{kitchen}"
-    );
+    assert!(kitchen.contains("~ Design  ^design"), "{kitchen}");
+    let launch = fs::read_to_string(dir.join("launch.sprig")).unwrap();
+    assert!(launch.contains("x Logo"), "{launch}");
     assert!(
         fs::read_to_string(dir.join("plans.ics"))
             .unwrap()

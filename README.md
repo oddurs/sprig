@@ -101,25 +101,43 @@ the exit code is 1, so a CI job fails. In GitHub Actions it is one step:
 - run: cargo install --locked --git https://github.com/oddurs/sprig sprig-cli && sprig check --strict .
 ```
 
-## The nine line starts
+## The whole format
 
-| Line | Means | Example |
-| --- | --- | --- |
-| `-` | to do | `- Book a van  due:2026-10-17` |
-| `~` | doing | `~ Pack` |
-| `x` | done | `x Books` |
-| `/` | dropped, kept for the record | `/ Hire movers` |
-| `>` | later, parked on purpose | `> Paint the new place` |
-| `?` | a question | `? Keep the old sofa?` |
-| `=` | the answer to the item above | `  = Yes, it fits the van.` |
-| `#` | a group | `# Kitchen` |
-| `+` | another file or branch grafted in | `+ [[kitchen]]` or `+ [[kitchen^oven]]` |
+<!-- card:start -->
+| A line that starts with | is |
+| --- | --- |
+| `- ` | to do |
+| `~ ` | doing |
+| `x ` | done |
+| `/ ` | dropped, kept for the record |
+| `> ` | later, parked on purpose |
+| `? ` | a question |
+| `= ` | the answer to the item above |
+| `# ` | a group |
+| `+ ` | another file or branch, grafted in: `+ [[kitchen]]` |
+| anything else | a note on the item above; `//` starts a comment |
 
-Anything else is a note on the item above it, and `//` starts a comment. On an
-item, `@name` is who owns it, `^anchor` names it, `after:^anchor` makes it wait,
-`due:2026-10-17` dates it, `est:3h` sizes it, and `#tag` tags it. Progress,
-estimates and what is blocked are computed from the text and never written
-into it.
+Indent a line to put it under the one above. On an item:
+
+| Token | means |
+| --- | --- |
+| `@name` | who owns it |
+| `#tag` | a tag |
+| `!` `!!` `!!!` | its priority |
+| `^anchor` | its name, for other items to point at |
+| `after:^anchor` | it waits on that item |
+| `due:2026-10-17` `start:fri` | when it is due, and when it can start |
+| `est:3h` | how big it is |
+| `every:fri` | it comes round again |
+| `[[file]]` `[[file^anchor]]` | a link |
+| `key:value` | any other field, kept and shown |
+
+Progress, what is blocked and who is on what are worked out from the text,
+never written into it.
+<!-- card:end -->
+
+The [specification](spec/sprig.md) has the exact rules, each numbered and
+each with an example.
 
 ## Going further
 
@@ -131,14 +149,15 @@ into it.
   progress and what an item waits on. Point your editor's LSP client at
   `sprig lsp` for `*.sprig` files.
 - [Sprig in the shell](https://oddurs.github.io/sprig/docs/shell/): `find`,
-  `agenda`, `add`, `mark`, `graph`, `export` and `import`, and recipes for fzf,
-  jq, a pre-commit hook and a calendar feed. [`action/`](action) checks plans
+  `tick`, `export` and `import`, and recipes for fzf, jq, a pre-commit hook, a
+  calendar feed and a picture of the dependency graph. [`action/`](action) checks plans
   in GitHub Actions and summarises what a pull request did to them.
 - [`sprig tui`](https://oddurs.github.io/sprig/docs/tui/): the tree, what's
   next and the agenda on one screen, with vim keys, and reloads when an editor
   or an agent saves.
 - [Plans for coding agents](https://oddurs.github.io/sprig/docs/agents/): the
-  `PLAN.sprig` convention, `sprig agent --write AGENTS.md`, and `sprig mcp`,
+  `PLAN.sprig` convention, `sprig mcp --instructions --write AGENTS.md`, and
+  `sprig mcp`,
   which lets an agent read the plans and change them through checked,
   diffed edits.
 - [`docs/stability.md`](docs/stability.md): what will not change under you

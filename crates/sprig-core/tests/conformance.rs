@@ -388,23 +388,30 @@ fn every_example_matches_its_expected_tree() {
     );
 }
 
+/// The core of the spec and its annex, whose rulings on edge cases are rules
+/// too, numbered in the chapters they belong to.
 fn spec() -> String {
-    fs::read_to_string(Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/sprig.md")).unwrap()
+    let read = |f: &str| {
+        fs::read_to_string(Path::new(env!("CARGO_MANIFEST_DIR")).join("../..").join(f)).unwrap()
+    };
+    read("spec/sprig.md") + "\n" + &read("spec/annex.md")
 }
 
-/// The spec's numbered rules, `§2.6`, with their headings, in order: every
-/// `### N.M` heading of chapters 1 to 10. The appendices are not rules.
+/// The spec's numbered rules, `§2.6`, with their headings, in number order:
+/// every `### N.M` heading of chapters 1 to 10, wherever it is written. The
+/// appendices are not rules.
 fn rules(spec: &str) -> Vec<(String, String)> {
-    spec.lines()
+    let mut rules: Vec<(Vec<u32>, String, String)> = spec
+        .lines()
         .filter_map(|l| l.strip_prefix("### "))
         .filter_map(|h| h.split_once(' '))
-        .filter(|(n, _)| {
-            n.split('.')
-                .next()
-                .is_some_and(|c| c.parse::<u32>().is_ok())
+        .filter_map(|(n, title)| {
+            let number: Option<Vec<u32>> = n.split('.').map(|p| p.parse().ok()).collect();
+            Some((number?, format!("§{n}"), title.to_string()))
         })
-        .map(|(n, title)| (format!("§{n}"), title.to_string()))
-        .collect()
+        .collect();
+    rules.sort();
+    rules.into_iter().map(|(_, n, t)| (n, t)).collect()
 }
 
 /// Each rule and the examples, as `section/NNN`, that cite it.
