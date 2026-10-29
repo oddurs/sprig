@@ -114,6 +114,35 @@ fn an_unknown_argument_is_a_usage_error() {
     assert!(stderr(&out).contains("--frobnicate"));
 }
 
+// Commands removed before 1.0 (cairn 0154) say what replaced them, so a
+// script or a habit that still uses one is told how to change, not just
+// that it failed.
+#[test]
+fn a_removed_command_exits_2_and_names_what_replaced_it() {
+    for (old, now) in [
+        ("status", "sprig tree --summary"),
+        ("agenda", "sprig find is:open"),
+        ("mark", "sprig tick REF --mark MARK"),
+        ("answer", "in your editor"),
+        ("add", "in your editor"),
+        ("edit", "your editor"),
+        ("graph", "sprig export --format dot"),
+        ("agent", "sprig mcp --instructions"),
+        ("completions", "sprig generate SHELL"),
+        ("man", "sprig generate man"),
+    ] {
+        let out = sprig(&[old, "x"]);
+        assert_eq!(out.status.code(), Some(2), "{old}");
+        let err = stderr(&out);
+        assert!(
+            err.contains(&format!("`sprig {old}` is gone")) && err.contains(now),
+            "{old}: {err}"
+        );
+    }
+    // An unknown word that was never a command gets clap's own message.
+    assert!(!stderr(&sprig(&["frobnicate"])).contains("is gone"));
+}
+
 #[test]
 fn an_unreadable_path_exits_2_and_names_the_path() {
     for command in ["next", "check"] {
@@ -458,6 +487,13 @@ fn tick_changes_only_the_mark_or_the_due_date() {
     assert_eq!(
         stdout(&out),
         "lease.sprig:13  x Sign the lease  ^signed  after:^terms  after:^permit\nlease.sprig:9  x Who pays for the grease trap?\n"
+    );
+    // What it unblocked is told to the person, beside the output.
+    assert_eq!(
+        stderr(&out),
+        "No longer waiting on it:\n  \
+         bakery.sprig:15  Supplier credit line  (unblocked)\n  \
+         kitchen.sprig:18  Build  (still waits on Design)\n"
     );
     let after = fs::read_to_string(dir.join("lease.sprig")).unwrap();
     let diff: Vec<(usize, u8, u8)> = before

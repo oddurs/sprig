@@ -8,6 +8,20 @@ All notable changes to this project are recorded here. The format follows
 
 ### Added
 
+- Simplicity is a tested budget (`crates/sprig-cli/tests/budget.rs`): the
+  number of marks, commands, flags, fields with a meaning, diagnostic codes and
+  MCP tools is pinned, and the card and the core of the spec have a ceiling.
+  Adding one fails until the number is raised in the same pull request.
+- The whole format on one card, at the top of the spec and in the README, held
+  to §2.2's marks and §4.6's fields. The RFC template asks what a proposal adds
+  to it.
+- The spec is a core and an annex: the rules a reader needs in
+  `spec/sprig.md`, and the rulings on edge cases, under their own numbers, with
+  the grammar and the tree format, in `spec/annex.md`. The site shows both on
+  one page.
+- CONTRIBUTING.md starts with a first change that needs only Rust, and the
+  home page starts with a plan and what Sprig says about it.
+
 - The playground shows what `sprig check` would say as you type: each problem
   with its code, linked to its note, and what to do about it. Choosing one goes
   to its line, a line with a problem is marked in the editor, and a file's tab
@@ -62,6 +76,21 @@ All notable changes to this project are recorded here. The format follows
 
 ### Changed
 
+- The command answers questions, and the editor writes (cairn 0154): 22
+  commands became 13. A removed command exits 2 and names its replacement.
+  - `status` is `tree --summary`, and `status --oneline` is
+    `tree --summary --oneline`.
+  - `agenda` is `find is:open 'due:<=+2w'`; the TUI keeps the agenda view.
+  - `mark REF MARK` is `tick REF --mark MARK`.
+  - `answer`, `add` and `edit` are a line typed in an editor. The MCP
+    server's `answer_question`, `add_items` and `mark_item` stay, for agents.
+  - `graph` is `export --format dot` or `--format mermaid`.
+  - `agent` is `mcp --instructions`, and `agent --write` is
+    `mcp --instructions --write`.
+  - `completions SHELL` and `man` are `generate SHELL` and `generate man`.
+- `tick` reports what a change unblocked, on standard error, so its standard
+  output stays a line per ref.
+
 - `sprig-core`'s public API, reviewed for 1.0:
   - Every public item is documented, and every public function has an
     example that runs as a test.
@@ -75,6 +104,10 @@ All notable changes to this project are recorded here. The format follows
 
 ### Fixed
 
+- `fmt` could move a comment twice: placed by where the lines above it were,
+  it moved again once they had been formatted. A comment now sits at most one
+  level inside the line above it, so formatting settles in one pass. The
+  property test found it on a run in CI.
 - The site's and the VS Code extension's build tools carried 18 known
   advisories, 8 of them high: undici, vite, zod, source-map-js and
   postcss-selector-parser in the site, and MSAL in the extension's packager.

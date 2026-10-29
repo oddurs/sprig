@@ -10,3 +10,4 @@ cc 9ba417753ebd15f8cec28d8521d6a4723cec20f059debf6f8691879a0812ded6 # shrinks to
 cc d8edaf77d08e752c47eb8c2fed345a4304ba2428337fe49a88583f48262da4b3 # shrinks to src = "\n  due:fri\n    = \n  // c"
 cc ffa26eda656f9ad25370447deb541b892bbca310f49316e19e4046a89669d509 # shrinks to pick = Index(13214254168186169187), ops = [Field(0, "due", Some("two words"))]
 cc e0aaaf3bedb2b524670dab0bde0eb910dc30d34e47c677446cb5d560c7da5a8e # shrinks to pick = Index(0), ops = [Field(0, "after", Some("2026-11-02"))]
+cc d0bef1c45f0bee4c16a421cf019bf8526867e89a22a4be3688bd5940cc6d59e4 # shrinks to src = "- \n  - \ndue:fri\n      - \n    // c"

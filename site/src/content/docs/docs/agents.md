@@ -23,12 +23,12 @@ it in review like any other file.
   next` puts the question in front of the person it names.
 - **`sprig check` passes before the agent says it has finished.**
 
-`sprig agent` prints these instructions for an agent's instruction file.
-`--write` keeps them in a marked block, so running it again updates the block
-and running it twice changes nothing:
+`sprig mcp --instructions` prints these instructions for an agent's
+instruction file. `--write` keeps them in a marked block, so running it again
+updates the block and running it twice changes nothing:
 
 ```sh
-sprig agent --write AGENTS.md     # or CLAUDE.md
+sprig mcp --instructions --write AGENTS.md     # or CLAUDE.md
 ```
 
 ## The MCP server
@@ -52,15 +52,15 @@ for Cursor, or under `[mcp_servers.sprig]` in `~/.codex/config.toml` for Codex.
 
 | Tool | Does | Same as |
 | --- | --- | --- |
-| `list_plans` | Each plan's progress: done, total, ready, waiting, late, errors | `sprig status --json` |
+| `list_plans` | Each plan's progress: done, total, ready, waiting, late, errors | `sprig tree --summary --json` |
 | `show_tree` | One plan as a resolved tree | `sprig export --format json` |
 | `next_items` | Ready work, optionally for one person, at most `limit` | `sprig next --json` |
 | `find_items` | Items matching a query: words, `@who`, `#tag`, `is:`, `due:` | `sprig find --json` |
 | `check_plans` | Every problem, with a stable code | `sprig check --json` |
 | `tick_items` | Tick items done, or reopen them | `sprig tick` |
-| `mark_item` | Set a mark: `-` `~` `x` `/` `>` `?` | `sprig mark` |
-| `add_items` | Add items under or after one, or to `PLAN.sprig` | `sprig add` |
-| `answer_question` | Settle a `?` with an `=` line | `sprig answer` |
+| `mark_item` | Set a mark: `-` `~` `x` `/` `>` `?` | `sprig tick --mark` |
+| `add_items` | Add items under or after one, or to `PLAN.sprig` | a new line, in an editor |
+| `answer_question` | Settle a `?` with an `=` line | an `= ` line, in an editor |
 | `set_field` | Set or remove a `key:value` field | |
 
 The read tools return exactly what the matching command prints. The write tools
@@ -153,9 +153,8 @@ on a person:
 ```
 
 Teo reads the question in the diff, or in `sprig next --who teo`, and answers
-it in the file (`  = Roof, as the engineer advised`) or with
-`sprig answer "Roof or wall" "Roof, as the engineer advised"`. The next
-session starts from there.
+it in the file, with a line under it: `  = Roof, as the engineer advised`. The
+next session starts from there.
 
 CI runs a session like this one through the official MCP client on every change
 to Sprig, and then runs `sprig check --strict` on the result.

@@ -112,9 +112,8 @@ only at the end. The first field is always a ref (T1) or a path, so
 | `next` | ref, mark, text, path through the tree, due date (stored form, or as written), priority (0 to 3) |
 | `check` | file, line, column, severity, code, message |
 | `tree` | ref, depth, mark, text, status, done, total |
-| `status` | file, done, total, ready, waiting, late, errors |
+| `tree --summary` | file, done, total, ready, waiting, late, errors |
 | `find` | ref, mark, text, path through the tree, due date, status |
-| `agenda` | ref, due date, mark, text, `every:` value |
 
 `next`, `find` and `export --format json` also print JSON (T5.5).
 
@@ -202,8 +201,9 @@ is. Tokens in the imported text keep their meaning, so a title such as
 A repository's plan for the work in progress is `PLAN.sprig` at its root. An
 agent reads it before starting, writes its steps into it before changing code,
 ticks each step in the same change as the work, and asks a person by adding a
-`?` item that names them, which it does not answer itself. `sprig agent`
-prints these instructions; `sprig agent --write FILE` keeps them in FILE
+`?` item that names them, which it does not answer itself.
+`sprig mcp --instructions` prints these instructions;
+`sprig mcp --instructions --write FILE` keeps them in FILE
 between the lines `<!-- sprig:start: ... -->` and `<!-- sprig:end -->`,
 replacing only what is between them.
 
@@ -255,7 +255,8 @@ model can act on. An unknown tool is a protocol error (`-32602`).
 `sprig tui [PATH]` shows a folder's plans in three views on one screen:
 - **the tree,** with grafts mounted;
 - **next up,** the items `next` lists, in its order;
-- **the agenda,** the items `agenda` lists for the next fourteen days.
+- **the agenda,** the open items with a date in the next fourteen days, by
+  day, late ones first.
 
 A detail pane shows the item under the cursor. The pane hides below 80
 columns, where nothing wraps.
@@ -267,8 +268,8 @@ columns, where nothing wraps.
 | `g` `G` | first and last item |
 | `x` | tick, as `sprig tick` does, recurrence included |
 | `~` | mark as doing |
-| `a` `A` | add a sibling after the item, or a child under it, as `sprig add` does |
-| `e` | open the editor at the item's line, as `sprig edit` does |
+| `a` `A` | add a sibling after the item, or a child under it, indented to match |
+| `e` | open `$VISUAL` or `$EDITOR` at the item's line |
 | `u` | undo this session's last write |
 | `1` `2` `3` | tree, next up, agenda |
 | `/` | filter by text as it is typed, keeping the ancestors of every match in the tree; `Esc` clears |

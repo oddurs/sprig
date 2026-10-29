@@ -17,6 +17,14 @@ Why the spec should change: what it would let people write, and what it would
 stop going wrong. Evidence from the files people write, and from how other
 plain-text formats handled the same question, counts for more than taste.
 
+## What it adds to the card
+
+The whole format fits on one card, at the top of `spec/sprig.md`, and that is
+what keeps Sprig simple. Say what this proposal adds to it: a line, a row, a
+word. The best answer is nothing. A proposal that adds a mark, or a field with
+a meaning, raises a number in `crates/sprig-cli/tests/budget.rs`, and needs a
+case strong enough to pay for it.
+
 ## The case against
 
 The strongest argument you can make against your own proposal. What it costs:

@@ -99,7 +99,7 @@ fn appendix_d_documents_every_key_the_schema_allows() {
     keys(&schema()["properties"], &mut all);
     keys(&schema()["$defs"], &mut all);
     all.insert("sprig_tree".into());
-    let spec = fs::read_to_string(repo("spec/sprig.md")).unwrap();
+    let spec = fs::read_to_string(repo("spec/annex.md")).unwrap();
     let appendix = &spec[spec.find("## Appendix D").expect("the spec has Appendix D")..];
     let missing: Vec<&String> = all
         .iter()

@@ -156,7 +156,7 @@ function check(files) {
 
 function status(files) {
 	const get = load(files);
-	const lines = [prompt(`sprig status --today ${PINNED}`)];
+	const lines = [prompt(`sprig tree --summary --today ${PINNED}`)];
 	const names = Object.keys(files).filter((f) => f !== 'dana.sprig');
 	for (const f of names) {
 		const d = get(f);
@@ -173,7 +173,7 @@ function status(files) {
 	const { ready, waiting } = readyList(get('bakery.sprig'));
 	const b = get('bakery.sprig').root.stats;
 	lines.push([]);
-	lines.push(prompt('sprig status --oneline'));
+	lines.push(prompt('sprig tree --summary --oneline'));
 	lines.push([S(`sprig ${Math.round((b.done / b.total) * 100)}% · ${ready.length} ready · ${waiting.length} waiting`)]);
 	return lines;
 }

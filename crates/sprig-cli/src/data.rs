@@ -1,5 +1,5 @@
 //! The commands that read plans as data or turn other data into plans:
-//! `find`, `agenda`, `graph`, `export` and `import`, and the JSON every
+//! `find`, `export` and `import`, and the JSON every
 //! `--json` prints. The MCP server returns the same values, built by the
 //! same functions, so a tool and a command cannot disagree.
 
@@ -11,10 +11,7 @@ use sprig_core::next::{self, Entry};
 use sprig_core::workspace::{Resolution, Resolved, Tree};
 use sprig_core::{Date, Severity, agenda, export, graph, import, json as tree, query};
 
-use crate::args::{
-    AgendaArgs, ExportArgs, ExportFormat, FindArgs, GraphArgs, GraphFormat, ImportArgs,
-    ImportFormat,
-};
+use crate::args::{ExportArgs, ExportFormat, FindArgs, ImportArgs, ImportFormat};
 use crate::load::Loaded;
 use crate::out::{Cell, Out, Row, Style, Table};
 use crate::views::{all_diagnostics, entry_trees, glyph, key, relative, resolve_all};
@@ -53,7 +50,7 @@ pub fn find_json(resolved: &[Resolution], q: &query::Query) -> Value {
     Value::Array(hits.iter().map(|h| item_json(h.node, &h.path)).collect())
 }
 
-/// `status --json`: a row per plan, with the counts `status` shows.
+/// `tree --summary --json`: a row per plan, with the counts the summary shows.
 pub fn status_json(groups: &[Loaded], resolved: &[Resolution], today: Date) -> Value {
     let mut rows = Vec::new();
     for (g, r) in groups.iter().zip(resolved) {
@@ -189,112 +186,8 @@ pub(crate) fn day(d: Date) -> String {
     )
 }
 
-pub fn agenda(a: &AgendaArgs, today: Date, out: Out) -> Result<ExitCode> {
-    let (_groups, resolved) = resolve_all(&a.paths, today)?;
-    let items: Vec<agenda::Dated> = resolved.iter().flat_map(agenda::dated).collect();
-    let w = agenda::window(items, today, i64::from(a.days));
-    let row = |d: &agenda::Dated| {
-        let n = d.node;
-        let mark = glyph(n);
-        let every = d.every.map(|e| format!("every:{e}")).unwrap_or_default();
-        if out.plain {
-            return Row {
-                key: key(n),
-                cells: vec![
-                    vec![Cell::plain(d.due.to_string())],
-                    vec![Cell::plain(mark.to_string())],
-                    vec![Cell::plain(n.label.clone())],
-                    vec![Cell::plain(every)],
-                ],
-            };
-        }
-        let late = today.days_until(d.due);
-        Row {
-            key: key(n),
-            cells: vec![
-                vec![
-                    Cell::plain("  "),
-                    Cell::new(mark.to_string(), Style::Mark(mark)),
-                    Cell::plain(format!(" {}", n.label)),
-                ],
-                vec![Cell::new(
-                    if late < 0 {
-                        relative(late)
-                    } else {
-                        String::new()
-                    },
-                    Style::Warning,
-                )],
-                vec![Cell::new(every, Style::Dim)],
-                vec![Cell::new(format!("{}:{}", n.file, n.line), Style::Dim)],
-            ],
-        }
-    };
-    let mut lines = Vec::new();
-    let mut sections: Vec<(String, Vec<Row>)> = Vec::new();
-    if !w.late.is_empty() {
-        sections.push(("Late".into(), w.late.iter().map(row).collect()));
-    }
-    for (d, items) in &w.days {
-        let name = match today.days_until(*d) {
-            0 => format!("{} · today", day(*d)),
-            1 => format!("{} · tomorrow", day(*d)),
-            _ => day(*d),
-        };
-        sections.push((name, items.iter().map(row).collect()));
-    }
-    if out.plain {
-        let rows: Vec<Row> = sections.into_iter().flat_map(|(_, r)| r).collect();
-        lines.extend(out.table(&Table {
-            rows,
-            shrink: vec![],
-            keep_end: vec![],
-        }));
-    } else {
-        // One table under all the headings, so columns line up across days.
-        let sizes: Vec<(String, usize)> =
-            sections.iter().map(|(n, r)| (n.clone(), r.len())).collect();
-        let rows: Vec<Row> = sections.into_iter().flat_map(|(_, r)| r).collect();
-        let mut body = out
-            .table(&Table {
-                rows,
-                shrink: vec![(0, 12), (3, 8)],
-                keep_end: vec![3],
-            })
-            .into_iter();
-        for (i, (name, n)) in sizes.into_iter().enumerate() {
-            if i > 0 {
-                lines.push(String::new());
-            }
-            lines.push(out.paint(&name, Style::Bold));
-            lines.extend(body.by_ref().take(n));
-        }
-        if lines.is_empty() {
-            lines.push(format!("Nothing is due in the next {} days", a.days));
-        }
-    }
-    let mut out_w = io::stdout().lock();
-    for l in lines {
-        writeln!(out_w, "{l}")?;
-    }
-    Ok(ExitCode::SUCCESS)
-}
-
 // ----------------------------------------------------------------------------
-// graph and export
-
-pub fn graph(a: &GraphArgs, today: Date) -> Result<ExitCode> {
-    let (_groups, resolved) = resolve_all(&a.paths, today)?;
-    let mut w = io::stdout().lock();
-    for r in &resolved {
-        let text = match a.format {
-            GraphFormat::Dot => graph::dot(r),
-            GraphFormat::Mermaid => graph::mermaid(r),
-        };
-        w.write_all(text.as_bytes())?;
-    }
-    Ok(ExitCode::SUCCESS)
-}
+// export
 
 pub fn export(a: &ExportArgs, today: Date) -> Result<ExitCode> {
     let (groups, resolved) = resolve_all(&a.paths, today)?;
@@ -317,6 +210,16 @@ pub fn export(a: &ExportArgs, today: Date) -> Result<ExitCode> {
         ExportFormat::Ics => {
             let items: Vec<agenda::Dated> = resolved.iter().flat_map(agenda::dated).collect();
             w.write_all(export::ics(&items, today).as_bytes())?;
+        }
+        ExportFormat::Dot => {
+            for r in &resolved {
+                w.write_all(graph::dot(r).as_bytes())?;
+            }
+        }
+        ExportFormat::Mermaid => {
+            for r in &resolved {
+                w.write_all(graph::mermaid(r).as_bytes())?;
+            }
         }
         ExportFormat::Csv => {
             for (i, r) in resolved.iter().enumerate() {

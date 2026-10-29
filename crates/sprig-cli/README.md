@@ -18,10 +18,14 @@ $ sprig mcp                      # the plans, served to a coding agent
 ```
 
 Every command takes `--plain`: tab-separated, with columns that stay stable.
-`next`, `check`, `status` and `find` also take `--json`, and `sprig export`
-writes the whole tree as JSON. `sprig help <command>` has the rest, and
-`sprig completions <shell>` and `sprig man` print the shell completions and the
-manual page.
+`next`, `check`, `find` and `tree --summary` also take `--json`, and
+`sprig export` writes the whole tree as JSON. `sprig help <command>` has the
+rest, and `sprig generate <shell>` and `sprig generate man` print the shell
+completions and the manual page.
+
+Thirteen commands, each answering one question about a plan. Changing a plan
+is a line typed in an editor; `tick` is the one write with a command, because
+it settles recurrence and dates.
 
 The guides are on the website: [the shell](https://oddurs.github.io/sprig/docs/shell/),
 [the TUI](https://oddurs.github.io/sprig/docs/tui/) and

@@ -26,7 +26,7 @@ use sprig_core::Date;
 use crate::Result;
 use crate::args::TuiArgs;
 use crate::load::{self, Loaded};
-use crate::verbs::run_editor;
+use crate::write::run_editor;
 use crate::write::save;
 use app::{Action, App, Key};
 

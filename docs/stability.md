@@ -28,7 +28,7 @@ The `sprig` command follows semantic versioning, and its interface includes:
 
 | Promise | Held by |
 | --- | --- |
-| Exit codes: 0 fine; 1 findings (`check` errors, or warnings with `--strict`; `next` with nothing ready; `find` matching nothing; `fmt --check` with files to change; `status --oneline` with something late; `why` on a blocked item); 2 a usage error, an unknown ref or filter, or a path that could not be read. | `crates/sprig-cli/tests/cli.rs` `help_lists_each_command_with_one_line_and_the_exit_codes`, `next_with_nothing_ready_exits_1`, `an_unreadable_path_exits_2_and_names_the_path`; `crates/sprig-cli/tests/tools.rs` `find_with_an_unknown_filter_exits_2_and_lists_the_filters`; `crates/sprig-cli/tests/views.rs` `why_tiling_crosses_into_the_lease_and_exits_1`. |
+| Exit codes: 0 fine; 1 findings (`check` errors, or warnings with `--strict`; `next` with nothing ready; `find` matching nothing; `fmt --check` with files to change; `tree --summary --oneline` with something late; `why` on a blocked item); 2 a usage error, an unknown ref or filter, or a path that could not be read. | `crates/sprig-cli/tests/cli.rs` `help_lists_each_command_with_one_line_and_the_exit_codes`, `next_with_nothing_ready_exits_1`, `an_unreadable_path_exits_2_and_names_the_path`; `crates/sprig-cli/tests/tools.rs` `find_with_an_unknown_filter_exits_2_and_lists_the_filters`; `crates/sprig-cli/tests/views.rs` `why_tiling_crosses_into_the_lease_and_exits_1`. |
 | The columns of every `--plain` output, in order. A new column is added only at the end. | `crates/sprig-cli/tests/plain.rs`, a snapshot for each command below. |
 | `--json` output is the tree format, as above. | `crates/sprig-cli/tests/tools.rs` `next_json_gives_the_items_next_shows_in_the_same_order_and_valid`. |
 | The MCP server's tool names and arguments. New tools and optional arguments may be added. | `crates/sprig-cli/tests/mcp.rs` `every_tool_has_a_valid_schema_and_honest_annotations`. |
@@ -40,9 +40,8 @@ The `--plain` columns:
 | `next` | ref, mark, text, path through the tree, due date, priority | `crates/sprig-cli/tests/plain.rs` `the_plain_columns_of_next_stay_as_they_are` |
 | `check` | file, line, column, severity, code, message | `crates/sprig-cli/tests/plain.rs` `the_plain_columns_of_check_stay_as_they_are` |
 | `tree` | ref, depth, mark, text, status, done, total | `crates/sprig-cli/tests/plain.rs` `the_plain_columns_of_tree_stay_as_they_are` |
-| `status` | file, done, total, ready, waiting, late, errors | `crates/sprig-cli/tests/plain.rs` `the_plain_columns_of_status_stay_as_they_are` |
+| `tree --summary` | file, done, total, ready, waiting, late, errors | `crates/sprig-cli/tests/plain.rs` `the_plain_columns_of_tree_summary_stay_as_they_are` |
 | `find` | ref, mark, text, path through the tree, due date, status | `crates/sprig-cli/tests/plain.rs` `the_plain_columns_of_find_stay_as_they_are` |
-| `agenda` | ref, due date, mark, text, `every:` value | `crates/sprig-cli/tests/plain.rs` `the_plain_columns_of_agenda_stay_as_they_are` |
 
 The wording of messages, help and human-readable output is not part of the
 interface, and improves without notice.
