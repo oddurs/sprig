@@ -20,7 +20,7 @@ path = "src/main.rs"
 [dependencies]
 clap = { version = "4", features = ["derive", "env"] }
 clap_complete = "4"
-clap_mangen = "0.2"
+clap_mangen = "0.3"
 crossterm = "0.29"
 jiff = "0.2"
 # The file watcher the TUI reloads by: FSEvents, inotify or
