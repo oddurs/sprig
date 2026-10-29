@@ -49,7 +49,7 @@ pub(crate) fn relative(days: i64) -> String {
     }
 }
 
-fn hours(h: f64) -> String {
+pub(crate) fn hours(h: f64) -> String {
     let short = |x: f64| {
         let r = (x * 10.0).round() / 10.0;
         if r.fract() == 0.0 {

@@ -1,0 +1,24 @@
+ sprig  1 tree 2 next up 3 agenda
+›   Open the bakery               9/40  in 69d  @dana │ Open the bakery
+    # Money                                       2/4 │ bakery.sprig:1
+      x Business plan v3                              │
+      x Bank meeting                                  │ status   doing
+      ~ Equipment loan paperwork                in 6d │ owner    @dana
+      - Supplier credit line                     @teo │ due      2026-12-09 (in
+      - Weekly numbers to the bank              in 1d │ 69d)
+    + Lease                                       2/6 │ estimate 35.5d
+      x Shortlist three spaces                        │ progress 9 of 40 done
+      ~ Negotiate terms                    1/3  in 4d │
+        x Eight weeks rent-free for the fit-out       │
+        ~ Break clause at year three                  │
+        ? Who pays for the grease trap?               │
+      - Change-of-use permit                          │
+      - Sign the lease                                │
+    + Kitchen fit-out                      1/10  @teo │
+      - Design                                    1/2 │
+        x Layout sketch                               │
+        ~ Ventilation plan with the engineer   in 11d │
+      # Equipment                                 0/3 │
+        - Deck oven, three decks                  0/2 │
+          - Get a third quote                   in 1d │
+ 10/46 done · 21 ready · 12 waiting                                      ? help

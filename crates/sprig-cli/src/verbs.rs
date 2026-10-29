@@ -308,8 +308,17 @@ pub fn edit(a: &EditArgs, today: Date) -> Result<ExitCode> {
         Ok(found) => found,
         Err(code) => return Ok(code),
     };
-    // $VISUAL, then $EDITOR, then vi, as git and crontab choose; the value may
-    // carry arguments, as in `code --wait`.
+    Ok(if run_editor(&g.root.join(&item.file), item.line)? {
+        ExitCode::SUCCESS
+    } else {
+        ExitCode::from(2)
+    })
+}
+
+/// Opens a file at a line in the person's editor and waits for it: $VISUAL,
+/// then $EDITOR, then vi, as git and crontab choose. The value may carry
+/// arguments, as in `code --wait`. Says whether the editor succeeded.
+pub(crate) fn run_editor(path: &Path, line: usize) -> Result<bool> {
     let editor = ["VISUAL", "EDITOR"]
         .iter()
         .find_map(|v| std::env::var(v).ok().filter(|e| !e.trim().is_empty()))
@@ -318,13 +327,9 @@ pub fn edit(a: &EditArgs, today: Date) -> Result<ExitCode> {
     let program = words.next().expect("the editor is not empty");
     let status = Command::new(program)
         .args(words)
-        .arg(format!("+{}", item.line))
-        .arg(g.root.join(&item.file))
+        .arg(format!("+{line}"))
+        .arg(path)
         .status()
         .map_err(|e| format!("cannot run {program}: {e}"))?;
-    Ok(if status.success() {
-        ExitCode::SUCCESS
-    } else {
-        ExitCode::from(2)
-    })
+    Ok(status.success())
 }

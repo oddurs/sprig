@@ -49,16 +49,12 @@ VS Code highlights `.sprig` files, completes people, anchors and file links, sho
 
 ## v0.4 — Work the plan from one screen
 
-`··········` 0% · 0 of 6 done · due 2027-05-21
+`··········` 0% · 0 of 2 done · due 2027-05-21
 
 `sprig tui`: the tree, what's next and the agenda for a folder of plans on one terminal screen, with vim keys, writes that go through the same one-line edits as the verbs, and live reload when a file changes underneath it. Plan: `design/cli-plan.html`.
 
-- [ ] [`0130`](https://github.com/oddurs/sprig/blob/main/cairn/items/0130-how-should-sprig-tui-be-built.md) How should sprig tui be built? <sup>spike · p0 · cli</sup>
-- [ ] [`0131`](https://github.com/oddurs/sprig/blob/main/cairn/items/0131-sprig-tui-tree-view-detail-pane-and-navigation.md) sprig tui: tree view, detail pane and navigation <sup>feature · p0 · cli</sup>
-- [ ] [`0132`](https://github.com/oddurs/sprig/blob/main/cairn/items/0132-sprig-tui-tick-mark-add-and-undo.md) sprig tui: tick, mark, add and undo <sup>feature · p0 · cli</sup>
-- [ ] [`0133`](https://github.com/oddurs/sprig/blob/main/cairn/items/0133-sprig-tui-reload-when-a-file-changes-on-disk.md) sprig tui: reload when a file changes on disk <sup>feature · p0 · cli</sup>
-- [ ] [`0134`](https://github.com/oddurs/sprig/blob/main/cairn/items/0134-sprig-tui-next-up-and-agenda-views-and-filtering.md) sprig tui: next-up and agenda views, and filtering <sup>feature · p1 · cli</sup>
 - [ ] [`0135`](https://github.com/oddurs/sprig/blob/main/cairn/items/0135-release-v0-4.md) Release v0.4 <sup>chore · p0 · release</sup>
+- [ ] [`0133`](https://github.com/oddurs/sprig/blob/main/cairn/items/0133-sprig-tui-reload-when-a-file-changes-on-disk.md) sprig tui: reload when a file changes on disk <sup>feature · p0 · cli</sup>
 
 ## v1.0 — Sprig 1.0
 

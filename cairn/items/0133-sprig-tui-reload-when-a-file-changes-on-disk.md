@@ -3,13 +3,13 @@ id: 133
 uid: 71b16b09-fb53-49ee-9659-dd9519b14bc4
 title: 'sprig tui: reload when a file changes on disk'
 type: feature
-status: planned
+status: doing
 milestone: v0.4
 depends_on:
 - 130
 - 131
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-10-29
 priority: p0
 effort: m
 area: cli
@@ -25,6 +25,10 @@ Watch every file in the workspace, including grafted ones, and re-resolve on cha
 
 ## Acceptance criteria
 
-- [ ] A test changes a file on disk while the core holds it and checks the new state appears and the cursor stays on its item.
-- [ ] A test edits the target line externally between a keypress and its write, and checks the write is refused with nothing lost.
+- [x] A test changes a file on disk while the core holds it and checks the new state appears and the cursor stays on its item.
+- [x] A test edits the target line externally between a keypress and its write, and checks the write is refused with nothing lost.
 - [ ] Saving from Vim, which writes by rename, triggers a reload on macOS and Linux; checked by hand and noted here.
+
+## 2026-10-29
+
+The folder is watched, not the files, and a test saves the way Vim does with backupcopy=no (write a new file, rename it over the plan) and waits for the event. That test runs in CI on Linux, macOS and Windows. Saving from Vim itself, on macOS and Linux, still has to be tried by hand.

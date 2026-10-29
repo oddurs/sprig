@@ -1,0 +1,30 @@
+ sprig  1 tree 2 next up 3 agenda
+› ~ Break clause at year three  Lease › Negotiate terms            │ Break clause at year three
+  ~ Equipment loan paperwork  Money                          in 6d │ lease.sprig:8
+  ~ Ventilation plan with the engineer  Kitchen fit-out ›…  in 11d │
+  ~ Logo, second round  Opening week › Brand                in 13d │ status   doing
+  ? Who pays for the grease trap?  Lease › Negotiate terms         │ owner    @dana
+  - Get a third quote  Kitchen fit-out › Equipment › Deck …  in 1d │
+  - Free loaf for the first 50 through the door  Opening week › O… │
+  - Photos for the local paper  Opening week › Opening day   @dana │
+  - Flaky sea salt  Opening week › Soft opening › Stock the shelv… │
+  - Weekly numbers to the bank  Money                        in 1d │
+  - Call the insurer about public liability                  in 2d │
+  - Two counter staff  Opening week › Hiring                in 35d │
+  - Rye, 4 sacks  Opening week › Soft opening › Stock the shelves… │
+  - Strong white, 6 sacks  Opening week › Soft opening › Stock th… │
+  - Whole milk, 12 L  Opening week › Soft opening › Stock the she… │
+  - Sesame  Opening week › Soft opening › Stock the shelves › Sup… │
+  - Nigella  Opening week › Soft opening › Stock the shelves › Su… │
+  - Paper bags, 1000  Opening week › Soft opening › Stock the she… │
+  - Change-of-use permit  Lease                                    │
+  - Spiral mixer, 40 litres  Kitchen fit-out › Equipment           │
+  ? Kiln & Crumb, or Mill Street Bread?                            │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+ 10/46 done · 21 ready · 12 waiting                                                          ? help
