@@ -30,6 +30,7 @@ usage: scripts/task <target>
   perf       time parse, resolve and check against the committed baseline, in release builds
   mcp        a scripted session with sprig mcp through the official MCP client (needs node)
   fuzz       fuzz the parser and the edit API, FUZZ_SECONDS each (default 60; needs nightly and cargo-fuzz)
+  audit      every lockfile against the RustSec and npm advisory databases (needs network)
 USAGE
 }
 
@@ -193,6 +194,18 @@ case "${1:-}" in
         done
       }
       cargo +nightly fuzz run "$target" "corpus/$target" -- -max_total_time="$seconds"
+    done
+    ;;
+  audit)
+    # Every lockfile the repository commits, so nothing it builds or tests
+    # with carries a known advisory: the workspace, the fuzzer's own
+    # workspace, the site, the editors and the MCP client test.
+    command -v cargo-audit >/dev/null 2>&1 || cargo install --locked cargo-audit
+    cargo audit --deny warnings --file Cargo.lock
+    cargo audit --deny warnings --file crates/sprig-core/fuzz/Cargo.lock
+    for dir in site editors editors/vscode tests/mcp; do
+      printf '%s: ' "$dir"
+      npm --prefix "$dir" audit --audit-level=low
     done
     ;;
   perf)

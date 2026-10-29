@@ -64,6 +64,7 @@ scripts/task test       # the full suite
 scripts/task build      # compile everything
 scripts/task backlog    # cairn check --strict, and ROADMAP.md is current
 scripts/task check      # all of the above; what CI runs
+scripts/task audit      # every lockfile against the advisory databases
 ```
 
 `pre-commit` formats and lints; `pre-push` runs the lot. Never use

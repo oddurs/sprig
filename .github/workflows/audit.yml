@@ -1,0 +1,33 @@
+name: audit
+
+# Every lockfile against the RustSec and npm advisory databases. An advisory
+# can be published on any day, against a lockfile nobody touched, so this runs
+# weekly as well as on the changes that move a dependency. It is not one of
+# the checks branch protection requires: a new advisory in a tool's
+# dependency must not block a pull request that has nothing to do with it.
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  push:
+    branches: [main]
+    paths: ["**/Cargo.lock", "**/Cargo.toml", "**/package-lock.json", "**/package.json"]
+  pull_request:
+    paths: ["**/Cargo.lock", "**/Cargo.toml", "**/package-lock.json", "**/package.json"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: site/.node-version
+      - run: ./scripts/task audit
