@@ -512,17 +512,29 @@ pub fn format(src: &str, today: Date) -> Change {
     };
     let comment_level = |i: usize| -> usize {
         let indent = lines[i].indent;
+        // Never deeper than one inside the content line just above it (its
+        // own level, if that is a note): the lines above move as they are
+        // formatted, and a comment placed by where they were would move
+        // again on the next pass.
+        let cap = (0..i)
+            .rev()
+            .find(|&j| is_content(j))
+            .map_or(0, |j| match kinds[j].kind {
+                syntax::LineKind::Title => 0,
+                syntax::LineKind::Item(_) => level[j].unwrap_or(0) + 1,
+                _ => level[j].unwrap_or(0),
+            });
         for j in (0..i).rev().filter(|&j| is_content(j)) {
             let lvl = match kinds[j].kind {
                 syntax::LineKind::Title => return 0,
                 _ => level[j].unwrap_or(0),
             };
             if lines[j].indent == indent {
-                return lvl;
+                return lvl.min(cap);
             }
             // Only an item has an inside; past a shallower note, keep looking.
             if lines[j].indent < indent && matches!(kinds[j].kind, syntax::LineKind::Item(_)) {
-                return lvl + 1;
+                return (lvl + 1).min(cap);
             }
         }
         0

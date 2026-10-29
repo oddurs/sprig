@@ -104,6 +104,10 @@ All notable changes to this project are recorded here. The format follows
 
 ### Fixed
 
+- `fmt` could move a comment twice: placed by where the lines above it were,
+  it moved again once they had been formatted. A comment now sits at most one
+  level inside the line above it, so formatting settles in one pass. The
+  property test found it on a run in CI.
 - The site's and the VS Code extension's build tools carried 18 known
   advisories, 8 of them high: undici, vite, zod, source-map-js and
   postcss-selector-parser in the site, and MSAL in the extension's packager.
