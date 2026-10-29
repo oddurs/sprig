@@ -35,20 +35,26 @@ status() {
   fi
 }
 
-# Items matching a query, one per line as `file<TAB>text<TAB>path`, so that an
-# item is the same item on both sides even when lines above it moved. `find`
-# exits 1 when nothing matches, which is an answer here, not a failure.
+# Items matching a query, one per line as `file<TAB>text<TAB>path<TAB>ref`,
+# so that an item is the same item on both sides even when lines above it
+# moved. `find` exits 1 when nothing matches, which is an answer here, not a
+# failure.
 items() {
   local dir=$1 query=$2
   shift 2
-  local p code
+  local p code prefix
   present "$dir" "$@" | while IFS= read -r p; do
     code=0
     (cd "$dir" && "$sprig" find --plain --in "$p" "$query") >"$scratch/found" || code=$?
     if [ "$code" -gt 1 ]; then exit "$code"; fi
-    awk -F '\t' -v root="$p" '{
-      file = $1; sub(/[:^].*/, "", file)
-      print root "/" file "\t" $3 "\t" $4 "\t" $1
+    # `find` names a file relative to the folder it searched, which for a
+    # file is the folder the file is in.
+    if [ -d "$dir/$p" ]; then prefix=${p%/}/; else prefix=$(dirname "$p")/; fi
+    if [ "$prefix" = ./ ]; then prefix=; fi
+    awk -F '\t' -v prefix="$prefix" '{
+      ref = prefix $1
+      file = ref; sub(/[:^].*/, "", file)
+      print file "\t" $3 "\t" $4 "\t" ref
     }' "$scratch/found"
   done | sort -u
 }
@@ -79,8 +85,7 @@ items "$head" is:open "$@" >"$scratch/head-open"
 awk -F '\t' 'FILENAME == ARGV[1] { was[$1 FS $2 FS $3] = 1; next }
              FILENAME == ARGV[2] { still[$1 FS $2 FS $3] = 1; next }
              ($1 FS $2 FS $3) in was && !(($1 FS $2 FS $3) in still) {
-               dir = $1; sub(/[^\/]*$/, "", dir)
-               printf "- `%s%s` %s\n", dir, $4, $2
+               printf "- `%s` %s\n", $4, $2
              }' "$scratch/base-blocked" "$scratch/head-blocked" "$scratch/head-open" >"$scratch/freed"
 
 echo

@@ -48,6 +48,9 @@ All notable changes to this project are recorded here. The format follows
 - The tree-sitter grammar reads a file whose last line has no line ending,
   which the new conformance examples found. An external scanner ends a line
   at a newline or at the end of the file.
+- The GitHub Action's summary named an unblocked item by a wrong path
+  (`plans/bakery/bakery/bakery.sprig`) when it checked a folder of folders or
+  a single file. Only a folder one level deep came out right.
 
 - `sprig tui`: the tree, next up and the agenda on one screen.
   - Vim keys, a detail pane, and a filter that keeps every match's ancestors.
