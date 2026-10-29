@@ -16,3 +16,7 @@ serde_json = { version = "1", features = ["preserve_order"] }
 jsonschema = { version = "0.33", default-features = false }
 proptest = "1"
 toml = "0.9"
+
+[[bench]]
+name = "workspace"
+harness = false

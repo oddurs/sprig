@@ -1,0 +1,13 @@
+{
+  "name": "sprig-editors",
+  "private": true,
+  "description": "Editor grammars for Sprig, and their tests",
+  "scripts": {
+    "test:textmate": "vscode-tmgrammar-snap --grammar sprig.tmLanguage.json --scope source.sprig 'tests/textmate/*.sprig'",
+    "update:textmate": "vscode-tmgrammar-snap -u --grammar sprig.tmLanguage.json --scope source.sprig 'tests/textmate/*.sprig'"
+  },
+  "devDependencies": {
+    "vscode-tmgrammar-test": "0.1.3",
+    "tree-sitter-cli": "0.27.1"
+  }
+}

@@ -1,0 +1,109 @@
+=== bakery.sprig
+[1mOpen the bakery  [0m[38;5;6m@dana[0m[1m  [0m[38;5;4mdue:2026-12-09[0m[1m  [0m[38;5;4mwhere:"41 Mill Street"[0m[1m
+[0m
+Corner unit, 62 m². Sourdough, laminated pastry, good coffee.
+Open seven days, 7 till 3.
+
+// Each + line grafts another file in as a branch.
+// Its progress, estimates and blockers roll up into this one.
+
+[38;5;5m# [0mMoney  [38;5;4m#finance[0m
+  Budget is 180k. Anything over 10k needs a second quote.
+  [38;5;8mx Business plan v3
+[0m  [38;5;8mx Bank meeting  [0m[38;5;4mdue:2026-09-14[0m[38;5;8m
+[0m  [38;5;3m~ [0mEquipment loan paperwork  [38;5;3m^loan[0m  [38;5;4mdue:2026-10-07[0m  [1m!![0m
+    The bank wants a signed lease first, see [[lease^signed]].
+  [38;5;7m- [0mSupplier credit line  [38;5;6m@teo[0m  [38;5;5mafter:[[lease^signed]][0m
+  [38;5;7m- [0mWeekly numbers to the bank  [38;5;4mevery:fri[0m  [38;5;4mdue:2026-10-02[0m
+
+[38;5;5m+ [0m[4m[[lease]][0m
+[38;5;5m+ [0m[4m[[kitchen]][0m  [38;5;6m@teo[0m
+[38;5;5m+ [0m[4m[[launch]][0m   [38;5;6m@kim[0m
+
+[38;5;5m? [0mKiln & Crumb, or Mill Street Bread?  [38;5;3m^name[0m
+  Street poll so far: 31 to 24 for Kiln & Crumb.
+  // Settle it: add a line under here that starts with "= ".
+=== dana.sprig
+[1mDana, this week  [0m[38;5;6m@dana[0m[1m
+[0m
+Everything on Dana's plate, grafted from the plans it lives in.
+Tick something here and the line changes in its own file.
+
+[38;5;5m+ [0m[4m[[lease^terms]][0m
+[38;5;5m+ [0m[4m[[bakery^loan]][0m
+[38;5;5m+ [0m[4m[[kitchen^oven]][0m  [38;5;6m@dana[0m
+[38;5;7m- [0mCall the insurer about public liability  [38;5;4mdue:2026-10-03[0m
+=== groceries.sprig
+[1mSupply run  [0m[38;5;4mevery:week[0m[1m  [0m[38;5;4mwhere:"Wholesale Foods, unit 9"[0m[1m
+[0m
+[38;5;5m# [0mFlour
+  [38;5;7m- [0mRye, 4 sacks
+  [38;5;7m- [0mStrong white, 6 sacks
+  [38;5;8mx Spelt, 1 sack
+[0m[38;5;5m# [0mDairy
+  [38;5;8mx Butter, 10 kg
+[0m  [38;5;7m- [0mWhole milk, 12 L
+[38;5;5m# [0mSeeds
+  [38;5;7m- [0mSesame
+  [38;5;7m- [0mNigella
+  [38;5;8mx Sunflower
+[0m[38;5;7m- [0mPaper bags, 1000
+[38;5;7m- [0mFlaky sea salt  [1m![0m
+=== kitchen.sprig
+[1mKitchen fit-out  [0m[38;5;6m@teo[0m[1m  [0m[38;5;4mbudget:64k[0m[1m
+[0m
+[38;5;7m- [0mDesign  [38;5;3m^design[0m
+  [38;5;8mx Layout sketch
+[0m  [38;5;3m~ [0mVentilation plan with the engineer  [38;5;4mdue:2026-10-12[0m  [38;5;4mest:2d[0m
+    Extraction has to exit through the roof, not the back wall.
+    The neighbours at no. 43 have already asked.
+[38;5;5m# [0mEquipment  [38;5;4m#finance[0m
+  [38;5;7m- [0mDeck oven, three decks  [38;5;3m^oven[0m  [1m!![0m
+    Rondo quoted 14.2k, Mono 12.9k. Mono's lead time is ten weeks.
+    [38;5;7m- [0mGet a third quote  [38;5;4mdue:2026-10-02[0m  [38;5;4mest:2h[0m
+    [38;5;7m- [0mPlace the order  [38;5;5mafter:[[bakery^loan]][0m
+  [38;5;7m- [0mSpiral mixer, 40 litres  [38;5;4mest:1h[0m
+  [3m/ Proofing cabinet
+[0m    [38;5;5m= [0m[3mDropped. The walk-in cooler can double as a retarder.
+[0m  [38;5;8m> [0mEspresso machine
+    After opening, once we know what the morning rush looks like.
+[38;5;7m- [0mBuild  [38;5;5mafter:^design[0m  [38;5;5mafter:[[lease^signed]][0m
+  [38;5;7m- [0mStrip out  [38;5;4mest:3d[0m
+  [38;5;7m- [0mPlumbing and drains  [38;5;4mest:4d[0m
+  [38;5;7m- [0mThree-phase electrics  [38;5;4mest:2d[0m
+  [38;5;7m- [0mTiling  [38;5;4mest:5d[0m
+  [38;5;7m- [0mInstall equipment  [38;5;4mest:2d[0m
+=== launch.sprig
+[1mOpening week  [0m[38;5;6m@kim[0m[1m  [0m[38;5;4mdue:2026-12-09[0m[1m
+[0m
+[38;5;5m# [0mBrand
+  [38;5;3m~ [0mLogo, second round  [38;5;3m^logo[0m  [38;5;4mdue:2026-10-14[0m
+    Round one was too rustic. New brief: a kiln, drawn in one line.
+  [38;5;7m- [0mWindow lettering  [38;5;5mafter:^logo[0m  [38;5;5mafter:[[bakery^name]][0m  [38;5;4mest:1d[0m
+  [38;5;7m- [0mMenu boards  [38;5;5mafter:^logo[0m  [38;5;4mest:4h[0m
+[38;5;5m# [0mHiring
+  [38;5;8mx Head baker  [0m[38;5;6m@dana[0m[38;5;8m
+[0m    Priya Nair. Starts two weeks before the soft opening.
+  [38;5;7m- [0mTwo counter staff  [38;5;3m^counter[0m  [38;5;4mdue:2026-11-05[0m
+  [38;5;7m- [0mMorning rota  [38;5;5mafter:^counter[0m  [38;5;4mest:2h[0m
+[38;5;7m- [0mSoft opening  [38;5;4mdue:2026-12-02[0m
+  [38;5;7m- [0mInvite the street  [38;5;4m#neighbours[0m  [38;5;4mstart:2026-11-16[0m  [38;5;4mest:3h[0m
+  [38;5;7m- [0mStock the shelves
+    [38;5;5m+ [0m[4m[[groceries]][0m
+[38;5;7m- [0mOpening day  [38;5;4mdue:2026-12-09[0m  [1m!![0m
+  [38;5;7m- [0mFree loaf for the first 50 through the door
+  [38;5;7m- [0mPhotos for the local paper  [38;5;6m@dana[0m
+=== lease.sprig
+[1mLease  [0m[38;5;6m@dana[0m[1m
+[0m
+[38;5;8mx Shortlist three spaces  [0m[38;5;4mest:2d[0m[38;5;8m
+[0m  41 Mill Street won. Corner frontage, three-phase power already in,
+  and the landlord will split the cost of a new shopfront.
+[38;5;3m~ [0mNegotiate terms  [38;5;3m^terms[0m  [38;5;4mdue:2026-10-05[0m  [1m!!![0m
+  [38;5;8mx Eight weeks rent-free for the fit-out
+[0m  [38;5;3m~ [0mBreak clause at year three
+  [38;5;5m? [0mWho pays for the grease trap?
+    Landlord says us. Our lawyer says it's a fixture.
+[38;5;7m- [0mChange-of-use permit  [38;5;3m^permit[0m  [38;5;4mest:3w[0m
+  Class E covers a bakery, but seating for more than 12 needs a variation.
+[38;5;7m- [0mSign the lease  [38;5;3m^signed[0m  [38;5;5mafter:^terms[0m  [38;5;5mafter:^permit[0m

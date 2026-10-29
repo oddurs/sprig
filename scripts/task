@@ -26,6 +26,8 @@ usage: scripts/task <target>
   backlog    cairn check --strict, and ROADMAP.md is up to date (needs cairn)
   wasm       build sprig-core for the browser, into site/src/generated/sprig.wasm
   site       build the website, check tokens, contrast, links and accessibility (needs node, chrome)
+  editors    test the TextMate and tree-sitter grammars and the VS Code extension (needs node, a display)
+  perf       time parse, resolve and check against the committed baseline, in release builds
 USAGE
 }
 
@@ -93,6 +95,52 @@ case "${1:-}" in
     npm --prefix site run build
     # axe in both themes; GitHub's runners ship Chrome, locally set CHROME_PATH if needed
     npm --prefix site run a11y
+    ;;
+  editors)
+    # The TextMate grammar's snapshots, the tree-sitter grammar's corpus and
+    # highlight snapshot (its agreement with the core runs under cargo test),
+    # and the VS Code extension in a real VS Code, which needs a display: CI
+    # runs this under xvfb-run. TREE_SITTER names a tree-sitter CLI to use
+    # instead of the npm one, whose install downloads from GitHub.
+    command -v npm >/dev/null 2>&1 || {
+      printf 'scripts/task: npm is not installed; the editors need Node\n' >&2
+      exit 1
+    }
+    npm --prefix editors ci --no-audit --no-fund ${TREE_SITTER:+--ignore-scripts}
+    npm --prefix editors run test:textmate
+    ts=${TREE_SITTER:-$PWD/editors/node_modules/.bin/tree-sitter}
+    (
+      cd editors/tree-sitter-sprig
+      # ABI 14 loads in Neovim 0.9 and every newer tree-sitter host.
+      TREE_SITTER_DIR="$PWD/test/config" "$ts" generate --abi 14
+      # The generated parser is committed, so it must be what grammar.js says.
+      git diff --exit-code -- src || {
+        printf '\nscripts/task: src/ is stale; run tree-sitter generate in editors/tree-sitter-sprig and commit it\n' >&2
+        exit 1
+      }
+      TREE_SITTER_DIR="$PWD/test/config" "$ts" test
+      TREE_SITTER="$ts" test/highlight.sh
+      # The Neovim section of the editor guide, followed on a clean config.
+      if command -v nvim >/dev/null 2>&1; then
+        so=$(mktemp -d)/sprig.so
+        TREE_SITTER_DIR="$PWD/test/config" "$ts" build -o "$so"
+        cargo build --locked -p sprig-cli
+        work=$(mktemp -d)
+        cp ../../examples/bakery/*.sprig "$work"
+        nvim --headless --clean -u NONE -l ../neovim/test.lua "$(cd ../.. && pwd)/target/debug/sprig" "$so" "$work"
+      else
+        printf 'scripts/task: nvim is not installed; the Neovim guide was not followed\n' >&2
+      fi
+    )
+    cargo build --locked -p sprig-cli
+    npm --prefix editors/vscode ci --no-audit --no-fund
+    npm --prefix editors/vscode test
+    ;;
+  perf)
+    # The baseline gate and the language server's 50 ms keystroke criterion,
+    # both in release builds; see crates/sprig-core/benches/README.md.
+    cargo bench --locked -p sprig-core --bench workspace
+    cargo test --locked --release -p sprig-lsp --test lsp rechecking_a_large_workspace_after_a_keystroke_is_quick -- --nocapture
     ;;
   backlog)
     command -v cairn >/dev/null 2>&1 || {

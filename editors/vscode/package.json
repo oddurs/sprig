@@ -1,0 +1,49 @@
+{
+  "name": "sprig",
+  "displayName": "Sprig",
+  "description": "Plain-text plans: highlighting, problems as you type, completion and ticking for .sprig files",
+  "version": "0.0.0",
+  "publisher": "oddurs",
+  "license": "MIT",
+  "private": true,
+  "repository": { "type": "git", "url": "https://github.com/oddurs/sprig" },
+  "engines": { "vscode": "^1.90.0" },
+  "categories": ["Programming Languages", "Formatters"],
+  "activationEvents": ["workspaceContains:**/*.sprig"],
+  "main": "./src/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "sprig",
+        "aliases": ["Sprig", "sprig"],
+        "extensions": [".sprig"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      { "language": "sprig", "scopeName": "source.sprig", "path": "./syntaxes/sprig.tmLanguage.json" }
+    ],
+    "configuration": {
+      "title": "Sprig",
+      "properties": {
+        "sprig.server.path": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "The `sprig` binary to run as the language server. Empty uses the one bundled with the extension, then `sprig` on your `PATH`."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "prepare-grammar": "node scripts/prepare.js",
+    "test": "node scripts/prepare.js && node test/run.js",
+    "package": "node scripts/prepare.js && vsce package"
+  },
+  "dependencies": {
+    "vscode-languageclient": "9.0.1"
+  },
+  "devDependencies": {
+    "@vscode/test-electron": "3.1.0",
+    "@vscode/vsce": "4.1.0"
+  }
+}

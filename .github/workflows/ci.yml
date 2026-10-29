@@ -91,12 +91,35 @@ jobs:
           cache-dependency-path: site/package-lock.json
       - run: ./scripts/task site
 
+  editors:
+    # The grammars and the VS Code extension. The extension test downloads VS
+    # Code and runs it on examples/bakery/, so it needs a display.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: site/.node-version
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      # The editor guide's Neovim section is followed in CI, on a clean config.
+      - run: sudo apt-get update -q && sudo apt-get install -y -q neovim
+      - run: xvfb-run -a ./scripts/task editors
+
+  perf:
+    # Release builds, on the runner the baseline was measured on: more than
+    # twice the baseline fails, and so does a keystroke slower than 50 ms.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - run: ./scripts/task perf
+
   # The one status check branch protection requires. It exists so that adding a
   # job never means editing a protection rule.
   required:
     name: required
     if: always()
-    needs: [check, install, backlog, site]
+    needs: [check, install, backlog, site, editors, perf]
     runs-on: ubuntu-latest
     steps:
       - name: Every job succeeded
@@ -115,5 +138,13 @@ jobs:
           fi
           if [ "${{ needs.site.result }}" != "success" ]; then
             echo "site: ${{ needs.site.result }}"
+            exit 1
+          fi
+          if [ "${{ needs.editors.result }}" != "success" ]; then
+            echo "editors: ${{ needs.editors.result }}"
+            exit 1
+          fi
+          if [ "${{ needs.perf.result }}" != "success" ]; then
+            echo "perf: ${{ needs.perf.result }}"
             exit 1
           fi

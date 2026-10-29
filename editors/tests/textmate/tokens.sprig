@@ -1,0 +1,14 @@
+Tokens
+
+- People  @dana @jo-ann @t_eo @dana.k
+- Not people  @jo, dana@example.org
+- Tags  #market #2026_q4 #café
+- Priority  ! !! !!!
+- Not priority  !!!! !important
+- Anchors  ^van ^step-1
+- Fields  due:fri  est:2h  Budget:64k  vendor:"Mono Ovens"  vendor:""
+- Not fields  https://example.org  2:30  key:
+- After  after:^van  after:[[lease^signed]]  after:[[kitchen]]
+- Links  see [[kitchen]] and [[rooms/hall^a]], not [[my notes]]
+- Unclosed  where:"41 Mill Street
+- Unicode  @jón  ^þing  lykill:gildi

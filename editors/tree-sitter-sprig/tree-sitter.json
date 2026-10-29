@@ -1,0 +1,19 @@
+{
+  "grammars": [
+    {
+      "name": "sprig",
+      "camelcase": "Sprig",
+      "scope": "source.sprig",
+      "path": ".",
+      "file-types": ["sprig"],
+      "highlights": "queries/highlights.scm"
+    }
+  ],
+  "metadata": {
+    "version": "0.0.0",
+    "license": "MIT",
+    "description": "Sprig grammar for tree-sitter",
+    "links": { "repository": "https://github.com/oddurs/sprig" }
+  },
+  "bindings": { "c": false, "go": false, "node": false, "python": false, "rust": false, "swift": false }
+}
