@@ -10,12 +10,13 @@ use std::path::Path;
 use std::process::{Command, ExitCode};
 
 use sprig_core::edit::{self, Change, Place};
-use sprig_core::workspace::{Resolved, Wait};
+use sprig_core::workspace::Resolved;
 use sprig_core::{Date, Resolution, Workspace, refs, syntax};
 
 use crate::Result;
 use crate::args::{AddArgs, AnswerArgs, EditArgs, MarkArgs};
 use crate::load::{self, Loaded};
+use crate::views::wait_label;
 use crate::write::{save, write_error};
 
 /// The workspace a write acts on, and the one item a ref names in it.
@@ -172,14 +173,7 @@ pub(crate) fn freed<'r>(
         .into_iter()
         .map(|node| Freed {
             node,
-            still: node
-                .waits_on
-                .iter()
-                .map(|w| match w {
-                    Wait::Reference { label, .. } => label.clone(),
-                    Wait::Start(d) => format!("its start, {d}"),
-                })
-                .collect(),
+            still: node.waits_on.iter().map(wait_label).collect(),
         })
         .collect()
 }

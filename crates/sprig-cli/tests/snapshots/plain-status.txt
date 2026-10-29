@@ -1,0 +1,6 @@
+examples/bakery/bakery.sprig	9	40	20	12	0	0
+examples/bakery/dana.sprig	1	6	4	1	0	0
+examples/bakery/groceries.sprig	3	10	7	0	0	0
+examples/bakery/kitchen.sprig	1	10	3	6	0	0
+examples/bakery/launch.sprig	4	19	11	4	0	0
+examples/bakery/lease.sprig	2	6	3	1	0	0

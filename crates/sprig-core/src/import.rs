@@ -5,6 +5,19 @@
 //! per level, notes at their item's children's depth, one line ending at the
 //! end) and that `sprig check` accepts, so the first thing a person does with
 //! an import is read it, not fix it.
+//!
+//! # Example
+//!
+//! ```
+//! use sprig_core::import;
+//!
+//! let md = import::markdown("# Move\n\n- [x] Book a van\n- [ ] Pack\n", "move");
+//! assert_eq!(md, "Move\n\nx Book a van\n- Pack\n");
+//! let todo = import::todotxt("(A) Call the bank +money\n", "errands");
+//! assert_eq!(todo, "errands\n\n- Call the bank #money !!!\n");
+//! let gh = import::github(r#"[{"number": 7, "title": "Fix it", "state": "OPEN"}]"#, "Issues").unwrap();
+//! assert_eq!(gh, "Issues\n\n- Fix it  issue:7\n");
+//! ```
 
 use serde_json::Value;
 

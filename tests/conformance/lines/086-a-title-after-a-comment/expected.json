@@ -1,0 +1,20 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Launch",
+    "root": {
+      "line": 2,
+      "span": [9, 15],
+      "text": "Launch",
+      "children": [
+        {
+          "line": 4,
+          "span": [17, 22],
+          "mark": "-",
+          "text": "One"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

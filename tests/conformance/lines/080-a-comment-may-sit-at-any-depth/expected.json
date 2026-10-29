@@ -1,0 +1,67 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Comments",
+    "root": {
+      "line": 1,
+      "span": [0, 8],
+      "text": "Comments",
+      "children": [
+        {
+          "line": 4,
+          "span": [17, 24],
+          "mark": "-",
+          "text": "Thing",
+          "children": [
+            {
+              "line": 6,
+              "span": [39, 46],
+              "mark": "-",
+              "text": "Child"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Comments",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 1
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 4,
+        "mark": "-",
+        "label": "Thing",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 6,
+            "mark": "-",
+            "label": "Child",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

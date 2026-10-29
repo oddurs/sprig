@@ -190,11 +190,40 @@ $ sprig check move.sprig
 move.sprig:3:3: error[S0101]: no file named pakcing.sprig
 ```
 
-It exits 1 on an error, so it can guard a repository. In GitHub Actions:
+It exits 1 on an error, so it can guard a repository. In GitHub Actions, the
+[Sprig action](https://github.com/oddurs/sprig/tree/main/action) checks every
+plan and summarises what each pull request did to them:
 
 ```yaml
-- run: cargo install --locked --git https://github.com/oddurs/sprig sprig-cli && sprig check --strict .
+- uses: oddurs/sprig/action@main
 ```
+
+## 8. Work it from your editor, and hand it to an agent
+
+Fix the graft again, and tick the van as booked:
+
+{/* edit: move.sprig: [[pakcing]] => [[packing]] */}
+```console
+$ sprig tick van
+move.sprig:4  x Book a van
+```
+
+A ref is any words that match one item, an `^anchor`, or `file:line`. In VS Code,
+Neovim or any editor with a language server, the same tick is one action on the
+line, and problems show as you type: [set up your editor](/docs/editors/).
+
+For a project, the plan lives at the root as `PLAN.sprig`. To have a coding
+agent read it before it starts and keep it up to date as it works, add the
+instructions to the file the agent reads:
+
+```console
+$ sprig agent --write AGENTS.md
+```
+
+Then register the MCP server with the agent. `sprig mcp --config` prints the
+snippet for `.mcp.json`. The agent can then ask what is next, tick what it
+finishes and add the steps it plans, and every change it makes shows up as a
+diff: [plans for coding agents](/docs/agents/).
 
 That's the whole idea. From here:
 

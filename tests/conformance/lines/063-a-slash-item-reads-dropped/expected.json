@@ -1,0 +1,46 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Marks",
+    "root": {
+      "line": 1,
+      "span": [0, 5],
+      "text": "Marks",
+      "children": [
+        {
+          "line": 3,
+          "span": [7, 14],
+          "mark": "/",
+          "text": "Thing"
+        }
+      ]
+    }
+  },
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Marks",
+    "status": "empty",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 0
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "/",
+        "label": "Thing",
+        "status": "dropped",
+        "settled": true,
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 0
+        }
+      }
+    ]
+  },
+  "diagnostics": []
+}

@@ -1,0 +1,155 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Deep",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 1
+    },
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "L0",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "-",
+            "label": "L1",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "children": [
+              {
+                "file": "main.sprig",
+                "line": 5,
+                "mark": "-",
+                "label": "L2",
+                "status": "todo",
+                "progress": {
+                  "done": 0,
+                  "doing": 0,
+                  "total": 1
+                },
+                "children": [
+                  {
+                    "file": "main.sprig",
+                    "line": 6,
+                    "mark": "-",
+                    "label": "L3",
+                    "status": "todo",
+                    "progress": {
+                      "done": 0,
+                      "doing": 0,
+                      "total": 1
+                    },
+                    "children": [
+                      {
+                        "file": "main.sprig",
+                        "line": 7,
+                        "mark": "-",
+                        "label": "L4",
+                        "status": "todo",
+                        "progress": {
+                          "done": 0,
+                          "doing": 0,
+                          "total": 1
+                        },
+                        "children": [
+                          {
+                            "file": "main.sprig",
+                            "line": 8,
+                            "mark": "-",
+                            "label": "L5",
+                            "status": "todo",
+                            "progress": {
+                              "done": 0,
+                              "doing": 0,
+                              "total": 1
+                            },
+                            "children": [
+                              {
+                                "file": "main.sprig",
+                                "line": 9,
+                                "mark": "-",
+                                "label": "L6",
+                                "status": "todo",
+                                "progress": {
+                                  "done": 0,
+                                  "doing": 0,
+                                  "total": 1
+                                },
+                                "children": [
+                                  {
+                                    "file": "main.sprig",
+                                    "line": 10,
+                                    "mark": "-",
+                                    "label": "L7",
+                                    "status": "todo",
+                                    "progress": {
+                                      "done": 0,
+                                      "doing": 0,
+                                      "total": 1
+                                    },
+                                    "children": [
+                                      {
+                                        "file": "main.sprig",
+                                        "line": 11,
+                                        "mark": "-",
+                                        "label": "L8",
+                                        "status": "todo",
+                                        "progress": {
+                                          "done": 0,
+                                          "doing": 0,
+                                          "total": 1
+                                        },
+                                        "children": [
+                                          {
+                                            "file": "main.sprig",
+                                            "line": 12,
+                                            "mark": "-",
+                                            "label": "L9",
+                                            "status": "todo",
+                                            "progress": {
+                                              "done": 0,
+                                              "doing": 0,
+                                              "total": 1
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

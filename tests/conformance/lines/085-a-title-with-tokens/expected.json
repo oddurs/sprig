@@ -1,0 +1,53 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Launch",
+    "root": {
+      "line": 1,
+      "span": [0, 32],
+      "text": "Launch",
+      "people": ["kim"],
+      "priority": 2,
+      "fields": {
+        "due": "2026-12-05"
+      },
+      "children": [
+        {
+          "line": 3,
+          "span": [34, 39],
+          "mark": "-",
+          "text": "One"
+        }
+      ]
+    }
+  },
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Launch",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 1
+    },
+    "people": ["kim"],
+    "due": "2026-12-05",
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "One",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "people": ["kim"]
+      }
+    ]
+  },
+  "diagnostics": []
+}

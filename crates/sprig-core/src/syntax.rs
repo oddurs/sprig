@@ -3,6 +3,33 @@
 //! The syntax tree holds only what the file says. Nothing here looks at another
 //! file or at the date, so the parser can be tested on its own and a tree means
 //! the same thing wherever it was built.
+//!
+//! # Example
+//!
+//! ```
+//! use sprig_core::syntax::{self, LineKind, Mark};
+//! use sprig_core::{Date, parse};
+//!
+//! let p = parse("plan.sprig", "Plan\n\n# Kit\n  - Oven  !!\n    Mono quoted 12.9k.\n");
+//! assert_eq!(p.document.title.as_deref(), Some("Plan"));
+//! let kit = &p.document.root.children[0];
+//! assert_eq!(kit.mark, Some(Mark::Group));
+//! assert!(Mark::Group.is_structure() && Mark::Group.as_char() == '#');
+//! assert_eq!(kit.children[0].notes[0].text(), "Mono quoted 12.9k.");
+//! let mut count = 0;
+//! syntax::walk(&p.document.root, &mut |_| count += 1);
+//! assert_eq!(count, 2);
+//!
+//! // Line by line, for an editor.
+//! let lines = syntax::lex("Plan\n// note to self\n- Go\n");
+//! assert_eq!(lines[1].kind, LineKind::Comment);
+//! assert_eq!(lines[2].kind.as_str(), "item");
+//!
+//! // One line at a time, as a playground or an editor's quick fix does.
+//! let today = Date::new(2026, 10, 1).unwrap();
+//! assert_eq!(syntax::expand_dates("- Call  due:fri", today), "- Call  due:2026-10-02");
+//! assert_eq!(syntax::tick("- Call", today).unwrap().line, "x Call");
+//! ```
 
 use crate::date;
 use crate::diagnostic::{Code, Diagnostic, LineIndex, Span};
@@ -11,13 +38,21 @@ use crate::token::{self, Tokens};
 /// The mark that starts an item line (§2.2).
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Mark {
+    /// `-`: to do.
     Todo,
+    /// `~`: doing.
     Doing,
+    /// `x`: done.
     Done,
+    /// `/`: dropped.
     Dropped,
+    /// `>`: later.
     Later,
+    /// `?`: a question.
     Question,
+    /// `#`: a group, whose status comes from its items (§2.4).
     Group,
+    /// `+`: a graft (§8).
     Graft,
 }
 
@@ -36,6 +71,7 @@ impl Mark {
         })
     }
 
+    /// The character that writes it.
     pub fn as_char(self) -> char {
         match self {
             Mark::Todo => '-',
@@ -68,6 +104,7 @@ pub struct NoteLine {
 /// Consecutive note lines of one item (§2.6).
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Paragraph {
+    /// Its lines, in order.
     pub lines: Vec<NoteLine>,
 }
 
@@ -82,9 +119,11 @@ impl Paragraph {
 /// A `= ` line (§2.5).
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Answer {
+    /// Its tokens (§4).
     pub tokens: Tokens,
     /// 1-based.
     pub line: usize,
+    /// The line after its indentation.
     pub span: Span,
 }
 
@@ -93,6 +132,7 @@ pub struct Answer {
 pub struct Node {
     /// `None` for the root.
     pub mark: Option<Mark>,
+    /// Its tokens (§4); the root's are the title's.
     pub tokens: Tokens,
     /// 1-based line number. For the root, the title's line, or 0 when the
     /// file has no title.
@@ -102,8 +142,11 @@ pub struct Node {
     pub span: Option<Span>,
     /// Indentation in columns (§3.1). The root's is irrelevant and reads 0.
     pub indent: usize,
+    /// Its note paragraphs (§2.6).
     pub notes: Vec<Paragraph>,
+    /// Its answer lines (§2.5).
     pub answers: Vec<Answer>,
+    /// Its child items, in written order.
     pub children: Vec<Node>,
 }
 
@@ -112,13 +155,16 @@ pub struct Node {
 pub struct Document {
     /// The title's text, when the file has a title (§1.2).
     pub title: Option<String>,
+    /// The root: the title, or an empty node when there is none, holding the items.
     pub root: Node,
 }
 
 /// A document and the problems found reading it.
 #[derive(Clone, Debug)]
 pub struct Parsed {
+    /// The tree the file writes.
     pub document: Document,
+    /// Problems found in this file alone.
     pub diagnostics: Vec<Diagnostic>,
 }
 
@@ -189,27 +235,37 @@ struct Building {
 /// What one line of a file is, for an editor that colours it.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Lexed {
+    /// What the line is.
     pub kind: LineKind,
     /// The line after indentation, as in a node's span.
     pub span: Span,
     /// The mark, the `=`, the backslash or the `//`, when the line has one.
     pub marker: Option<Span>,
+    /// The tokens in it that an editor colours, in order.
     pub pieces: Vec<(token::Piece, Span)>,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+/// The kinds of line (§2.1).
 pub enum LineKind {
+    /// Nothing but whitespace.
     Blank,
+    /// The title (§1.2).
     Title,
+    /// A `//` comment (§2.7).
     Comment,
+    /// A note (§2.6).
     Note,
     /// A note written with a leading backslash (§2.8).
     Escaped,
+    /// An item, with its mark.
     Item(Mark),
+    /// An `=` answer (§2.5).
     Answer,
 }
 
 impl LineKind {
+    /// The kind as a word, such as `item` or `note`, for an editor's scopes.
     pub fn as_str(self) -> &'static str {
         match self {
             LineKind::Blank => "blank",
@@ -338,6 +394,7 @@ pub fn expand_dates(line: &str, today: crate::date::Date) -> String {
 /// One line, ticked (§10.4).
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Ticked {
+    /// The line as it reads after the tick.
     pub line: String,
     /// For a recurring item, the due date it moved to; it stays open.
     pub moved_to: Option<crate::date::Date>,
@@ -541,7 +598,7 @@ fn assemble(arena: &mut [Building], id: usize) -> Node {
 
 /// Reads an estimate (§10.1) as hours: a number and `h`, `d` (8 hours) or `w`
 /// (40 hours).
-pub fn estimate_hours(value: &str) -> Option<f64> {
+pub(crate) fn estimate_hours(value: &str) -> Option<f64> {
     let unit = value.chars().last()?;
     let hours = match unit.to_ascii_lowercase() {
         'h' => 1.0,

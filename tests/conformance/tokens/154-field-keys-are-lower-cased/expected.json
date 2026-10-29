@@ -1,0 +1,24 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Tokens",
+    "root": {
+      "line": 1,
+      "span": [0, 6],
+      "text": "Tokens",
+      "children": [
+        {
+          "line": 3,
+          "span": [8, 34],
+          "mark": "-",
+          "text": "Pay",
+          "fields": {
+            "vendor": "Mono",
+            "vat": "20"
+          }
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

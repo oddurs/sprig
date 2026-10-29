@@ -3,13 +3,13 @@ id: 80
 uid: e9f11cbf-6e15-4a04-ad3a-f39340b42d48
 title: Fuzz the parser and the edit API
 type: chore
-status: planned
+status: doing
 milestone: v1.0
 depends_on:
 - 14
 - 43
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-10-29
 priority: p1
 effort: s
 area: core

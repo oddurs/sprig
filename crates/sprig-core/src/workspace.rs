@@ -12,6 +12,41 @@
 //! down from wherever it is mounted. A reference (§7.2) asks about the file
 //! that writes the anchor, in that file's own tree, so its answer does not
 //! depend on who is asking.
+//!
+//! # Example
+//!
+//! ```
+//! use sprig_core::workspace::{Status, Workspace, link_target};
+//! use sprig_core::Date;
+//!
+//! let mut ws = Workspace::new();
+//! ws.insert("plan.sprig", "Plan\n\n+ [[lease]]\n- Fit-out  after:[[lease^signed]]\n");
+//! // A loader adds what grafts and references name, a file at a time.
+//! assert_eq!(ws.wanted().into_iter().collect::<Vec<_>>(), ["lease.sprig"]);
+//! ws.insert("lease.sprig", "Lease\n\n- Sign  ^signed\n");
+//! assert!(ws.wanted().is_empty());
+//! assert_eq!(ws.files().count(), 2);
+//!
+//! let res = ws.resolve(Date::new(2026, 10, 1).unwrap());
+//! // The lease is grafted, so the plan is the only root.
+//! assert_eq!(res.roots(), ["plan.sprig"]);
+//! assert_eq!(res.trees().count(), 2);
+//! let plan = &res.tree("plan.sprig").unwrap().root;
+//! let fit_out = &plan.children[1];
+//! assert!(fit_out.is_leaf() && fit_out.blocked);
+//! assert_eq!(fit_out.status.as_str(), "todo");
+//! assert!(Status::Todo.is_open() && !Status::Done.is_open());
+//!
+//! // A file that is named but missing is recorded, so it is not asked for again.
+//! ws.remove("lease.sprig");
+//! ws.mark_absent("lease.sprig");
+//! assert!(ws.wanted().is_empty());
+//! assert!(!ws.resolve(Date::new(2026, 10, 1).unwrap()).diagnostics.is_empty());
+//!
+//! // Links are resolved from the file that writes them, inside the root only.
+//! assert_eq!(link_target("plans/a.sprig", "../b.sprig").as_deref(), Some("b.sprig"));
+//! assert_eq!(link_target("a.sprig", "../../etc.sprig"), None);
+//! ```
 
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::rc::Rc;
@@ -34,6 +69,7 @@ pub struct Workspace {
 }
 
 impl Workspace {
+    /// An empty workspace.
     pub fn new() -> Workspace {
         Workspace::default()
     }
@@ -62,6 +98,7 @@ impl Workspace {
         self.absent.insert(path.into());
     }
 
+    /// Every file with its text, in path order.
     pub fn files(&self) -> impl Iterator<Item = (&str, &str)> {
         self.files
             .iter()
@@ -166,6 +203,7 @@ impl Workspace {
 /// Every file, parsed and resolved.
 #[derive(Clone, Debug)]
 pub struct Resolution {
+    /// Every file of the workspace as parsed, by path.
     pub parsed: BTreeMap<String, Arc<Parsed>>,
     trees: BTreeMap<String, Tree>,
     /// Every problem in every file, sorted by place.
@@ -179,6 +217,7 @@ impl Resolution {
         self.trees.get(file)
     }
 
+    /// Every file's tree, in path order.
     pub fn trees(&self) -> impl Iterator<Item = &Tree> {
         self.trees.values()
     }
@@ -196,24 +235,33 @@ impl Resolution {
 /// One file's tree with grafts mounted and everything computed.
 #[derive(Clone, Debug, PartialEq)]
 pub struct Tree {
+    /// The file it is the tree of.
     pub file: String,
+    /// Its root: the title, holding the items and the grafts mounted under them.
     pub root: Resolved,
 }
 
 /// Status after settling (§5.2) and derivation (§5.5).
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Status {
+    /// To do.
     Todo,
+    /// Doing.
     Doing,
+    /// Done, or an answered question.
     Done,
+    /// Dropped.
     Dropped,
+    /// Later.
     Later,
+    /// An unanswered question.
     Question,
     /// A group, graft or root with nothing beneath it that counts.
     Empty,
 }
 
 impl Status {
+    /// The status as the tree format writes it, such as `todo` or `empty`.
     pub fn as_str(self) -> &'static str {
         match self {
             Status::Todo => "todo",
@@ -251,8 +299,11 @@ impl Status {
 /// Counting leaves beneath a node (§5.4).
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub struct Progress {
+    /// Counting leaves done.
     pub done: usize,
+    /// Counting leaves in progress.
     pub doing: usize,
+    /// Counting leaves in all (§5.3).
     pub total: usize,
 }
 
@@ -262,11 +313,13 @@ pub struct Graft {
     /// The grafted file, workspace-relative. Empty when the line has no link
     /// or its path could not be resolved.
     pub path: String,
+    /// For a branch graft, the anchor it mounts.
     pub anchor: Option<String>,
     /// The grafted file's title, or the anchored item's text (§8.3).
     pub title: String,
     /// The mounted branch's notes and, for a branch, its answers.
     pub notes: Vec<String>,
+    /// For a branch graft, the anchored item's answers.
     pub answers: Vec<String>,
     /// False when the graft is an error and mounted nothing.
     pub mounted: bool,
@@ -279,7 +332,9 @@ pub struct Graft {
 
 /// Something an open item waits on (§7.3, §7.5).
 #[derive(Clone, Debug, PartialEq)]
+#[non_exhaustive]
 pub enum Wait {
+    /// An `after:` value naming something unfinished, or nothing at all (§7.2).
     Reference {
         /// The `after:` value as written.
         value: String,
@@ -290,6 +345,7 @@ pub enum Wait {
         /// The file and line of what it names, when it names something.
         target: Option<(String, usize)>,
     },
+    /// A start date still ahead (§7.5).
     Start(Date),
 }
 
@@ -309,29 +365,37 @@ pub struct Resolved {
     pub tokens: Arc<Tokens>,
     /// Mounted here by a graft from another file.
     pub grafted: bool,
+    /// On a `+` line, what it mounts and whether it could.
     pub graft: Option<Graft>,
+    /// After settling (§5.2) and derivation (§5.5).
     pub status: Status,
     /// A question with an answer (§2.5).
     pub answered: bool,
     /// Its status came from an `x`, `/` or `>` on it or above it (§5.2).
     pub settled: bool,
+    /// Counting leaves beneath, done and in progress (§5.4).
     pub progress: Progress,
     /// Remaining estimate in hours (§10.2).
     pub estimate: f64,
+    /// Its people after §6.1: its own, or those it inherits.
     pub people: Vec<String>,
     /// Its own `due:` and `start:`, read against today; `None` when absent
     /// or unreadable.
     pub due: Option<Date>,
+    /// Its own `start:`, read against today.
     pub start: Option<Date>,
+    /// Blocked by its own waits or by an ancestor's (§7.3).
     pub blocked: bool,
     /// What this item itself waits on; inherited blocking is in `blocked`.
     pub waits_on: Vec<Wait>,
     /// Written open, with every counting leaf beneath it done (§5.6).
     pub ready_to_close: bool,
+    /// Its written children, then the items a graft on it mounted.
     pub children: Vec<Resolved>,
 }
 
 impl Resolved {
+    /// Whether it has no children.
     pub fn is_leaf(&self) -> bool {
         self.children.is_empty()
     }

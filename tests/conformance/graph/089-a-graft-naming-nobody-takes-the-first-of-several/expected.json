@@ -1,0 +1,52 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "People",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 1
+    },
+    "people": ["a"],
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "+",
+        "label": "Side",
+        "status": "todo",
+        "graft": {
+          "path": "side.sprig",
+          "title": "Side",
+          "mounted": true
+        },
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "people": ["s"],
+        "children": [
+          {
+            "file": "side.sprig",
+            "line": 3,
+            "mark": "-",
+            "label": "One",
+            "status": "todo",
+            "grafted": true,
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "people": ["s"]
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

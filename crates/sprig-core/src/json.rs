@@ -4,6 +4,26 @@
 //! written, so a conformance example states only what matters to it; a reader
 //! treats a missing key as its empty value. The schema says which keys may be
 //! missing.
+//!
+//! # Example
+//!
+//! ```
+//! use sprig_core::{Date, Workspace, json, parse};
+//!
+//! let mut ws = Workspace::new();
+//! ws.insert("plan.sprig", "Plan\n\n- Logo  @kim\n");
+//! let today = Date::new(2026, 10, 1).unwrap();
+//! let res = ws.resolve(today);
+//!
+//! let doc = json::tree_document(&res, "plan.sprig", today).unwrap();
+//! assert_eq!(doc["sprig_tree"], 1);
+//! assert_eq!(doc["resolved"]["children"][0]["people"][0], "kim");
+//! // The layers, one at a time.
+//! let tree = &res.tree("plan.sprig").unwrap().root;
+//! assert_eq!(json::resolved(tree)["label"], "Plan");
+//! assert_eq!(json::syntax(&parse("plan.sprig", "Plan\n").document)["title"], "Plan");
+//! assert_eq!(json::diagnostics(&res.diagnostics), serde_json::json!([]));
+//! ```
 
 use serde_json::{Map, Value, json};
 
@@ -221,6 +241,8 @@ fn hours(h: f64) -> Value {
     }
 }
 
+/// Diagnostics in the tree format (spec Appendix D.4): `code`, `severity`,
+/// `file`, `line`, `col`, `span`, `message` and, when there is one, `help`.
 pub fn diagnostics(ds: &[Diagnostic]) -> Value {
     let out: Vec<Value> = ds
         .iter()

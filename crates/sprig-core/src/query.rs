@@ -6,6 +6,23 @@
 //! other word must appear in its text, ignoring case. A word that looks like a
 //! filter but is not one is an error, so a typo never quietly matches
 //! nothing.
+//!
+//! # Example
+//!
+//! ```
+//! use sprig_core::{Date, Workspace, query};
+//!
+//! let mut ws = Workspace::new();
+//! ws.insert("plan.sprig", "Plan\n\n- Logo  @kim  due:2026-10-02\n- Menus  @teo\n");
+//! let today = Date::new(2026, 10, 1).unwrap();
+//! let res = ws.resolve(today);
+//!
+//! let q = query::parse("@kim due:<=fri", today).unwrap();
+//! let hits = query::find(&res, &q);
+//! assert_eq!(hits.len(), 1);
+//! assert!(q.matches(hits[0].node));
+//! assert!(query::parse("colour:red", today).is_err());
+//! ```
 
 use std::fmt;
 
@@ -14,16 +31,23 @@ use crate::workspace::{Resolution, Resolved, Status};
 
 /// A state `is:` asks about.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum Is {
     /// To do, doing, or an unanswered question (§7.1).
     Open,
+    /// Written or settled to do.
     Todo,
+    /// In progress.
     Doing,
+    /// Done, or an answered question.
     Done,
+    /// Dropped.
     Dropped,
+    /// Deferred.
     Later,
     /// An unanswered question.
     Ask,
+    /// Open, and waiting on something (§7.3).
     Blocked,
 }
 
@@ -59,8 +83,11 @@ pub struct Query {
 
 /// Why a query could not be read.
 #[derive(Clone, Debug, PartialEq, Eq)]
+#[non_exhaustive]
 pub enum QueryError {
+    /// A `key:` term that is not a filter; the term as written.
     UnknownFilter(String),
+    /// A filter whose value cannot be read, such as `due:soon`; the term as written.
     BadValue(String),
 }
 
@@ -167,7 +194,9 @@ impl Query {
 /// An item that matched, with the labels of the items above it in its file.
 #[derive(Clone, Debug)]
 pub struct Hit<'r> {
+    /// The item that matched.
     pub node: &'r Resolved,
+    /// The labels from the top of its tree down to its parent.
     pub path: Vec<&'r str>,
 }
 

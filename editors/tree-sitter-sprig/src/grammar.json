@@ -150,7 +150,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_nl"
+          "name": "_eol"
         }
       ]
     },
@@ -196,7 +196,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_nl"
+          "name": "_eol"
         }
       ]
     },
@@ -263,7 +263,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_nl"
+          "name": "_eol"
         }
       ]
     },
@@ -288,7 +288,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_nl"
+          "name": "_eol"
         }
       ]
     },
@@ -314,7 +314,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_nl"
+          "name": "_eol"
         }
       ]
     },
@@ -350,7 +350,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "_nl"
+              "name": "_eol"
             }
           ]
         },
@@ -428,7 +428,7 @@
             },
             {
               "type": "SYMBOL",
-              "name": "_nl"
+              "name": "_eol"
             }
           ]
         },
@@ -583,7 +583,12 @@
   "extras": [],
   "conflicts": [],
   "precedences": [],
-  "externals": [],
+  "externals": [
+    {
+      "type": "SYMBOL",
+      "name": "_eol"
+    }
+  ],
   "inline": [],
   "supertypes": [],
   "reserved": {}

@@ -1,0 +1,20 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "x marks the spot",
+    "root": {
+      "line": 1,
+      "span": [0, 17],
+      "text": "x marks the spot",
+      "children": [
+        {
+          "line": 3,
+          "span": [19, 24],
+          "mark": "-",
+          "text": "Dig"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

@@ -1,0 +1,17 @@
+kitchen.sprig:1	0		Kitchen fit-out	doing	1	10
+kitchen.sprig^design	1	-	Design	todo	1	2
+kitchen.sprig:4	2	x	Layout sketch	done	1	1
+kitchen.sprig:5	2	~	Ventilation plan with the engineer	doing	0	1
+kitchen.sprig:8	1	#	Equipment	todo	0	3
+kitchen.sprig^oven	2	-	Deck oven, three decks	todo	0	2
+kitchen.sprig:11	3	-	Get a third quote	todo	0	1
+kitchen.sprig:12	3	-	Place the order	todo	0	1
+kitchen.sprig:13	2	-	Spiral mixer, 40 litres	todo	0	1
+kitchen.sprig:14	2	/	Proofing cabinet	dropped	0	0
+kitchen.sprig:16	2	>	Espresso machine	later	0	0
+kitchen.sprig:18	1	-	Build	todo	0	5
+kitchen.sprig:19	2	-	Strip out	todo	0	1
+kitchen.sprig:20	2	-	Plumbing and drains	todo	0	1
+kitchen.sprig:21	2	-	Three-phase electrics	todo	0	1
+kitchen.sprig:22	2	-	Tiling	todo	0	1
+kitchen.sprig:23	2	-	Install equipment	todo	0	1

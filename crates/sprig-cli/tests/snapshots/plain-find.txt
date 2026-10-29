@@ -1,0 +1,53 @@
+bakery.sprig:9	#	Money			doing
+bakery.sprig^loan	~	Equipment loan paperwork	Money	2026-10-07	doing
+bakery.sprig:15	-	Supplier credit line	Money		blocked
+bakery.sprig:16	-	Weekly numbers to the bank	Money	2026-10-02	todo
+bakery.sprig:18	+	Lease			doing
+bakery.sprig:19	+	Kitchen fit-out			doing
+bakery.sprig:20	+	Opening week			doing
+bakery.sprig^name	?	Kiln & Crumb, or Mill Street Bread?			question
+dana.sprig:6	+	Negotiate terms			doing
+dana.sprig:8	+	Deck oven, three decks			todo
+dana.sprig:9	-	Call the insurer about public liability		2026-10-03	todo
+groceries.sprig:3	#	Flour			doing
+groceries.sprig:4	-	Rye, 4 sacks	Flour		todo
+groceries.sprig:5	-	Strong white, 6 sacks	Flour		todo
+groceries.sprig:7	#	Dairy			doing
+groceries.sprig:9	-	Whole milk, 12 L	Dairy		todo
+groceries.sprig:10	#	Seeds			doing
+groceries.sprig:11	-	Sesame	Seeds		todo
+groceries.sprig:12	-	Nigella	Seeds		todo
+groceries.sprig:14	-	Paper bags, 1000			todo
+groceries.sprig:15	-	Flaky sea salt			todo
+kitchen.sprig^design	-	Design			todo
+kitchen.sprig:5	~	Ventilation plan with the engineer	Design	2026-10-12	doing
+kitchen.sprig:8	#	Equipment			todo
+kitchen.sprig^oven	-	Deck oven, three decks	Equipment		todo
+kitchen.sprig:11	-	Get a third quote	Equipment › Deck oven, three decks	2026-10-02	todo
+kitchen.sprig:12	-	Place the order	Equipment › Deck oven, three decks		blocked
+kitchen.sprig:13	-	Spiral mixer, 40 litres	Equipment		todo
+kitchen.sprig:18	-	Build			blocked
+kitchen.sprig:19	-	Strip out	Build		blocked
+kitchen.sprig:20	-	Plumbing and drains	Build		blocked
+kitchen.sprig:21	-	Three-phase electrics	Build		blocked
+kitchen.sprig:22	-	Tiling	Build		blocked
+kitchen.sprig:23	-	Install equipment	Build		blocked
+launch.sprig:3	#	Brand			doing
+launch.sprig^logo	~	Logo, second round	Brand	2026-10-14	doing
+launch.sprig:6	-	Window lettering	Brand		blocked
+launch.sprig:7	-	Menu boards	Brand		blocked
+launch.sprig:8	#	Hiring			doing
+launch.sprig^counter	-	Two counter staff	Hiring	2026-11-05	todo
+launch.sprig:12	-	Morning rota	Hiring		blocked
+launch.sprig:13	-	Soft opening		2026-12-02	todo
+launch.sprig:14	-	Invite the street	Soft opening		blocked
+launch.sprig:15	-	Stock the shelves	Soft opening		todo
+launch.sprig:16	+	Supply run	Soft opening › Stock the shelves		doing
+launch.sprig:17	-	Opening day		2026-12-09	todo
+launch.sprig:18	-	Free loaf for the first 50 through the door	Opening day		todo
+launch.sprig:19	-	Photos for the local paper	Opening day		todo
+lease.sprig^terms	~	Negotiate terms		2026-10-05	doing
+lease.sprig:8	~	Break clause at year three	Negotiate terms		doing
+lease.sprig:9	?	Who pays for the grease trap?	Negotiate terms		question
+lease.sprig^permit	-	Change-of-use permit			todo
+lease.sprig^signed	-	Sign the lease			blocked

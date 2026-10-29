@@ -1,0 +1,29 @@
+[package]
+name = "sprig-core-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+sprig-core = { path = ".." }
+
+# Built by cargo-fuzz on nightly, never by the workspace.
+[workspace]
+
+[[bin]]
+name = "parse"
+path = "fuzz_targets/parse.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "edits"
+path = "fuzz_targets/edits.rs"
+test = false
+doc = false
+bench = false

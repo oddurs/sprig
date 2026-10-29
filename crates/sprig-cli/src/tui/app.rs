@@ -10,12 +10,12 @@ use std::collections::HashSet;
 
 use sprig_core::edit::{self, Place};
 use sprig_core::next;
-use sprig_core::workspace::{Resolution, Resolved, Status, Tree, Wait};
+use sprig_core::workspace::{Resolution, Resolved, Status, Tree};
 use sprig_core::{Date, Mark, Workspace, agenda};
 
 use crate::data::day as day_name;
 use crate::verbs::item_line;
-use crate::views::{glyph, hours, relative};
+use crate::views::{glyph, hours, relative, wait_label};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum View {
@@ -663,14 +663,7 @@ impl App {
             let p = n.progress;
             lines.push(("progress".into(), format!("{} of {} done", p.done, p.total)));
         }
-        let waits = n
-            .waits_on
-            .iter()
-            .map(|w| match w {
-                Wait::Reference { label, .. } => label.clone(),
-                Wait::Start(d) => format!("its start, {d}"),
-            })
-            .collect();
+        let waits = n.waits_on.iter().map(wait_label).collect();
         let notes = self
             .res
             .parsed

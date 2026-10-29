@@ -96,3 +96,19 @@ reasoning: the problem, the proposal and verifiable acceptance criteria.
 The format is opinionated on purpose. Before proposing a change to it, read the
 settled arguments (`cairn list --view decisions`). A proposal states the case
 against itself as well as the case for.
+
+## Changing the spec
+
+A change to what a `.sprig` file means is an RFC: copy `rfcs/0000-template.md`,
+and open a pull request with it. `rfcs/README.md` says when one is needed.
+
+- **Review.** It stays open for review for 14 days from the pull request, or
+  7 for a clarification, so people who build on Sprig have time to read it.
+- **Who decides.** The maintainer, in a comment that gives the reasons. With
+  more than one maintainer, a ruling also needs a second maintainer's approval.
+- **What lands.** An accepted RFC lands with the spec text, new conformance
+  examples, the implementation and a cairn `decision` item, all in one pull
+  request.
+
+After 1.0 a change may only add (`docs/stability.md`); anything else waits for
+a 2.0.
