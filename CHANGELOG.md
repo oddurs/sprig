@@ -16,8 +16,8 @@ All notable changes to this project are recorded here. The format follows
   crates' Cargo metadata names their README, keywords and categories, and the
   examples in the core's and the tree-sitter grammar's READMEs run as tests.
 - A test that every path a document names, as a Markdown link or in
-  backticks, exists. It found a module pointing at a `spec/refs.md` that was
-  never written.
+  backticks, exists. It found a module citing a spec file that was never
+  written; refs are specified in T1 of `spec/tools.md`.
 - `scripts/task lint` refuses a committed package, archive or file over 1 MiB.
 
 - The conformance suite holds 417 examples, with every numbered rule of the
