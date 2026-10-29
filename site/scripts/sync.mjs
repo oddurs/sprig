@@ -231,7 +231,14 @@ write(
 			editUrl: `${edit}/spec/diagnostics.md`,
 		},
 		`:::note[Generated]\nThis page is \`spec/diagnostics.md\`. A test holds it and the core to each other: every code the core can report has a row and a note here.\n:::\n\n` +
-			dropTitle(read('spec/diagnostics.md')),
+			// Each note gets an anchor per code it explains, so a tool (the
+			// playground's problems) can link a code straight to its note.
+			dropTitle(read('spec/diagnostics.md')).replace(/^\*\*(S\d{4}(?:, S\d{4})*)\.\*\*/gm, (all, codes) =>
+				codes
+					.split(', ')
+					.map((c) => `<span id="${c.toLowerCase()}"></span>`)
+					.join('') + all,
+			),
 	),
 );
 

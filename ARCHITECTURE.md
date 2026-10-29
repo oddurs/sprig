@@ -139,7 +139,16 @@ the core, and the agreement test catches a grammar that drifts.
 The website, built with Astro. `site/scripts/sync.mjs` copies the spec, the
 changelog, the roadmap, the decisions and the reference pages into the site
 at build time, from the repository and from the `sprig` binary itself, so a
-page cannot drift from its source. The playground runs `sprig-wasm`.
+page cannot drift from its source. The playground runs `sprig-wasm`, and
+shows what `sprig check` would say as you type.
+
+The build then checks the built pages in headless Chrome, with no browser
+driver: every value is a design token (`lint-tokens.mjs`), every colour pair
+has its contrast (`contrast.mjs`), every link resolves (`check.mjs`), axe finds
+nothing in either theme (`a11y.mjs`), and nothing scrolls sideways or is too
+small to tap at a phone's width (`mobile.mjs`). `playground.mjs` drives the
+playground wide and narrow. `harness.mjs` is the server and the Chrome they
+share.
 
 ### `action/`
 
