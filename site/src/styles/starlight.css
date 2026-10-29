@@ -70,3 +70,31 @@
 	white-space: pre-wrap;
 	overflow-wrap: anywhere;
 }
+
+/* By touch, Starlight's controls are fingertip-sized too (--target). */
+@media (max-width: 859px), (pointer: coarse) {
+	.site-title,
+	.sl-anchor-link,
+	.sl-menu-button,
+	a[href*='github.com'][href*='/edit/'],
+	site-search button[data-open-modal],
+	.expressive-code .copy button {
+		min-width: var(--target);
+		min-height: var(--target);
+	}
+	/* Flat, like the search button beside it: elevation is never a shadow. */
+	.sl-menu-button {
+		box-shadow: none;
+		background: transparent;
+		border: 0;
+	}
+	.sl-anchor-link {
+		display: inline-grid;
+		place-items: center;
+		vertical-align: middle;
+	}
+	.expressive-code .copy button {
+		width: var(--target);
+		height: var(--target);
+	}
+}

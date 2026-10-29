@@ -16,7 +16,7 @@ const body = html ?? `<span class="t-dim">$ </span>${esc(command ?? '')}`;
 <figure class="sp-term">
 	{title && <figcaption>{title}</figcaption>}
 	{/* Wide screens scroll sideways on phones; tabindex lets a keyboard do it too. */}
-	<pre class:list={['st', { mono, wrap: command !== undefined }]} tabindex="0" set:html={body} />
+	<pre class:list={['st', 'scroll-x', { mono, wrap: command !== undefined }]} tabindex="0" set:html={body} />
 </figure>
 
 <style>

@@ -8,6 +8,21 @@ All notable changes to this project are recorded here. The format follows
 
 ### Added
 
+- The playground shows what `sprig check` would say as you type: each problem
+  with its code, linked to its note, and what to do about it. Choosing one goes
+  to its line, a line with a problem is marked in the editor, and a file's tab
+  carries a dot.
+- The playground on a phone: Source, Plan and Problems one at a time, each as
+  tall as what it holds, so only the page scrolls; long lines wrap; a key bar
+  stands in for Tab, Shift-Tab and the mark shortcut; Share opens the phone's
+  share sheet.
+- Files in the playground can be renamed, which carries every link to them,
+  downloaded and deleted.
+- Every control on the site is at least 44px by touch, and long terminal and
+  code lines fade at the edge they scroll towards. The site build checks every
+  page at a phone's and a tablet's width, and drives the playground wide and
+  narrow.
+
 - ARCHITECTURE.md, a map of the code for a newcomer: what each crate and top
   level folder does, how a file becomes an answer, and the invariants a change
   must keep, each with where it is enforced.

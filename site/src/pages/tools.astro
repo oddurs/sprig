@@ -366,8 +366,8 @@ const strip = ['k', 'j', 'h', 'l', 'x', '~', '1', '2', '3', '/', '?'];
 		gap: var(--space-2);
 	}
 	.strip button {
-		min-width: 40px;
-		min-height: 36px;
+		min-width: var(--target);
+		min-height: var(--target);
 		padding: 0 var(--space-3);
 		font: inherit;
 		font-family: var(--font-mono);
@@ -407,6 +407,16 @@ const strip = ['k', 'j', 'h', 'l', 'x', '~', '1', '2', '3', '/', '?'];
 	.text-link {
 		color: var(--text);
 		font-size: var(--text-sm);
+	}
+	/* These links stand on their own, so by touch each is a full target tall. */
+	@media (max-width: 859px), (pointer: coarse) {
+		.text-link {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-height: var(--target);
+			min-width: var(--target);
+		}
 	}
 	@media (max-width: 859px) {
 		.hero,

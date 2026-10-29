@@ -50,6 +50,18 @@ img {
 .skip:focus {
 	top: var(--space-3);
 }
+/* Read by a screen reader, never seen: a word that a glyph stands for on screen. */
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
 .page {
 	max-width: var(--measure-page);
 	margin: 0 auto;
@@ -58,5 +70,46 @@ img {
 @media (max-width: 559px) {
 	.page {
 		padding-inline: var(--space-4);
+	}
+}
+
+/*
+ * A box that scrolls sideways (a terminal, a code block) fades the edge it
+ * can still scroll towards, so a phone shows there is more to the line rather
+ * than cutting it off. The fade follows the scroll position; a box with
+ * nothing to scroll has no scroll timeline, so it does not fade at all.
+ * Elevation here is never a shadow (docs/design), so the cue is the text
+ * itself thinning out.
+ */
+@property --fade-start {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 0px;
+}
+@property --fade-end {
+	syntax: '<length>';
+	inherits: false;
+	initial-value: 0px;
+}
+@keyframes scroll-edges {
+	0% {
+		--fade-start: 0px;
+		--fade-end: var(--space-7);
+	}
+	8%,
+	92% {
+		--fade-start: var(--space-7);
+		--fade-end: var(--space-7);
+	}
+	100% {
+		--fade-start: var(--space-7);
+		--fade-end: 0px;
+	}
+}
+@supports (animation-timeline: scroll()) {
+	.scroll-x {
+		mask-image: linear-gradient(to right, transparent, black var(--fade-start), black calc(100% - var(--fade-end)), transparent);
+		animation: scroll-edges linear both;
+		animation-timeline: scroll(self inline);
 	}
 }
