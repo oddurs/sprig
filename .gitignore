@@ -28,6 +28,7 @@
 /site/src/content/docs/docs/reference/cli.md
 /editors/node_modules/
 /editors/vscode/node_modules/
+/tests/mcp/node_modules/
 /editors/vscode/.vscode-test/
 # Copied in by editors/vscode/scripts/prepare.js
 /editors/vscode/syntaxes/

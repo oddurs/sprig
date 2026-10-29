@@ -23,8 +23,10 @@ unicode-width = "0.2"
 sprig-core = { path = "../sprig-core", version = "0.0.0" }
 sprig-lsp = { path = "../sprig-lsp", version = "0.0.0" }
 serde_json = "1"
+similar = "3"
 
 [dev-dependencies]
+similar = "3"
 icalendar = { version = "0.17", default-features = false, features = ["parser"] }
 jsonschema = { version = "0.33", default-features = false }
 unicode-width = "0.2"

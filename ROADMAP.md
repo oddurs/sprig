@@ -36,17 +36,12 @@ VS Code highlights `.sprig` files, completes people, anchors and file links, sho
 
 ## v0.3 — Agents work the plan
 
-`··········` 0% · 0 of 11 done · due 2027-04-02
+`··········` 0% · 0 of 6 done · due 2027-04-02
 
 `sprig mcp` lets a coding agent read a repository's `PLAN.sprig`, find ready work, tick, add and answer items, where every change is an ordinary file edit a person can review. Plans export to calendars and JSON, and existing checklists import. From the shell, `mark`, `add`, `answer`, `find`, `agenda` and `graph` cover the everyday writes and questions, through the same edit API the agents use.
 
-- [ ] [`0058`](https://github.com/oddurs/sprig/blob/main/cairn/items/0058-what-tools-should-sprig-mcp-expose.md) What tools should sprig mcp expose? <sup>spike · p0 · agents</sup>
-- [ ] [`0059`](https://github.com/oddurs/sprig/blob/main/cairn/items/0059-sprig-mcp-read-tools.md) sprig mcp: read tools <sup>feature · p0 · agents</sup>
-- [ ] [`0060`](https://github.com/oddurs/sprig/blob/main/cairn/items/0060-sprig-mcp-write-tools.md) sprig mcp: write tools <sup>feature · p0 · agents</sup>
-- [ ] [`0061`](https://github.com/oddurs/sprig/blob/main/cairn/items/0061-cap-how-many-items-an-agent-adds-per-call.md) Cap how many items an agent adds per call <sup>feature · p1 · agents</sup>
-- [ ] [`0062`](https://github.com/oddurs/sprig/blob/main/cairn/items/0062-plan-sprig-convention-and-sprig-agent.md) PLAN.sprig convention and sprig agent <sup>docs · p0 · agents</sup>
-- [ ] [`0063`](https://github.com/oddurs/sprig/blob/main/cairn/items/0063-end-to-end-test-with-a-real-mcp-client.md) End-to-end test with a real MCP client <sup>chore · p1 · agents</sup>
 - [ ] [`0071`](https://github.com/oddurs/sprig/blob/main/cairn/items/0071-release-v0-3.md) Release v0.3 <sup>chore · p0 · release</sup>
+- [ ] [`0063`](https://github.com/oddurs/sprig/blob/main/cairn/items/0063-end-to-end-test-with-a-real-mcp-client.md) End-to-end test with a real MCP client <sup>chore · p1 · agents</sup>
 - [ ] [`0064`](https://github.com/oddurs/sprig/blob/main/cairn/items/0064-sprig-export-json-and-icalendar.md) sprig export: JSON and iCalendar <sup>feature · p1 · interop</sup>
 - [ ] [`0067`](https://github.com/oddurs/sprig/blob/main/cairn/items/0067-github-action-check-plans-and-summarise-progress-in-pull-requests.md) GitHub Action: check plans and summarise progress in pull requests <sup>feature · p1 · interop</sup>
 - [ ] [`0128`](https://github.com/oddurs/sprig/blob/main/cairn/items/0128-sprig-graph-the-dependency-graph-for-graphviz-and-mermaid.md) sprig graph: the dependency graph for Graphviz and Mermaid <sup>feature · p2 · interop</sup>
