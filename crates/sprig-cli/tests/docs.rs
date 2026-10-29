@@ -262,3 +262,28 @@ fn a_renamed_file_is_reported_and_a_link_to_a_folder_is_not() {
     );
     assert_eq!(normal("crates/x/../../spec/./sprig.md"), "spec/sprig.md");
 }
+
+// A lockfile Dependabot does not watch never hears of an advisory, and adding
+// one is easy to do without noticing: the editors and the MCP test each
+// brought their own.
+#[test]
+fn dependabot_watches_every_lockfile() {
+    let config = read(".github/dependabot.yml");
+    let (files, _) = tracked();
+    for f in &files {
+        let dir = match f.as_str() {
+            "Cargo.lock" | "package-lock.json" => "/".to_string(),
+            f => match f
+                .strip_suffix("/Cargo.lock")
+                .or_else(|| f.strip_suffix("/package-lock.json"))
+            {
+                Some(d) => format!("/{d}"),
+                None => continue,
+            },
+        };
+        assert!(
+            config.contains(&format!("\"{dir}\"")),
+            "{f} is not in .github/dependabot.yml"
+        );
+    }
+}
