@@ -178,7 +178,7 @@ const MONTHS: [&str; 12] = [
 ];
 
 /// `Thu 1 Oct`.
-fn day(d: Date) -> String {
+pub(crate) fn day(d: Date) -> String {
     let iso = d.to_string();
     let month: usize = iso[5..7].parse().expect("an ISO date");
     let dom: u32 = iso[8..10].parse().expect("an ISO date");

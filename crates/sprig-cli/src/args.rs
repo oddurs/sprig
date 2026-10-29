@@ -108,6 +108,9 @@ pub enum Command {
     Mcp(McpArgs),
     /// Print the instructions that tell a coding agent how this repository plans
     Agent(AgentArgs),
+    /// Work the plan from one screen: the tree, next up and the agenda, with vim keys
+    #[command(after_help = TUI_HELP)]
+    Tui(TuiArgs),
     /// Candidates for shell completion: refs and people in the current folder
     #[command(name = "__complete", hide = true)]
     Complete(CompleteArgs),
@@ -237,6 +240,29 @@ tick_items, mark_item, add_items, answer_question and set_field.
 
 Every write goes through the same edit API as `sprig tick`, is refused when it
 would add an error `sprig check` reports, and returns the diff it applied.";
+
+const TUI_HELP: &str = "\
+Keys: j k move, h l fold, x tick, ~ doing, a A add, e edit, u undo,
+1 2 3 tree, next up and agenda, / filter, ? help, q quit.
+
+Every write goes through the same edit API as `sprig tick`, and is refused if
+the line changed on disk since the TUI read it. The files are read again
+whenever one changes.";
+
+#[derive(Debug, Args)]
+pub struct TuiArgs {
+    /// A plan or a folder of plans [default: .]
+    #[arg(value_name = "PATH")]
+    pub path: Option<PathBuf>,
+
+    /// Print one frame, WIDTHxHEIGHT such as 100x30, as text and exit
+    #[arg(long, value_name = "WxH")]
+    pub screenshot: Option<String>,
+
+    /// With --screenshot: keys to press first, such as "jjx" or "/oven<Enter>"
+    #[arg(long, value_name = "KEYS", requires = "screenshot")]
+    pub keys: Option<String>,
+}
 
 #[derive(Debug, Args)]
 pub struct AgentArgs {

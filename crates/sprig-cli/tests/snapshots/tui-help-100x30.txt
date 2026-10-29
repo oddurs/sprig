@@ -1,0 +1,30 @@
+ sprig  1 tree 2 next up 3 agenda
+›   Open the bakery                            9/40  in 69d  @dana │ Open the bakery
+    # Money                                                    2/4 │ bakery.sprig:1
+      x Business plan v3                                           │
+      x Bank meeting                                               │ status   doing
+      ~ Equipment loan paperwork                             in 6d │ owner    @dana
+      - Supplier c┌ keys · any key closes ───────────────────────────────────────┐-12-09 (in 69d)
+      - Weekly num│                                                              │d
+    + Lease       │ j k  ↓ ↑  move down and up                                   │ 40 done
+      x Shortlist │ h l  ← →  fold and unfold; h on a leaf goes to its parent    │
+      ~ Negotiate │ g G       first and last item                                │
+        x Eight we│ x         tick: done, or reopen; a recurring item moves its… │
+        ~ Break cl│ ~         mark as doing                                      │
+        ? Who pays│ a A       add a sibling after the item, or a child under it  │
+      - Change-of-│ e         open $EDITOR at the item's line                    │
+      - Sign the l│ u         undo this session's last write                     │
+    + Kitchen fit-│ 1 2 3     tree, next up, agenda                              │
+      - Design    │ /         filter by text; Esc clears                         │
+        x Layout s│ r         read the files again                               │
+        ~ Ventilat│ ?         this help                                          │
+      # Equipment │ q         quit                                               │
+        - Deck ove│                                                              │
+          - Get a └──────────────────────────────────────────────────────────────┘
+          - Place the order                                        │
+        - Spiral mixer, 40 litres                                  │
+        / Proofing cabinet                                         │
+        > Espresso machine                                         │
+      - Build                                                  0/5 │
+        - Strip out                                                │
+ 10/46 done · 21 ready · 12 waiting                                                          ? help

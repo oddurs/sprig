@@ -108,6 +108,9 @@ into it.
   `agenda`, `add`, `mark`, `graph`, `export` and `import`, and recipes for fzf,
   jq, a pre-commit hook and a calendar feed. [`action/`](action) checks plans
   in GitHub Actions and summarises what a pull request did to them.
+- [`sprig tui`](https://oddurs.github.io/sprig/docs/tui/): the tree, what's
+  next and the agenda on one screen, with vim keys, and reloads when an editor
+  or an agent saves.
 - [Plans for coding agents](https://oddurs.github.io/sprig/docs/agents/): the
   `PLAN.sprig` convention, `sprig agent --write AGENTS.md`, and `sprig mcp`,
   which lets an agent read the plans and change them through checked,

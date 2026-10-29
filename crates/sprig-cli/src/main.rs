@@ -9,6 +9,7 @@ mod data;
 mod load;
 mod mcp;
 mod out;
+mod tui;
 mod verbs;
 mod views;
 mod write;
@@ -63,6 +64,7 @@ fn run() -> ExitCode {
         Command::Mcp(a) => mcp::stdio(a.plans.clone(), &args::clock(&cli), a.max_new_items)
             .map(|()| ExitCode::SUCCESS),
         Command::Agent(a) => agent::agent(a),
+        Command::Tui(a) => tui::tui(a, &args::clock(&cli)),
         Command::Complete(a) => views::candidates(&a.what, today),
     };
     match result {

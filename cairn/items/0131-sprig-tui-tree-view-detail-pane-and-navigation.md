@@ -3,13 +3,14 @@ id: 131
 uid: 57ba274d-aafd-471c-9f55-cfc111d392ed
 title: 'sprig tui: tree view, detail pane and navigation'
 type: feature
-status: planned
+status: done
 milestone: v0.4
 depends_on:
 - 45
 - 130
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-10-29
+closed_at: 2026-10-29
 priority: p0
 effort: l
 area: cli
@@ -25,6 +26,10 @@ The verbs answer one question each. Working through a plan means asking several 
 
 ## Acceptance criteria
 
-- [ ] Snapshots of the tree view at 80x24 and 120x40 on `examples/bakery/` are committed and tested.
-- [ ] Every key in the help overlay has a test driving the pure core, with no terminal involved.
-- [ ] Below 80 columns the detail pane hides, and nothing wraps or overflows; a snapshot at 60x20 proves it.
+- [x] Snapshots of the tree view at 80x24 and 120x40 on `examples/bakery/` are committed and tested.
+- [x] Every key in the help overlay has a test driving the pure core, with no terminal involved.
+- [x] Below 80 columns the detail pane hides, and nothing wraps or overflows; a snapshot at 60x20 proves it.
+
+## Result
+
+sprig tui opens the tree with grafts mounted, a detail pane from 80 columns up, and a status line. --screenshot renders a frame as text: snapshots at 80x24, 120x40 and 60x20, where the pane hides and no line passes 60 columns. Every key in the help has a test driving the core.

@@ -1,0 +1,30 @@
+ sprig  1 tree 2 next up 3 agenda   /quote
+›   Open the bakery                            9/40  in 69d  @dana │ Open the bakery
+    + Kitchen fit-out                                   1/10  @teo │ bakery.sprig:1
+      # Equipment                                              0/3 │
+        - Deck oven, three decks                               0/2 │ status   doing
+          - Get a third quote                                in 1d │ owner    @dana
+    Dana, this week                                     1/6  @dana │ due      2026-12-09 (in 69d)
+    + Deck oven, three decks                            0/2  @dana │ estimate 35.5d
+      - Get a third quote                                    in 1d │ progress 9 of 40 done
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+ /quote▏                                                                   Enter keeps · Esc clears

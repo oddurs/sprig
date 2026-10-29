@@ -84,6 +84,7 @@ export default defineConfig({
 						{ label: 'Your first plan', slug: 'docs/first-plan' },
 						{ label: 'Set up your editor', slug: 'docs/editors' },
 						{ label: 'Sprig in the shell', slug: 'docs/shell' },
+						{ label: 'Work the plan from one screen', slug: 'docs/tui' },
 						{ label: 'Plans for coding agents', slug: 'docs/agents' },
 						{ label: 'Playground', link: '/play/' },
 					],

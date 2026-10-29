@@ -3,14 +3,15 @@ id: 134
 uid: 42ee4ec0-91c5-4853-bf0e-2e06f662b0cc
 title: 'sprig tui: next-up and agenda views, and filtering'
 type: feature
-status: planned
+status: done
 milestone: v0.4
 depends_on:
 - 23
 - 127
 - 131
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-10-29
+closed_at: 2026-10-29
 priority: p1
 effort: s
 area: cli
@@ -26,6 +27,10 @@ The tree answers "where is everything". Day to day, the questions are "what now"
 
 ## Acceptance criteria
 
-- [ ] For `examples/bakery/`, the next-up view lists the same items in the same order as `sprig next`, checked by a test.
-- [ ] Filtering the tree keeps the ancestors of every match visible, so matches stay in context.
-- [ ] Snapshots of all three views are committed.
+- [x] For `examples/bakery/`, the next-up view lists the same items in the same order as `sprig next`, checked by a test.
+- [x] Filtering the tree keeps the ancestors of every match visible, so matches stay in context.
+- [x] Snapshots of all three views are committed.
+
+## Result
+
+1, 2 and 3 switch between tree, next up and agenda, built from the same next and agenda functions as the commands; a test checks next up against sprig next. / filters as you type and keeps every match's ancestors. Snapshots cover all three views, the help and a filter.
