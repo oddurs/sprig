@@ -739,3 +739,37 @@ fn the_action_summary_shows_both_done_counts_and_what_a_change_unblocked() {
     // Build still waits on Design, so it is not listed.
     assert!(!md.contains("Build"), "{md}");
 }
+
+// `find` names files relative to the folder it searched, so the summary must
+// put that folder back, whether a path is a folder of folders or one file.
+#[cfg(unix)]
+#[test]
+fn the_action_summary_names_an_unblocked_item_by_its_path_from_the_root() {
+    let (base, head) = (scratch("base"), scratch("head"));
+    for dir in [&base, &head] {
+        fs::create_dir_all(dir.join("plans/bakery")).unwrap();
+        for e in fs::read_dir(repo("examples/bakery")).unwrap() {
+            let e = e.unwrap();
+            fs::copy(e.path(), dir.join("plans/bakery").join(e.file_name())).unwrap();
+        }
+    }
+    let o = run(&head, &["mark", "^signed", "x", "--in", "plans/bakery"]);
+    assert!(o.status.success(), "{}", stderr(&o));
+
+    for path in ["plans", "plans/", "plans/bakery/bakery.sprig"] {
+        let o = Command::new("bash")
+            .arg(repo("action/summary.sh"))
+            .args([&base, &head])
+            .arg(path)
+            .env("SPRIG", env!("CARGO_BIN_EXE_sprig"))
+            .env("SPRIG_TODAY", "2026-10-01")
+            .output()
+            .unwrap();
+        assert!(o.status.success(), "{}", stderr(&o));
+        let md = stdout(&o);
+        assert!(
+            md.contains("- `plans/bakery/bakery.sprig:15` Supplier credit line"),
+            "{path}: {md}"
+        );
+    }
+}
