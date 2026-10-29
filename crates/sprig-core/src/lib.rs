@@ -41,6 +41,11 @@ pub mod syntax;
 pub mod token;
 pub mod workspace;
 
+// The README's example is a test too, so the first code a reader sees runs.
+#[doc = include_str!("../README.md")]
+#[cfg(doctest)]
+pub struct ReadmeDoctests;
+
 pub use date::Date;
 pub use diagnostic::{Code, Diagnostic, Severity, Span};
 pub use syntax::{Document, Mark, Node, Parsed, parse};

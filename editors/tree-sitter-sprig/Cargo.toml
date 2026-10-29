@@ -6,10 +6,14 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords = ["sprig", "tree-sitter", "grammar", "parser"]
+categories = ["parser-implementations", "text-editors"]
 authors.workspace = true
 publish.workspace = true
 build = "bindings/rust/build.rs"
-include = ["bindings/rust/*", "grammar.js", "queries/*", "src/*", "tree-sitter.json"]
+include = ["bindings/rust/*", "grammar.js", "queries/*", "src/*", "tree-sitter.json", "README.md"]
 
 [lib]
 path = "bindings/rust/lib.rs"
