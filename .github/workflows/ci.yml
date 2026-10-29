@@ -113,6 +113,17 @@ jobs:
       - run: sudo apt-get update -q && sudo apt-get install -y -q neovim
       - run: xvfb-run -a ./scripts/task editors
 
+  mcp:
+    # sprig mcp, driven by the official MCP client as an agent's tools drive it.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: site/.node-version
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - run: ./scripts/task mcp
+
   perf:
     # Release builds, on the runner the baseline was measured on: more than
     # twice the baseline fails, and so does a keystroke slower than 50 ms.
@@ -139,7 +150,7 @@ jobs:
   required:
     name: required
     if: always()
-    needs: [check, install, backlog, site, editors, perf, plans]
+    needs: [check, install, backlog, site, editors, perf, plans, mcp]
     runs-on: ubuntu-latest
     steps:
       - name: Every job succeeded
@@ -170,5 +181,9 @@ jobs:
           fi
           if [ "${{ needs.plans.result }}" != "success" ]; then
             echo "plans: ${{ needs.plans.result }}"
+            exit 1
+          fi
+          if [ "${{ needs.mcp.result }}" != "success" ]; then
+            echo "mcp: ${{ needs.mcp.result }}"
             exit 1
           fi

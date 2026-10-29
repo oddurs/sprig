@@ -113,16 +113,12 @@ pub fn next(a: &NextArgs, today: Date, out: Out) -> Result<ExitCode> {
         .zip(&resolved)
         .flat_map(|(g, r)| entry_trees(g, r))
         .collect();
-    let n = next::next(&trees, who);
-    let shown: Vec<&Entry> = n.ready.iter().take(a.limit.unwrap_or(usize::MAX)).collect();
     if a.json {
-        let items: Vec<serde_json::Value> = shown
-            .iter()
-            .map(|e| crate::data::item_json(e.node, &e.path))
-            .collect();
-        println!("{}", serde_json::to_string_pretty(&items)?);
+        crate::data::print_json(&crate::data::next_json(&groups, &resolved, who, a.limit))?;
         return Ok(ExitCode::SUCCESS);
     }
+    let n = next::next(&trees, who);
+    let shown: Vec<&Entry> = n.ready.iter().take(a.limit.unwrap_or(usize::MAX)).collect();
 
     // Text and paths are capped even in a pipe, so a line stays a line.
     const WIDE: usize = 40;
@@ -234,17 +230,26 @@ fn diagnostics(loaded: &Loaded, ds: &[Diagnostic]) -> Vec<Diagnostic> {
         .collect()
 }
 
-pub fn check(a: &CheckArgs, today: Date, out: Out) -> Result<ExitCode> {
-    let (groups, resolved) = resolve_all(&a.paths, today)?;
+/// Every diagnostic in a set of workspaces, named as the command line named
+/// the files, in the order `check` prints them.
+pub(crate) fn all_diagnostics(groups: &[Loaded], resolved: &[Resolution]) -> Vec<Diagnostic> {
     let mut all = Vec::new();
-    let mut files = 0;
-    for (g, r) in groups.iter().zip(&resolved) {
-        files += r.parsed.len();
+    for (g, r) in groups.iter().zip(resolved) {
         all.extend(diagnostics(g, &r.diagnostics));
     }
     all.sort_by(|a, b| a.sort_key().cmp(&b.sort_key()));
+    all
+}
+
+pub fn check(a: &CheckArgs, today: Date, out: Out) -> Result<ExitCode> {
+    let (groups, resolved) = resolve_all(&a.paths, today)?;
+    let files: usize = resolved.iter().map(|r| r.parsed.len()).sum();
+    let all = all_diagnostics(&groups, &resolved);
+    if a.json {
+        crate::data::print_json(&crate::data::check_json(&groups, &resolved))?;
+    }
     let mut w = io::stdout().lock();
-    for d in &all {
+    for d in all.iter().filter(|_| !a.json) {
         if out.plain {
             writeln!(
                 w,
@@ -722,6 +727,10 @@ fn chain(
 pub fn status(a: &StatusArgs, today: Date, out: Out) -> Result<ExitCode> {
     let (groups, resolved) = resolve_all(&a.paths, today)?;
     let late = |e: &Entry| e.due_date.is_some_and(|d| d < today);
+    if a.json {
+        crate::data::print_json(&crate::data::status_json(&groups, &resolved, today))?;
+        return Ok(ExitCode::SUCCESS);
+    }
 
     if a.oneline {
         let trees: Vec<&Tree> = groups

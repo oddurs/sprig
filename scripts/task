@@ -28,6 +28,7 @@ usage: scripts/task <target>
   site       build the website, check tokens, contrast, links and accessibility (needs node, chrome)
   editors    test the TextMate and tree-sitter grammars and the VS Code extension (needs node, a display)
   perf       time parse, resolve and check against the committed baseline, in release builds
+  mcp        a scripted session with sprig mcp through the official MCP client (needs node)
 USAGE
 }
 
@@ -135,6 +136,17 @@ case "${1:-}" in
     cargo build --locked -p sprig-cli
     npm --prefix editors/vscode ci --no-audit --no-fund
     npm --prefix editors/vscode test
+    ;;
+  mcp)
+    # The unit tests drive the server with a client of this repository's own;
+    # this drives it with the one agents' tools are built on.
+    command -v npm >/dev/null 2>&1 || {
+      printf 'scripts/task: npm is not installed; the MCP session needs Node\n' >&2
+      exit 1
+    }
+    cargo build --locked -p sprig-cli
+    npm --prefix tests/mcp ci --no-audit --no-fund
+    node tests/mcp/session.mjs target/debug/sprig
     ;;
   perf)
     # The baseline gate and the language server's 50 ms keystroke criterion,

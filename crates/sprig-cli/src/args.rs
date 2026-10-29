@@ -103,6 +103,11 @@ pub enum Command {
     Man,
     /// Run the language server on stdin and stdout, for editors
     Lsp,
+    /// Serve the plans to a coding agent over the Model Context Protocol, on stdin and stdout
+    #[command(after_help = MCP_HELP)]
+    Mcp(McpArgs),
+    /// Print the instructions that tell a coding agent how this repository plans
+    Agent(AgentArgs),
     /// Candidates for shell completion: refs and people in the current folder
     #[command(name = "__complete", hide = true)]
     Complete(CompleteArgs),
@@ -156,6 +161,11 @@ pub struct StatusArgs {
     /// One short line for a shell prompt or a status bar; exit 1 if anything is late
     #[arg(long)]
     pub oneline: bool,
+
+    /// A row per plan as JSON: file, title, done, total, ready, waiting, late
+    /// and errors
+    #[arg(long, conflicts_with = "oneline")]
+    pub json: bool,
 }
 
 #[derive(Debug, Args)]
@@ -220,6 +230,37 @@ Exit codes:
   0  converted
   2  usage error, or a file that could not be read or understood";
 
+const MCP_HELP: &str = "\
+Register it with an agent's MCP client; `sprig mcp --config` prints the
+snippet. Tools: list_plans, show_tree, next_items, find_items, check_plans,
+tick_items, mark_item, add_items, answer_question and set_field.
+
+Every write goes through the same edit API as `sprig tick`, is refused when it
+would add an error `sprig check` reports, and returns the diff it applied.";
+
+#[derive(Debug, Args)]
+pub struct AgentArgs {
+    /// Keep them in FILE, such as AGENTS.md or CLAUDE.md, between markers: a
+    /// second run replaces the block, and changes nothing if it is current
+    #[arg(long, value_name = "FILE")]
+    pub write: Option<PathBuf>,
+}
+
+#[derive(Debug, Args)]
+pub struct McpArgs {
+    /// The folder of plans to serve
+    #[arg(long = "in", value_name = "PATH", default_value = ".")]
+    pub plans: PathBuf,
+
+    /// The most items add_items may add, in one call and in the whole session
+    #[arg(long, value_name = "N", default_value_t = 20)]
+    pub max_new_items: usize,
+
+    /// Print the configuration that registers this server with an MCP client, and exit
+    #[arg(long)]
+    pub config: bool,
+}
+
 #[derive(Debug, Args)]
 pub struct FindArgs {
     /// Words and filters
@@ -250,7 +291,7 @@ pub struct AgendaArgs {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct MarkValue(pub sprig_core::Mark);
 
-fn parse_mark(s: &str) -> Result<MarkValue, String> {
+pub(crate) fn parse_mark(s: &str) -> Result<MarkValue, String> {
     use sprig_core::Mark;
     Ok(MarkValue(match s {
         "-" | "todo" => Mark::Todo,
@@ -437,6 +478,10 @@ pub struct CheckArgs {
     /// Exit 1 on warnings too
     #[arg(long)]
     pub strict: bool,
+
+    /// Diagnostics as JSON, in the tree format's shape; the exit code is the same
+    #[arg(long)]
+    pub json: bool,
 }
 
 fn parse_date(s: &str) -> Result<Date, String> {

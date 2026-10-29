@@ -1,19 +1,23 @@
 //! The commands that read plans as data or turn other data into plans:
-//! `find`, `agenda`, `graph`, `export`, `import`, and `next --json`.
+//! `find`, `agenda`, `graph`, `export` and `import`, and the JSON every
+//! `--json` prints. The MCP server returns the same values, built by the
+//! same functions, so a tool and a command cannot disagree.
 
 use std::io::{self, Read, Write};
 use std::process::ExitCode;
 
 use serde_json::{Value, json};
-use sprig_core::workspace::Resolved;
-use sprig_core::{Date, agenda, export, graph, import, json as tree, query};
+use sprig_core::next::{self, Entry};
+use sprig_core::workspace::{Resolution, Resolved, Tree};
+use sprig_core::{Date, Severity, agenda, export, graph, import, json as tree, query};
 
 use crate::args::{
     AgendaArgs, ExportArgs, ExportFormat, FindArgs, GraphArgs, GraphFormat, ImportArgs,
     ImportFormat,
 };
+use crate::load::Loaded;
 use crate::out::{Cell, Out, Row, Style, Table};
-use crate::views::{entry_trees, glyph, key, relative, resolve_all};
+use crate::views::{all_diagnostics, entry_trees, glyph, key, relative, resolve_all};
 use crate::{Result, load};
 
 /// One item as `--json` gives it (spec/tools.md T5): its ref, the labels
@@ -26,7 +30,72 @@ pub fn item_json(n: &Resolved, path: &[&str]) -> Value {
     json!({ "ref": key(n), "path": path, "node": node })
 }
 
-fn print_json(v: &Value) -> Result<()> {
+/// `next --json`: the ready work, as `next` lists it.
+pub fn next_json(
+    groups: &[Loaded],
+    resolved: &[Resolution],
+    who: Option<&str>,
+    limit: Option<usize>,
+) -> Value {
+    let trees: Vec<&Tree> = groups
+        .iter()
+        .zip(resolved)
+        .flat_map(|(g, r)| entry_trees(g, r))
+        .collect();
+    let n = next::next(&trees, who);
+    let shown: Vec<&Entry> = n.ready.iter().take(limit.unwrap_or(usize::MAX)).collect();
+    Value::Array(shown.iter().map(|e| item_json(e.node, &e.path)).collect())
+}
+
+/// `find --json`.
+pub fn find_json(resolved: &[Resolution], q: &query::Query) -> Value {
+    let hits: Vec<query::Hit> = resolved.iter().flat_map(|r| query::find(r, q)).collect();
+    Value::Array(hits.iter().map(|h| item_json(h.node, &h.path)).collect())
+}
+
+/// `status --json`: a row per plan, with the counts `status` shows.
+pub fn status_json(groups: &[Loaded], resolved: &[Resolution], today: Date) -> Value {
+    let mut rows = Vec::new();
+    for (g, r) in groups.iter().zip(resolved) {
+        for t in r.trees() {
+            if g.entries.as_ref().is_some_and(|e| !e.contains(&t.file)) {
+                continue;
+            }
+            let n = next::next(&[t], None);
+            let late = n
+                .ready
+                .iter()
+                .chain(&n.waiting)
+                .filter(|e| e.due_date.is_some_and(|d| d < today))
+                .count();
+            let errors = r
+                .diagnostics
+                .iter()
+                .filter(|d| d.file == t.file && d.severity() == Severity::Error)
+                .count();
+            let p = t.root.progress;
+            rows.push(json!({
+                "file": g.display(&t.file),
+                "title": t.root.label,
+                "done": p.done,
+                "total": p.total,
+                "ready": n.ready.len(),
+                "waiting": n.waiting.len(),
+                "late": late,
+                "errors": errors,
+            }));
+        }
+    }
+    Value::Array(rows)
+}
+
+/// `check --json`: every diagnostic in the tree format's shape, in the order
+/// `check` prints them.
+pub fn check_json(groups: &[Loaded], resolved: &[Resolution]) -> Value {
+    tree::diagnostics(&all_diagnostics(groups, resolved))
+}
+
+pub(crate) fn print_json(v: &Value) -> Result<()> {
     let mut w = io::stdout().lock();
     serde_json::to_writer_pretty(&mut w, v)?;
     writeln!(w)?;
@@ -47,8 +116,7 @@ pub fn find(a: &FindArgs, today: Date, out: Out) -> Result<ExitCode> {
     let (_groups, resolved) = resolve_all(std::slice::from_ref(&a.plans), today)?;
     let hits: Vec<query::Hit> = resolved.iter().flat_map(|r| query::find(r, &q)).collect();
     if a.json {
-        let items: Vec<Value> = hits.iter().map(|h| item_json(h.node, &h.path)).collect();
-        print_json(&Value::Array(items))?;
+        print_json(&find_json(&resolved, &q))?;
     } else {
         let rows = hits
             .iter()
