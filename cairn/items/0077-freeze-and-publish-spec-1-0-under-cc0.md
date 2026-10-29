@@ -9,7 +9,7 @@ depends_on:
 - 73
 - 76
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-10-29
 priority: p0
 effort: s
 area: spec
@@ -27,3 +27,7 @@ Publish spec 1.0 at a stable URL with the suite version that matches it.
 
 - [ ] The URL is stable and versioned, and the text is CC0.
 - [ ] The spec names the conformance suite version that defines it.
+
+## 2026-10-29
+
+Follows 0076. The text is already CC0 (spec/sprig.md). The versioned URL and the suite version that defines 1.0 are set when the review closes.

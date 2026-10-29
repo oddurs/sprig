@@ -36,7 +36,7 @@ VS Code highlights `.sprig` files, completes people, anchors and file links, sho
 
 ## v0.3 — Agents work the plan
 
-`··········` 0% · 0 of 6 done · due 2027-04-02
+`··········` 0% · 0 of 5 done · due 2027-04-02
 
 `sprig mcp` lets a coding agent read a repository's `PLAN.sprig`, find ready work, tick, add and answer items, where every change is an ordinary file edit a person can review. Plans export to calendars and JSON, and existing checklists import. From the shell, `mark`, `add`, `answer`, `find`, `agenda` and `graph` cover the everyday writes and questions, through the same edit API the agents use.
 
@@ -45,7 +45,6 @@ VS Code highlights `.sprig` files, completes people, anchors and file links, sho
 - [ ] [`0064`](https://github.com/oddurs/sprig/blob/main/cairn/items/0064-sprig-export-json-and-icalendar.md) sprig export: JSON and iCalendar <sup>feature · p1 · interop</sup>
 - [ ] [`0067`](https://github.com/oddurs/sprig/blob/main/cairn/items/0067-github-action-check-plans-and-summarise-progress-in-pull-requests.md) GitHub Action: check plans and summarise progress in pull requests <sup>feature · p1 · interop</sup>
 - [ ] [`0128`](https://github.com/oddurs/sprig/blob/main/cairn/items/0128-sprig-graph-the-dependency-graph-for-graphviz-and-mermaid.md) sprig graph: the dependency graph for Graphviz and Mermaid <sup>feature · p2 · interop</sup>
-- [ ] [`0129`](https://github.com/oddurs/sprig/blob/main/cairn/items/0129-guide-sprig-in-the-shell.md) Guide: Sprig in the shell <sup>docs · p2 · docs</sup>
 
 ## v0.4 — Work the plan from one screen
 

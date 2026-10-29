@@ -8,7 +8,7 @@ milestone: launch
 depends_on:
 - 22
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-10-29
 priority: p0
 effort: m
 area: release
@@ -26,3 +26,7 @@ Extend the release workflow to build and attach binaries for macOS (arm64 and x6
 
 - [ ] A tagged release attaches a binary for each target, with SHA256SUMS.
 - [ ] Each binary that can run on its build runner prints `sprig --version` in CI.
+
+## 2026-10-29
+
+Waits on the name (0006) and on 1.0 (0082); the launch needs people: testers for the preview, and someone to post.

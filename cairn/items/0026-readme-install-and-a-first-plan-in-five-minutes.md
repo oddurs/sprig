@@ -9,7 +9,7 @@ depends_on:
 - 23
 - 25
 created: 2026-09-28
-updated: 2026-10-28
+updated: 2026-10-29
 priority: p0
 effort: s
 area: docs
@@ -31,3 +31,7 @@ What Sprig is in two sentences; install; a ten-line plan; `sprig next` and `spri
 ## 2026-10-28
 
 README rewritten to the brief: two sentences on what Sprig is; install; a ten-line plan; `sprig next` and `sprig check` on it, including a misspelt anchor; the nine line starts with an example each; links to the spec, `examples/bakery/`, the conformance suite and the site. (2) `crates/sprig-cli/tests/readme.rs` runs every `sprig` command in the README and requires the exact output shown. It runs under `scripts/task test` on all three CI platforms, and fails when the README is wrong (checked by changing one number). The install line is covered separately by the new `install` CI job, on three platforms, through `scripts/task install`. (1) is still open and needs a person: someone who has not seen the project follows the README, and their time and stumbles are noted here. Blocked on that. The install line installs from git until the crate name is settled (0006) and published (0027).
+
+## 2026-10-29
+
+Still needs a newcomer to time it. The README's commands run in CI (readme.rs), and the site's tutorial now continues from it to ticking and an agent (0081).
