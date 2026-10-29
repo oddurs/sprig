@@ -1,0 +1,20 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Plan",
+    "root": {
+      "line": 1,
+      "span": [0, 4],
+      "text": "Plan",
+      "children": [
+        {
+          "line": 2,
+          "span": [5, 10],
+          "mark": "-",
+          "text": "One"
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

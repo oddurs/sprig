@@ -6,7 +6,7 @@ type: spike
 status: blocked
 milestone: v0.1
 created: 2026-09-28
-updated: 2026-10-28
+updated: 2026-10-29
 priority: p0
 effort: s
 area: community
@@ -58,3 +58,7 @@ The format can't keep a name whose tooling can't use it. The name belongs to the
 ## 2026-10-28
 
 Registries checked by script. crates.io and npm through their public APIs; the Marketplace through its extension-query API; Linguist through `languages.yml` on main. The trademark was searched on the web, because TSDR needs an API key. The remaining criteria wait on the owner's decision: if rename, the new name has to pass the same checks and a follow-up item renames everything; either way, follow-up items for whatever the decision implies.
+
+## 2026-10-29
+
+Still open, and it blocks every release item: publishing to crates.io, the VS Code Marketplace and a launch all need the name settled. A person has to make the call; the Answer lists the registries already checked.

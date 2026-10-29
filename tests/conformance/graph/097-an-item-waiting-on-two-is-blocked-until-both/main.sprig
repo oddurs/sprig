@@ -1,0 +1,5 @@
+Block
+
+x A  ^a
+- B  ^b
+- Go  after:^a  after:^b

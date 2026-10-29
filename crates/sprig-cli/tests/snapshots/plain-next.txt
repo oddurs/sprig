@@ -1,0 +1,21 @@
+lease.sprig:8	~	Break clause at year three	Lease › Negotiate terms	2026-10-05	3
+bakery.sprig^loan	~	Equipment loan paperwork	Money	2026-10-07	2
+kitchen.sprig:5	~	Ventilation plan with the engineer	Kitchen fit-out › Design	2026-10-12	0
+launch.sprig^logo	~	Logo, second round	Opening week › Brand	2026-10-14	0
+lease.sprig:9	?	Who pays for the grease trap?	Lease › Negotiate terms	2026-10-05	3
+kitchen.sprig:11	-	Get a third quote	Kitchen fit-out › Equipment › Deck oven, three decks	2026-10-02	2
+launch.sprig:18	-	Free loaf for the first 50 through the door	Opening week › Opening day	2026-12-09	2
+launch.sprig:19	-	Photos for the local paper	Opening week › Opening day	2026-12-09	2
+groceries.sprig:15	-	Flaky sea salt	Opening week › Soft opening › Stock the shelves › Supply run	2026-12-02	1
+bakery.sprig:16	-	Weekly numbers to the bank	Money	2026-10-02	0
+dana.sprig:9	-	Call the insurer about public liability	Dana, this week	2026-10-03	0
+launch.sprig^counter	-	Two counter staff	Opening week › Hiring	2026-11-05	0
+groceries.sprig:4	-	Rye, 4 sacks	Opening week › Soft opening › Stock the shelves › Supply run › Flour	2026-12-02	0
+groceries.sprig:5	-	Strong white, 6 sacks	Opening week › Soft opening › Stock the shelves › Supply run › Flour	2026-12-02	0
+groceries.sprig:9	-	Whole milk, 12 L	Opening week › Soft opening › Stock the shelves › Supply run › Dairy	2026-12-02	0
+groceries.sprig:11	-	Sesame	Opening week › Soft opening › Stock the shelves › Supply run › Seeds	2026-12-02	0
+groceries.sprig:12	-	Nigella	Opening week › Soft opening › Stock the shelves › Supply run › Seeds	2026-12-02	0
+groceries.sprig:14	-	Paper bags, 1000	Opening week › Soft opening › Stock the shelves › Supply run	2026-12-02	0
+lease.sprig^permit	-	Change-of-use permit	Lease	2026-12-09	0
+kitchen.sprig:13	-	Spiral mixer, 40 litres	Kitchen fit-out › Equipment	2026-12-09	0
+bakery.sprig^name	?	Kiln & Crumb, or Mill Street Bread?	Open the bakery	2026-12-09	0

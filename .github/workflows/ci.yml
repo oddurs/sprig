@@ -124,6 +124,18 @@ jobs:
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
       - run: ./scripts/task mcp
 
+  fuzz:
+    # A minute of each fuzz target on every change, seeded from the suite: a
+    # regression in what the parser survives shows up here, and the long runs
+    # before a release start from somewhere (cairn 0080).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+        with:
+          workspaces: crates/sprig-core/fuzz
+      - run: FUZZ_SECONDS=60 ./scripts/task fuzz
+
   perf:
     # Release builds, on the runner the baseline was measured on: more than
     # twice the baseline fails, and so does a keystroke slower than 50 ms.
@@ -150,7 +162,7 @@ jobs:
   required:
     name: required
     if: always()
-    needs: [check, install, backlog, site, editors, perf, plans, mcp]
+    needs: [check, install, backlog, site, editors, perf, plans, mcp, fuzz]
     runs-on: ubuntu-latest
     steps:
       - name: Every job succeeded
@@ -185,5 +197,9 @@ jobs:
           fi
           if [ "${{ needs.mcp.result }}" != "success" ]; then
             echo "mcp: ${{ needs.mcp.result }}"
+            exit 1
+          fi
+          if [ "${{ needs.fuzz.result }}" != "success" ]; then
+            echo "fuzz: ${{ needs.fuzz.result }}"
             exit 1
           fi

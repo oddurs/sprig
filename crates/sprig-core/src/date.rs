@@ -3,6 +3,28 @@
 //! Sprig needs a calendar date, comparison and a difference in days. That is
 //! small enough to own, and owning it keeps the core free of any crate that
 //! could reach for the clock.
+//!
+//! # Example
+//!
+//! ```
+//! use sprig_core::date::{self, Date};
+//!
+//! let today = Date::parse_iso("2026-10-01").unwrap();
+//! assert_eq!((today.year(), today.month(), today.day()), (2026, 10, 1));
+//! assert_eq!(today.weekday(), 4, "Sunday is 0");
+//! assert_eq!(today.add_days(30), Date::new(2026, 10, 31).unwrap());
+//! assert_eq!(today.days_until(Date::new(2026, 12, 25).unwrap()), 85);
+//! assert_eq!(Date::new(2026, 2, 29), None);
+//!
+//! // Typed shortcuts resolve against a today the caller supplies (§9.3).
+//! assert_eq!(date::resolve("fri", today).unwrap().to_string(), "2026-10-02");
+//! assert_eq!(date::resolve("q4", today).unwrap().to_string(), "2026-12-31");
+//! assert!(date::readable("+2w") && !date::readable("soonish"));
+//!
+//! // Ticking a recurring item moves it to the next occurrence (§10.4).
+//! let next = date::next_occurrence(Some(today), "fri", today).unwrap();
+//! assert_eq!(next.to_string(), "2026-10-02");
+//! ```
 
 use std::fmt;
 
@@ -43,14 +65,17 @@ impl Date {
         Date::new(year, month, day)
     }
 
+    /// The year, such as 2026.
     pub fn year(self) -> i32 {
         self.year
     }
 
+    /// The month, 1 to 12.
     pub fn month(self) -> u8 {
         self.month
     }
 
+    /// The day of the month, 1 to 31.
     pub fn day(self) -> u8 {
         self.day
     }
@@ -72,7 +97,7 @@ impl Date {
     }
 
     /// The same day next month, or that month's last day if it is shorter.
-    pub fn add_month(self) -> Date {
+    pub(crate) fn add_month(self) -> Date {
         let (year, month) = if self.month == 12 {
             (self.year + 1, 1)
         } else {
@@ -241,7 +266,7 @@ fn month_day(v: &str) -> Option<(u8, u8)> {
 }
 
 /// Whether an `every:` value names a recurrence (§10.3).
-pub fn recurs(every: &str) -> bool {
+pub(crate) fn recurs(every: &str) -> bool {
     let anchor = Date {
         year: 2024,
         month: 1,

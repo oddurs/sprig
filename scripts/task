@@ -29,6 +29,7 @@ usage: scripts/task <target>
   editors    test the TextMate and tree-sitter grammars and the VS Code extension (needs node, a display)
   perf       time parse, resolve and check against the committed baseline, in release builds
   mcp        a scripted session with sprig mcp through the official MCP client (needs node)
+  fuzz       fuzz the parser and the edit API, FUZZ_SECONDS each (default 60; needs nightly and cargo-fuzz)
 USAGE
 }
 
@@ -60,9 +61,14 @@ case "${1:-}" in
   lint)
     purity
     cargo clippy --all-targets --all-features -- -D warnings
+    # The core's documentation is part of its API: complete, and with links
+    # that resolve (docs/stability.md).
+    RUSTDOCFLAGS="-D warnings" cargo doc --no-deps -p sprig-core
     ;;
   test)
     cargo test --all-targets
+    # --all-targets leaves out doc examples, which are tests too.
+    cargo test --doc --workspace
     # The workflow scripts are code too, and a broken one strands whoever
     # relies on it mid-task.
     for t in tests/scripts/*.sh; do
@@ -147,6 +153,26 @@ case "${1:-}" in
     cargo build --locked -p sprig-cli
     npm --prefix tests/mcp ci --no-audit --no-fund
     node tests/mcp/session.mjs target/debug/sprig
+    ;;
+  fuzz)
+    # Seeded with every file the suite and the examples hold, so the fuzzer
+    # starts from plans rather than from nothing. A crash lands in
+    # crates/sprig-core/fuzz/artifacts/ and becomes a test (cairn 0080).
+    seconds=${FUZZ_SECONDS:-60}
+    rustup toolchain list | grep -q '^nightly' || rustup toolchain install nightly --profile minimal
+    command -v cargo-fuzz >/dev/null 2>&1 || cargo install --locked cargo-fuzz
+    cd crates/sprig-core/fuzz
+    for target in parse edits; do
+      mkdir -p "corpus/$target"
+      find ../../../tests/conformance ../../../examples -name '*.sprig' | {
+        n=0
+        while IFS= read -r f; do
+          n=$((n + 1))
+          cp "$f" "corpus/$target/seed-$n"
+        done
+      }
+      cargo +nightly fuzz run "$target" "corpus/$target" -- -max_total_time="$seconds"
+    done
     ;;
   perf)
     # The baseline gate and the language server's 50 ms keystroke criterion,

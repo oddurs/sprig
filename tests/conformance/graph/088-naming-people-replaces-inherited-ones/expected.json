@@ -1,0 +1,31 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "People",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 1
+    },
+    "people": ["a", "b"],
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "One",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 1
+        },
+        "people": ["c"]
+      }
+    ]
+  },
+  "diagnostics": []
+}

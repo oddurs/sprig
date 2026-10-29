@@ -23,6 +23,11 @@ meaning: a dropped item no longer holds up what waits on it (§5.7).
 examples, diagnostics and discussions can cite it. A number never changes
 meaning once published; a rule that is removed leaves its number unused.
 
+**Changes.** A change to what a file means goes through an RFC (`rfcs/`), and
+after 1.0 every change only adds: a file valid under 1.0 means the same to
+every 1.x tool. `docs/stability.md` lists each promise and the test that keeps
+it.
+
 **Words.** *Must* and *must not* are requirements on an implementation. *Should*
 is a strong recommendation that tools may depart from with a reason. A *tool* is
 anything that reads Sprig: a parser, an editor, a renderer, an agent.
@@ -931,8 +936,8 @@ Kitchen has 7 days left; its own `est:10d` is not used.
 ### 10.3 Recurrence
 
 `every:` makes an item recurring. Its value is `day` or `daily`, `week` or
-`weekly`, `month` or `monthly`, a count of one or more such as `3d` or `2w`, or
-a weekday name; case does not matter. A recurring leaf is upkeep and never
+`weekly`, `month` or `monthly`, a count of one or more days or weeks such as
+`3d` or `2w`, or a weekday name; case does not matter. A recurring leaf is upkeep and never
 counts toward progress (§5.3). An item whose `every:` is none of these is still
 recurring, has no next occurrence, and a tool should warn about it.
 

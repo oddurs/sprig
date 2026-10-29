@@ -7,6 +7,22 @@
 //! moves when a line is added above it. Refs name the item where it is
 //! written, never a grafted copy, so a ref always points at the line an edit
 //! would change.
+//!
+//! # Example
+//!
+//! ```
+//! use sprig_core::{Date, Workspace, refs};
+//!
+//! let mut ws = Workspace::new();
+//! ws.insert("lease.sprig", "Lease\n\n- Negotiate\n- Sign the lease  ^signed\n");
+//! let res = ws.resolve(Date::new(2026, 10, 1).unwrap());
+//!
+//! // By anchor, by file and line, or by words that match one item.
+//! assert_eq!(refs::resolve(&res, "^signed").unwrap().line, 4);
+//! assert_eq!(refs::resolve(&res, "lease.sprig:3").unwrap().text, "Negotiate");
+//! assert_eq!(refs::resolve(&res, "negot").unwrap().line, 3);
+//! assert!(refs::resolve(&res, "^nowhere").is_err());
+//! ```
 
 use std::fmt;
 
@@ -16,9 +32,11 @@ use crate::workspace::Resolution;
 /// An item, where it is written.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Item {
+    /// The workspace path of the file that writes the item.
     pub file: String,
     /// 1-based.
     pub line: usize,
+    /// The item's text (§4.9), as candidates are listed.
     pub text: String,
 }
 
@@ -30,6 +48,8 @@ impl fmt::Display for Item {
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
+/// Why a ref named no single item.
+#[non_exhaustive]
 pub enum RefError {
     /// Nothing matches; the message says what was looked for.
     NotFound(String),

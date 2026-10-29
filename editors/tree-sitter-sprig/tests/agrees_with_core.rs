@@ -64,6 +64,8 @@ fn core(src: &str) -> Vec<Line> {
                         toks.push(format!("{}:{text}", p.as_str()))
                     }
                     Piece::Value | Piece::Link => {}
+                    // A piece the grammar has not been taught: fail, so it is.
+                    other => panic!("the grammar test does not know {other:?}"),
                 }
             }
             (kind, toks)

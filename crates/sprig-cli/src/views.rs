@@ -41,6 +41,16 @@ pub(crate) fn glyph(n: &Resolved) -> char {
     }
 }
 
+/// What a wait is, in a few words: the label of what it names, or its start.
+pub(crate) fn wait_label(w: &Wait) -> String {
+    match w {
+        Wait::Reference { label, .. } => label.clone(),
+        Wait::Start(d) => format!("its start, {d}"),
+        // A kind of wait a later core adds.
+        _ => "something not yet finished".into(),
+    }
+}
+
 pub(crate) fn relative(days: i64) -> String {
     match days {
         0 => "today".into(),
@@ -314,14 +324,14 @@ fn waits_text(waits: &[Wait]) -> String {
         .iter()
         .filter_map(|w| match w {
             Wait::Reference { label, .. } => Some(label.as_str()),
-            Wait::Start(_) => None,
+            _ => None,
         })
         .collect();
     let until: Vec<String> = waits
         .iter()
         .filter_map(|w| match w {
             Wait::Start(d) => Some(d.to_string()),
-            Wait::Reference { .. } => None,
+            _ => None,
         })
         .collect();
     let mut parts = Vec::new();
@@ -717,6 +727,14 @@ fn chain(
                     rows.push(note(state(t), Style::Plain));
                 }
             }
+            // A kind of wait a later core adds, named as the rest are.
+            other => rows.push(Row {
+                key: String::new(),
+                cells: vec![vec![
+                    Cell::new(branch, Style::Dim),
+                    Cell::plain(wait_label(other)),
+                ]],
+            }),
         }
     }
 }

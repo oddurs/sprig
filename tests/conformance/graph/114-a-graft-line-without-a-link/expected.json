@@ -1,0 +1,13 @@
+{
+  "sprig_tree": 1,
+  "diagnostics": [
+    {
+      "code": "S0005",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 1,
+      "span": [6, 20]
+    }
+  ]
+}

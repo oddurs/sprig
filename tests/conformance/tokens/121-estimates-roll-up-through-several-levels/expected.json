@@ -1,0 +1,102 @@
+{
+  "sprig_tree": 1,
+  "resolved": {
+    "file": "main.sprig",
+    "line": 1,
+    "label": "Rollup",
+    "status": "todo",
+    "progress": {
+      "done": 0,
+      "doing": 0,
+      "total": 3
+    },
+    "estimate": 28,
+    "children": [
+      {
+        "file": "main.sprig",
+        "line": 3,
+        "mark": "-",
+        "label": "House",
+        "status": "todo",
+        "progress": {
+          "done": 0,
+          "doing": 0,
+          "total": 3
+        },
+        "estimate": 28,
+        "children": [
+          {
+            "file": "main.sprig",
+            "line": 4,
+            "mark": "-",
+            "label": "Kitchen",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 2
+            },
+            "estimate": 24,
+            "children": [
+              {
+                "file": "main.sprig",
+                "line": 5,
+                "mark": "-",
+                "label": "Tiles",
+                "status": "todo",
+                "progress": {
+                  "done": 0,
+                  "doing": 0,
+                  "total": 1
+                },
+                "estimate": 16
+              },
+              {
+                "file": "main.sprig",
+                "line": 6,
+                "mark": "-",
+                "label": "Paint",
+                "status": "todo",
+                "progress": {
+                  "done": 0,
+                  "doing": 0,
+                  "total": 1
+                },
+                "estimate": 8
+              }
+            ]
+          },
+          {
+            "file": "main.sprig",
+            "line": 7,
+            "mark": "-",
+            "label": "Bath",
+            "status": "todo",
+            "progress": {
+              "done": 0,
+              "doing": 0,
+              "total": 1
+            },
+            "estimate": 4,
+            "children": [
+              {
+                "file": "main.sprig",
+                "line": 8,
+                "mark": "-",
+                "label": "Taps",
+                "status": "todo",
+                "progress": {
+                  "done": 0,
+                  "doing": 0,
+                  "total": 1
+                },
+                "estimate": 4
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "diagnostics": []
+}

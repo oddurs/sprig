@@ -1,0 +1,21 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Notes",
+    "root": {
+      "line": 1,
+      "span": [0, 5],
+      "text": "Notes",
+      "children": [
+        {
+          "line": 3,
+          "span": [7, 14],
+          "mark": "-",
+          "text": "Thing",
+          "notes": ["Remember: the key is under the mat."]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

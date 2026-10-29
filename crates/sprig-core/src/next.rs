@@ -3,6 +3,23 @@
 //! The same answer as the playground's Next up view: open leaves, split into
 //! those that can start and those waiting on something, the first ranked by
 //! in progress, then priority, then due date, then the order they are written.
+//!
+//! # Example
+//!
+//! ```
+//! use sprig_core::{Date, Workspace, next};
+//!
+//! let mut ws = Workspace::new();
+//! ws.insert("plan.sprig", "Plan\n\n- Logo  ^logo  @kim\n- Menus  after:^logo\n? Which font?  @teo\n");
+//! let res = ws.resolve(Date::new(2026, 10, 1).unwrap());
+//! let trees: Vec<_> = res.trees().collect();
+//!
+//! let n = next::next(&trees, None);
+//! assert_eq!(n.ready.len(), 2);
+//! assert_eq!(n.waiting[0].node.label, "Menus");
+//! assert_eq!(n.questions(), 1);
+//! assert_eq!(next::next(&trees, Some("kim")).ready[0].node.label, "Logo");
+//! ```
 
 use crate::date::Date;
 use crate::workspace::{Resolved, Status, Tree};
@@ -10,6 +27,7 @@ use crate::workspace::{Resolved, Status, Tree};
 /// One open leaf.
 #[derive(Clone, Debug)]
 pub struct Entry<'t> {
+    /// The item.
     pub node: &'t Resolved,
     /// Labels from the top of its tree down to its parent; empty for an item
     /// at the top.
@@ -25,8 +43,11 @@ pub struct Entry<'t> {
 }
 
 #[derive(Clone, Debug, Default)]
+/// The open leaves of a set of trees, split by whether anything is in their way.
 pub struct Next<'t> {
+    /// What can be done now, in progress first, then by priority and due date.
     pub ready: Vec<Entry<'t>>,
+    /// What waits on something unfinished or on a start date, in the same order.
     pub waiting: Vec<Entry<'t>>,
 }
 

@@ -26,6 +26,8 @@
 /site/src/content/docs/roadmap.md
 /site/src/content/docs/changelog.md
 /site/src/content/docs/docs/reference/cli.md
+/site/src/content/docs/docs/reference/mcp.md
+/site/src/content/docs/docs/reference/diagnostics.md
 /editors/node_modules/
 /editors/vscode/node_modules/
 /tests/mcp/node_modules/
@@ -35,3 +37,9 @@
 /editors/vscode/server/
 /editors/vscode/LICENSE
 *.vsix
+
+# Fuzzing: generated inputs and the fuzzer's own build.
+/crates/sprig-core/fuzz/corpus/
+/crates/sprig-core/fuzz/artifacts/
+/crates/sprig-core/fuzz/target/
+/crates/sprig-core/fuzz/coverage/

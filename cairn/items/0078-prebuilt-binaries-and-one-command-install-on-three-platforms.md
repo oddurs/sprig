@@ -8,7 +8,7 @@ milestone: v1.0
 depends_on:
 - 71
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-10-29
 priority: p0
 effort: m
 area: release
@@ -26,3 +26,7 @@ Release workflow producing binaries for macOS (arm64, x64), Linux (x64, arm64, m
 
 - [ ] A from-scratch CI job per platform installs with one command and runs `sprig --version`.
 - [ ] Every binary ships with a checksum, and the installers verify it.
+
+## 2026-10-29
+
+Waits on the name (0006) and on a first release (0027). The vscode workflow shows the shape: one build per target on main. Binaries and checksums need a tag to attach to.

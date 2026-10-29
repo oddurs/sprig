@@ -1,0 +1,46 @@
+{
+  "sprig_tree": 1,
+  "syntax": {
+    "title": "Tokens",
+    "root": {
+      "line": 1,
+      "span": [0, 6],
+      "text": "Tokens",
+      "children": [
+        {
+          "line": 3,
+          "span": [8, 44],
+          "mark": "-",
+          "text": "Ship",
+          "after": ["^b", "^a", "^b"]
+        }
+      ]
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "S0201",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 9,
+      "span": [16, 24]
+    },
+    {
+      "code": "S0201",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 19,
+      "span": [26, 34]
+    },
+    {
+      "code": "S0201",
+      "severity": "error",
+      "file": "main.sprig",
+      "line": 3,
+      "col": 29,
+      "span": [36, 44]
+    }
+  ]
+}

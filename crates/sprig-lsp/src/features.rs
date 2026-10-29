@@ -536,6 +536,8 @@ fn describe(n: &Resolved, today: Date) -> String {
                     } => format!("- *{label}* ({file}:{line})"),
                     Wait::Reference { label, .. } => format!("- *{label}*"),
                     Wait::Start(d) => format!("- its start date, {}", when(*d, today)),
+                    // A kind of wait a later core adds.
+                    _ => "- something not yet finished".to_string(),
                 });
             }
             out.push(waits.join("\n"));

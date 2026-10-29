@@ -173,6 +173,7 @@ pub struct StatusArgs {
 
 #[derive(Debug, Args)]
 pub struct CompletionsArgs {
+    /// The shell to complete for
     #[arg(value_enum)]
     pub shell: clap_complete::Shell,
 }
@@ -531,4 +532,43 @@ fn system_date() -> Date {
     let d = jiff::Zoned::now().date();
     Date::new(i32::from(d.year()), d.month() as u8, d.day() as u8)
         .expect("the system clock gives a real date")
+}
+
+#[cfg(test)]
+mod tests {
+    use clap::CommandFactory;
+
+    use super::Cli;
+
+    /// The reference on the site is the binary's own help, so a command or an
+    /// option without help would be a hole in it.
+    #[test]
+    fn every_command_and_option_has_help() {
+        let cli = Cli::command();
+        let mut missing = Vec::new();
+        for cmd in cli.get_subcommands().filter(|c| !c.is_hide_set()) {
+            if cmd
+                .get_about()
+                .is_none_or(|a| a.to_string().trim().is_empty())
+            {
+                missing.push(format!("sprig {}", cmd.get_name()));
+            }
+            for arg in cmd.get_arguments().filter(|a| !a.is_hide_set()) {
+                if arg.get_id() == "help" || arg.get_id() == "version" {
+                    continue;
+                }
+                if arg
+                    .get_help()
+                    .is_none_or(|h| h.to_string().trim().is_empty())
+                {
+                    missing.push(format!("sprig {} {}", cmd.get_name(), arg.get_id()));
+                }
+            }
+        }
+        assert!(
+            missing.is_empty(),
+            "no help for:\n  {}",
+            missing.join("\n  ")
+        );
+    }
 }

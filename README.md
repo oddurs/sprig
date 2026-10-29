@@ -115,6 +115,9 @@ into it.
   `PLAN.sprig` convention, `sprig agent --write AGENTS.md`, and `sprig mcp`,
   which lets an agent read the plans and change them through checked,
   diffed edits.
+- [`docs/stability.md`](docs/stability.md): what will not change under you
+  after 1.0, each promise with the test that keeps it, and
+  [`rfcs/`](rfcs), how the spec changes.
 - [`spec/sprig.md`](spec/sprig.md): the specification, every rule numbered,
   each with an example, and [`tests/conformance/`](tests/conformance) holding
   the implementation to it.
