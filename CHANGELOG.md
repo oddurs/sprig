@@ -8,6 +8,22 @@ All notable changes to this project are recorded here. The format follows
 
 ### Added
 
+- Tools for the shell, each sharing the core's edit API or tree:
+  - `sprig find` searches by words, `@who`, `#tag`, `is:STATE` and
+    `due:<DATE`.
+  - `sprig agenda` shows dated work by day.
+  - `sprig mark`, `sprig answer` and `sprig add` change a plan from the
+    command line and say what stopped waiting.
+  - `sprig edit` opens an editor at an item.
+  - `sprig graph` prints the dependencies for Graphviz or Mermaid.
+  - `sprig export` writes JSON, iCalendar or CSV.
+  - `sprig import` reads Markdown checklists, todo.txt and GitHub issues.
+  - `next --json` and `find --json` print items in the tree format.
+- `spec/tools.md` T5: what queries mean, the agenda, calendar UIDs, graph ids
+  and conversions.
+- A GitHub Action in `action/`. It checks plans, annotates problems, and
+  summarises a pull request's effect on done counts and on what it unblocked.
+- A guide to Sprig in the shell, whose recipes run in CI.
 - Spec draft 0.5:
   - It rules on every ambiguity Appendix B listed, folded into the numbered
     rules.

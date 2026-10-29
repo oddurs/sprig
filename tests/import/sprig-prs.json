@@ -1,0 +1,333 @@
+[
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 30,
+    "state": "OPEN",
+    "title": "feat(editors): tree-sitter grammar, VS Code extension, editor guide"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 29,
+    "state": "MERGED",
+    "title": "fix(site): show what ships today, from the binary's own command list"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 28,
+    "state": "MERGED",
+    "title": "docs(spec): draft 0.5, a ruling on every known ambiguity"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 27,
+    "state": "MERGED",
+    "title": "fix(core): refuse a field edit that would not read back"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 26,
+    "state": "MERGED",
+    "title": "feat(lsp): add a language server with diagnostics, completion and hover"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 25,
+    "state": "MERGED",
+    "title": "test(suite): add token, date and graph conformance examples"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 24,
+    "state": "MERGED",
+    "title": "feat(cli): one output layer, and sprig tree, why and status"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 23,
+    "state": "MERGED",
+    "title": "feat: byte-preserving edits, refs, sprig fmt and sprig tick"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 22,
+    "state": "MERGED",
+    "title": "feat(site): run sprig-core as WebAssembly, with typed dates in the core"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "",
+        "name": "dependencies",
+        "description": "",
+        "color": "0366d6"
+      },
+      {
+        "id": "",
+        "name": "javascript",
+        "description": "",
+        "color": "168700"
+      }
+    ],
+    "milestone": null,
+    "number": 21,
+    "state": "OPEN",
+    "title": "build: bump postcss-selector-parser from 6.1.4 to 6.1.5 in /site"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "",
+        "name": "dependencies",
+        "description": "",
+        "color": "0366d6"
+      },
+      {
+        "id": "",
+        "name": "javascript",
+        "description": "",
+        "color": "168700"
+      }
+    ],
+    "milestone": null,
+    "number": 20,
+    "state": "OPEN",
+    "title": "build: bump undici from 8.11.2 to 8.12.3 in /site"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "",
+        "name": "dependencies",
+        "description": "",
+        "color": "0366d6"
+      },
+      {
+        "id": "",
+        "name": "javascript",
+        "description": "",
+        "color": "168700"
+      }
+    ],
+    "milestone": null,
+    "number": 19,
+    "state": "OPEN",
+    "title": "build: bump zod from 4.6.5 to 4.6.7 in /site"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 18,
+    "state": "MERGED",
+    "title": "feat: v0.1, check a plan from the terminal"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "",
+        "name": "dependencies",
+        "description": "",
+        "color": "0366d6"
+      },
+      {
+        "id": "",
+        "name": "github_actions",
+        "description": "",
+        "color": "000000"
+      }
+    ],
+    "milestone": null,
+    "number": 17,
+    "state": "OPEN",
+    "title": "ci: bump Swatinem/rust-cache from 2.9.2 to 2.9.3 in the actions group across 1 directory"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "",
+        "name": "dependencies",
+        "description": "",
+        "color": "0366d6"
+      },
+      {
+        "id": "",
+        "name": "javascript",
+        "description": "",
+        "color": "168700"
+      }
+    ],
+    "milestone": null,
+    "number": 16,
+    "state": "OPEN",
+    "title": "build: bump vite from 8.3.1 to 8.3.4 in /site"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "",
+        "name": "dependencies",
+        "description": "",
+        "color": "0366d6"
+      },
+      {
+        "id": "",
+        "name": "javascript",
+        "description": "",
+        "color": "168700"
+      }
+    ],
+    "milestone": null,
+    "number": 15,
+    "state": "OPEN",
+    "title": "build: bump the site group across 1 directory with 4 updates"
+  },
+  {
+    "assignees": [],
+    "labels": [
+      {
+        "id": "",
+        "name": "dependencies",
+        "description": "",
+        "color": "0366d6"
+      },
+      {
+        "id": "",
+        "name": "javascript",
+        "description": "",
+        "color": "168700"
+      }
+    ],
+    "milestone": null,
+    "number": 14,
+    "state": "CLOSED",
+    "title": "build: bump @astrojs/starlight from 0.42.4 to 0.42.5 in /site in the site group"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 13,
+    "state": "MERGED",
+    "title": "docs(spec): tighten dates and grafts in draft 0.4"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 12,
+    "state": "MERGED",
+    "title": "feat(site): add a tools page and a toolchain section"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 11,
+    "state": "MERGED",
+    "title": "chore(backlog): file the CLI toolbelt and TUI items"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 10,
+    "state": "MERGED",
+    "title": "feat(site): add a design system built around the nine marks"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 9,
+    "state": "MERGED",
+    "title": "chore(backlog): file the site design system item"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 8,
+    "state": "MERGED",
+    "title": "chore(backlog): close the site deploy item"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 7,
+    "state": "MERGED",
+    "title": "feat(site): build the website with a live hero and a playground"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 6,
+    "state": "MERGED",
+    "title": "docs(spec): write the specification as spec/sprig.md, draft 0.3"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 5,
+    "state": "MERGED",
+    "title": "chore(backlog): file the launch milestone and the website items"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 4,
+    "state": "MERGED",
+    "title": "chore(backlog): close the workspace and CI scaffold item"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 3,
+    "state": "MERGED",
+    "title": "fix(ci): fail the release when the notes filter errors"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 2,
+    "state": "MERGED",
+    "title": "docs: add the CI badge to the README"
+  },
+  {
+    "assignees": [],
+    "labels": [],
+    "milestone": null,
+    "number": 1,
+    "state": "MERGED",
+    "title": "fix(agent): name worktree directories after the repository"
+  }
+]

@@ -11,7 +11,7 @@ depends_on:
 - 50
 - 53
 created: 2026-09-28
-updated: 2026-10-28
+updated: 2026-10-29
 priority: p0
 effort: m
 area: editors
@@ -28,7 +28,7 @@ An extension that registers the language, ships the TextMate grammar, and bundle
 ## Acceptance criteria
 
 - [ ] Published to the Marketplace under the name the spike cleared.
-- [ ] Targets macOS arm64 and x64, Linux x64 and arm64, and Windows x64.
+- [x] Targets macOS arm64 and x64, Linux x64 and arm64, and Windows x64.
 - [x] A CI smoke test with `@vscode/test-electron` opens `examples/bakery/` and asserts the expected diagnostics count.
 - [x] Works with no network access and no separate install.
 
@@ -40,3 +40,7 @@ An extension that registers the language, ships the TextMate grammar, and bundle
 - **Criterion 4:** the server is bundled, so nothing else is needed and nothing is fetched.
 - **Criterion 2:** `.github/workflows/vscode.yml` packages one VSIX per target (darwin-arm64, darwin-x64, linux-x64, linux-arm64 and win32-x64), each with that target's release binary. It is ticked once the workflow's first run on main succeeds.
 - **Criterion 1** waits on the name (0006): nothing is published to the Marketplace until it is cleared.
+
+## 2026-10-29
+
+The vscode workflow's first run on main (run 40791431500) built all five VSIX packages: darwin-arm64, darwin-x64, linux-x64, linux-arm64, win32-x64. Publishing waits on the name (0006).

@@ -35,7 +35,15 @@ jobs:
       # rustup installs the toolchain named in rust-toolchain.toml on the first
       # cargo invocation, so there is nothing to pin twice.
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      # `sprig graph | dot -Tsvg` and the shell guide's jq recipe are part of
+      # the suite. Linux runs them for certain; elsewhere a test that lacks
+      # the tool says it was skipped.
+      - name: Install Graphviz
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y -q graphviz
       - run: ./scripts/task check
+        env:
+          SPRIG_CI_TOOLS: ${{ runner.os == 'Linux' && '1' || '' }}
 
   install:
     # The README's install line, on the three platforms v0.1 promises: a clean
@@ -116,10 +124,22 @@ jobs:
 
   # The one status check branch protection requires. It exists so that adding a
   # job never means editing a protection rule.
+  plans:
+    # This repository's own action (action/), on its own example plans: the
+    # pull request's summary shows what it did to them.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+      - uses: ./action
+        with:
+          paths: examples tests/import
+          strict: true
+
   required:
     name: required
     if: always()
-    needs: [check, install, backlog, site, editors, perf]
+    needs: [check, install, backlog, site, editors, perf, plans]
     runs-on: ubuntu-latest
     steps:
       - name: Every job succeeded
@@ -146,5 +166,9 @@ jobs:
           fi
           if [ "${{ needs.perf.result }}" != "success" ]; then
             echo "perf: ${{ needs.perf.result }}"
+            exit 1
+          fi
+          if [ "${{ needs.plans.result }}" != "success" ]; then
+            echo "plans: ${{ needs.plans.result }}"
             exit 1
           fi

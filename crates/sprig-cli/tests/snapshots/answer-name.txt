@@ -1,0 +1,4 @@
+bakery.sprig:25  = Kiln & Crumb
+
+No longer waiting on it:
+  launch.sprig:6  Window lettering  (still waits on Logo, second round)

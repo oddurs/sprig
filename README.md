@@ -104,6 +104,10 @@ into it.
   people, anchors and file links. It also follows links, and its hover shows
   progress and what an item waits on. Point your editor's LSP client at
   `sprig lsp` for `*.sprig` files.
+- [Sprig in the shell](https://oddurs.github.io/sprig/docs/shell/): `find`,
+  `agenda`, `add`, `mark`, `graph`, `export` and `import`, and recipes for fzf,
+  jq, a pre-commit hook and a calendar feed. [`action/`](action) checks plans
+  in GitHub Actions and summarises what a pull request did to them.
 - [`spec/sprig.md`](spec/sprig.md): the specification, every rule numbered,
   each with an example, and [`tests/conformance/`](tests/conformance) holding
   the implementation to it.

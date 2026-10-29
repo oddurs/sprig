@@ -3,12 +3,13 @@ id: 49
 uid: 9e6ccf77-b820-4a98-bbb0-5fdb7ca2261c
 title: 'Language server: diagnostics as you type'
 type: feature
-status: doing
+status: done
 milestone: v0.2
 depends_on:
 - 25
 created: 2026-09-28
-updated: 2026-10-28
+updated: 2026-10-29
+closed_at: 2026-10-29
 priority: p0
 effort: m
 area: lsp
@@ -26,7 +27,7 @@ area: lsp
 
 - [x] Diagnostics appear on open and on change, driven by a scripted JSON-RPC test client.
 - [x] Deleting `^signed` in `lease.sprig` produces a diagnostic in `bakery.sprig`, which links to it, without `bakery.sprig` being edited.
-- [ ] Rechecking a 5,000-line workspace after a keystroke takes under 50 ms on the CI runner.
+- [x] Rechecking a 5,000-line workspace after a keystroke takes under 50 ms on the CI runner.
 
 ## 2026-10-28
 
@@ -39,3 +40,11 @@ area: lsp
    - The test asserts under 50 ms in release and under 500 ms in debug, but CI runs debug.
    - On the way I cut the core's allocations. Tokens are now shared between trees (`Resolved::tokens` is an `Arc`), finished trees are moved rather than copied, and the §8.8 keys and reference lookup borrow instead of allocating. With `examples/bench_resolve.rs`, the hub went from 34 to 21 ms and a 50-deep graft chain from 397 to 161 ms. The chain is quadratic by design, since every file's tree holds everything beneath it.
    - Holding the 50 ms on the CI runner needs either a release-mode test job or more headroom; that is 0056's work.
+
+## 2026-10-29
+
+CI perf job on PR #30: a keystroke recheck of 5,000 lines took a median of 17.9 ms, worst 18.6 ms, on ubuntu-latest. The job fails above 50 ms.
+
+## Result
+
+The language server keeps a parsed workspace and reparses only the file that changed; CI holds a keystroke recheck of 5,000 lines under 50 ms (18 ms measured).
