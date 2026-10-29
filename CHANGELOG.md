@@ -19,6 +19,9 @@ All notable changes to this project are recorded here. The format follows
   backticks, exists. It found a module citing a spec file that was never
   written; refs are specified in T1 of `spec/tools.md`.
 - `scripts/task lint` refuses a committed package, archive or file over 1 MiB.
+- `scripts/task audit` checks every lockfile against the RustSec and npm
+  advisory databases. CI runs it weekly and on dependency changes, and
+  Dependabot now watches every lockfile, which a test holds it to.
 
 - The conformance suite holds 417 examples, with every numbered rule of the
   spec cited:
@@ -56,6 +59,11 @@ All notable changes to this project are recorded here. The format follows
 - §10.3 says what a count in `every:` counts: days or weeks.
 
 ### Fixed
+
+- The site's and the VS Code extension's build tools carried 18 known
+  advisories, 8 of them high: undici, vite, zod, source-map-js and
+  postcss-selector-parser in the site, and MSAL in the extension's packager.
+  None reached a published page or the extension itself.
 
 - Two downloaded Python packages that reached the root of the tree in the
   v1.0 groundwork change are removed.

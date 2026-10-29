@@ -12,8 +12,10 @@ updates:
       actions:
         update-types: [minor, patch]
 
+  # Every committed lockfile is listed here; crates/sprig-cli/tests/docs.rs
+  # fails when one is not, so a new one cannot go unwatched.
   - package-ecosystem: cargo
-    directory: "/"
+    directories: ["/", "/crates/sprig-core/fuzz"]
     schedule:
       interval: weekly
     commit-message:
@@ -23,11 +25,11 @@ updates:
         update-types: [minor, patch]
 
   - package-ecosystem: npm
-    directory: "/site"
+    directories: ["/site", "/editors", "/editors/vscode", "/tests/mcp"]
     schedule:
       interval: weekly
     commit-message:
       prefix: "build"
     groups:
-      site:
+      npm:
         update-types: [minor, patch]
