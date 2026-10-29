@@ -26,38 +26,29 @@ A public website that explains Sprig in ten seconds and lets a visitor edit a re
 
 ## v0.2 — Write plans in your editor
 
-`··········` 0% · 0 of 4 done · due 2027-01-29
+`··········` 0% · 0 of 3 done · due 2027-01-29
 
 VS Code highlights `.sprig` files, completes people, anchors and file links, shows `sprig check` diagnostics as you type, and ticks items with a code action. `sprig fmt` normalises a file without touching anything it doesn't mean to. In the terminal, `sprig tree`, `status` and `why` show a plan's shape and what holds it up, and every command completes in the shell.
 
 - [ ] [`0057`](https://github.com/oddurs/sprig/blob/main/cairn/items/0057-release-v0-2.md) Release v0.2 <sup>chore · p0 · release</sup>
-- [ ] [`0049`](https://github.com/oddurs/sprig/blob/main/cairn/items/0049-language-server-diagnostics-as-you-type.md) Language server: diagnostics as you type <sup>feature · p0 · lsp</sup>
 - [ ] [`0054`](https://github.com/oddurs/sprig/blob/main/cairn/items/0054-vs-code-extension.md) VS Code extension <sup>feature · p0 · editors</sup>
 - [ ] [`0055`](https://github.com/oddurs/sprig/blob/main/cairn/items/0055-editor-setup-guide-neovim-helix-zed.md) Editor setup guide: Neovim, Helix, Zed <sup>docs · p1 · docs</sup>
 
 ## v0.3 — Agents work the plan
 
-`··········` 0% · 0 of 19 done · due 2027-04-02
+`··········` 0% · 0 of 11 done · due 2027-04-02
 
 `sprig mcp` lets a coding agent read a repository's `PLAN.sprig`, find ready work, tick, add and answer items, where every change is an ordinary file edit a person can review. Plans export to calendars and JSON, and existing checklists import. From the shell, `mark`, `add`, `answer`, `find`, `agenda` and `graph` cover the everyday writes and questions, through the same edit API the agents use.
 
-- [ ] [`0024`](https://github.com/oddurs/sprig/blob/main/cairn/items/0024-sprig-next-json.md) sprig next --json <sup>feature · p1 · cli</sup>
 - [ ] [`0058`](https://github.com/oddurs/sprig/blob/main/cairn/items/0058-what-tools-should-sprig-mcp-expose.md) What tools should sprig mcp expose? <sup>spike · p0 · agents</sup>
 - [ ] [`0059`](https://github.com/oddurs/sprig/blob/main/cairn/items/0059-sprig-mcp-read-tools.md) sprig mcp: read tools <sup>feature · p0 · agents</sup>
 - [ ] [`0060`](https://github.com/oddurs/sprig/blob/main/cairn/items/0060-sprig-mcp-write-tools.md) sprig mcp: write tools <sup>feature · p0 · agents</sup>
 - [ ] [`0061`](https://github.com/oddurs/sprig/blob/main/cairn/items/0061-cap-how-many-items-an-agent-adds-per-call.md) Cap how many items an agent adds per call <sup>feature · p1 · agents</sup>
 - [ ] [`0062`](https://github.com/oddurs/sprig/blob/main/cairn/items/0062-plan-sprig-convention-and-sprig-agent.md) PLAN.sprig convention and sprig agent <sup>docs · p0 · agents</sup>
 - [ ] [`0063`](https://github.com/oddurs/sprig/blob/main/cairn/items/0063-end-to-end-test-with-a-real-mcp-client.md) End-to-end test with a real MCP client <sup>chore · p1 · agents</sup>
-- [ ] [`0064`](https://github.com/oddurs/sprig/blob/main/cairn/items/0064-sprig-export-json-and-icalendar.md) sprig export: JSON and iCalendar <sup>feature · p1 · interop</sup>
-- [ ] [`0065`](https://github.com/oddurs/sprig/blob/main/cairn/items/0065-sprig-import-markdown-checklists-and-todo-txt.md) sprig import: Markdown checklists and todo.txt <sup>feature · p1 · interop</sup>
-- [ ] [`0066`](https://github.com/oddurs/sprig/blob/main/cairn/items/0066-import-github-issues-from-gh-json.md) Import GitHub Issues from gh JSON <sup>feature · p2 · interop</sup>
-- [ ] [`0067`](https://github.com/oddurs/sprig/blob/main/cairn/items/0067-github-action-check-plans-and-summarise-progress-in-pull-requests.md) GitHub Action: check plans and summarise progress in pull requests <sup>feature · p1 · interop</sup>
 - [ ] [`0071`](https://github.com/oddurs/sprig/blob/main/cairn/items/0071-release-v0-3.md) Release v0.3 <sup>chore · p0 · release</sup>
-- [ ] [`0123`](https://github.com/oddurs/sprig/blob/main/cairn/items/0123-sprig-mark-and-sprig-answer.md) sprig mark and sprig answer <sup>feature · p1 · cli</sup>
-- [ ] [`0124`](https://github.com/oddurs/sprig/blob/main/cairn/items/0124-sprig-add-append-an-item-from-the-shell.md) sprig add: append an item from the shell <sup>feature · p1 · cli</sup>
-- [ ] [`0125`](https://github.com/oddurs/sprig/blob/main/cairn/items/0125-sprig-edit-open-editor-at-an-item.md) sprig edit: open $EDITOR at an item <sup>feature · p2 · cli</sup>
-- [ ] [`0126`](https://github.com/oddurs/sprig/blob/main/cairn/items/0126-sprig-find-search-by-text-and-by-token.md) sprig find: search by text and by token <sup>feature · p2 · cli</sup>
-- [ ] [`0127`](https://github.com/oddurs/sprig/blob/main/cairn/items/0127-sprig-agenda-dated-work-by-day.md) sprig agenda: dated work by day <sup>feature · p2 · cli</sup>
+- [ ] [`0064`](https://github.com/oddurs/sprig/blob/main/cairn/items/0064-sprig-export-json-and-icalendar.md) sprig export: JSON and iCalendar <sup>feature · p1 · interop</sup>
+- [ ] [`0067`](https://github.com/oddurs/sprig/blob/main/cairn/items/0067-github-action-check-plans-and-summarise-progress-in-pull-requests.md) GitHub Action: check plans and summarise progress in pull requests <sup>feature · p1 · interop</sup>
 - [ ] [`0128`](https://github.com/oddurs/sprig/blob/main/cairn/items/0128-sprig-graph-the-dependency-graph-for-graphviz-and-mermaid.md) sprig graph: the dependency graph for Graphviz and Mermaid <sup>feature · p2 · interop</sup>
 - [ ] [`0129`](https://github.com/oddurs/sprig/blob/main/cairn/items/0129-guide-sprig-in-the-shell.md) Guide: Sprig in the shell <sup>docs · p2 · docs</sup>
 

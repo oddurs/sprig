@@ -83,6 +83,7 @@ export default defineConfig({
 					items: [
 						{ label: 'Your first plan', slug: 'docs/first-plan' },
 						{ label: 'Set up your editor', slug: 'docs/editors' },
+						{ label: 'Sprig in the shell', slug: 'docs/shell' },
 						{ label: 'Playground', link: '/play/' },
 					],
 				},

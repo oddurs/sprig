@@ -3,13 +3,13 @@ id: 67
 uid: c0cd8e18-59fb-4f98-a431-0e4be528d8d8
 title: 'GitHub Action: check plans and summarise progress in pull requests'
 type: feature
-status: planned
+status: doing
 milestone: v0.3
 depends_on:
 - 25
 - 27
 created: 2026-09-28
-updated: 2026-09-28
+updated: 2026-10-29
 priority: p1
 effort: s
 area: interop

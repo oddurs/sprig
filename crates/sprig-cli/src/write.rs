@@ -18,7 +18,7 @@ use crate::load::{self, Loaded};
 use crate::{Result, plural};
 
 /// Replaces a file's contents in one step.
-fn save(path: &Path, text: &str) -> io::Result<()> {
+pub(crate) fn save(path: &Path, text: &str) -> io::Result<()> {
     let name = path
         .file_name()
         .map(|n| n.to_string_lossy().into_owned())
@@ -30,7 +30,7 @@ fn save(path: &Path, text: &str) -> io::Result<()> {
     })
 }
 
-fn write_error(path: &Path, e: io::Error) -> Box<dyn std::error::Error> {
+pub(crate) fn write_error(path: &Path, e: io::Error) -> Box<dyn std::error::Error> {
     format!("cannot write {}: {e}", path.display()).into()
 }
 

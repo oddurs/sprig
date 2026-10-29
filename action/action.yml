@@ -1,0 +1,69 @@
+name: Sprig plans
+description: Check .sprig plans, and summarise what a pull request does to their progress
+branding:
+  icon: check-square
+  color: green
+
+inputs:
+  paths:
+    description: Plans to check, as files or directories separated by spaces
+    default: .
+  strict:
+    description: Fail on warnings as well as errors
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    # Until there is a release to download (cairn 0027), the action builds
+    # the sprig of its own ref, the way the README installs it. A sprig
+    # already on PATH is used as it is.
+    - name: Install sprig
+      shell: bash
+      run: |
+        set -eu
+        if ! command -v sprig >/dev/null; then
+          cd "$GITHUB_ACTION_PATH/.."
+          ./scripts/task install
+          echo "$PWD/target/install/bin" >>"$GITHUB_PATH"
+        fi
+
+    # Before the check, so a failing check still leaves the summary.
+    - name: Summarise progress
+      shell: bash
+      env:
+        PATHS: ${{ inputs.paths }}
+        BASE: ${{ github.event.pull_request.base.sha }}
+      run: |
+        set -eu
+        sprig --version
+        read -r -a paths <<<"$PATHS"
+        if [ -n "$BASE" ]; then
+          git fetch --no-tags --depth=1 origin "$BASE"
+          git worktree add --detach "$RUNNER_TEMP/sprig-base" "$BASE"
+          bash "$GITHUB_ACTION_PATH/summary.sh" "$RUNNER_TEMP/sprig-base" . "${paths[@]}" >>"$GITHUB_STEP_SUMMARY"
+          git worktree remove --force "$RUNNER_TEMP/sprig-base"
+        else
+          # Not a pull request: the head compared with itself.
+          bash "$GITHUB_ACTION_PATH/summary.sh" . . "${paths[@]}" >>"$GITHUB_STEP_SUMMARY"
+        fi
+
+    - name: Check
+      shell: bash
+      env:
+        PATHS: ${{ inputs.paths }}
+        STRICT: ${{ inputs.strict }}
+      run: |
+        set -eu
+        read -r -a paths <<<"$PATHS"
+        flags=(--plain)
+        if [ "$STRICT" = true ]; then flags+=(--strict); fi
+        # `check --plain`: file, line, column, severity, code, message; each
+        # becomes an annotation on the line it is about.
+        code=0
+        sprig check "${flags[@]}" "${paths[@]}" >"$RUNNER_TEMP/sprig-check" || code=$?
+        awk -F '\t' '{
+          level = ($4 == "error") ? "error" : "warning"
+          printf "::%s file=%s,line=%s,col=%s,title=%s::%s\n", level, $1, $2, $3, $5, $6
+        }' "$RUNNER_TEMP/sprig-check"
+        exit "$code"
