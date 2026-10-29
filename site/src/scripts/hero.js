@@ -8,7 +8,6 @@ const src = /** @type {HTMLTextAreaElement} */ (document.getElementById('demo-sr
 const hl = document.getElementById('demo-hl');
 const body = document.getElementById('demo-body');
 const stats = document.getElementById('demo-stats');
-const editBtn = document.getElementById('demo-edit');
 const presets = JSON.parse(document.getElementById('demo-presets').textContent);
 
 /** @type {Promise<typeof import('../lib/view.js')> | undefined} */
@@ -116,8 +115,3 @@ demo.addEventListener('click', async (e) => {
 	}
 });
 
-editBtn.addEventListener('click', () => {
-	const open = demo.classList.toggle('src-open');
-	editBtn.setAttribute('aria-expanded', String(open));
-	editBtn.textContent = open ? 'Hide the source' : 'Edit the source';
-});

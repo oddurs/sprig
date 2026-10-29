@@ -10,11 +10,10 @@ mod load;
 mod mcp;
 mod out;
 mod tui;
-mod verbs;
 mod views;
 mod write;
 
-use args::{Cli, Command};
+use args::{Cli, Command, Generated};
 use out::Out;
 
 fn main() -> ExitCode {
@@ -29,8 +28,35 @@ fn main() -> ExitCode {
     run.join().unwrap_or(ExitCode::from(2))
 }
 
+/// Commands removed before 1.0 (cairn 0154), and what does their work now.
+/// The table goes at 1.0, when the command line stops changing.
+const REMOVED: &[(&str, &str)] = &[
+    ("status", "sprig tree --summary"),
+    ("agenda", "sprig find is:open 'due:<=+2w'"),
+    ("mark", "sprig tick REF --mark MARK"),
+    ("answer", "an `= ` line under the question, in your editor"),
+    ("add", "a new line in the file, in your editor"),
+    ("edit", "your editor, or `e` in sprig tui"),
+    ("graph", "sprig export --format dot (or mermaid)"),
+    ("agent", "sprig mcp --instructions"),
+    ("completions", "sprig generate SHELL"),
+    ("man", "sprig generate man"),
+];
+
 fn run() -> ExitCode {
-    let cli = Cli::parse();
+    let cli = match Cli::try_parse() {
+        Ok(cli) => cli,
+        Err(e) => {
+            if e.kind() == clap::error::ErrorKind::InvalidSubcommand
+                && let Some(word) = std::env::args().skip(1).find(|a| !a.starts_with('-'))
+                && let Some((_, now)) = REMOVED.iter().find(|(old, _)| *old == word)
+            {
+                eprintln!("sprig: `sprig {word}` is gone; use {now}");
+                return ExitCode::from(2);
+            }
+            e.exit()
+        }
+    };
     let today = args::today(&cli);
     let out = Out::new(cli.color, cli.plain);
     let result = match &cli.command {
@@ -38,20 +64,19 @@ fn run() -> ExitCode {
         Command::Check(a) => views::check(a, today, out),
         Command::Tree(a) => views::tree(a, today, out),
         Command::Why(a) => views::why(a, today, out),
-        Command::Status(a) => views::status(a, today, out),
         Command::Find(a) => data::find(a, today, out),
-        Command::Agenda(a) => data::agenda(a, today, out),
-        Command::Mark(a) => verbs::mark(a, today),
-        Command::Answer(a) => verbs::answer(a, today),
-        Command::Add(a) => verbs::add(a, today),
-        Command::Edit(a) => verbs::edit(a, today),
-        Command::Graph(a) => data::graph(a, today),
         Command::Export(a) => data::export(a, today),
         Command::Import(a) => data::import(a),
         Command::Fmt(a) => write::fmt(a, today),
         Command::Tick(a) => write::tick(a, today),
-        Command::Completions(a) => completions(a.shell),
-        Command::Man => man(),
+        Command::Generate(a) => match a.what {
+            Generated::Man => man(),
+            Generated::Bash => completions(clap_complete::Shell::Bash),
+            Generated::Zsh => completions(clap_complete::Shell::Zsh),
+            Generated::Fish => completions(clap_complete::Shell::Fish),
+            Generated::Elvish => completions(clap_complete::Shell::Elvish),
+            Generated::Powershell => completions(clap_complete::Shell::PowerShell),
+        },
         Command::Lsp => sprig_lsp::stdio(&args::clock(&cli))
             .map(|()| ExitCode::SUCCESS)
             .map_err(|e| e.to_string().into()),
@@ -61,9 +86,9 @@ fn run() -> ExitCode {
             );
             ExitCode::SUCCESS
         }),
+        Command::Mcp(a) if a.instructions => agent::instructions(a.write.as_deref()),
         Command::Mcp(a) => mcp::stdio(a.plans.clone(), &args::clock(&cli), a.max_new_items)
             .map(|()| ExitCode::SUCCESS),
-        Command::Agent(a) => agent::agent(a),
         Command::Tui(a) => tui::tui(a, &args::clock(&cli)),
         Command::Complete(a) => views::candidates(&a.what, today),
     };

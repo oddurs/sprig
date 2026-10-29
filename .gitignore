@@ -21,6 +21,7 @@
 /site/.astro/
 /site/src/generated/
 /site/public/spec.md
+/site/public/spec-annex.md
 /site/src/content/docs/spec.md
 /site/src/content/docs/decisions.md
 /site/src/content/docs/roadmap.md

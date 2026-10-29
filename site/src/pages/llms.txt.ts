@@ -13,7 +13,8 @@ The specification is the authority. Read it before writing or editing a .sprig f
 
 ## Specification
 
-- [Sprig specification, raw Markdown](${at('/spec.md')}): every rule, numbered, with examples
+- [Sprig specification, raw Markdown](${at('/spec.md')}): the format on one card, then every rule, numbered, with examples
+- [Specification annex, raw Markdown](${at('/spec-annex.md')}): the rulings on edge cases, the grammar and the tree format
 - [Specification, rendered](${at('/spec/')})
 
 ## Docs

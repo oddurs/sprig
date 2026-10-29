@@ -39,12 +39,18 @@ function page(meta, body) {
 // Starlight takes the title from frontmatter, so the source's own H1 goes.
 const dropTitle = (md) => md.replace(/^# .*\n+/, '');
 
-/* spec: rendered at /spec/, and served raw at /spec.md byte for byte */
+/* spec: the core and its annex rendered as one page at /spec/, so every rule's
+   anchor is on it, and each served raw byte for byte, at /spec.md and
+   /spec-annex.md */
 const spec = read('spec/sprig.md');
+const annex = read('spec/annex.md');
 // The draft named in the spec's own title, so the description cannot lag it.
 const draft = spec.match(/^# .*draft (\S+)/m)?.[1];
 if (!draft) throw new Error('spec/sprig.md: no "draft N" in its title');
 write(join(site, 'public/spec.md'), spec);
+write(join(site, 'public/spec-annex.md'), annex);
+// On one page, the two files' links to each other become links within it.
+const onePage = (md) => md.replace(/\]\(annex\.md\)/g, '](#annex)').replace(/\]\(sprig\.md\)/g, '](#the-format-on-one-card)');
 write(
 	join(docs, 'spec.md'),
 	page(
@@ -54,7 +60,10 @@ write(
 			editUrl: `${edit}/spec/sprig.md`,
 			tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 3 },
 		},
-		`:::note[Generated]\nThis page is built from [\`spec/sprig.md\`](${blob}/spec/sprig.md). The raw file is at [/spec.md](/spec.md).\n:::\n\n${dropTitle(spec)}`,
+		`:::note[Generated]\nThis page is built from [\`spec/sprig.md\`](${blob}/spec/sprig.md) and its annex, [\`spec/annex.md\`](${blob}/spec/annex.md). The raw files are at [/spec.md](/spec.md) and [/spec-annex.md](/spec-annex.md).\n:::\n\n` +
+			onePage(dropTitle(spec)) +
+			'\n\n## Annex\n\n' +
+			onePage(dropTitle(annex)),
 	),
 );
 

@@ -227,7 +227,7 @@ fn read_tools_answer_what_the_json_commands_print() {
     let mut s = Session::start(&dir, &[]);
     assert_eq!(
         s.ok("list_plans", json!({})),
-        cli(&dir, &["status", "--json"])
+        cli(&dir, &["tree", "--summary", "--json"])
     );
     assert_eq!(
         s.ok("next_items", json!({})),
@@ -451,13 +451,13 @@ fn config_prints_a_snippet_a_client_can_load() {
 }
 
 #[test]
-fn agent_write_keeps_one_block_and_a_second_run_changes_nothing() {
+fn instructions_write_keeps_one_block_and_a_second_run_changes_nothing() {
     let dir = bakery();
     let file = dir.join("AGENTS.md");
     fs::write(&file, "# Agents\n\nRun the tests before pushing.\n").unwrap();
     let run = || {
         let o = Command::new(env!("CARGO_BIN_EXE_sprig"))
-            .args(["agent", "--write"])
+            .args(["mcp", "--instructions", "--write"])
             .arg(&file)
             .output()
             .unwrap();
@@ -470,7 +470,7 @@ fn agent_write_keeps_one_block_and_a_second_run_changes_nothing() {
     assert_eq!(run(), once);
     // Printed, it is the same text without the markers.
     let o = Command::new(env!("CARGO_BIN_EXE_sprig"))
-        .arg("agent")
+        .args(["mcp", "--instructions"])
         .output()
         .unwrap();
     let printed = String::from_utf8(o.stdout).unwrap();

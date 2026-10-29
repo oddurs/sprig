@@ -63,19 +63,6 @@ fn bakery() -> PathBuf {
     dir
 }
 
-fn snapshot(name: &str, actual: &str) {
-    let path = Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("tests/snapshots")
-        .join(name);
-    if std::env::var_os("SPRIG_BLESS").is_some() {
-        fs::write(&path, actual).unwrap();
-        return;
-    }
-    let expected = fs::read_to_string(&path)
-        .unwrap_or_else(|_| panic!("no snapshot {name}; run with SPRIG_BLESS=1"));
-    assert_eq!(actual, expected.replace("\r\n", "\n"), "snapshot {name}");
-}
-
 fn schema(def: Option<&str>) -> jsonschema::Validator {
     let mut s: Value =
         serde_json::from_str(&fs::read_to_string(repo("spec/tree.schema.json")).unwrap()).unwrap();
@@ -255,24 +242,17 @@ fn find_with_an_unknown_filter_exits_2_and_lists_the_filters() {
 }
 
 // ---------------------------------------------------------------------------
-// agenda and export
-
-#[test]
-fn agenda_for_the_bakery_matches_its_snapshot() {
-    snapshot(
-        "agenda-bakery.txt",
-        &stdout(&sprig(&["agenda", "examples/bakery"])),
-    );
-}
+// dated work and export
 
 #[test]
 fn a_recurring_item_appears_once_on_its_next_date() {
     let out = stdout(&sprig(&[
-        "agenda",
-        "--days",
-        "60",
+        "find",
         "--plain",
+        "--in",
         "examples/bakery",
+        "is:open",
+        "due:<=2026-11-30",
     ]));
     let weekly: Vec<&str> = out
         .lines()
@@ -317,39 +297,10 @@ fn events(ics: &str) -> Vec<icalendar::Event> {
     events
 }
 
-fn date_of(e: &icalendar::Event) -> String {
-    use icalendar::{Component, DatePerhapsTime};
-    match e.get_start().unwrap() {
-        DatePerhapsTime::Date(d) => d.format("%Y-%m-%d").to_string(),
-        other => panic!("a timed start: {other:?}"),
-    }
-}
-
 #[test]
 fn the_ics_export_is_valid_icalendar() {
     let ics = stdout(&sprig(&["export", "--format", "ics", "examples/bakery"]));
     assert!(!events(&ics).is_empty());
-}
-
-#[test]
-fn the_agenda_and_the_ics_export_list_the_same_items_for_a_window() {
-    use icalendar::Component;
-    let agenda = stdout(&sprig(&["agenda", "--plain", "examples/bakery"]));
-    let shown: BTreeSet<(String, String)> = agenda
-        .lines()
-        .map(|l| {
-            let c: Vec<&str> = l.split('\t').collect();
-            (c[1].to_string(), c[3].to_string())
-        })
-        .collect();
-    let ics = stdout(&sprig(&["export", "--format", "ics", "examples/bakery"]));
-    // The agenda's default window: today and the thirteen days after.
-    let exported: BTreeSet<(String, String)> = events(&ics)
-        .iter()
-        .map(|e| (date_of(e), e.get_summary().unwrap().to_string()))
-        .filter(|(d, _)| d.as_str() <= "2026-10-14")
-        .collect();
-    assert_eq!(shown, exported);
 }
 
 #[test]
@@ -397,16 +348,22 @@ fn the_csv_export_has_a_row_per_line_that_counts() {
 }
 
 // ---------------------------------------------------------------------------
-// graph
+// the dependency graph, as an export
 
 #[test]
 fn graph_ids_are_stable_and_named_after_anchors_or_lines() {
-    let one = stdout(&sprig(&["graph", "examples/bakery"]));
-    assert_eq!(one, stdout(&sprig(&["graph", "examples/bakery"])));
+    let dot = ["export", "--format", "dot", "examples/bakery"];
+    let one = stdout(&sprig(&dot));
+    assert_eq!(one, stdout(&sprig(&dot)));
     assert!(one.contains("bakery_loan ["), "{one}");
     // An edge runs from what is waited on to what waits.
     assert!(one.contains("launch_logo -> launch_l6"), "{one}");
-    let m = stdout(&sprig(&["graph", "--format", "mermaid", "examples/bakery"]));
+    let m = stdout(&sprig(&[
+        "export",
+        "--format",
+        "mermaid",
+        "examples/bakery",
+    ]));
     assert!(m.starts_with("flowchart LR\n"), "{m}");
     assert!(m.contains("bakery_loan["), "{m}");
 }
@@ -434,7 +391,7 @@ fn graphviz_draws_the_bakery() {
     dot.stdin
         .take()
         .unwrap()
-        .write_all(&sprig(&["graph", "examples/bakery"]).stdout)
+        .write_all(&sprig(&["export", "--format", "dot", "examples/bakery"]).stdout)
         .unwrap();
     let o = dot.wait_with_output().unwrap();
     assert!(o.status.success(), "{}", stderr(&o));
@@ -442,26 +399,19 @@ fn graphviz_draws_the_bakery() {
 }
 
 // ---------------------------------------------------------------------------
-// mark and answer
-
-#[test]
-fn answering_the_name_frees_window_lettering_of_it() {
-    let dir = bakery();
-    let o = run(&dir, &["answer", "^name", "Kiln & Crumb"]);
-    assert!(o.status.success(), "{}", stderr(&o));
-    snapshot("answer-name.txt", &stdout(&o));
-}
+// tick --mark
 
 #[test]
 fn marking_the_lease_signed_lists_what_it_unblocks() {
     let dir = bakery();
-    let o = run(&dir, &["mark", "^signed", "x"]);
+    let o = run(&dir, &["tick", "^signed", "--mark", "x"]);
     assert!(o.status.success(), "{}", stderr(&o));
     let out = stdout(&o);
     assert!(out.starts_with("lease.sprig:13  x Sign the lease"), "{out}");
     assert!(
-        out.contains("bakery.sprig:15  Supplier credit line  (unblocked)"),
-        "{out}"
+        stderr(&o).contains("bakery.sprig:15  Supplier credit line  (unblocked)"),
+        "{}",
+        stderr(&o)
     );
 }
 
@@ -470,7 +420,7 @@ fn marking_a_group_or_a_graft_exits_2_and_writes_nothing() {
     let dir = bakery();
     for r in ["launch.sprig:3", "bakery.sprig:18"] {
         let before = fs::read_to_string(dir.join(r.split(':').next().unwrap())).unwrap();
-        let o = run(&dir, &["mark", r, "x"]);
+        let o = run(&dir, &["tick", r, "--mark", "x"]);
         assert_eq!(o.status.code(), Some(2), "{r}");
         assert!(
             stderr(&o).contains("status comes from its children"),
@@ -490,137 +440,10 @@ fn mark_takes_the_mark_or_its_name() {
         ("later", "> Menu boards"),
         ("-", "- Menu boards"),
     ] {
-        let o = run(&dir, &["mark", "launch.sprig:7", m]);
+        let o = run(&dir, &["tick", "launch.sprig:7", "--mark", m]);
         assert!(o.status.success(), "{m}: {}", stderr(&o));
         assert!(stdout(&o).contains(want), "{m}: {}", stdout(&o));
     }
-}
-
-// ---------------------------------------------------------------------------
-// add
-
-#[test]
-fn add_matches_the_indentation_of_the_siblings_it_joins() {
-    for indent in ["\t", "    "] {
-        let dir = scratch("indent");
-        let src = format!("Plan\n\n- Parent  ^p\n{indent}x First\n- Other\n");
-        fs::write(dir.join("plan.sprig"), &src).unwrap();
-        let o = run(&dir, &["add", "Second", "--under", "^p"]);
-        assert!(o.status.success(), "{}", stderr(&o));
-        assert_eq!(
-            fs::read_to_string(dir.join("plan.sprig")).unwrap(),
-            format!("Plan\n\n- Parent  ^p\n{indent}x First\n{indent}- Second\n- Other\n"),
-            "{indent:?}"
-        );
-    }
-}
-
-#[test]
-fn add_writes_typed_dates_out_and_prints_where() {
-    let dir = bakery();
-    let o = run(
-        &dir,
-        &[
-            "add",
-            "Call the plumber due:fri",
-            "--under",
-            "^design",
-            "--today",
-            "2026-10-01",
-        ],
-    );
-    assert!(o.status.success(), "{}", stderr(&o));
-    assert_eq!(
-        stdout(&o),
-        "kitchen.sprig:8  - Call the plumber due:2026-10-02\n"
-    );
-    let kitchen = fs::read_to_string(dir.join("kitchen.sprig")).unwrap();
-    assert_eq!(
-        kitchen.lines().nth(7),
-        Some("  - Call the plumber due:2026-10-02")
-    );
-}
-
-#[test]
-fn add_after_puts_the_item_after_the_whole_branch() {
-    let dir = bakery();
-    let o = run(&dir, &["add", "~ Pick tiles", "--after", "^design"]);
-    assert!(o.status.success(), "{}", stderr(&o));
-    // Design runs to line 7, its last note.
-    assert_eq!(stdout(&o), "kitchen.sprig:8  ~ Pick tiles\n");
-}
-
-#[test]
-fn add_with_nowhere_to_go_appends_to_plan_sprig() {
-    let dir = scratch("inbox");
-    fs::write(dir.join("PLAN.sprig"), "Inbox\n\n- First\n").unwrap();
-    let o = run(&dir, &["add", "Second"]);
-    assert!(o.status.success(), "{}", stderr(&o));
-    assert_eq!(stdout(&o), "PLAN.sprig:4  - Second\n");
-    assert_eq!(
-        fs::read_to_string(dir.join("PLAN.sprig")).unwrap(),
-        "Inbox\n\n- First\n- Second\n"
-    );
-    let empty = scratch("no-inbox");
-    let o = run(&empty, &["add", "Second"]);
-    assert_eq!(o.status.code(), Some(2), "{}", stdout(&o));
-}
-
-// ---------------------------------------------------------------------------
-// edit
-
-#[test]
-fn edit_outside_a_terminal_exits_2_without_starting_an_editor() {
-    let dir = bakery();
-    let marker = dir.join("editor-ran");
-    let o = Command::new(env!("CARGO_BIN_EXE_sprig"))
-        .args(["edit", "^loan"])
-        .current_dir(&dir)
-        .env("EDITOR", format!("touch {}", marker.display()))
-        .env_remove("VISUAL")
-        .stdin(Stdio::null())
-        .output()
-        .unwrap();
-    assert_eq!(o.status.code(), Some(2));
-    assert!(stderr(&o).contains("terminal"), "{}", stderr(&o));
-    assert!(!marker.exists());
-}
-
-#[cfg(target_os = "linux")]
-#[test]
-fn edit_hands_the_editor_the_line_and_the_file() {
-    // `script` gives the command a terminal, as a person's shell would.
-    if Command::new("script").arg("--version").output().is_err() {
-        eprintln!("script is not installed here; edit was not tried");
-        return;
-    }
-    let dir = bakery();
-    let stub = dir.join("stub-editor");
-    let args = dir.join("editor-args");
-    fs::write(
-        &stub,
-        format!("#!/bin/sh\nprintf '%s\\n' \"$@\" > '{}'\n", args.display()),
-    )
-    .unwrap();
-    use std::os::unix::fs::PermissionsExt;
-    fs::set_permissions(&stub, fs::Permissions::from_mode(0o755)).unwrap();
-    let cmd = format!("'{}' edit ^loan", env!("CARGO_BIN_EXE_sprig"));
-    let o = Command::new("script")
-        .args(["-qec", &cmd, "/dev/null"])
-        .current_dir(&dir)
-        .env("EDITOR", &stub)
-        .env_remove("VISUAL")
-        .stdin(Stdio::null())
-        .output()
-        .unwrap();
-    assert!(o.status.success(), "{}{}", stdout(&o), stderr(&o));
-    let got = fs::read_to_string(&args).unwrap();
-    let got: Vec<&str> = got.lines().collect();
-    assert_eq!(got[0], "+13");
-    assert_eq!(
-        dir.join(got[1]).canonicalize().unwrap(),
-        dir.join("bakery.sprig").canonicalize().unwrap()
-    );
 }
 
 // ---------------------------------------------------------------------------
@@ -708,7 +531,7 @@ fn the_action_summary_shows_both_done_counts_and_what_a_change_unblocked() {
             fs::copy(e.path(), dir.join("plans").join(e.file_name())).unwrap();
         }
     }
-    let o = run(&head, &["mark", "^signed", "x", "--in", "plans"]);
+    let o = run(&head, &["tick", "^signed", "--mark", "x", "--in", "plans"]);
     assert!(o.status.success(), "{}", stderr(&o));
     // A file the pull request adds has no base count.
     fs::write(head.join("plans/new.sprig"), "New\n\n- One\n").unwrap();
@@ -753,7 +576,10 @@ fn the_action_summary_names_an_unblocked_item_by_its_path_from_the_root() {
             fs::copy(e.path(), dir.join("plans/bakery").join(e.file_name())).unwrap();
         }
     }
-    let o = run(&head, &["mark", "^signed", "x", "--in", "plans/bakery"]);
+    let o = run(
+        &head,
+        &["tick", "^signed", "--mark", "x", "--in", "plans/bakery"],
+    );
     assert!(o.status.success(), "{}", stderr(&o));
 
     for path in ["plans", "plans/", "plans/bakery/bakery.sprig"] {

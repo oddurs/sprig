@@ -1,30 +1,36 @@
 //! The specification says its examples are valid Sprig files. Each fenced
-//! `sprig` block in `spec/sprig.md` is read here, so an example that stops
-//! meaning what the text around it says is caught.
+//! `sprig` block in `spec/sprig.md` and `spec/annex.md` is read here, so an
+//! example that stops meaning what the text around it says is caught.
 
 use std::fs;
 use std::path::Path;
 
 use sprig_core::{Severity, Workspace, parse};
 
-fn examples() -> Vec<(usize, String)> {
-    let spec =
-        fs::read_to_string(Path::new(env!("CARGO_MANIFEST_DIR")).join("../../spec/sprig.md"))
-            .unwrap();
+/// Every example, with where it is as `file:line`.
+fn examples() -> Vec<(String, String)> {
     let mut out = Vec::new();
-    let mut block: Option<(usize, String)> = None;
-    for (i, line) in spec.lines().enumerate() {
-        match &mut block {
-            None if line == "```sprig" => block = Some((i + 2, String::new())),
-            Some((at, text)) if line == "```" => {
-                out.push((*at, std::mem::take(text)));
-                block = None;
+    for file in ["spec/sprig.md", "spec/annex.md"] {
+        let spec = fs::read_to_string(
+            Path::new(env!("CARGO_MANIFEST_DIR"))
+                .join("../..")
+                .join(file),
+        )
+        .unwrap();
+        let mut block: Option<(usize, String)> = None;
+        for (i, line) in spec.lines().enumerate() {
+            match &mut block {
+                None if line == "```sprig" => block = Some((i + 2, String::new())),
+                Some((at, text)) if line == "```" => {
+                    out.push((format!("{file}:{at}"), std::mem::take(text)));
+                    block = None;
+                }
+                Some((_, text)) => {
+                    text.push_str(line);
+                    text.push('\n');
+                }
+                None => {}
             }
-            Some((_, text)) => {
-                text.push_str(line);
-                text.push('\n');
-            }
-            None => {}
         }
     }
     out
@@ -41,7 +47,7 @@ fn every_example_in_the_spec_parses_without_an_error() {
             .filter(|d| d.severity() == Severity::Error)
             .map(ToString::to_string)
             .collect();
-        assert!(errors.is_empty(), "spec/sprig.md:{line}: {errors:?}");
+        assert!(errors.is_empty(), "{line}: {errors:?}");
     }
 }
 

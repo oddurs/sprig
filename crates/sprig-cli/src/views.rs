@@ -1,5 +1,5 @@
-//! The commands that read and print: `next`, `check`, `tree`, `why` and
-//! `status`. Each builds rows and leaves widths, colour and `--plain` to
+//! The commands that read and print: `next`, `check`, `tree` (and its
+//! `--summary`) and `why`. Each builds rows and leaves widths, colour and `--plain` to
 //! [`crate::out`].
 
 use std::collections::HashSet;
@@ -10,7 +10,7 @@ use sprig_core::next::{self, Entry};
 use sprig_core::workspace::{Resolution, Resolved, Status, Tree, Wait};
 use sprig_core::{Date, Diagnostic, Severity, refs};
 
-use crate::args::{CheckArgs, NextArgs, StatusArgs, TreeArgs, WhyArgs};
+use crate::args::{CheckArgs, NextArgs, TreeArgs, WhyArgs};
 use crate::load::{self, Loaded};
 use crate::out::{Cell, Out, Row, Style, Table, clip};
 use crate::{Result, plural};
@@ -356,6 +356,9 @@ fn progress(n: &Resolved) -> String {
 }
 
 pub fn tree(a: &TreeArgs, today: Date, out: Out) -> Result<ExitCode> {
+    if a.summary {
+        return summary(a, today, out);
+    }
     let (groups, resolved) = resolve_all(&a.paths, today)?;
     let mut w = io::stdout().lock();
     let mut first = true;
@@ -740,9 +743,9 @@ fn chain(
 }
 
 // ----------------------------------------------------------------------------
-// status
+// tree --summary: the whole folder, a line per file
 
-pub fn status(a: &StatusArgs, today: Date, out: Out) -> Result<ExitCode> {
+fn summary(a: &TreeArgs, today: Date, out: Out) -> Result<ExitCode> {
     let (groups, resolved) = resolve_all(&a.paths, today)?;
     let late = |e: &Entry| e.due_date.is_some_and(|d| d < today);
     if a.json {
@@ -858,7 +861,7 @@ pub fn status(a: &StatusArgs, today: Date, out: Out) -> Result<ExitCode> {
 // completion candidates
 
 /// Anchors as refs, or people, from the plans in the current folder, one per
-/// line, for the shell scripts `sprig completions` prints.
+/// line, for the shell scripts `sprig generate` prints.
 pub fn candidates(what: &str, today: Date) -> Result<ExitCode> {
     let (_, resolved) = resolve_all(&[std::path::PathBuf::from(".")], today)?;
     let mut found = std::collections::BTreeSet::new();

@@ -14,8 +14,8 @@ use sprig_core::workspace::{Resolution, Resolved, Status, Tree};
 use sprig_core::{Date, Mark, Workspace, agenda};
 
 use crate::data::day as day_name;
-use crate::verbs::item_line;
 use crate::views::{glyph, hours, relative, wait_label};
+use crate::write::item_line;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum View {

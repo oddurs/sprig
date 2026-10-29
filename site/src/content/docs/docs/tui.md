@@ -57,7 +57,7 @@ sprig tui examples/bakery
 | `q` | quit |
 
 The next-up view lists what `sprig next` does, in the same order. The agenda
-lists what `sprig agenda` does.
+lists the open, dated work of the next fourteen days by day, late work first.
 
 ## Open alongside an editor or an agent
 
@@ -65,8 +65,8 @@ The TUI reads the files again whenever one changes, including a save that
 writes a new file and renames it into place, as Vim's does. The cursor stays on
 its item.
 
-Every write is the same one-line edit `sprig tick`, `sprig mark` or
-`sprig add` would make, and it reads the file again first. If the line it is
+Every write is a one-line edit, the same one `sprig tick` makes for a tick or
+a mark, and it reads the file again first. If the line it is
 aimed at has changed since the TUI showed it, the write is refused, nothing is
 written, and the screen shows the file as it is now. Nobody's change is
 overwritten. A change to another line doesn't stop it.

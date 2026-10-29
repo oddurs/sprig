@@ -72,10 +72,10 @@ fn the_plain_columns_of_tree_stay_as_they_are() {
 }
 
 #[test]
-fn the_plain_columns_of_status_stay_as_they_are() {
-    let out = plain(&["status", "examples/bakery"]);
+fn the_plain_columns_of_tree_summary_stay_as_they_are() {
+    let out = plain(&["tree", "--summary", "examples/bakery"]);
     columns(&out, 7);
-    snapshot("plain-status.txt", &out);
+    snapshot("plain-summary.txt", &out);
 }
 
 #[test]
@@ -83,11 +83,4 @@ fn the_plain_columns_of_find_stay_as_they_are() {
     let out = plain(&["find", "--in", "examples/bakery", "is:open"]);
     columns(&out, 6);
     snapshot("plain-find.txt", &out);
-}
-
-#[test]
-fn the_plain_columns_of_agenda_stay_as_they_are() {
-    let out = plain(&["agenda", "examples/bakery"]);
-    columns(&out, 5);
-    snapshot("plain-agenda.txt", &out);
 }
