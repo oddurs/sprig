@@ -32,3 +32,7 @@ Watch every file in the workspace, including grafted ones, and re-resolve on cha
 ## 2026-10-29
 
 The folder is watched, not the files, and a test saves the way Vim does with backupcopy=no (write a new file, rename it over the plan) and waits for the event. That test runs in CI on Linux, macOS and Windows. Saving from Vim itself, on macOS and Linux, still has to be tried by hand.
+
+## 2026-10-29
+
+Linux, 2026-10-29: real Vim 9.1 with writebackup and backupcopy=no, run as a script rather than typed. sprig tui ran in tmux on a copy of the bakery, outside /tmp, because Vim's default backupskip turns off rename-on-write there. Two saves in a row, each a rename (strace showed rename("lease.sprig", "lease.sprig~"), and the inode changed both times), each showed on screen within two seconds, with the done count going 10, 11, 12. The watch survives the file it saw being replaced. macOS is still to try, so criterion 3 stays open.
