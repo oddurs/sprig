@@ -18,7 +18,7 @@ usage: scripts/task <target>
 
   fmt        format in place
   fmt:check  verify formatting; non-zero on drift
-  lint       clippy with warnings denied, and the core purity guard
+  lint       clippy with warnings denied, the core purity guard, and no packages in git
   test       the full test suite
   build      compile everything, including the tests
   install    cargo install the CLI into target/install, as a stranger would, and run it
@@ -51,6 +51,26 @@ purity() {
   fi
 }
 
+# Only source belongs in the tree. A package or an archive is a build output or
+# a download, and once committed it stays in every clone forever; two reached
+# the root unnoticed once (cairn 0151). So is anything over a mebibyte: the
+# largest file written by hand is a fraction of that.
+tracked() {
+  bad=$(
+    # awk, not grep, which fails when nothing matches and so stops `set -e`.
+    git ls-files | awk 'tolower($0) ~ /\.(tar|tgz|zip|7z|gz|xz|bz2|whl|egg|crate|vsix|jar|exe|dll|so|dylib|deb|rpm|dmg|msi)$/'
+    # Sizes from the index, which is what a commit would carry.
+    git ls-files -s | awk -F '\t' '{ split($1, f, " "); print f[2], $2 }' \
+      | git cat-file --batch-check='%(objectsize) %(rest)' \
+      | awk '$1 > 1048576 { sub(/^[0-9]+ /, ""); print }'
+  )
+  if [ -n "$bad" ]; then
+    printf '%s\n' "$bad" | sort -u
+    printf '\nlint: these are packages, archives or files over 1 MiB, which do not belong in git.\n' >&2
+    exit 1
+  fi
+}
+
 case "${1:-}" in
   fmt)
     cargo fmt --all
@@ -60,6 +80,7 @@ case "${1:-}" in
     ;;
   lint)
     purity
+    tracked
     cargo clippy --all-targets --all-features -- -D warnings
     # The core's documentation is part of its API: complete, and with links
     # that resolve (docs/stability.md).

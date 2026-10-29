@@ -43,3 +43,12 @@
 /crates/sprig-core/fuzz/artifacts/
 /crates/sprig-core/fuzz/target/
 /crates/sprig-core/fuzz/coverage/
+
+# Downloads and build outputs, so `git add -A` cannot sweep one in;
+# `scripts/task lint` refuses any that are committed anyway (cairn 0151).
+*.tar
+*.tar.*
+*.tgz
+*.zip
+*.whl
+*.crate

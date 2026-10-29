@@ -8,6 +8,32 @@ character says what a line is and indentation says where it belongs. The
 `sprig` command reads a folder of them and tells you what can be done now and
 what is broken, for people and for the coding agents working beside them.
 
+**Status:** before the first release. The format is
+[draft 0.5](spec/sprig.md), held to it by 417 conformance examples, and its
+design decisions are settled; a change from here goes through an
+[RFC](rfcs/). The command, the language server, the TUI and the MCP server
+all work today, tested on Linux, macOS and Windows. Nothing is published to crates.io or an editor marketplace yet, because the name is
+still being cleared, so install from source for now.
+
+## Why Sprig
+
+Markdown checklists are everywhere, todo.txt is simple, and Org-mode can do
+anything inside Emacs. Sprig is for the plan that outgrows them, and it stays
+plain text:
+
+- **It computes what is blocked.** `after:^van` makes an item wait, across
+  files, and `sprig next` lists only what can start now.
+- **A plan can span files.** `+ [[kitchen]]` grafts one plan into another, so
+  each team keeps its own file and the roll-up stays live.
+- **It is checked like code.** Every problem has a stable code, an exit status
+  and a line number, for editors and for CI.
+- **Agents can use it safely.** `sprig mcp` gives a coding agent the plan and
+  checked, diffed edits, through the same parser every other tool uses.
+
+[How Sprig compares](https://oddurs.github.io/sprig/compare/) sets it beside
+Markdown task lists, todo.txt, TaskPaper, Org-mode and Taskwarrior, including
+what each does better.
+
 ## Install
 
 With Rust installed ([rustup.rs](https://rustup.rs)):
@@ -139,7 +165,9 @@ scripts/agent pr                         # check, push, open the pull request
 ```
 
 `main` only advances through a merged pull request. [CONTRIBUTING.md](CONTRIBUTING.md)
-has the whole loop.
+has the whole loop, and [ARCHITECTURE.md](ARCHITECTURE.md) is the map of the
+code: what each crate does, how data flows through it, and the invariants that
+hold it together. Questions go where [SUPPORT.md](SUPPORT.md) says.
 
 ## License
 
