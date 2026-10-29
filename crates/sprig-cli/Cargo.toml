@@ -6,6 +6,10 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords = ["sprig", "plans", "todo", "cli", "tui"]
+categories = ["command-line-utilities", "text-processing"]
 authors.workspace = true
 publish.workspace = true
 

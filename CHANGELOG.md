@@ -8,6 +8,18 @@ All notable changes to this project are recorded here. The format follows
 
 ### Added
 
+- ARCHITECTURE.md, a map of the code for a newcomer: what each crate and top
+  level folder does, how a file becomes an answer, and the invariants a change
+  must keep, each with where it is enforced.
+- A README for every crate and for `spec/`, `docs/`, `editors/`, `examples/`,
+  `scripts/` and `design/`, and SUPPORT.md, saying where to ask what. The
+  crates' Cargo metadata names their README, keywords and categories, and the
+  examples in the core's and the tree-sitter grammar's READMEs run as tests.
+- A test that every path a document names, as a Markdown link or in
+  backticks, exists. It found a module citing a spec file that was never
+  written; refs are specified in T1 of `spec/tools.md`.
+- `scripts/task lint` refuses a committed package, archive or file over 1 MiB.
+
 - The conformance suite holds 417 examples, with every numbered rule of the
   spec cited:
   - Dates, shortcuts and estimates are checked against an oracle written
@@ -44,6 +56,9 @@ All notable changes to this project are recorded here. The format follows
 - §10.3 says what a count in `every:` counts: days or weeks.
 
 ### Fixed
+
+- Two downloaded Python packages that reached the root of the tree in the
+  v1.0 groundwork change are removed.
 
 - The tree-sitter grammar reads a file whose last line has no line ending,
   which the new conformance examples found. An external scanner ends a line

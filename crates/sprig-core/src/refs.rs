@@ -1,7 +1,7 @@
 //! Naming one item from outside a file: the refs a command line, an editor or
 //! an agent passes to say which item to tick or explain.
 //!
-//! This is tool behaviour, not format; `spec/refs.md` states it so that other
+//! This is tool behaviour, not format; `spec/tools.md` (T1) states it so that other
 //! implementations can match it. Anchors are the stable form, the way
 //! Taskwarrior's UUIDs are and its working-set numbers are not: a line number
 //! moves when a line is added above it. Refs name the item where it is

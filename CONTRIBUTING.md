@@ -3,6 +3,9 @@
 Sprig is a small project with a strict workflow. The strictness is what lets
 people and agents work in it at the same time without stepping on each other.
 
+New to the code? [ARCHITECTURE.md](ARCHITECTURE.md) is the map: which crate does
+what, how a file becomes an answer, and the invariants a change must keep.
+
 ## Once, after cloning
 
 ```sh

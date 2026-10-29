@@ -6,6 +6,10 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords = ["sprig", "plans", "todo", "parser", "plain-text"]
+categories = ["parser-implementations", "text-processing"]
 authors.workspace = true
 publish.workspace = true
 

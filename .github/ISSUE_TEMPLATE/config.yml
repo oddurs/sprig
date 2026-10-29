@@ -3,3 +3,9 @@ contact_links:
   - name: Security vulnerability
     url: https://github.com/oddurs/sprig/security/advisories/new
     about: Report privately. Please do not open a public issue.
+  - name: Documentation
+    url: https://oddurs.github.io/sprig/docs/first-plan/
+    about: The tutorial, the guides and the reference, which may already answer it.
+  - name: A change to the format
+    url: https://github.com/oddurs/sprig/blob/main/rfcs/README.md
+    about: What a .sprig file means changes through an RFC, not an issue.

@@ -24,3 +24,8 @@ pub const HIGHLIGHTS_QUERY: &str = include_str!("../../queries/highlights.scm");
 
 /// What the parser knows about each node type.
 pub const NODE_TYPES: &str = include_str!("../../src/node-types.json");
+
+// The README's example is a test too, so the first code a reader sees runs.
+#[doc = include_str!("../../README.md")]
+#[cfg(doctest)]
+pub struct ReadmeDoctests;

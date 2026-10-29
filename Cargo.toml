@@ -8,6 +8,7 @@ edition = "2024"
 rust-version = "1.98"
 license = "MIT"
 repository = "https://github.com/oddurs/sprig"
+homepage = "https://oddurs.github.io/sprig/"
 authors = ["Oddur Sigurdsson <oddurs@gmail.com>"]
 # Nothing publishes until the name is cleared (cairn item 0006): a crate name,
 # once taken on crates.io, cannot be given back.

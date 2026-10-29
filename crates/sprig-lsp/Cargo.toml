@@ -6,6 +6,10 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords = ["sprig", "plans", "lsp", "language-server"]
+categories = ["development-tools", "text-editors"]
 authors.workspace = true
 publish.workspace = true
 
