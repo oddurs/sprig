@@ -3,12 +3,12 @@ id: 157
 uid: 0e216562-a010-42fe-846f-5bd9074e04f1
 title: Tests that run git leave the real repository alone under a hook
 type: bug
-status: doing
+status: done
 milestone: v1.0
 assignee: Oddur Sigurdsson
-claimed: 2026-11-02
 created: 2026-11-02
 updated: 2026-11-02
+closed_at: 2026-11-02
 priority: p0
 effort: s
 area: release
@@ -26,7 +26,7 @@ Every test that spawns git removes the GIT_ variables it inherits before setting
 
 - [x] tui.rs and docs.rs spawn git with no inherited GIT_ variables.
 - [x] tests/scripts/git-isolation.sh fails without the fix and passes with it.
-- [ ] A push from a worktree, which runs the suite under pre-push, succeeds.
+- [x] A push from a worktree, which runs the suite under pre-push, succeeds.
 
 ## 2026-11-02
 
@@ -35,3 +35,7 @@ Found when the pre-push hook of 0156 ran the suite: tui.rs's scratch-repository 
 ## 2026-11-02
 
 The first push of the fix still went wrong: guide.rs runs 'git init -q && git add -A' through sh, which a grep for Command::new("git") missed. It re-initialised the primary repository as bare and staged the bakery into this worktree's index; both repaired by hand again. guide.rs now strips GIT_ variables from that call and from the recipes it runs. git-isolation.sh now covers every test file that mentions git, sets GIT_DIR alone as a push hook does (with GIT_WORK_TREE set too, init does not mark the repository bare, and the leak went unseen), and compares the decoy's index as well as its config and HEAD. It fails with guide.rs unfixed.
+
+## Result
+
+Every test that runs git, directly or through a shell, drops the GIT_ variables a hook exports, and tests/scripts/git-isolation.sh runs each such test with GIT_DIR aimed at a decoy and fails if its config, HEAD or index change. A push from a worktree now runs the suite under pre-push without touching the real repository.
