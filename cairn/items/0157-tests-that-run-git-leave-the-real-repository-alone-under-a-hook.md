@@ -31,3 +31,7 @@ Every test that spawns git removes the GIT_ variables it inherits before setting
 ## 2026-11-02
 
 Found when the pre-push hook of 0156 ran the suite: tui.rs's scratch-repository setup set core.bare=true in the primary checkout's config and committed 'base' onto the branch being pushed. Repaired by hand (core.bare false, branch reset --mixed to the real commit; nothing reached the remote). Both tests now strip every inherited GIT_ variable rather than a list, since git adds to that list. git-isolation.sh finds the test binaries by grepping for Command::new("git"), so a new test that spawns git is covered without editing it; it failed before the fix with 2 tui tests red and passed after.
+
+## 2026-11-02
+
+The first push of the fix still went wrong: guide.rs runs 'git init -q && git add -A' through sh, which a grep for Command::new("git") missed. It re-initialised the primary repository as bare and staged the bakery into this worktree's index; both repaired by hand again. guide.rs now strips GIT_ variables from that call and from the recipes it runs. git-isolation.sh now covers every test file that mentions git, sets GIT_DIR alone as a push hook does (with GIT_WORK_TREE set too, init does not mark the repository bare, and the leak went unseen), and compares the decoy's index as well as its config and HEAD. It fails with guide.rs unfixed.
