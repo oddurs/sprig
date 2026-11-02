@@ -52,6 +52,20 @@ fn snapshot(name: &str, actual: &str) {
 }
 
 /// A copy of the bakery, committed to a git repository of its own, so
+/// git in `dir`, and only there. A hook exports GIT_DIR and its siblings
+/// naming the repository being pushed; passed on, they turn the scratch
+/// repository's init and commit into writes to the real one (cairn 0157).
+fn git(dir: &Path) -> Command {
+    let mut c = Command::new("git");
+    c.current_dir(dir);
+    for (k, _) in std::env::vars_os() {
+        if k.to_string_lossy().starts_with("GIT_") {
+            c.env_remove(k);
+        }
+    }
+    c
+}
+
 /// `git diff` shows what a session changed.
 fn bakery() -> PathBuf {
     static N: AtomicUsize = AtomicUsize::new(0);
@@ -66,10 +80,9 @@ fn bakery() -> PathBuf {
         let e = e.unwrap();
         fs::copy(e.path(), dir.join(e.file_name())).unwrap();
     }
-    let git = |args: &[&str]| {
-        let o = Command::new("git")
+    let run_git = |args: &[&str]| {
+        let o = git(&dir)
             .args(args)
-            .current_dir(&dir)
             .env("GIT_AUTHOR_NAME", "t")
             .env("GIT_AUTHOR_EMAIL", "t@example.org")
             .env("GIT_COMMITTER_NAME", "t")
@@ -79,16 +92,15 @@ fn bakery() -> PathBuf {
         assert!(o.status.success(), "{}", String::from_utf8_lossy(&o.stderr));
         String::from_utf8(o.stdout).unwrap()
     };
-    git(&["init", "-q"]);
-    git(&["-c", "core.autocrlf=false", "add", "-A"]);
-    git(&["commit", "-qm", "base"]);
+    run_git(&["init", "-q"]);
+    run_git(&["-c", "core.autocrlf=false", "add", "-A"]);
+    run_git(&["commit", "-qm", "base"]);
     dir
 }
 
 fn diff(dir: &Path) -> Vec<String> {
-    let o = Command::new("git")
+    let o = git(dir)
         .args(["diff", "-U0", "--no-color"])
-        .current_dir(dir)
         .output()
         .unwrap();
     String::from_utf8(o.stdout)
