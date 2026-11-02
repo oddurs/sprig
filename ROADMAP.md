@@ -11,7 +11,7 @@ A plain-text format for plans that people and coding agents read, edit and check
 A stranger installs `sprig`, writes a plan across one or more `.sprig` files, and gets two answers: `sprig next` says what can be done right now, and `sprig check` reports broken links, loops and unknown anchors with exit codes CI can use.
 
 - [ ] [`0027`](https://github.com/oddurs/sprig/blob/main/cairn/items/0027-release-v0-1.md) Release v0.1 <sup>chore · p0 · release</sup>
-- [ ] [`0006`](https://github.com/oddurs/sprig/blob/main/cairn/items/0006-is-the-name-sprig-free-to-use.md) Is the name Sprig free to use? <sup>spike · p0 · community</sup>
+- [ ] [`0158`](https://github.com/oddurs/sprig/blob/main/cairn/items/0158-rename-sprig-to-chea.md) Rename Sprig to Chea <sup>chore · p0 · release</sup>
 - [ ] [`0026`](https://github.com/oddurs/sprig/blob/main/cairn/items/0026-readme-install-and-a-first-plan-in-five-minutes.md) README: install and a first plan in five minutes <sup>docs · p0 · docs</sup>
 
 ## launch — Launch the website and Show HN

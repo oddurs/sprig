@@ -3,10 +3,11 @@ id: 6
 uid: a36c7611-35fb-4bfc-a439-d95243ab2336
 title: Is the name Sprig free to use?
 type: spike
-status: blocked
+status: done
 milestone: v0.1
 created: 2026-09-28
-updated: 2026-10-29
+updated: 2026-11-02
+closed_at: 2026-11-02
 priority: p0
 effort: s
 area: community
@@ -48,12 +49,27 @@ Checked 2026-10-28.
 
 The format can't keep a name whose tooling can't use it. The name belongs to the project's owner, and a trademark answer needs a person with access to TSDR or counsel, so this spike stays open (blocked) until they decide. Until then, `publish = false` stays in `Cargo.toml` and nothing is published.
 
+**Decision, 2026-11-02: rename to Chea.** The owner chose the name. Chea is the word Calenha, the owner's constructed language, uses for the flood tide, *what is coming*: the particle that marks the future, beside *vaza*, the ebb, for what has passed. A plan is a record of what is coming. It is said like the Portuguese *cheia*, "SHAY-uh".
+
+| Where | Name | Result, 2026-11-02 |
+| --- | --- | --- |
+| crates.io | `chea`, `chea-core`, `chea-cli` | Free. |
+| npm | `chea` | A placeholder: one version, no description, last touched 2025-10-22. |
+| npm | `chea-core`, `chea-cli` | Free. |
+| VS Code Marketplace | "chea" | No extension of that name. |
+| GitHub Linguist | `.chea` | Not mapped to any language. |
+| GitHub | `oddurs/chea` | Free. |
+| Homebrew | `chea` | No formula. |
+| USPTO | CHEA | Not checked, for the same reason as above; it needs a person. |
+
+One association to know about: Chea is a common Cambodian surname, and a bare web search for it can surface Nuon Chea, the Khmer Rouge's chief ideologist. Searches for the project's own terms do not. Item 0158 renames everything.
+
 ## Acceptance criteria
 
 - [x] The Answer lists every registry checked, with the result and date.
-- [ ] If the answer is rename, the new name has passed the same checks and a follow-up item renames everything that says Sprig.
-- [ ] The Answer section states a decision and the evidence for it.
-- [ ] Follow-up items exist for everything the answer implies.
+- [x] If the answer is rename, the new name has passed the same checks and a follow-up item renames everything that says Sprig.
+- [x] The Answer section states a decision and the evidence for it.
+- [x] Follow-up items exist for everything the answer implies.
 
 ## 2026-10-28
 
@@ -62,3 +78,11 @@ Registries checked by script. crates.io and npm through their public APIs; the M
 ## 2026-10-29
 
 Still open, and it blocks every release item: publishing to crates.io, the VS Code Marketplace and a launch all need the name settled. A person has to make the call; the Answer lists the registries already checked.
+
+## 2026-11-02
+
+The owner chose Chea, a word from Calenha. The checks for it are in the Answer; 0158 renames everything.
+
+## Result
+
+Rename to Chea: Sprig is taken on crates.io and npm, collides with a language whose binary and check command match this project's, and has a live trademark application. Chea passed the same registry checks; 0158 renames everything.
