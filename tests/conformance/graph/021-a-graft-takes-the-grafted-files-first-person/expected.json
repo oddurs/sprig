@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "House",
     "status": "todo",
@@ -13,13 +13,13 @@
     "people": ["sam"],
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "+",
         "label": "Kitchen",
         "status": "todo",
         "graft": {
-          "path": "kitchen.sprig",
+          "path": "kitchen.chea",
           "title": "Kitchen",
           "mounted": true
         },
@@ -31,7 +31,7 @@
         "people": ["teo"],
         "children": [
           {
-            "file": "kitchen.sprig",
+            "file": "kitchen.chea",
             "line": 3,
             "mark": "-",
             "label": "Tiles",
@@ -47,13 +47,13 @@
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "+",
         "label": "Garden",
         "status": "todo",
         "graft": {
-          "path": "garden.sprig",
+          "path": "garden.chea",
           "title": "Garden",
           "mounted": true
         },
@@ -65,7 +65,7 @@
         "people": ["jo"],
         "children": [
           {
-            "file": "garden.sprig",
+            "file": "garden.chea",
             "line": 3,
             "mark": "-",
             "label": "Dig",
@@ -81,13 +81,13 @@
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 5,
         "mark": "+",
         "label": "Hall",
         "status": "todo",
         "graft": {
-          "path": "hall.sprig",
+          "path": "hall.chea",
           "title": "Hall",
           "mounted": true
         },
@@ -99,7 +99,7 @@
         "people": ["sam"],
         "children": [
           {
-            "file": "hall.sprig",
+            "file": "hall.chea",
             "line": 3,
             "mark": "-",
             "label": "Paint",

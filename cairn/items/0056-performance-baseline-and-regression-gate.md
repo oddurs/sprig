@@ -30,7 +30,7 @@ A generated 5,000-line, 20-file workspace and a benchmark binary that times pars
 
 ## 2026-10-28
 
-`crates/sprig-core/benches/workspace.rs` generates 20 files and 5,078 lines, shaped like the bakery, and times parse, resolve and check, taking the median of 31 runs. It fails if a median is more than twice `benches/baseline.json`. `scripts/task perf` runs it in the new `perf` CI job, together with the language server's keystroke test in a release build. `benches/README.md` says how to update the baseline and when not to.
+`crates/chea-core/benches/workspace.rs` generates 20 files and 5,078 lines, shaped like the bakery, and times parse, resolve and check, taking the median of 31 runs. It fails if a median is more than twice `benches/baseline.json`. `scripts/task perf` runs it in the new `perf` CI job, together with the language server's keystroke test in a release build. `benches/README.md` says how to update the baseline and when not to.
 
 Building it found the language server re-parsing all 20 files on every keystroke. Now `Workspace` parses a file when it is inserted, unchanged text keeps its parse, and the server keeps one workspace for the session. As a result:
 - resolve takes 12 ms, down from 23;

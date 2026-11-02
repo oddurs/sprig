@@ -1,35 +1,35 @@
 {
-  "name": "sprig",
-  "displayName": "Sprig",
-  "description": "Plain-text plans: highlighting, problems as you type, completion and ticking for .sprig files",
+  "name": "chea",
+  "displayName": "Chea",
+  "description": "Plain-text plans: highlighting, problems as you type, completion and ticking for .chea files",
   "version": "0.0.0",
   "publisher": "oddurs",
   "license": "MIT",
   "private": true,
-  "repository": { "type": "git", "url": "https://github.com/oddurs/sprig" },
+  "repository": { "type": "git", "url": "https://github.com/oddurs/chea" },
   "engines": { "vscode": "^1.90.0" },
   "categories": ["Programming Languages", "Formatters"],
-  "activationEvents": ["workspaceContains:**/*.sprig"],
+  "activationEvents": ["workspaceContains:**/*.chea"],
   "main": "./src/extension.js",
   "contributes": {
     "languages": [
       {
-        "id": "sprig",
-        "aliases": ["Sprig", "sprig"],
-        "extensions": [".sprig"],
+        "id": "chea",
+        "aliases": ["Chea", "chea"],
+        "extensions": [".chea"],
         "configuration": "./language-configuration.json"
       }
     ],
     "grammars": [
-      { "language": "sprig", "scopeName": "source.sprig", "path": "./syntaxes/sprig.tmLanguage.json" }
+      { "language": "chea", "scopeName": "source.chea", "path": "./syntaxes/chea.tmLanguage.json" }
     ],
     "configuration": {
-      "title": "Sprig",
+      "title": "Chea",
       "properties": {
-        "sprig.server.path": {
+        "chea.server.path": {
           "type": "string",
           "default": "",
-          "markdownDescription": "The `sprig` binary to run as the language server. Empty uses the one bundled with the extension, then `sprig` on your `PATH`."
+          "markdownDescription": "The `chea` binary to run as the language server. Empty uses the one bundled with the extension, then `chea` on your `PATH`."
         }
       }
     }

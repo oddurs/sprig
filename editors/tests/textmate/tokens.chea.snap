@@ -1,0 +1,105 @@
+>Tokens
+#^^^^^^ source.chea markup.heading.title.chea
+>
+>- People  @dana @jo-ann @t_eo @dana.k
+#^ source.chea keyword.mark.todo.chea
+# ^^^^^^^^^ source.chea
+#          ^^^^^ source.chea variable.other.person.chea
+#               ^ source.chea
+#                ^^^^^^^ source.chea variable.other.person.chea
+#                       ^ source.chea
+#                        ^^^^^ source.chea variable.other.person.chea
+#                             ^ source.chea
+#                              ^^^^^^^ source.chea variable.other.person.chea
+>- Not people  @jo, dana@example.org
+#^ source.chea keyword.mark.todo.chea
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.chea
+>- Tags  #market #2026_q4 #café
+#^ source.chea keyword.mark.todo.chea
+# ^^^^^^^ source.chea
+#        ^^^^^^^ source.chea entity.name.tag.chea
+#               ^ source.chea
+#                ^^^^^^^^ source.chea entity.name.tag.chea
+#                        ^ source.chea
+#                         ^^^^^ source.chea entity.name.tag.chea
+>- Priority  ! !! !!!
+#^ source.chea keyword.mark.todo.chea
+# ^^^^^^^^^^^ source.chea
+#            ^ source.chea keyword.other.priority.chea
+#             ^ source.chea
+#              ^^ source.chea keyword.other.priority.chea
+#                ^ source.chea
+#                 ^^^ source.chea keyword.other.priority.chea
+>- Not priority  !!!! !important
+#^ source.chea keyword.mark.todo.chea
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.chea
+>- Anchors  ^van ^step-1
+#^ source.chea keyword.mark.todo.chea
+# ^^^^^^^^^^ source.chea
+#           ^^^^ source.chea entity.name.label.anchor.chea
+#               ^ source.chea
+#                ^^^^^^^ source.chea entity.name.label.anchor.chea
+>- Fields  due:fri  est:2h  Budget:64k  vendor:"Mono Ovens"  vendor:""
+#^ source.chea keyword.mark.todo.chea
+# ^^^^^^^^^ source.chea
+#          ^^^ source.chea support.type.property-name.chea
+#             ^ source.chea punctuation.separator.key-value.chea
+#              ^^^ source.chea string.unquoted.value.chea
+#                 ^^ source.chea
+#                   ^^^ source.chea support.type.property-name.chea
+#                      ^ source.chea punctuation.separator.key-value.chea
+#                       ^^ source.chea string.unquoted.value.chea
+#                         ^^ source.chea
+#                           ^^^^^^ source.chea support.type.property-name.chea
+#                                 ^ source.chea punctuation.separator.key-value.chea
+#                                  ^^^ source.chea string.unquoted.value.chea
+#                                     ^^ source.chea
+#                                       ^^^^^^ source.chea support.type.property-name.chea
+#                                             ^ source.chea punctuation.separator.key-value.chea
+#                                              ^^^^^^^^^^^^ source.chea string.unquoted.value.chea
+#                                                          ^^ source.chea
+#                                                            ^^^^^^ source.chea support.type.property-name.chea
+#                                                                  ^ source.chea punctuation.separator.key-value.chea
+#                                                                   ^^ source.chea string.unquoted.value.chea
+>- Not fields  https://example.org  2:30  key:
+#^ source.chea keyword.mark.todo.chea
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.chea
+>- After  after:^van  after:[[lease^signed]]  after:[[kitchen]]
+#^ source.chea keyword.mark.todo.chea
+# ^^^^^^^^ source.chea
+#         ^^^^^ source.chea support.type.property-name.chea
+#              ^ source.chea punctuation.separator.key-value.chea
+#               ^^^^ source.chea string.unquoted.value.chea
+#                   ^^ source.chea
+#                     ^^^^^ source.chea support.type.property-name.chea
+#                          ^ source.chea punctuation.separator.key-value.chea
+#                           ^^^^^^^^^^^^^^^^ source.chea string.unquoted.value.chea markup.underline.link.chea
+#                                           ^^ source.chea
+#                                             ^^^^^ source.chea support.type.property-name.chea
+#                                                  ^ source.chea punctuation.separator.key-value.chea
+#                                                   ^^^^^^^^^^^ source.chea string.unquoted.value.chea markup.underline.link.chea
+>- Links  see [[kitchen]] and [[rooms/hall^a]], not [[my notes]]
+#^ source.chea keyword.mark.todo.chea
+# ^^^^^^^^^^^^ source.chea
+#             ^^^^^^^^^^^ source.chea markup.underline.link.chea
+#                        ^^^^^ source.chea
+#                             ^^^^^^^^^^^^^^^^ source.chea markup.underline.link.chea
+#                                             ^^^^^^^^^^^^^^^^^^ source.chea
+>- Unclosed  where:"41 Mill Street
+#^ source.chea keyword.mark.todo.chea
+# ^^^^^^^^^^^ source.chea
+#            ^^^^^ source.chea support.type.property-name.chea
+#                 ^ source.chea punctuation.separator.key-value.chea
+#                  ^^^ source.chea string.unquoted.value.chea
+#                     ^^^^^^^^^^^^ source.chea
+>- Unicode  @jón  ^þing  lykill:gildi
+#^ source.chea keyword.mark.todo.chea
+# ^^^^^^^^^^ source.chea
+#           ^^^^ source.chea variable.other.person.chea
+#               ^^ source.chea
+#                 ^^^^^ source.chea entity.name.label.anchor.chea
+#                      ^^ source.chea
+#                        ^^^^^^ source.chea support.type.property-name.chea
+#                              ^ source.chea punctuation.separator.key-value.chea
+#                               ^^^^^ source.chea string.unquoted.value.chea
+>

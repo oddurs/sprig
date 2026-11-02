@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Plan",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "Start",
@@ -27,7 +27,7 @@
           {
             "after": "[[stub]]",
             "label": "Stub, to be written",
-            "file": "stub.sprig",
+            "file": "stub.chea",
             "line": 1
           }
         ]
@@ -36,9 +36,9 @@
   },
   "diagnostics": [
     {
-      "code": "S0206",
+      "code": "C0206",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 10,
       "span": [15, 29]

@@ -17,7 +17,7 @@ Zed reaches a tree-sitter grammar and a language server only through an extensio
 
 ## Proposal
 
-A Zed extension in `editors/zed`. Its `extension.toml` names the tree-sitter grammar in `editors/tree-sitter-sprig`, its `languages/sprig/` holds the language config and highlight queries, and a small Rust extension, built with `zed_extension_api` for `wasm32-wasip1`, starts `sprig lsp` from `PATH`.
+A Zed extension in `editors/zed`. Its `extension.toml` names the tree-sitter grammar in `editors/tree-sitter-chea`, its `languages/chea/` holds the language config and highlight queries, and a small Rust extension, built with `zed_extension_api` for `wasm32-wasip1`, starts `chea lsp` from `PATH`.
 
 ## Acceptance criteria
 

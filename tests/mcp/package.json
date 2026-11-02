@@ -1,7 +1,7 @@
 {
-  "name": "sprig-mcp-session",
+  "name": "chea-mcp-session",
   "private": true,
-  "description": "A scripted session with sprig mcp through the official MCP client, for CI",
+  "description": "A scripted session with chea mcp through the official MCP client, for CI",
   "type": "module",
   "scripts": {
     "test": "node session.mjs"

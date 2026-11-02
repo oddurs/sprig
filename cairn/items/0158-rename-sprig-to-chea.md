@@ -26,7 +26,11 @@ Chea is Calenha for the flood tide, what is coming: the word the language uses t
 
 ## Acceptance criteria
 
-- [ ] No tracked path or line names Sprig outside `design/`, spike 0006 and this item.
-- [ ] The diagnostic codes read `C` and a number everywhere, and the spec says so.
+- [x] No tracked path or line names Sprig outside `design/`, spike 0006 and this item.
+- [x] The diagnostic codes read `C` and a number everywhere, and the spec says so.
 - [ ] `scripts/task check`, `scripts/task editors` and the site build pass.
-- [ ] The README says what the name means.
+- [x] The README says what the name means.
+
+## 2026-11-02
+
+One scripted pass, case-preserving, over every tracked file and path outside design/, spike 0006 and this item; the design-draft references stay, since that file keeps its name. What the pass could not see, the suite found: four conformance trees whose byte spans moved because chea is a byte shorter than sprig (re-blessed; only span numbers changed), two TUI and tree snapshots whose padding moved (whitespace only), filters that matched '| S' and, now, the table's own 'Code' header, the JSON schema's code pattern, the site's anchor regex, and a code after a tab escape that \\b could not see. The tree-sitter parser was not regenerated: the current CLI emits ABI 15 against the committed 14, which is drift for its own change. The VS Code extension test cannot start locally, because macOS refuses its socket path under ../.worktrees/; CI runs it.

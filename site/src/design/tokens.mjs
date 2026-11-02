@@ -1,4 +1,4 @@
-// Sprig's design tokens: the one place a colour, a size or a duration is
+// Chea's design tokens: the one place a colour, a size or a duration is
 // written down. Everything else reads them as CSS custom properties (emitted by
 // css() below into src/generated/tokens.css) or through the syntax themes for
 // the docs' code blocks (shikiTheme()). A colour anywhere else in site/src is a
@@ -206,17 +206,17 @@ export function shikiTheme(name) {
 	const t = themes[name];
 	const fg = (scope, foreground, fontStyle) => ({ scope, settings: fontStyle ? { foreground, fontStyle } : { foreground } });
 	return {
-		name: `sprig-${name}`,
+		name: `chea-${name}`,
 		type: name,
 		colors: { 'editor.background': t['surface-raised'], 'editor.foreground': t.text },
 		tokenColors: [
-			...marks.map((m) => fg(`keyword.mark.${m.key}.sprig`, t[`mark-${m.key}`])),
-			fg('markup.done.sprig', t['text-muted']),
-			fg('markup.strikethrough.sprig', t['text-muted'], 'strikethrough'),
-			fg(['variable.other.person.sprig', 'entity.name.tag.sprig', 'entity.name.label.anchor.sprig', 'support.type.property-name.sprig', 'punctuation.separator.key-value.sprig', 'string.unquoted.value.sprig'], t['text-muted']),
-			fg('markup.underline.link.sprig', t.text, 'underline'),
-			fg('keyword.other.priority.sprig', t.text, 'bold'),
-			fg(['comment', 'constant.character.escape.sprig'], t['text-muted']),
+			...marks.map((m) => fg(`keyword.mark.${m.key}.chea`, t[`mark-${m.key}`])),
+			fg('markup.done.chea', t['text-muted']),
+			fg('markup.strikethrough.chea', t['text-muted'], 'strikethrough'),
+			fg(['variable.other.person.chea', 'entity.name.tag.chea', 'entity.name.label.anchor.chea', 'support.type.property-name.chea', 'punctuation.separator.key-value.chea', 'string.unquoted.value.chea'], t['text-muted']),
+			fg('markup.underline.link.chea', t.text, 'underline'),
+			fg('keyword.other.priority.chea', t.text, 'bold'),
+			fg(['comment', 'constant.character.escape.chea'], t['text-muted']),
 			// Everything else a code block might hold (shell, JSON) stays calm too.
 			fg(['keyword', 'storage', 'string', 'constant', 'entity', 'variable', 'support'], t.text),
 		],

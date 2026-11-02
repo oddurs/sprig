@@ -32,7 +32,7 @@ At least 40 examples: every token kind, quotes (including an unterminated quote)
 
 ## 2026-10-28
 
-55 examples in `tests/conformance/tokens/`, generated from a table and blessed, then read line by line against §4 and §9. The token examples agree with the reference parser (draft 0.2's `sprig.js`, from git history) on all but one, Unicode names, which is ruling B.13. The date examples agree except on days that do not exist (B.15).
+55 examples in `tests/conformance/tokens/`, generated from a table and blessed, then read line by line against §4 and §9. The token examples agree with the reference parser (draft 0.2's `chea.js`, from git history) on all but one, Unicode names, which is ruling B.13. The date examples agree except on days that do not exist (B.15).
 
 Writing them found a bug: `feb29` read after a non-leap February had passed gave no date, where the 120-day rule makes it the coming leap day. Fixed in `date::resolve`, with unit tests and `tokens/051`; B.15 now says so.
 

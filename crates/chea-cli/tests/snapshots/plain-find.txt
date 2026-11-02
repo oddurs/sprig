@@ -1,0 +1,53 @@
+bakery.chea:9	#	Money			doing
+bakery.chea^loan	~	Equipment loan paperwork	Money	2026-10-07	doing
+bakery.chea:15	-	Supplier credit line	Money		blocked
+bakery.chea:16	-	Weekly numbers to the bank	Money	2026-10-02	todo
+bakery.chea:18	+	Lease			doing
+bakery.chea:19	+	Kitchen fit-out			doing
+bakery.chea:20	+	Opening week			doing
+bakery.chea^name	?	Kiln & Crumb, or Mill Street Bread?			question
+dana.chea:6	+	Negotiate terms			doing
+dana.chea:8	+	Deck oven, three decks			todo
+dana.chea:9	-	Call the insurer about public liability		2026-10-03	todo
+groceries.chea:3	#	Flour			doing
+groceries.chea:4	-	Rye, 4 sacks	Flour		todo
+groceries.chea:5	-	Strong white, 6 sacks	Flour		todo
+groceries.chea:7	#	Dairy			doing
+groceries.chea:9	-	Whole milk, 12 L	Dairy		todo
+groceries.chea:10	#	Seeds			doing
+groceries.chea:11	-	Sesame	Seeds		todo
+groceries.chea:12	-	Nigella	Seeds		todo
+groceries.chea:14	-	Paper bags, 1000			todo
+groceries.chea:15	-	Flaky sea salt			todo
+kitchen.chea^design	-	Design			todo
+kitchen.chea:5	~	Ventilation plan with the engineer	Design	2026-10-12	doing
+kitchen.chea:8	#	Equipment			todo
+kitchen.chea^oven	-	Deck oven, three decks	Equipment		todo
+kitchen.chea:11	-	Get a third quote	Equipment › Deck oven, three decks	2026-10-02	todo
+kitchen.chea:12	-	Place the order	Equipment › Deck oven, three decks		blocked
+kitchen.chea:13	-	Spiral mixer, 40 litres	Equipment		todo
+kitchen.chea:18	-	Build			blocked
+kitchen.chea:19	-	Strip out	Build		blocked
+kitchen.chea:20	-	Plumbing and drains	Build		blocked
+kitchen.chea:21	-	Three-phase electrics	Build		blocked
+kitchen.chea:22	-	Tiling	Build		blocked
+kitchen.chea:23	-	Install equipment	Build		blocked
+launch.chea:3	#	Brand			doing
+launch.chea^logo	~	Logo, second round	Brand	2026-10-14	doing
+launch.chea:6	-	Window lettering	Brand		blocked
+launch.chea:7	-	Menu boards	Brand		blocked
+launch.chea:8	#	Hiring			doing
+launch.chea^counter	-	Two counter staff	Hiring	2026-11-05	todo
+launch.chea:12	-	Morning rota	Hiring		blocked
+launch.chea:13	-	Soft opening		2026-12-02	todo
+launch.chea:14	-	Invite the street	Soft opening		blocked
+launch.chea:15	-	Stock the shelves	Soft opening		todo
+launch.chea:16	+	Supply run	Soft opening › Stock the shelves		doing
+launch.chea:17	-	Opening day		2026-12-09	todo
+launch.chea:18	-	Free loaf for the first 50 through the door	Opening day		todo
+launch.chea:19	-	Photos for the local paper	Opening day		todo
+lease.chea^terms	~	Negotiate terms		2026-10-05	doing
+lease.chea:8	~	Break clause at year three	Negotiate terms		doing
+lease.chea:9	?	Who pays for the grease trap?	Negotiate terms		question
+lease.chea^permit	-	Change-of-use permit			todo
+lease.chea^signed	-	Sign the lease			blocked

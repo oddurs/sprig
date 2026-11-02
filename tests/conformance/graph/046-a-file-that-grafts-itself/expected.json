@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Self",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "One",
@@ -24,14 +24,14 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "+",
-        "label": "main.sprig",
+        "label": "main.chea",
         "status": "empty",
         "graft": {
-          "path": "main.sprig",
-          "title": "main.sprig",
+          "path": "main.chea",
+          "title": "main.chea",
           "mounted": false
         },
         "progress": {
@@ -41,15 +41,15 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 5,
         "mark": "+",
-        "label": "main.sprig",
+        "label": "main.chea",
         "status": "empty",
         "graft": {
-          "path": "main.sprig",
+          "path": "main.chea",
           "anchor": "one",
-          "title": "main.sprig",
+          "title": "main.chea",
           "mounted": false
         },
         "progress": {
@@ -62,17 +62,17 @@
   },
   "diagnostics": [
     {
-      "code": "S0103",
+      "code": "C0103",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 4,
       "col": 3,
       "span": [20, 28]
     },
     {
-      "code": "S0103",
+      "code": "C0103",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 5,
       "col": 3,
       "span": [31, 43]

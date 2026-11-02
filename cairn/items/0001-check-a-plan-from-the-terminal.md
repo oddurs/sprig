@@ -13,14 +13,14 @@ due: 2026-11-20
 
 ## Ships
 
-A stranger installs `sprig`, writes a plan across one or more `.sprig` files, and gets two answers: `sprig next` says what can be done right now, and `sprig check` reports broken links, loops and unknown anchors with exit codes CI can use.
+A stranger installs `chea`, writes a plan across one or more `.chea` files, and gets two answers: `chea next` says what can be done right now, and `chea check` reports broken links, loops and unknown anchors with exit codes CI can use.
 
 ## Done when
 
 - [ ] `cargo install` of the published crate works on macOS, Linux and Windows.
-- [x] `sprig next` and `sprig check` give correct answers for the six files in `examples/bakery/`.
+- [x] `chea next` and `chea check` give correct answers for the six files in `examples/bakery/`.
 - [x] The spec draft and the conformance harness are in the repository, and CI runs the suite on three platforms.
-- [ ] The README takes a stranger from nothing to `sprig next` output in five minutes.
+- [ ] The README takes a stranger from nothing to `chea next` output in five minutes.
 
 ## Explicitly not in this milestone
 
@@ -30,4 +30,4 @@ A stranger installs `sprig`, writes a plan across one or more `.sprig` files, an
 
 ## 2026-10-28
 
-Two of four done. `sprig next` and `sprig check` give the reference parser's answers for the six bakery files, and are snapshotted (0023, 0025). The spec draft, the conformance harness and 55 examples are in the repository, and the `check` job runs the suite on ubuntu, macOS and Windows. Open: publishing (0027, blocked on the name, 0006), and the five-minute stranger test of the README (0026).
+Two of four done. `chea next` and `chea check` give the reference parser's answers for the six bakery files, and are snapshotted (0023, 0025). The spec draft, the conformance harness and 55 examples are in the repository, and the `check` job runs the suite on ubuntu, macOS and Windows. Open: publishing (0027, blocked on the name, 0006), and the five-minute stranger test of the README (0026).

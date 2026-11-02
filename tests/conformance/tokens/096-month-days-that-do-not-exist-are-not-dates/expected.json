@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Dates on 2026-10-01",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "Item 1",
@@ -24,7 +24,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "-",
         "label": "Item 2",
@@ -36,7 +36,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 5,
         "mark": "-",
         "label": "Item 3",
@@ -48,7 +48,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 6,
         "mark": "-",
         "label": "Item 4",
@@ -60,7 +60,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 7,
         "mark": "-",
         "label": "Item 5",
@@ -72,7 +72,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 8,
         "mark": "-",
         "label": "Item 6",
@@ -87,49 +87,49 @@
   },
   "diagnostics": [
     {
-      "code": "S0001",
+      "code": "C0001",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 11,
       "span": [31, 40]
     },
     {
-      "code": "S0001",
+      "code": "C0001",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 4,
       "col": 11,
       "span": [51, 60]
     },
     {
-      "code": "S0001",
+      "code": "C0001",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 5,
       "col": 11,
       "span": [71, 80]
     },
     {
-      "code": "S0001",
+      "code": "C0001",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 6,
       "col": 11,
       "span": [91, 100]
     },
     {
-      "code": "S0001",
+      "code": "C0001",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 7,
       "col": 11,
       "span": [111, 120]
     },
     {
-      "code": "S0001",
+      "code": "C0001",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 8,
       "col": 11,
       "span": [131, 139]

@@ -18,7 +18,7 @@ area: suite
 
 ## Problem
 
-Cross-file behaviour is Sprig's headline feature and the hardest to specify in prose.
+Cross-file behaviour is Chea's headline feature and the hardest to specify in prose.
 
 ## Proposal
 
@@ -41,4 +41,4 @@ Two cases are worth knowing. When two files graft each other, path order decides
 
 ## 2026-10-28
 
-Correction: the file later in path order is the one whose graft closes the loop. In graph/045, main.sprig grafts b.sprig and b.sprig grafts main.sprig. b.sprig comes first in path order, so main.sprig's graft is refused, and main.sprig's own tree mounts nothing from b.sprig. Spec §8.4 now states the rule, with decision 0144.
+Correction: the file later in path order is the one whose graft closes the loop. In graph/045, main.chea grafts b.chea and b.chea grafts main.chea. b.chea comes first in path order, so main.chea's graft is refused, and main.chea's own tree mounts nothing from b.chea. Spec §8.4 now states the rule, with decision 0144.

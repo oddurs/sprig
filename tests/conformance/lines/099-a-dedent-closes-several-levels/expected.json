@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Indent",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "A",
@@ -24,7 +24,7 @@
         },
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 4,
             "mark": "-",
             "label": "B",
@@ -36,7 +36,7 @@
             },
             "children": [
               {
-                "file": "main.sprig",
+                "file": "main.chea",
                 "line": 5,
                 "mark": "-",
                 "label": "C",
@@ -52,7 +52,7 @@
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 6,
         "mark": "-",
         "label": "D",

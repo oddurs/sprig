@@ -1,6 +1,6 @@
 // How the site shows a plan: the tree, Next up, chips, notes and the editor's
-// colours, as HTML. What a plan *means* comes from sprig-core (./core.js); this
-// module only renders it, so the site and the `sprig` command cannot disagree.
+// colours, as HTML. What a plan *means* comes from chea-core (./core.js); this
+// module only renders it, so the site and the `chea` command cannot disagree.
 //
 // The interface is the one the pages were written against: a workspace is
 // set, a document built, and nodes rendered. A render is: useWorkspace(files),
@@ -57,7 +57,7 @@ export function expandDates(line) {
 }
 
 /**
- * One line ticked, as `sprig tick` would: `{line, movedTo}` or null when the
+ * One line ticked, as `chea tick` would: `{line, movedTo}` or null when the
  * line is not an item with a status.
  */
 export function tickLine(line) {
@@ -132,7 +132,7 @@ export function buildDoc(name) {
 	return workspace().docs[name] ?? null;
 }
 
-/** Every problem in the workspace, as `sprig check` reports it. */
+/** Every problem in the workspace, as `chea check` reports it. */
 export function diagnostics() {
 	return workspace().diagnostics;
 }
@@ -159,7 +159,7 @@ export function walkLeaves(root, fn) {
 	for (const l of root.doc.leaves) fn(l.n, l.path, l.blk, l.due, l.prio);
 }
 
-/** Open leaves, ready and waiting, in the core's order: the same as `sprig next`. */
+/** Open leaves, ready and waiting, in the core's order: the same as `chea next`. */
 export function readyList(doc) {
 	const pick = (ids) => ids.map((i) => doc.leaves[i]).map((l) => ({ n: l.n, path: l.path, b: l.blk, due: l.due, prio: l.prio }));
 	return { ready: pick(doc.ready), waiting: pick(doc.waiting) };

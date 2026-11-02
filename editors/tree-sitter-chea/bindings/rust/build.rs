@@ -1,0 +1,13 @@
+fn main() {
+    let src = std::path::Path::new("src");
+    let mut c = cc::Build::new();
+    c.std("c11").include(src);
+    #[cfg(target_env = "msvc")]
+    c.flag("-utf-8");
+    c.file(src.join("parser.c"));
+    c.file(src.join("scanner.c"));
+    c.warnings(false);
+    c.compile("tree-sitter-chea");
+    println!("cargo:rerun-if-changed=src/parser.c");
+    println!("cargo:rerun-if-changed=src/scanner.c");
+}

@@ -1,5 +1,5 @@
-name: Sprig plans
-description: Check .sprig plans, and summarise what a pull request does to their progress
+name: Chea plans
+description: Check .chea plans, and summarise what a pull request does to their progress
 branding:
   icon: check-square
   color: green
@@ -16,13 +16,13 @@ runs:
   using: composite
   steps:
     # Until there is a release to download (cairn 0027), the action builds
-    # the sprig of its own ref, the way the README installs it. A sprig
+    # the chea of its own ref, the way the README installs it. A chea
     # already on PATH is used as it is.
-    - name: Install sprig
+    - name: Install chea
       shell: bash
       run: |
         set -eu
-        if ! command -v sprig >/dev/null; then
+        if ! command -v chea >/dev/null; then
           cd "$GITHUB_ACTION_PATH/.."
           ./scripts/task install
           echo "$PWD/target/install/bin" >>"$GITHUB_PATH"
@@ -37,13 +37,13 @@ runs:
         BASE: ${{ github.event.pull_request.base.sha }}
       run: |
         set -eu
-        sprig --version
+        chea --version
         read -r -a paths <<<"$PATHS"
         if [ -n "$BASE" ]; then
           git fetch --no-tags --depth=1 origin "$BASE"
-          git worktree add --detach "$RUNNER_TEMP/sprig-base" "$BASE"
-          bash "$GITHUB_ACTION_PATH/summary.sh" "$RUNNER_TEMP/sprig-base" . "${paths[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
-          git worktree remove --force "$RUNNER_TEMP/sprig-base"
+          git worktree add --detach "$RUNNER_TEMP/chea-base" "$BASE"
+          bash "$GITHUB_ACTION_PATH/summary.sh" "$RUNNER_TEMP/chea-base" . "${paths[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
+          git worktree remove --force "$RUNNER_TEMP/chea-base"
         else
           # Not a pull request: the head compared with itself.
           bash "$GITHUB_ACTION_PATH/summary.sh" . . "${paths[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
@@ -62,9 +62,9 @@ runs:
         # `check --plain`: file, line, column, severity, code, message; each
         # becomes an annotation on the line it is about.
         code=0
-        sprig check "${flags[@]}" "${paths[@]}" >"$RUNNER_TEMP/sprig-check" || code=$?
+        chea check "${flags[@]}" "${paths[@]}" >"$RUNNER_TEMP/chea-check" || code=$?
         awk -F '\t' '{
           level = ($4 == "error") ? "error" : "warning"
           printf "::%s file=%s,line=%s,col=%s,title=%s::%s\n", level, $1, $2, $3, $5, $6
-        }' "$RUNNER_TEMP/sprig-check"
+        }' "$RUNNER_TEMP/chea-check"
         exit "$code"

@@ -15,12 +15,12 @@ const site = join(dirname(fileURLToPath(import.meta.url)), '..');
 const repo = join(site, '..');
 const docs = join(site, 'src/content/docs');
 const generated = join(site, 'src/generated');
-const blob = 'https://github.com/oddurs/sprig/blob/main';
-const edit = 'https://github.com/oddurs/sprig/edit/main';
+const blob = 'https://github.com/oddurs/chea/blob/main';
+const edit = 'https://github.com/oddurs/chea/edit/main';
 
-// The site runs sprig-core, which is built by cargo rather than by npm.
-if (!existsSync(join(generated, 'sprig.wasm'))) {
-	console.error('sync: src/generated/sprig.wasm is missing. Build it first, from the repository root:\n\n  scripts/task wasm\n');
+// The site runs chea-core, which is built by cargo rather than by npm.
+if (!existsSync(join(generated, 'chea.wasm'))) {
+	console.error('sync: src/generated/chea.wasm is missing. Build it first, from the repository root:\n\n  scripts/task wasm\n');
 	process.exit(1);
 }
 
@@ -42,25 +42,25 @@ const dropTitle = (md) => md.replace(/^# .*\n+/, '');
 /* spec: the core and its annex rendered as one page at /spec/, so every rule's
    anchor is on it, and each served raw byte for byte, at /spec.md and
    /spec-annex.md */
-const spec = read('spec/sprig.md');
+const spec = read('spec/chea.md');
 const annex = read('spec/annex.md');
 // The draft named in the spec's own title, so the description cannot lag it.
 const draft = spec.match(/^# .*draft (\S+)/m)?.[1];
-if (!draft) throw new Error('spec/sprig.md: no "draft N" in its title');
+if (!draft) throw new Error('spec/chea.md: no "draft N" in its title');
 write(join(site, 'public/spec.md'), spec);
 write(join(site, 'public/spec-annex.md'), annex);
 // On one page, the two files' links to each other become links within it.
-const onePage = (md) => md.replace(/\]\(annex\.md\)/g, '](#annex)').replace(/\]\(sprig\.md\)/g, '](#the-format-on-one-card)');
+const onePage = (md) => md.replace(/\]\(annex\.md\)/g, '](#annex)').replace(/\]\(chea\.md\)/g, '](#the-format-on-one-card)');
 write(
 	join(docs, 'spec.md'),
 	page(
 		{
 			title: 'Specification',
-			description: `The Sprig format, rule by rule. Draft ${draft}, dedicated to the public domain.`,
-			editUrl: `${edit}/spec/sprig.md`,
+			description: `The Chea format, rule by rule. Draft ${draft}, dedicated to the public domain.`,
+			editUrl: `${edit}/spec/chea.md`,
 			tableOfContents: { minHeadingLevel: 2, maxHeadingLevel: 3 },
 		},
-		`:::note[Generated]\nThis page is built from [\`spec/sprig.md\`](${blob}/spec/sprig.md) and its annex, [\`spec/annex.md\`](${blob}/spec/annex.md). The raw files are at [/spec.md](/spec.md) and [/spec-annex.md](/spec-annex.md).\n:::\n\n` +
+		`:::note[Generated]\nThis page is built from [\`spec/chea.md\`](${blob}/spec/chea.md) and its annex, [\`spec/annex.md\`](${blob}/spec/annex.md). The raw files are at [/spec.md](/spec.md) and [/spec-annex.md](/spec-annex.md).\n:::\n\n` +
 			onePage(dropTitle(spec)) +
 			'\n\n## Annex\n\n' +
 			onePage(dropTitle(annex)),
@@ -106,10 +106,10 @@ write(
 	page(
 		{
 			title: 'Settled arguments',
-			description: 'Every rule in Sprig was argued both ways. These are the rulings, with the case against each.',
+			description: 'Every rule in Chea was argued both ways. These are the rulings, with the case against each.',
 			editUrl: false,
 		},
-		`Sprig is opinionated on purpose. Each rule below was argued both ways before it went in, and the arguments that lost are kept so nobody has to have them again. To reopen one, propose a change with the case for, the case against and a ruling.\n\n:::note[Generated]\nBuilt from the ${decisions.length} decision items in [\`cairn/items\`](${blob}/cairn/items).\n:::\n\n${decisionsBody}`,
+		`Chea is opinionated on purpose. Each rule below was argued both ways before it went in, and the arguments that lost are kept so nobody has to have them again. To reopen one, propose a change with the case for, the case against and a ruling.\n\n:::note[Generated]\nBuilt from the ${decisions.length} decision items in [\`cairn/items\`](${blob}/cairn/items).\n:::\n\n${decisionsBody}`,
 	),
 );
 
@@ -145,25 +145,25 @@ write(join(generated, 'tokens.css'), css());
 /* example plans for the playground */
 const examples = Object.fromEntries(
 	readdirSync(join(repo, 'examples/bakery'))
-		.filter((f) => f.endsWith('.sprig'))
+		.filter((f) => f.endsWith('.chea'))
 		.map((f) => [f, read(`examples/bakery/${f}`)]),
 );
 write(join(generated, 'examples.json'), JSON.stringify(examples, null, '\t'));
 
-/* the command reference: the built `sprig` binary's own help, one section per command */
-const exe = process.env.SPRIG_BIN ?? join(repo, 'target/debug', process.platform === 'win32' ? 'sprig.exe' : 'sprig');
+/* the command reference: the built `chea` binary's own help, one section per command */
+const exe = process.env.CHEA_BIN ?? join(repo, 'target/debug', process.platform === 'win32' ? 'chea.exe' : 'chea');
 if (!existsSync(exe)) {
-	console.error(`sync: no sprig binary at ${exe}. Build it first, from the repository root:\n\n  cargo build -p sprig-cli\n`);
+	console.error(`sync: no chea binary at ${exe}. Build it first, from the repository root:\n\n  cargo build -p chea-cli\n`);
 	process.exit(1);
 }
-// Without SPRIG_TODAY, so the page does not depend on who built it.
-const env = Object.fromEntries(Object.entries(process.env).filter(([k]) => k !== 'SPRIG_TODAY'));
+// Without CHEA_TODAY, so the page does not depend on who built it.
+const env = Object.fromEntries(Object.entries(process.env).filter(([k]) => k !== 'CHEA_TODAY'));
 const help = (...args) => execFileSync(exe, [...args, '--help'], { encoding: 'utf8', env }).trimEnd();
 const top = help();
-// The commands are whatever `sprig --help` lists, so a new one needs no change here.
+// The commands are whatever `chea --help` lists, so a new one needs no change here.
 const commands = [...(top.split(/^Commands:$/m)[1] ?? '').split(/^\S/m)[0].matchAll(/^ {2}([a-z][\w-]*) {2,}(.*)$/gm)].map((m) => ({ name: m[1], about: m[2] }));
 if (!commands.length) {
-	console.error('sync: `sprig --help` lists no commands');
+	console.error('sync: `chea --help` lists no commands');
 	process.exit(1);
 }
 const fence = (text) => '```text\n' + text + '\n```';
@@ -172,12 +172,12 @@ write(
 	page(
 		{
 			title: 'Command line',
-			description: 'Every sprig command and option, from the binary\'s own help.',
+			description: 'Every chea command and option, from the binary\'s own help.',
 			editUrl: false,
 		},
-		`:::note[Generated]\nThis page is the output of \`sprig --help\` and of each command's help, from the build of \`crates/sprig-cli\` this site was built with. It cannot describe a flag the command does not have.\n:::\n\n` +
-			`## sprig\n\n${fence(top)}\n\n` +
-			commands.map((c) => `## sprig ${c.name}\n\n${c.about}\n\n${fence(help(c.name))}`).join('\n\n'),
+		`:::note[Generated]\nThis page is the output of \`chea --help\` and of each command's help, from the build of \`crates/chea-cli\` this site was built with. It cannot describe a flag the command does not have.\n:::\n\n` +
+			`## chea\n\n${fence(top)}\n\n` +
+			commands.map((c) => `## chea ${c.name}\n\n${c.about}\n\n${fence(help(c.name))}`).join('\n\n'),
 	),
 );
 
@@ -194,7 +194,7 @@ const replies = execFileSync(exe, ['mcp', '--in', join(repo, 'examples/bakery')]
 	.map((l) => JSON.parse(l));
 const tools = replies.find((r) => r.id === 2)?.result?.tools ?? [];
 if (!tools.length) {
-	console.error('sync: `sprig mcp` lists no tools');
+	console.error('sync: `chea mcp` lists no tools');
 	process.exit(1);
 }
 const cell = (s) => String(s).replaceAll('|', '\\|').replaceAll('\n', ' ');
@@ -217,10 +217,10 @@ write(
 	page(
 		{
 			title: 'MCP tools',
-			description: 'Every tool sprig mcp offers an agent, with its arguments, from the server itself.',
+			description: 'Every tool chea mcp offers an agent, with its arguments, from the server itself.',
 			editUrl: false,
 		},
-		`:::note[Generated]\nThis page is what \`sprig mcp\` answers to \`tools/list\`, from the build of \`crates/sprig-cli\` this site was built with. \`spec/tools.md\` T6 is the contract, and the [agents guide](/docs/agents/) shows a session.\n:::\n\n` +
+		`:::note[Generated]\nThis page is what \`chea mcp\` answers to \`tools/list\`, from the build of \`crates/chea-cli\` this site was built with. \`spec/tools.md\` T6 is the contract, and the [agents guide](/docs/agents/) shows a session.\n:::\n\n` +
 			tools
 				.map((t) => {
 					const kind = t.annotations?.readOnlyHint ? 'Reads.' : 'Writes, through the edit API, and returns the diff.';
@@ -236,13 +236,13 @@ write(
 	page(
 		{
 			title: 'Diagnostics',
-			description: 'Every code a Sprig tool reports, its severity, the rule it enforces and what it means.',
+			description: 'Every code a Chea tool reports, its severity, the rule it enforces and what it means.',
 			editUrl: `${edit}/spec/diagnostics.md`,
 		},
 		`:::note[Generated]\nThis page is \`spec/diagnostics.md\`. A test holds it and the core to each other: every code the core can report has a row and a note here.\n:::\n\n` +
 			// Each note gets an anchor per code it explains, so a tool (the
 			// playground's problems) can link a code straight to its note.
-			dropTitle(read('spec/diagnostics.md')).replace(/^\*\*(S\d{4}(?:, S\d{4})*)\.\*\*/gm, (all, codes) =>
+			dropTitle(read('spec/diagnostics.md')).replace(/^\*\*(C\d{4}(?:, C\d{4})*)\.\*\*/gm, (all, codes) =>
 				codes
 					.split(', ')
 					.map((c) => `<span id="${c.toLowerCase()}"></span>`)

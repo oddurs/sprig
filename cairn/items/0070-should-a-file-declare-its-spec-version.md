@@ -17,7 +17,7 @@ area: spec
 
 ## Question
 
-Should a file be able to say which spec version it follows (for example a `sprig:1` field on the title line)? It helps a future 2.0; it costs noise in every file.
+Should a file be able to say which spec version it follows (for example a `chea:1` field on the title line)? It helps a future 2.0; it costs noise in every file.
 
 ## Timebox
 
@@ -33,14 +33,14 @@ Any change planned after 1.0 that a 1.0 parser would misread.
 
 - A file without a version is read by the current version of the spec.
 - Every 1.x file means the same to every 1.x tool, so a file never needs to say which 1.x it follows.
-- The title's `sprig:` field is reserved (§4.6). `sprig:1` changes nothing. A tool that meets a version it does not read warns (S0007) and reads the file as best it can.
+- The title's `chea:` field is reserved (§4.6). `chea:1` changes nothing. A tool that meets a version it does not read warns (C0007) and reads the file as best it can.
 
 Evidence:
 - CommonMark never adopted a per-document version declaration, though one was proposed, and its IANA registration always means the latest version.
 - TOML, JSON and todo.txt carry no version in files either.
 - HTML's doctype ended as a fixed string.
 
-Compatibility comes from never changing what a valid file means. Sprig's grammar already degrades safely: an unknown key is an ordinary field and an unknown mark is a note, so additions in 1.x reach old tools as text, not as errors. The reserved key costs nothing until a 2.0 needs it, and then a 1.x tool sees it and says so rather than misreading silently.
+Compatibility comes from never changing what a valid file means. Chea's grammar already degrades safely: an unknown key is an ordinary field and an unknown mark is a note, so additions in 1.x reach old tools as text, not as errors. The reserved key costs nothing until a 2.0 needs it, and then a 1.x tool sees it and says so rather than misreading silently.
 
 ## Acceptance criteria
 
@@ -50,4 +50,4 @@ Compatibility comes from never changing what a valid file means. Sprig's grammar
 
 ## 2026-10-28
 
-Spec §4.6 reserves `sprig`. Diagnostic S0007 is added and catalogued, and `tokens/064` and `tokens/065` hold it. Follow-up: the stability policy (0073) should promise that 1.x never changes what a valid file means; a note there records it.
+Spec §4.6 reserves `chea`. Diagnostic C0007 is added and catalogued, and `tokens/064` and `tokens/065` hold it. Follow-up: the stability policy (0073) should promise that 1.x never changes what a valid file means; a note there records it.

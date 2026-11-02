@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Main",
     "status": "todo",
@@ -12,13 +12,13 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "+",
         "label": "A",
         "status": "todo",
         "graft": {
-          "path": "plans/a.sprig",
+          "path": "plans/a.chea",
           "title": "A",
           "mounted": true
         },
@@ -29,14 +29,14 @@
         },
         "children": [
           {
-            "file": "plans/a.sprig",
+            "file": "plans/a.chea",
             "line": 3,
             "mark": "+",
             "label": "B",
             "status": "todo",
             "grafted": true,
             "graft": {
-              "path": "plans/b.sprig",
+              "path": "plans/b.chea",
               "title": "B",
               "mounted": true
             },
@@ -47,7 +47,7 @@
             },
             "children": [
               {
-                "file": "plans/b.sprig",
+                "file": "plans/b.chea",
                 "line": 3,
                 "mark": "-",
                 "label": "Leaf",

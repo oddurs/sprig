@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Unreadable",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "Sometime",
@@ -27,17 +27,17 @@
   },
   "diagnostics": [
     {
-      "code": "S0001",
+      "code": "C0001",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 13,
       "span": [24, 35]
     },
     {
-      "code": "S0001",
+      "code": "C0001",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 26,
       "span": [37, 48]

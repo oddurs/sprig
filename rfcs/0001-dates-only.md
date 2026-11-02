@@ -10,7 +10,7 @@
 
 Should `due:` and `start:` take a time of day, as in this example?
 
-```sprig
+```chea
 Launch
 
 - Call the printer  due:2027-03-01T14:00
@@ -39,7 +39,7 @@ time through.
 
 Dates only. A stored date is `YYYY-MM-DD` and has no time of day (§9.2). A value
 such as `2027-03-01T14:00` is unreadable (§9.5): it is kept as text, warned about
-with S0001, and never misread as a date. The examples
+with C0001, and never misread as a date. The examples
 `tokens/062-a-date-has-no-time-of-day` and
 `tokens/104-a-time-of-day-makes-a-date-unreadable` pin it.
 

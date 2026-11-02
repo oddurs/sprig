@@ -10,8 +10,8 @@
 
 Should a file say which version of the spec it was written for?
 
-```sprig
-Launch  sprig:1
+```chea
+Launch  chea:1
 
 - Print the menus
 ```
@@ -29,7 +29,7 @@ version it does not read, rather than misreading it.
   version, though one was proposed, and its IANA registration always means the
   latest version. TOML, JSON and todo.txt carry none either. HTML's doctype
   ended as a fixed string.
-- **Sprig already degrades safely.** An unknown key is an ordinary field and an
+- **Chea already degrades safely.** An unknown key is an ordinary field and an
   unknown mark is a note, so additions in 1.x reach old tools as text, not as
   errors.
 
@@ -38,8 +38,8 @@ version it does not read, rather than misreading it.
 A file needs no version, and one without is read by the current version.
 Every 1.x file means the same to every 1.x tool (`docs/stability.md`).
 
-The title's `sprig:` key is reserved (§4.6). `sprig:1` changes nothing. A tool
-that meets a version it does not read warns with S0007, then reads the file as
+The title's `chea:` key is reserved (§4.6). `chea:1` changes nothing. A tool
+that meets a version it does not read warns with C0007, then reads the file as
 best it can. The reserved key costs nothing until a 2.0 needs it, and then a
 1.x tool sees it and says so rather than misreading silently.
 

@@ -1,19 +1,19 @@
 name: Bug report
-description: A file Sprig reads wrongly, or a command that misbehaves
+description: A file Chea reads wrongly, or a command that misbehaves
 labels: [bug]
 body:
   - type: markdown
     attributes:
       value: |
         Thank you for the report. With a plain-text format the input usually
-        says more than a description, so please paste the smallest `.sprig`
+        says more than a description, so please paste the smallest `.chea`
         file that shows the problem.
 
   - type: textarea
     id: input
     attributes:
       label: The input
-      description: The smallest `.sprig` file (or files) that reproduces it.
+      description: The smallest `.chea` file (or files) that reproduces it.
       render: text
     validations:
       required: true
@@ -39,7 +39,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: Output of `sprig --version`, or the commit you built from.
+      description: Output of `chea --version`, or the commit you built from.
     validations:
       required: true
 

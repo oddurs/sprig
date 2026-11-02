@@ -1,5 +1,5 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "syntax": {
     "title": "Links",
     "root": {
@@ -9,18 +9,18 @@
       "children": [
         {
           "line": 3,
-          "span": [7, 77],
+          "span": [7, 76],
           "mark": "-",
-          "text": "See ./kitchen and rooms/hall.sprig and ../shared/notes^a",
+          "text": "See ./kitchen and rooms/hall.chea and ../shared/notes^a",
           "links": [
             {
-              "path": "kitchen.sprig"
+              "path": "kitchen.chea"
             },
             {
-              "path": "rooms/hall.sprig"
+              "path": "rooms/hall.chea"
             },
             {
-              "path": "../shared/notes.sprig",
+              "path": "../shared/notes.chea",
               "anchor": "a"
             }
           ]

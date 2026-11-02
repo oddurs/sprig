@@ -5,7 +5,7 @@
 You need Rust ([rustup.rs](https://rustup.rs)) and nothing else.
 
 ```sh
-git clone https://github.com/oddurs/sprig && cd sprig
+git clone https://github.com/oddurs/chea && cd chea
 git switch -c fix/what-it-fixes
 # ... change something ...
 scripts/task check          # format, lint, test, build: what CI runs
@@ -41,7 +41,7 @@ request. Branches are `<type>/<id>-<slug>`, so the item is in the name.
 cairn next                                  # what is ready to start
 cairn claim 17                              # take it, so nobody duplicates it
 scripts/agent start feat/0017-resolve-grafts
-cd ../.worktrees/sprig/feat/0017-resolve-grafts
+cd ../.worktrees/chea/feat/0017-resolve-grafts
 
 # ... work, ticking criteria as they become true: cairn tick 17 2 ...
 
@@ -55,14 +55,14 @@ scripts/agent done feat/0017-resolve-grafts
 ```
 
 `scripts/agent list` shows every worktree, its branch and its pull request.
-Worktrees live in `../.worktrees/sprig/<branch>/`, outside the repository, so
+Worktrees live in `../.worktrees/chea/<branch>/`, outside the repository, so
 two branches never share an index or a `target/` directory. Anything you list
 in `.git/info/exclude`, such as your editor's or agent's own notes, is linked
 into each new worktree, so it never needs committing.
 
 ## Keep it small
 
-Sprig's essence is simplicity, and `crates/sprig-cli/tests/budget.rs` holds it
+Chea's essence is simplicity, and `crates/chea-cli/tests/budget.rs` holds it
 to that: the number of marks, commands, flags, fields with a meaning,
 diagnostic codes and MCP tools is pinned, and the card and the core of the
 spec have a ceiling. A change that adds one fails there until the number is
@@ -131,11 +131,11 @@ against itself as well as the case for.
 
 ## Changing the spec
 
-A change to what a `.sprig` file means is an RFC: copy `rfcs/0000-template.md`,
+A change to what a `.chea` file means is an RFC: copy `rfcs/0000-template.md`,
 and open a pull request with it. `rfcs/README.md` says when one is needed.
 
 - **Review.** It stays open for review for 14 days from the pull request, or
-  7 for a clarification, so people who build on Sprig have time to read it.
+  7 for a clarification, so people who build on Chea have time to read it.
 - **Who decides.** The maintainer, in a comment that gives the reasons. With
   more than one maintainer, a ruling also needs a second maintainer's approval.
 - **What lands.** An accepted RFC lands with the spec text, new conformance

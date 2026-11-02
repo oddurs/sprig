@@ -1,6 +1,6 @@
-# Sprig specification, annex
+# Chea specification, annex
 
-The [core](sprig.md) says what each line and token of a Sprig file means. This
+The [core](chea.md) says what each line and token of a Chea file means. This
 annex holds the rest: the rulings on edge cases, each numbered as a rule of the
 chapter it belongs to and as normative as any rule there, then the grammar, the
 ambiguities the drafts settled, and the tree format.
@@ -24,7 +24,7 @@ answer, the file has no title.
 Its items still form a tree under an implicit root. Tools may show the file name
 in place of a title.
 
-```sprig
+```chea
 - milk
 - bread
 ```
@@ -35,7 +35,7 @@ A line whose first character after indentation is `\` is a note whose text is th
 rest of the line after the backslash, even if that text starts with a mark. A
 backslash on its own is a note with no text.
 
-```sprig
+```chea
 Escapes
 
 - Pack
@@ -47,7 +47,7 @@ Escapes
 
 Items nest to any depth.
 
-```sprig
+```chea
 Deep
 
 - Company
@@ -63,7 +63,7 @@ An item with children keeps the status it is written with; progress beneath it
 does not change it. A tool may point out a parent whose counting children are all
 done, but must not display it as done until it is written `x`.
 
-```sprig
+```chea
 Ready to close
 
 - Design
@@ -81,7 +81,7 @@ dropped item was decided against, so nothing waits on it any longer; a later
 item has only been put off, so what waits on it still waits. An empty node
 (§5.5) is never finished, and a reference to one should be warned about.
 
-```sprig
+```chea
 Done
 
 ? Free tier?  ^tier
@@ -91,7 +91,7 @@ Done
 
 The question is answered, so *Pricing page* is not waiting.
 
-```sprig
+```chea
 Dropped
 
 / Custom domain  ^domain
@@ -105,7 +105,7 @@ The domain was decided against, so *Launch* is not waiting either.
 Blocked is computed and must never be stored in a file. There is no mark or field
 for it.
 
-```sprig
+```chea
 Computed
 
 - Permit  ^permit
@@ -123,22 +123,22 @@ grafts in document order, and the graft that reaches a file still being
 visited closes the loop. That graft is refused in every tree, and with it taken
 out no file's tree loops.
 
-```sprig
+```chea
 A
 
 + [[b]]
 ```
 
-If this is `a.sprig` and `b.sprig` grafts `[[a]]`, path order visits `a.sprig`
-first, and the graft in `b.sprig` closes the loop. Read on its own, `a.sprig`
-still shows what `b.sprig` writes; `b.sprig` does not show `a.sprig`.
+If this is `a.chea` and `b.chea` grafts `[[a]]`, path order visits `a.chea`
+first, and the graft in `b.chea` closes the loop. Read on its own, `a.chea`
+still shows what `b.chea` writes; `b.chea` does not show `a.chea`.
 
 ### 8.5 Missing targets
 
 A graft naming a file or anchor that does not exist is an error on the graft
 line, and the graft has no grafted children.
 
-```sprig
+```chea
 Missing
 
 + [[nowhere]]
@@ -149,13 +149,13 @@ Missing
 A tool that changes an item shown through a graft must change the original line
 in the file that writes it.
 
-```sprig
+```chea
 Mounted
 
 + [[kitchen]]
 ```
 
-Ticking a kitchen item seen here edits `kitchen.sprig`.
+Ticking a kitchen item seen here edits `kitchen.chea`.
 
 ### 8.7 Anchors belong to their file
 
@@ -164,7 +164,7 @@ grafts in are not anchors of the grafting file, and `[[file^anchor]]` reaches
 only anchors that `file` writes itself; refer to an anchor through the file that
 writes it.
 
-```sprig
+```chea
 Anchors across files
 
 + [[lease]]
@@ -179,7 +179,7 @@ inside an earlier grafted file, or a file containing an earlier grafted branch, 
 an error reported on the later graft line in document order, and that graft has
 no grafted children. Progress therefore never counts an item twice.
 
-```sprig
+```chea
 Once
 
 + [[kitchen]]
@@ -194,7 +194,7 @@ A date field whose value is neither form is kept as written and shown as text. A
 tool should warn about it. A stored date for a day that does not exist, such as
 `2026-02-30`, is unreadable too.
 
-```sprig
+```chea
 Unreadable
 
 - Sometime  due:soonish
@@ -206,7 +206,7 @@ An item without a `due:` of its own is due when the nearest item above it with
 one is, the title included. Tools that order or flag work by due date use this
 **effective due date**; an item's own `due:` always wins over one above it.
 
-```sprig
+```chea
 Launch  due:2026-12-05
 
 - Print the menus
@@ -225,7 +225,7 @@ month is shorter; only the due date is stored, so the day does not come back
 (31 January, 28 February, 28 March). An item with no `due:` gets one. An item
 whose `every:` has no next occurrence (§10.3) is marked done.
 
-```sprig
+```chea
 After ticking on 2026-10-02
 
 - Weekly numbers to the bank  every:fri  due:2026-10-09
@@ -309,11 +309,11 @@ to revisit it: `cairn list --view decisions`.
 
 ## Appendix D. The tree format
 
-A tool that hands a Sprig file to another program, and every expected result in
+A tool that hands a Chea file to another program, and every expected result in
 the conformance suite (`tests/conformance/`), uses one JSON shape. Its schema is
 `spec/tree.schema.json`, in JSON Schema 2020-12.
 
-**Version.** A document carries `"sprig_tree": 1`. The number changes only when
+**Version.** A document carries `"chea_tree": 1`. The number changes only when
 a reader written for the old version would misread the new one: a key removed,
 renamed, or given a new meaning. Adding an optional key does not change it, so
 a reader must ignore keys it does not know.
@@ -331,7 +331,7 @@ their own.
 
 | Key | Type | Meaning |
 | --- | --- | --- |
-| `sprig_tree` | `1` | The format version. Required. |
+| `chea_tree` | `1` | The format version. Required. |
 | `file` | path | The file this document describes. |
 | `today` | date | The day the resolved layer was computed for (§7.5). |
 | `syntax` | object | The syntax layer, D.2. |
@@ -339,7 +339,7 @@ their own.
 | `diagnostics` | list | Every problem found, D.4. |
 
 A *path* is relative to the workspace root, with `/` between components, and
-ends in `.sprig`. A *date* is `YYYY-MM-DD`. A *span* is a pair of byte offsets
+ends in `.chea`. A *date* is `YYYY-MM-DD`. A *span* is a pair of byte offsets
 into the file, start inclusive and end exclusive. A *line* counts from 1.
 
 ### D.2 The syntax layer
@@ -369,7 +369,7 @@ and the **tokens** of §4, on items, the root and answers alike:
 | `anchor` | string | The anchor that names the item (§4.5, Appendix B.3). |
 | `fields` | object | Each field's key, lower-cased, to the value that counts (§4.6), in order of first use. Quotes are removed. |
 | `after` | list of strings | `after:` values as written, in order (§4.7). |
-| `links` | list | Links in the item's words (§4.8): each has `path`, with `./` dropped and `.sprig` added but still relative to this file, and `anchor` when the link names one. |
+| `links` | list | Links in the item's words (§4.8): each has `path`, with `./` dropped and `.chea` added but still relative to this file, and `anchor` when the link names one. |
 
 ### D.3 The resolved layer
 

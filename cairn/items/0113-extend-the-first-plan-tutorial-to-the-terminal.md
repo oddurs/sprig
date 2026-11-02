@@ -18,11 +18,11 @@ area: site
 
 ## Reader and question
 
-A reader who finished the playground tutorial and wants the same plan checked by `sprig next` and `sprig check`.
+A reader who finished the playground tutorial and wants the same plan checked by `chea next` and `chea check`.
 
 ## Change
 
-Add the terminal steps to the tutorial once v0.1 exists: install, `sprig next`, `sprig check`, and a CI one-liner.
+Add the terminal steps to the tutorial once v0.1 exists: install, `chea next`, `chea check`, and a CI one-liner.
 
 ## Acceptance criteria
 
@@ -30,7 +30,7 @@ Add the terminal steps to the tutorial once v0.1 exists: install, `sprig next`, 
 
 ## 2026-10-28
 
-Step 7 of `site/src/content/docs/docs/first-plan.mdx`: install, `sprig next` on step 6's two files, `sprig check` clean and then with a misspelt graft, and the GitHub Actions line. (1) `crates/sprig-cli/tests/readme.rs` now runs every `sprig` command in both the README and this tutorial, against the files the page itself defines (marked `{/* file: ... */}` in MDX), and requires the exact output shown. It runs in the `check` job on three platforms.
+Step 7 of `site/src/content/docs/docs/first-plan.mdx`: install, `chea next` on step 6's two files, `chea check` clean and then with a misspelt graft, and the GitHub Actions line. (1) `crates/chea-cli/tests/readme.rs` now runs every `chea` command in both the README and this tutorial, against the files the page itself defines (marked `{/* file: ... */}` in MDX), and requires the exact output shown. It runs in the `check` job on three platforms.
 
 ## Result
 

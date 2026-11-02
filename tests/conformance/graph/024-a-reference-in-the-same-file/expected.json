@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "References",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "Sign",
@@ -24,7 +24,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "-",
         "label": "Order the oven",
@@ -39,7 +39,7 @@
           {
             "after": "^signed",
             "label": "Sign",
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 3
           }
         ]

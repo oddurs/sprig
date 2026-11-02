@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "References",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "Supplier credit",
@@ -27,13 +27,13 @@
           {
             "after": "[[lease^signed]]",
             "label": "Sign",
-            "file": "lease.sprig",
+            "file": "lease.chea",
             "line": 4
           }
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "-",
         "label": "Fit out",

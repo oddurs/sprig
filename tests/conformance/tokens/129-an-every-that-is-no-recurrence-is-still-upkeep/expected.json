@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Upkeep",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "Real work",
@@ -24,7 +24,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "-",
         "label": "Chore 1",
@@ -36,7 +36,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 5,
         "mark": "-",
         "label": "Chore 2",
@@ -48,7 +48,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 6,
         "mark": "-",
         "label": "Chore 3",
@@ -63,25 +63,25 @@
   },
   "diagnostics": [
     {
-      "code": "S0006",
+      "code": "C0006",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 4,
       "col": 12,
       "span": [31, 48]
     },
     {
-      "code": "S0006",
+      "code": "C0006",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 5,
       "col": 12,
       "span": [60, 71]
     },
     {
-      "code": "S0006",
+      "code": "C0006",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 6,
       "col": 12,
       "span": [83, 90]

@@ -20,7 +20,7 @@ Allow relative dates (fast, but the file's meaning changes with the day it's rea
 
 ## Decision
 
-Store ISO. Editors and `sprig fmt` expand `fri`, `+2w`, `oct3` and `tomorrow` when you leave the line. Parsers still read them against today as a courtesy. The 0.1 special case where `due:oct 3` swallowed the next word is removed.
+Store ISO. Editors and `chea fmt` expand `fri`, `+2w`, `oct3` and `tomorrow` when you leave the line. Parsers still read them against today as a courtesy. The 0.1 special case where `due:oct 3` swallowed the next word is removed.
 
 ## Revisit when
 

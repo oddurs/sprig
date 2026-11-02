@@ -17,15 +17,15 @@ area: core
 
 ## Problem
 
-Every command that acts on one item needs to name it, and the CLI, the TUI and the MCP server must agree on what a name means. Today only `sprig tick` (0046) describes a form, and only in its own words.
+Every command that acts on one item needs to name it, and the CLI, the TUI and the MCP server must agree on what a name means. Today only `chea tick` (0046) describes a form, and only in its own words.
 
 ## Proposal
 
-One resolver in sprig-core, with no I/O, that takes a ref string and a resolved workspace and returns an item, or a diagnostic listing candidates. Forms, from exact to forgiving:
+One resolver in chea-core, with no I/O, that takes a ref string and a resolved workspace and returns an item, or a diagnostic listing candidates. Forms, from exact to forgiving:
 
 1. `^anchor`, searched across the workspace.
 2. `file^anchor`, in one file.
-3. `file.sprig:12`, a line, as compilers print it.
+3. `file.chea:12`, a line, as compilers print it.
 4. Words from the item's text, if they match exactly one item.
 
 The CLI adds `-`, which reads one ref per line from stdin. The plan is `design/cli-plan.html`.
@@ -39,7 +39,7 @@ The CLI adds `-`, which reads one ref per line from stdin. The plan is `design/c
 
 ## 2026-10-28
 
-`sprig_core::refs::resolve`: `^anchor`, `file^anchor`, `file:12`, then words (case-insensitive, an exact text match beating partial ones). A file part may drop `.sprig`, or give a bare file name when it is unique. (1) Unit tests over `examples/bakery/` cover each form. `third quote` resolves to `kitchen.sprig:11`, the line that writes it, although dana.sprig grafts that branch. (2) An ambiguous ref lists every candidate as `file:line  text`. `sack` gives the three grocery lines, and an anchor written in both `a.sprig` and `b.sprig` gives both and resolves as `b^x`. (3) Words never match notes or answers: `mill street` appears in a lease.sprig note and in the name question, and resolves to the question; a phrase only in a note matches nothing. (4) `spec/tools.md` T1 states the resolver as tool behaviour, with Taskwarrior's renumbering IDs as the reason anchors are the stable form and refs are resolved before any write.
+`chea_core::refs::resolve`: `^anchor`, `file^anchor`, `file:12`, then words (case-insensitive, an exact text match beating partial ones). A file part may drop `.chea`, or give a bare file name when it is unique. (1) Unit tests over `examples/bakery/` cover each form. `third quote` resolves to `kitchen.chea:11`, the line that writes it, although dana.chea grafts that branch. (2) An ambiguous ref lists every candidate as `file:line  text`. `sack` gives the three grocery lines, and an anchor written in both `a.chea` and `b.chea` gives both and resolves as `b^x`. (3) Words never match notes or answers: `mill street` appears in a lease.chea note and in the name question, and resolves to the question; a phrase only in a note matches nothing. (4) `spec/tools.md` T1 states the resolver as tool behaviour, with Taskwarrior's renumbering IDs as the reason anchors are the stable form and refs are resolved before any write.
 
 ## Result
 

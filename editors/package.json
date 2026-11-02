@@ -1,10 +1,10 @@
 {
-  "name": "sprig-editors",
+  "name": "chea-editors",
   "private": true,
-  "description": "Editor grammars for Sprig, and their tests",
+  "description": "Editor grammars for Chea, and their tests",
   "scripts": {
-    "test:textmate": "vscode-tmgrammar-snap --grammar sprig.tmLanguage.json --scope source.sprig tests/textmate/*.sprig",
-    "update:textmate": "vscode-tmgrammar-snap -u --grammar sprig.tmLanguage.json --scope source.sprig tests/textmate/*.sprig"
+    "test:textmate": "vscode-tmgrammar-snap --grammar chea.tmLanguage.json --scope source.chea tests/textmate/*.chea",
+    "update:textmate": "vscode-tmgrammar-snap -u --grammar chea.tmLanguage.json --scope source.chea tests/textmate/*.chea"
   },
   "devDependencies": {
     "vscode-tmgrammar-test": "0.1.3",

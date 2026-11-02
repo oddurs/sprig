@@ -21,12 +21,12 @@ An agent can flood a plan with noise faster than a person can review it.
 
 ## Proposal
 
-`sprig mcp --max-new-items N` (default 20) limits items added per call and per session.
+`chea mcp --max-new-items N` (default 20) limits items added per call and per session.
 
 ## Acceptance criteria
 
 - [x] Exceeding the cap returns an error naming the limit and the flag.
-- [x] The default is documented in `sprig mcp --help` and in the agents guide.
+- [x] The default is documented in `chea mcp --help` and in the agents guide.
 
 ## 2026-10-29
 
@@ -34,4 +34,4 @@ One count covers both: a session may add --max-new-items items (20 by default) a
 
 ## Result
 
-sprig mcp --max-new-items N, 20 by default, documented in --help and in the agents guide.
+chea mcp --max-new-items N, 20 by default, documented in --help and in the agents guide.

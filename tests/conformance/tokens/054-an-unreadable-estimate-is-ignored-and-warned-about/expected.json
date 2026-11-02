@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Estimates",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "Tiling",
@@ -24,7 +24,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "-",
         "label": "Grout",
@@ -36,7 +36,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 5,
         "mark": "-",
         "label": "Seal",
@@ -51,25 +51,25 @@
   },
   "diagnostics": [
     {
-      "code": "S0002",
+      "code": "C0002",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 11,
       "span": [21, 32]
     },
     {
-      "code": "S0002",
+      "code": "C0002",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 4,
       "col": 10,
       "span": [42, 47]
     },
     {
-      "code": "S0002",
+      "code": "C0002",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 5,
       "col": 9,
       "span": [56, 62]

@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Dana, this week",
     "status": "doing",
@@ -13,13 +13,13 @@
     "people": ["dana"],
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "+",
         "label": "Negotiate",
         "status": "doing",
         "graft": {
-          "path": "lease.sprig",
+          "path": "lease.chea",
           "anchor": "terms",
           "title": "Negotiate",
           "mounted": true,
@@ -33,7 +33,7 @@
         "people": ["dana"],
         "children": [
           {
-            "file": "lease.sprig",
+            "file": "lease.chea",
             "line": 5,
             "mark": "x",
             "label": "Rent",
@@ -48,7 +48,7 @@
             "people": ["dana"]
           },
           {
-            "file": "lease.sprig",
+            "file": "lease.chea",
             "line": 6,
             "mark": "-",
             "label": "Break clause",
@@ -64,13 +64,13 @@
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "+",
         "label": "Oven",
         "status": "todo",
         "graft": {
-          "path": "kitchen.sprig",
+          "path": "kitchen.chea",
           "anchor": "oven",
           "title": "Oven",
           "mounted": true,
@@ -84,7 +84,7 @@
         "people": ["teo"],
         "children": [
           {
-            "file": "kitchen.sprig",
+            "file": "kitchen.chea",
             "line": 8,
             "mark": "-",
             "label": "Get quotes",
@@ -98,7 +98,7 @@
             "people": ["teo"]
           },
           {
-            "file": "kitchen.sprig",
+            "file": "kitchen.chea",
             "line": 9,
             "mark": "-",
             "label": "Order",
@@ -115,7 +115,7 @@
               {
                 "after": "^design",
                 "label": "Design",
-                "file": "kitchen.sprig",
+                "file": "kitchen.chea",
                 "line": 3
               }
             ]

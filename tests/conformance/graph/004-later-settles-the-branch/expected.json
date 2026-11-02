@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Settling",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": ">",
         "label": "Terrace",
@@ -25,7 +25,7 @@
         },
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 4,
             "mark": "-",
             "label": "Chairs",
@@ -38,7 +38,7 @@
             }
           },
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 5,
             "mark": "~",
             "label": "Awning",
@@ -53,7 +53,7 @@
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 6,
         "mark": "-",
         "label": "Oven",

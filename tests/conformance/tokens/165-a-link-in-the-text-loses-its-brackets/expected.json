@@ -1,5 +1,5 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "syntax": {
     "title": "Tokens",
     "root": {
@@ -14,10 +14,10 @@
           "text": "Read notes and kitchen^oven first",
           "links": [
             {
-              "path": "notes.sprig"
+              "path": "notes.chea"
             },
             {
-              "path": "kitchen.sprig",
+              "path": "kitchen.chea",
               "anchor": "oven"
             }
           ]

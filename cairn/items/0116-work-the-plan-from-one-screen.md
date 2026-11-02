@@ -15,11 +15,11 @@ due: 2027-05-21
 
 ## Ships
 
-`sprig tui`: the tree, what's next and the agenda for a folder of plans on one terminal screen, with vim keys, writes that go through the same one-line edits as the verbs, and live reload when a file changes underneath it. Plan: `design/cli-plan.html`.
+`chea tui`: the tree, what's next and the agenda for a folder of plans on one terminal screen, with vim keys, writes that go through the same one-line edits as the verbs, and live reload when a file changes underneath it. Plan: `design/cli-plan.html`.
 
 ## Done when
 
-- [x] `sprig tui` opens on `examples/bakery/`, and every write it can make leaves `git diff` showing only the lines it meant to change.
+- [x] `chea tui` opens on `examples/bakery/`, and every write it can make leaves `git diff` showing only the lines it meant to change.
 - [x] An editor and the TUI can have the same file open; a change saved in one appears in the other without data loss, covered by a test.
 - [x] Every view has a committed text snapshot rendered with `--screenshot`.
 
@@ -27,7 +27,7 @@ due: 2027-05-21
 
 - Mouse support, themes or a config file.
 - Editing item text inside the TUI; `e` opens `$EDITOR` at the line.
-- A second parser or renderer: the TUI uses sprig-core and the CLI's output layer.
+- A second parser or renderer: the TUI uses chea-core and the CLI's output layer.
 
 ## 2026-10-29
 

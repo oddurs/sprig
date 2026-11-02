@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Missing",
     "status": "todo",
@@ -12,14 +12,14 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "+",
-        "label": "nowhere.sprig",
+        "label": "nowhere.chea",
         "status": "todo",
         "graft": {
-          "path": "nowhere.sprig",
-          "title": "nowhere.sprig",
+          "path": "nowhere.chea",
+          "title": "nowhere.chea",
           "mounted": false
         },
         "progress": {
@@ -29,7 +29,7 @@
         },
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 4,
             "mark": "-",
             "label": "Kept",
@@ -46,9 +46,9 @@
   },
   "diagnostics": [
     {
-      "code": "S0101",
+      "code": "C0101",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 3,
       "span": [11, 22]

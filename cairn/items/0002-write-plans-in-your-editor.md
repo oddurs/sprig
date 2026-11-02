@@ -15,13 +15,13 @@ due: 2027-01-29
 
 ## Ships
 
-VS Code highlights `.sprig` files, completes people, anchors and file links, shows `sprig check` diagnostics as you type, and ticks items with a code action. `sprig fmt` normalises a file without touching anything it doesn't mean to. In the terminal, `sprig tree`, `status` and `why` show a plan's shape and what holds it up, and every command completes in the shell.
+VS Code highlights `.chea` files, completes people, anchors and file links, shows `chea check` diagnostics as you type, and ticks items with a code action. `chea fmt` normalises a file without touching anything it doesn't mean to. In the terminal, `chea tree`, `status` and `why` show a plan's shape and what holds it up, and every command completes in the shell.
 
 ## Done when
 
 - [ ] The VS Code extension is on the Marketplace and works offline on macOS, Linux and Windows.
 - [ ] Every edit the tools make changes only the bytes it means to, proven by property tests.
-- [ ] `sprig fmt --check` runs in this repository's CI.
+- [ ] `chea fmt --check` runs in this repository's CI.
 
 ## Explicitly not in this milestone
 

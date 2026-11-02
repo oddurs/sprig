@@ -15,7 +15,7 @@ area: community
 
 ## Reader and question
 
-Anyone deciding whether to build on Sprig, and needing to know what won't change under them.
+Anyone deciding whether to build on Chea, and needing to know what won't change under them.
 
 ## Change
 
@@ -29,8 +29,8 @@ Anyone deciding whether to build on Sprig, and needing to know what won't change
 
 ## 2026-10-28
 
-From spike 0070: the policy should promise that no 1.x release changes what a valid 1.x file means. That promise is why files carry no version, and the title's `sprig:` field is reserved for a 2.0 (§4.6, S0007).
+From spike 0070: the policy should promise that no 1.x release changes what a valid 1.x file means. That promise is why files carry no version, and the title's `chea:` field is reserved for a 2.0 (§4.6, C0007).
 
 ## Result
 
-docs/stability.md: files keep their meaning across 1.x, the spec only adds, codes are never reused, and the tree format, exit codes, --plain columns and MCP tools are stable. Each promise names its test, and crates/sprig-cli/tests/docs.rs fails if a named test or example disappears. It is linked from the README, the spec and the crate docs.
+docs/stability.md: files keep their meaning across 1.x, the spec only adds, codes are never reused, and the tree format, exit codes, --plain columns and MCP tools are stable. Each promise names its test, and crates/chea-cli/tests/docs.rs fails if a named test or example disappears. It is linked from the README, the spec and the crate docs.

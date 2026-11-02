@@ -25,7 +25,7 @@ Four blocks after the hero: what it computes, plans across files at every size, 
 
 ## Acceptance criteria
 
-- [x] Every code example on the page is a valid Sprig file that the reference parser reads without diagnostics.
+- [x] Every code example on the page is a valid Chea file that the reference parser reads without diagnostics.
 - [x] The questions block answers xkcd 927, Org-mode, Markdown checkboxes, AI, accounts, Rust, stability and phones.
 - [x] The footer states that there are no cookies and no analytics, and that is true of the built site.
 

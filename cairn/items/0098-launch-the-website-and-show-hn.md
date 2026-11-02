@@ -15,12 +15,12 @@ due: 2026-12-01
 
 ## Ships
 
-A public website that explains Sprig in ten seconds and lets a visitor edit a real plan in thirty, and a Show HN post that points at it. The site's plan, including the arguments behind its shape, is in `design/site-plan.html`.
+A public website that explains Chea in ten seconds and lets a visitor edit a real plan in thirty, and a Show HN post that points at it. The site's plan, including the arguments behind its shape, is in `design/site-plan.html`.
 
 ## Done when
 
 - [ ] The site is live, with the landing page, playground, spec, decisions, roadmap and comparison pages.
-- [ ] The playground runs sprig-core compiled to WebAssembly, not the draft reference parser.
+- [ ] The playground runs chea-core compiled to WebAssembly, not the draft reference parser.
 - [ ] v0.1 is released with prebuilt binaries for macOS, Linux and Windows.
 - [ ] The name spike (0006) has an answer.
 - [ ] The Show HN is posted, and the author stays in the thread for the first six hours.

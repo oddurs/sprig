@@ -58,33 +58,33 @@ x eggs
 	},
 };
 const first = presets.release.text;
-const hero = render({ 'plan.sprig': first }, 'plan.sprig', 'next');
+const hero = render({ 'plan.chea': first }, 'plan.chea', 'next');
 
 // What it computes: three small plans, and the sentence each one earns. The
 // sentences are computed here, so they can't drift from what the parser says.
 const cBlocked = `- Tests  ^tests\n- Ship  after:^tests`;
 const cProgress = `- Kitchen\n  x Strip out\n  - Tiling  est:3h\n  - Paint  est:2h`;
 const cNext = `x Pack\n- Book a van  ^van\n- Move  after:^van`;
-const ship = find(render({ 'a.sprig': cBlocked }, 'a.sprig').doc, 'Ship');
+const ship = find(render({ 'a.chea': cBlocked }, 'a.chea').doc, 'Ship');
 const blockedSentence = `Ship waits on ${blockers(ship)!.map((b: { label: string }) => b.label).join(', ')}.`;
-const kitchen = find(render({ 'a.sprig': cProgress }, 'a.sprig').doc, 'Kitchen');
+const kitchen = find(render({ 'a.chea': cProgress }, 'a.chea').doc, 'Kitchen');
 const progressSentence = `Kitchen: ${kitchen.stats.done} of ${kitchen.stats.total} done, ${fmtEst(kitchen.stats.est)} left.`;
-const next = render({ 'a.sprig': cNext }, 'a.sprig');
+const next = render({ 'a.chea': cNext }, 'a.chea');
 const nextSentence = `Ready: ${next.readyText.join(', ')}. Waiting: ${next.waitingText.join(', ')}.`;
 
 const house = `House 2027  @sam\n\n+ [[kitchen]]\n- Insurance renewal`;
 const kitchenFile = `Kitchen  @jo\n\nx Strip out\n- Tiling  ^tiling  est:5h\n- Paint  after:^tiling`;
 
 const company = {
-	'northwind.sprig': `Northwind 2027  @ana\n\n+ [[product]]  @kim\n+ [[hiring]]   @dana`,
-	'product.sprig': `Product\n\n- Sync engine  ^sync\n- Mobile app  after:^sync`,
-	'hiring.sprig': `Hiring\n\nx Head of design\n- Two engineers`,
+	'northwind.chea': `Northwind 2027  @ana\n\n+ [[product]]  @kim\n+ [[hiring]]   @dana`,
+	'product.chea': `Product\n\n- Sync engine  ^sync\n- Mobile app  after:^sync`,
+	'hiring.chea': `Hiring\n\nx Head of design\n- Two engineers`,
 };
 const sizes = [
-	{ label: 'a list', href: url(`/play/#${planFragment({ 'list.sprig': presets.list.text })}`) },
-	{ label: 'a weekend', href: url(`/play/#${planFragment({ 'move.sprig': presets.move.text })}`) },
-	{ label: 'a project', href: url(`/play/#${planFragment({ 'release.sprig': first })}`) },
-	{ label: 'a company', href: url(`/play/#${planFragment(company, 'northwind.sprig')}`) },
+	{ label: 'a list', href: url(`/play/#${planFragment({ 'list.chea': presets.list.text })}`) },
+	{ label: 'a weekend', href: url(`/play/#${planFragment({ 'move.chea': presets.move.text })}`) },
+	{ label: 'a project', href: url(`/play/#${planFragment({ 'release.chea': first })}`) },
+	{ label: 'a company', href: url(`/play/#${planFragment(company, 'northwind.chea')}`) },
 ];
 
 // Numbers in running prose read better as words, up to ninety-nine.
@@ -96,9 +96,9 @@ const tools = screen('next', examples as Record<string, string>, { limit: 5, com
 
 const faq = [
 	['Isn’t this xkcd 927?', 'Yes, it’s a new format. None of the existing ones computes what’s blocked across files while staying readable in cat. If one does, open an issue and this page will say so.'],
-	['Why not Org-mode?', 'Org does far more. Sprig does less on purpose, so it can be implemented from a spec in any language and read without Emacs.'],
+	['Why not Org-mode?', 'Org does far more. Chea does less on purpose, so it can be implemented from a spec in any language and read without Emacs.'],
 	['Why not Markdown checkboxes?', 'They can’t say what’s blocked, and accepting both spellings would double every tool. An importer converts them once.'],
-	['Is this an AI thing?', 'It’s a text format. Coding agents read and edit it the way people do, which is why status is computed instead of trusted. Nothing in Sprig calls a model.'],
+	['Is this an AI thing?', 'It’s a text format. Coding agents read and edit it the way people do, which is why status is computed instead of trusted. Nothing in Chea calls a model.'],
 	['Does it need an account or a server?', 'No. Plans are files. A shared playground link keeps the plan in the URL fragment, which browsers never send anywhere.'],
 	['Why Rust?', 'It compiles to a small native binary with no runtime, and to WebAssembly for the browser, from one codebase.'],
 	['Is the format stable?', 'It’s a draft. Spec 1.0 freezes it; after that, a 1.0 file parses the same way forever.'],
@@ -107,21 +107,21 @@ const faq = [
 ---
 
 <Base
-	title="Sprig: plain-text plans that work out what's next"
-	description="A plain-text format for plans. Start a line with a mark, indent to break it down, and Sprig works out what is done, what is blocked and what you can do next, across files."
+	title="Chea: plain-text plans that work out what's next"
+	description="A plain-text format for plans. Start a line with a mark, indent to break it down, and Chea works out what is done, what is blocked and what you can do next, across files."
 	current="home"
 >
 	<section class="hero" aria-labelledby="hero-h">
 		<Stack gap={6}>
 			<Stack gap={5}>
 				<Text size="sm" tone="muted">A plain-text format for plans</Text>
-				<Text as="h1" id="hero-h" size="3xl" weight="bold">Write the plan. Sprig works out the rest.</Text>
-				<Text size="md" tone="muted" measure>Start a line with a mark. Indent to break it down. Sprig works out what’s done, what’s blocked and what you can do next, across as many files as the plan needs.</Text>
+				<Text as="h1" id="hero-h" size="3xl" weight="bold">Write the plan. Chea works out the rest.</Text>
+				<Text size="md" tone="muted" measure>Start a line with a mark. Indent to break it down. Chea works out what’s done, what’s blocked and what you can do next, across as many files as the plan needs.</Text>
 			</Stack>
 			<Inline gap={3}>
 				<Button href={url('/play/')} variant="primary">Open the playground</Button>
 				<Button href={url('/spec/')}>Read the spec</Button>
-				<Button href="https://github.com/oddurs/sprig" variant="ghost">GitHub</Button>
+				<Button href="https://github.com/oddurs/chea" variant="ghost">GitHub</Button>
 			</Inline>
 		</Stack>
 	</section>
@@ -152,7 +152,7 @@ const faq = [
 				<div class="body sv" id="demo-body" set:html={hero.html} />
 			</div>
 		</div>
-		<Text size="sm" tone="muted">Tick <em>Migration guide</em>, or add an answer under the question, and watch <em>Announce</em> unblock. It runs the same Rust core as the <code>sprig</code> command, compiled to WebAssembly.</Text>
+		<Text size="sm" tone="muted">Tick <em>Migration guide</em>, or add an answer under the question, and watch <em>Announce</em> unblock. It runs the same Rust core as the <code>chea</code> command, compiled to WebAssembly.</Text>
 	</section>
 
 	<section class="marks" aria-labelledby="marks-h">
@@ -163,7 +163,7 @@ const faq = [
 	</section>
 
 
-	<Section id="computes-h" title="It works out what you’d track by hand." intro="Checklists record what you ticked. Sprig also works out what waits on what, how far along each branch is, and what can start now. None of it is written by hand, so none of it goes stale.">
+	<Section id="computes-h" title="It works out what you’d track by hand." intro="Checklists record what you ticked. Chea also works out what waits on what, how far along each branch is, and what can start now. None of it is written by hand, so none of it goes stale.">
 		<Grid cols={3} gap={6} rowGap={8}>
 			<Stack gap={4}>
 				<Code code={cBlocked} />
@@ -194,9 +194,9 @@ const faq = [
 
 	<Section id="files-h" title="A big plan is a folder of small ones." intro="A graft line mounts another file as a branch. Progress, owners and blockers carry across, so a company plan is an index of team plans, each owned by the people who work it.">
 		<Grid cols={3} gap={5}>
-			<Code code={house} file="house.sprig" />
-			<Code code={kitchenFile} file="kitchen.sprig" />
-			<Plan files={{ 'house.sprig': house, 'kitchen.sprig': kitchenFile }} active="house.sprig" caption="house.sprig, as Sprig reads it" />
+			<Code code={house} file="house.chea" />
+			<Code code={kitchenFile} file="kitchen.chea" />
+			<Plan files={{ 'house.chea': house, 'kitchen.chea': kitchenFile }} active="house.chea" caption="house.chea, as Chea reads it" />
 		</Grid>
 		<Inline gap={4} aria-label="Open an example in the playground">
 			<Text size="sm" tone="muted">Open in the playground:</Text>
@@ -226,7 +226,7 @@ const faq = [
 		</Grid>
 		<Inline gap={4}>
 			<a class="text-link" href={url('/decisions/')}>Why it is this way: {inWords(facts.decisions)} settled arguments</a>
-			<a class="text-link" href={url('/compare/')}>How Sprig compares</a>
+			<a class="text-link" href={url('/compare/')}>How Chea compares</a>
 		</Inline>
 	</Section>
 
@@ -404,7 +404,7 @@ const faq = [
 		.demo {
 			grid-template-columns: minmax(0, 1fr);
 		}
-		/* One column: the plan first, then what Sprig says about it. */
+		/* One column: the plan first, then what Chea says about it. */
 		.src {
 			border-right: 0;
 			border-bottom: 1px solid var(--border);

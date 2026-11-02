@@ -1,5 +1,5 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "syntax": {
     "title": "Links",
     "root": {
@@ -14,7 +14,7 @@
           "text": "Check (see kitchen) first",
           "links": [
             {
-              "path": "kitchen.sprig"
+              "path": "kitchen.chea"
             }
           ]
         }

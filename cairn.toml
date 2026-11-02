@@ -1,4 +1,4 @@
-# cairn.toml — the schema for Sprig's roadmap and issues.
+# cairn.toml — the schema for Chea's roadmap and issues.
 #
 #   cairn config          show the resolved schema
 #   cairn check           validate every item against it
@@ -7,8 +7,8 @@
 format = 5
 
 [project]
-name = "sprig"
-url = "https://github.com/oddurs/sprig/blob/main"
+name = "chea"
+url = "https://github.com/oddurs/chea/blob/main"
 description = "A plain-text format for plans that people and coding agents read, edit and check in the same file."
 dir = "cairn/items"
 default_type = "feature"
@@ -199,7 +199,7 @@ name = "area"
 kind = "enum"
 values = ["spec", "suite", "core", "cli", "lsp", "editors", "agents", "interop", "release", "docs", "site", "community"]
 column = true
-description = "spec: the document; suite: conformance examples; core: sprig-core crate; cli: the sprig binary; lsp: language server; editors: grammars and extensions; agents: MCP and agent conventions; interop: import, export, calendars, CI; release: packaging and CI; docs: guides; site: the website; community: name, governance, stewardship"
+description = "spec: the document; suite: conformance examples; core: chea-core crate; cli: the chea binary; lsp: language server; editors: grammars and extensions; agents: MCP and agent conventions; interop: import, export, calendars, CI; release: packaging and CI; docs: guides; site: the website; community: name, governance, stewardship"
 
 # ─── Saved views ─────────────────────────────────────────────────────────────
 
@@ -259,7 +259,7 @@ after-remove = "cairn render -q"
 
 [render]
 target = "ROADMAP.md"
-title = "Sprig roadmap"
+title = "Chea roadmap"
 group_by = "milestone"
 include = "category=open|active,type!=decision"
 checkbox = true

@@ -1,8 +1,8 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
-    "label": "main.sprig",
+    "file": "main.chea",
+    "label": "main.chea",
     "status": "todo",
     "progress": {
       "done": 0,
@@ -11,7 +11,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 1,
         "mark": "-",
         "label": "One",
@@ -23,7 +23,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 2,
         "mark": "-",
         "label": "Two",

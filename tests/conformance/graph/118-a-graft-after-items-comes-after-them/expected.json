@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Main",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "Own",
@@ -24,13 +24,13 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "+",
         "label": "Side",
         "status": "todo",
         "graft": {
-          "path": "side.sprig",
+          "path": "side.chea",
           "title": "Side",
           "mounted": true
         },
@@ -41,7 +41,7 @@
         },
         "children": [
           {
-            "file": "side.sprig",
+            "file": "side.chea",
             "line": 3,
             "mark": "-",
             "label": "Theirs",

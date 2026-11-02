@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Week",
     "status": "todo",
@@ -13,13 +13,13 @@
     "people": ["sam"],
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "+",
         "label": "Negotiate",
         "status": "todo",
         "graft": {
-          "path": "lease.sprig",
+          "path": "lease.chea",
           "anchor": "terms",
           "title": "Negotiate",
           "mounted": true
@@ -32,7 +32,7 @@
         "people": ["teo"],
         "children": [
           {
-            "file": "lease.sprig",
+            "file": "lease.chea",
             "line": 4,
             "mark": "-",
             "label": "Rent",
@@ -48,13 +48,13 @@
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "+",
         "label": "Sign",
         "status": "todo",
         "graft": {
-          "path": "lease.sprig",
+          "path": "lease.chea",
           "anchor": "signed",
           "title": "Sign",
           "mounted": true
@@ -67,7 +67,7 @@
         "people": ["dana"],
         "children": [
           {
-            "file": "lease.sprig",
+            "file": "lease.chea",
             "line": 6,
             "mark": "-",
             "label": "Witness",

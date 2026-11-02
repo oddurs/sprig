@@ -40,10 +40,10 @@
 *.vsix
 
 # Fuzzing: generated inputs and the fuzzer's own build.
-/crates/sprig-core/fuzz/corpus/
-/crates/sprig-core/fuzz/artifacts/
-/crates/sprig-core/fuzz/target/
-/crates/sprig-core/fuzz/coverage/
+/crates/chea-core/fuzz/corpus/
+/crates/chea-core/fuzz/artifacts/
+/crates/chea-core/fuzz/target/
+/crates/chea-core/fuzz/coverage/
 
 # Downloads and build outputs, so `git add -A` cannot sweep one in;
 # `scripts/task lint` refuses any that are committed anyway (cairn 0151).

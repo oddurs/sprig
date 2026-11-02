@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Progress",
     "status": "doing",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "Kitchen",
@@ -24,7 +24,7 @@
         },
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 4,
             "mark": "x",
             "label": "Strip out",
@@ -37,7 +37,7 @@
             }
           },
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 5,
             "mark": "~",
             "label": "Tiling",
@@ -49,7 +49,7 @@
             }
           },
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 6,
             "mark": "-",
             "label": "Paint",

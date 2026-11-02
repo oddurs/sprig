@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "House",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "+",
         "label": "the kitchen",
@@ -29,7 +29,7 @@
         },
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 4,
             "mark": "-",
             "label": "Choose a sink",
@@ -46,9 +46,9 @@
   },
   "diagnostics": [
     {
-      "code": "S0005",
+      "code": "C0005",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 1,
       "span": [7, 20]

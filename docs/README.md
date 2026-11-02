@@ -1,6 +1,6 @@
 # Docs
 
-Most documentation is on [the website](https://oddurs.github.io/sprig/), whose
+Most documentation is on [the website](https://oddurs.github.io/chea/), whose
 pages live in [`site/src/content/docs/`](../site/src/content/docs). This folder
 holds the documents that are policy, kept beside the code they bind:
 

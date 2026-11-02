@@ -1,10 +1,10 @@
-// What the planned `sprig` commands print, computed by sprig-core so the
+// What the planned `chea` commands print, computed by chea-core so the
 // tools page can't show output the format doesn't produce. Screens are
 // lines of segments; only a mark's own character takes colour, which is the
 // CLI's rule too: colour repeats what the mark says, so NO_COLOR loses nothing.
-import * as sprig from './view.js';
+import * as chea from './view.js';
 
-export const ready = sprig.ready;
+export const ready = chea.ready;
 
 // The example plans are written around this date, and every screen passes it
 // as --today, so the page reads the same on any day it is opened.
@@ -18,7 +18,7 @@ const pad = (segs, w) => (len(segs) < w ? segs.concat(S(' '.repeat(w - len(segs)
 const clip = (t, w) => ([...t].length > w ? [...t].slice(0, w - 1).join('') + '…' : t);
 const prompt = (cmd) => [S('$ ', 't-dim'), S(cmd, 't-b')];
 const html = (lines) =>
-	lines.map((l) => l.map((s) => (s.c ? `<span class="${s.c}">${sprig.esc(s.t)}</span>` : sprig.esc(s.t))).join('')).join('\n');
+	lines.map((l) => l.map((s) => (s.c ? `<span class="${s.c}">${chea.esc(s.t)}</span>` : chea.esc(s.t))).join('')).join('\n');
 const plain = (lines) => lines.map((l) => l.map((s) => s.t).join('')).join('\n');
 
 /** The mark as the file writes it, coloured by what it means now. */
@@ -31,13 +31,13 @@ export function markOf(n) {
 // The parser's own date style, so a screen and the playground agree.
 const dayMonth = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 const shortDate = (v) => {
-	const d = sprig.parseDate(v);
+	const d = chea.parseDate(v);
 	return d ? dayMonth(d) : v;
 };
 const rel = (v) => {
-	const d = sprig.parseDate(v);
+	const d = chea.parseDate(v);
 	if (!d) return '';
-	const n = Math.round((d - sprig.TODAY) / 864e5);
+	const n = Math.round((d - chea.TODAY) / 864e5);
 	return n < 0 ? `${-n}d late` : n === 0 ? 'today' : `in ${n}d`;
 };
 const bar = (done, total, w) => {
@@ -53,19 +53,19 @@ export function waitsText(bs) {
 }
 
 function load(files) {
-	sprig.useWorkspace(files);
-	sprig.beginRender();
-	return (name) => sprig.buildDoc(name);
+	chea.useWorkspace(files);
+	chea.beginRender();
+	return (name) => chea.buildDoc(name);
 }
 
-/** Open leaves, ready or waiting, ranked by the core the way `sprig next` ranks them. */
-export const readyList = (doc) => sprig.readyList(doc);
+/** Open leaves, ready or waiting, ranked by the core the way `chea next` ranks them. */
+export const readyList = (doc) => chea.readyList(doc);
 
 function next(files, { limit = 6, compact = false } = {}) {
-	const doc = load(files)('bakery.sprig');
+	const doc = load(files)('bakery.chea');
 	const { ready, waiting } = readyList(doc);
 	const asks = ready.filter((r) => r.n.view === 'ask').length;
-	const lines = [prompt(`sprig next --limit ${limit} --today ${PINNED}`)];
+	const lines = [prompt(`chea next --limit ${limit} --today ${PINNED}`)];
 	for (const r of ready.slice(0, limit)) {
 		const where = r.path.at(-1) ?? '';
 		const text = S(clip(r.n.meta.text, 30), r.n.view === 'doing' ? 't-b' : '');
@@ -85,10 +85,10 @@ function treeLines(doc, depth) {
 	(function walk(n, prefix, d) {
 		n.children.forEach((c, i) => {
 			const last = i === n.children.length - 1;
-			const own = sprig.blockers(c);
+			const own = chea.blockers(c);
 			const settled = c.view === 'done' || c.view === 'dropped' || c.view === 'later';
 			const segs = [S(prefix + (last ? '└─ ' : '├─ '), 't-dim'), markOf(c), S(' ')];
-			segs.push(S(sprig.labelOf(c), c.children.length ? 't-b' : settled ? 't-dim' : ''));
+			segs.push(S(chea.labelOf(c), c.children.length ? 't-b' : settled ? 't-dim' : ''));
 			if (c.state === 'graft') segs.push(S(`  ${c.target}`, 't-dim t-u'));
 			if (c.meta.prio) segs.push(S('  ' + '!'.repeat(c.meta.prio), 't-b'));
 			if (c.meta.fields.due && !settled) segs.push(S(`  ${shortDate(c.meta.fields.due)}`, 't-dim'));
@@ -102,7 +102,7 @@ function treeLines(doc, depth) {
 }
 
 function tree(files, file, { depth = 3, env = '' } = {}) {
-	return [prompt(`${env}sprig tree ${file}`)].concat(treeLines(load(files)(file), depth));
+	return [prompt(`${env}chea tree ${file}`)].concat(treeLines(load(files)(file), depth));
 }
 
 function why(files, file, text) {
@@ -116,23 +116,23 @@ function why(files, file, text) {
 		}
 	})(doc.root, null);
 	const loc = (n) => `${n.file}:${n.line + 1}`;
-	const lines = [prompt(`sprig why ${JSON.stringify(text).replace(/^"(\w+)"$/, '$1')}`)];
+	const lines = [prompt(`chea why ${JSON.stringify(text).replace(/^"(\w+)"$/, '$1')}`)];
 	lines.push(pad([markOf(target), S(' '), S(target.meta.text, 't-b')], 28).concat([S(loc(target), 't-dim')]));
 	// The item may wait on its own after: list, or inherit waiting from a parent.
-	const from = (sprig.blockers(target) ?? []).some((b) => !b.date) ? target : parent;
+	const from = (chea.blockers(target) ?? []).some((b) => !b.date) ? target : parent;
 	if (from !== target) lines.push([S('└─ ', 't-dim'), S('inside ', 't-dim'), S(from.meta.text, 't-b'), S(', which waits on:', 't-dim')]);
 	const seen = new Set();
 	(function chain(n, prefix) {
-		const refs = (sprig.blockers(n) ?? []).filter((b) => !b.date && !b.unknown).map(sprig.targetOf).filter(Boolean);
+		const refs = (chea.blockers(n) ?? []).filter((b) => !b.date && !b.unknown).map(chea.targetOf).filter(Boolean);
 		refs.forEach((m, i) => {
 			const last = i === refs.length - 1;
 			const who = m.who?.length ? `  @${m.who[0]}` : '';
-			lines.push(pad([S(prefix + (last ? '└─ ' : '├─ '), 't-dim'), markOf(m), S(' '), S(clip(sprig.labelOf(m), 22))], 34).concat([S(loc(m), 't-dim'), S(who, 't-dim')]));
+			lines.push(pad([S(prefix + (last ? '└─ ' : '├─ '), 't-dim'), markOf(m), S(' '), S(clip(chea.labelOf(m), 22))], 34).concat([S(loc(m), 't-dim'), S(who, 't-dim')]));
 			if (seen.has(m)) return;
 			seen.add(m);
 			const inner = prefix + (last ? '   ' : '│  ');
-			const date = sprig.blockers(m)?.find((b) => b.date);
-			if ((sprig.blockers(m) ?? []).some((b) => !b.date)) chain(m, inner);
+			const date = chea.blockers(m)?.find((b) => b.date);
+			if ((chea.blockers(m) ?? []).some((b) => !b.date)) chain(m, inner);
 			else if (date) lines.push([S(inner + '└─ ', 't-dim'), S(`starts ${date.label}`)]);
 			else {
 				const state = m.children.length ? `${m.stats.done} of ${m.stats.total} done, nothing blocks it` : m.view === 'doing' ? 'in progress, nothing blocks it' : 'ready to start';
@@ -143,11 +143,11 @@ function why(files, file, text) {
 	return lines;
 }
 
-/** `sprig check` over a copy of the files with the given lines broken. */
+/** `chea check` over a copy of the files with the given lines broken. */
 function check(files) {
 	load(files);
-	const found = sprig.diagnostics().filter((d) => d.severity === 'error');
-	const lines = [prompt('sprig check')];
+	const found = chea.diagnostics().filter((d) => d.severity === 'error');
+	const lines = [prompt('chea check')];
 	for (const d of found) lines.push([S(`${d.file}:${d.line}:${d.col}: `, 't-dim'), S('error', 't-b'), S(`[${d.code}]: ${d.message}`)]);
 	lines.push([]);
 	lines.push([S(found.length ? `${found.length} errors in ${new Set(found.map((d) => d.file)).size} files · exit 1` : 'no errors · exit 0', 't-dim')]);
@@ -156,25 +156,25 @@ function check(files) {
 
 function status(files) {
 	const get = load(files);
-	const lines = [prompt(`sprig tree --summary --today ${PINNED}`)];
-	const names = Object.keys(files).filter((f) => f !== 'dana.sprig');
+	const lines = [prompt(`chea tree --summary --today ${PINNED}`)];
+	const names = Object.keys(files).filter((f) => f !== 'dana.chea');
 	for (const f of names) {
 		const d = get(f);
 		const s = d.root.stats;
 		let waiting = 0;
 		let late = 0;
-		sprig.walkLeaves(d.root, (n, _p, b, due) => {
-			if (!sprig.OPEN.has(n.view)) return;
+		chea.walkLeaves(d.root, (n, _p, b, due) => {
+			if (!chea.OPEN.has(n.view)) return;
 			if (b) waiting++;
 			if (due && rel(due).endsWith('late')) late++;
 		});
-		lines.push(pad([S(f.replace('.sprig', ''))], 11).concat(bar(s.done, s.total, 8), [S(' ')], pad([S(`${s.done}/${s.total}`)], 7), pad([S(waiting ? `${waiting} waiting` : '', 't-dim')], 12), [S(late ? `${late} late` : '', 't-b')]));
+		lines.push(pad([S(f.replace('.chea', ''))], 11).concat(bar(s.done, s.total, 8), [S(' ')], pad([S(`${s.done}/${s.total}`)], 7), pad([S(waiting ? `${waiting} waiting` : '', 't-dim')], 12), [S(late ? `${late} late` : '', 't-b')]));
 	}
-	const { ready, waiting } = readyList(get('bakery.sprig'));
-	const b = get('bakery.sprig').root.stats;
+	const { ready, waiting } = readyList(get('bakery.chea'));
+	const b = get('bakery.chea').root.stats;
 	lines.push([]);
-	lines.push(prompt('sprig tree --summary --oneline'));
-	lines.push([S(`sprig ${Math.round((b.done / b.total) * 100)}% · ${ready.length} ready · ${waiting.length} waiting`)]);
+	lines.push(prompt('chea tree --summary --oneline'));
+	lines.push([S(`chea ${Math.round((b.done / b.total) * 100)}% · ${ready.length} ready · ${waiting.length} waiting`)]);
 	return lines;
 }
 
@@ -187,7 +187,7 @@ const screens = { next, tree, why, check, status };
  * @param {...any} args
  */
 export function screen(name, files, ...args) {
-	const lines = sprig.withToday(pinned, () => screens[name](files, ...args));
+	const lines = chea.withToday(pinned, () => screens[name](files, ...args));
 	return { html: html(lines), text: plain(lines) };
 }
 

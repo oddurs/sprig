@@ -1,0 +1,25 @@
+[package]
+name = "chea-lsp"
+description = "The Chea language server: diagnostics, completion and navigation in any editor"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords = ["chea", "plans", "lsp", "language-server"]
+categories = ["development-tools", "text-editors"]
+authors.workspace = true
+publish.workspace = true
+
+[dependencies]
+lsp-server = "0.7"
+lsp-types = "0.97"
+serde = "1"
+serde_json = "1"
+url = "2"
+chea-core = { path = "../chea-core", version = "0.0.0" }
+
+[dev-dependencies]
+tempfile = "3"

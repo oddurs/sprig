@@ -21,7 +21,7 @@ A suite with gaps looks complete until someone implements a rule differently.
 
 ## Proposal
 
-A script that lists every numbered rule in `spec/sprig.md` and the examples citing it. CI fails if any rule has none.
+A script that lists every numbered rule in `spec/chea.md` and the examples citing it. CI fails if any rule has none.
 
 ## Acceptance criteria
 
@@ -30,7 +30,7 @@ A script that lists every numbered rule in `spec/sprig.md` and the examples citi
 
 ## 2026-10-29
 
-The gate was shown failing on this branch for real: once chapter 10 counted, every_rule_in_the_spec_has_an_example reported §10.4, which no example cited because the format could not state an edit. Edit examples (tick and format, compared byte for byte with after.sprig) closed it. a_rule_with_no_example_is_reported keeps the failing case as a test, on a spec with an uncited rule, in place of a throwaway branch.
+The gate was shown failing on this branch for real: once chapter 10 counted, every_rule_in_the_spec_has_an_example reported §10.4, which no example cited because the format could not state an edit. Edit examples (tick and format, compared byte for byte with after.chea) closed it. a_rule_with_no_example_is_reported keeps the failing case as a test, on a spec with an uncited rule, in place of a throwaway branch.
 
 ## Result
 

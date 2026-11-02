@@ -12,7 +12,7 @@ area: spec
 
 ## Context
 
-§5.3 said no item with `every:` counts toward progress. The reference parser excluded only recurring leaves, so a recurring parent's children still counted, and `examples/bakery/groceries.sprig` (a weekly supply run on the title) depends on that (Appendix B.6).
+§5.3 said no item with `every:` counts toward progress. The reference parser excluded only recurring leaves, so a recurring parent's children still counted, and `examples/bakery/groceries.chea` (a weekly supply run on the title) depends on that (Appendix B.6).
 
 ## Options and tradeoffs
 

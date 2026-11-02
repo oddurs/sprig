@@ -1,5 +1,5 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "syntax": {
     "title": "Comments",
     "root": {
@@ -25,7 +25,7 @@
     }
   },
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Comments",
     "status": "todo",
@@ -36,7 +36,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "-",
         "label": "Thing",
@@ -48,7 +48,7 @@
         },
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 6,
             "mark": "-",
             "label": "Child",

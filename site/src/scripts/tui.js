@@ -1,5 +1,5 @@
 // The tools page's TUI demo. The first frame arrives rendered; the model and
-// sprig-core load the first time someone presses a key or an on-screen button.
+// chea-core load the first time someone presses a key or an on-screen button.
 
 const screen = document.getElementById('tui');
 const keys = document.getElementById('tui-keys');

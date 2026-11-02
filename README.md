@@ -1,36 +1,39 @@
-# Sprig
+# Chea
 
-[![ci](https://github.com/oddurs/sprig/actions/workflows/ci.yml/badge.svg)](https://github.com/oddurs/sprig/actions/workflows/ci.yml)
+[![ci](https://github.com/oddurs/chea/actions/workflows/ci.yml/badge.svg)](https://github.com/oddurs/chea/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Sprig is a plain-text format for plans, one item per line, where the first
+Chea is a plain-text format for plans, one item per line, where the first
 character says what a line is and indentation says where it belongs. The
-`sprig` command reads a folder of them and tells you what can be done now and
+`chea` command reads a folder of them and tells you what can be done now and
 what is broken, for people and for the coding agents working beside them.
 
+*Chea* is the flood tide in [Calenha](https://github.com/oddurs/calenha): the
+word for what is coming, which is what a plan is a record of.
+
 **Status:** before the first release. The format is
-[draft 0.5](spec/sprig.md), held to it by 417 conformance examples, and its
+[draft 0.5](spec/chea.md), held to it by 417 conformance examples, and its
 design decisions are settled; a change from here goes through an
 [RFC](rfcs/). The command, the language server, the TUI and the MCP server
-all work today, tested on Linux, macOS and Windows. Nothing is published to crates.io or an editor marketplace yet, because the name is
-still being cleared, so install from source for now.
+all work today, tested on Linux, macOS and Windows. Nothing is published to crates.io or an editor marketplace yet, so install
+from source for now.
 
-## Why Sprig
+## Why Chea
 
 Markdown checklists are everywhere, todo.txt is simple, and Org-mode can do
-anything inside Emacs. Sprig is for the plan that outgrows them, and it stays
+anything inside Emacs. Chea is for the plan that outgrows them, and it stays
 plain text:
 
 - **It computes what is blocked.** `after:^van` makes an item wait, across
-  files, and `sprig next` lists only what can start now.
+  files, and `chea next` lists only what can start now.
 - **A plan can span files.** `+ [[kitchen]]` grafts one plan into another, so
   each team keeps its own file and the roll-up stays live.
 - **It is checked like code.** Every problem has a stable code, an exit status
   and a line number, for editors and for CI.
-- **Agents can use it safely.** `sprig mcp` gives a coding agent the plan and
+- **Agents can use it safely.** `chea mcp` gives a coding agent the plan and
   checked, diffed edits, through the same parser every other tool uses.
 
-[How Sprig compares](https://oddurs.github.io/sprig/compare/) sets it beside
+[How Chea compares](https://oddurs.github.io/chea/compare/) sets it beside
 Markdown task lists, todo.txt, TaskPaper, Org-mode and Taskwarrior, including
 what each does better.
 
@@ -39,16 +42,16 @@ what each does better.
 With Rust installed ([rustup.rs](https://rustup.rs)):
 
 ```sh
-cargo install --locked --git https://github.com/oddurs/sprig sprig-cli
-sprig --version
+cargo install --locked --git https://github.com/oddurs/chea chea-cli
+chea --version
 ```
 
 ## A first plan
 
-Save this as `plan.sprig`:
+Save this as `plan.chea`:
 
-<!-- file: plan.sprig -->
-```sprig
+<!-- file: plan.chea -->
+```chea
 Move flats  @me
 
 - Book a van  ^van  !!
@@ -65,7 +68,7 @@ Move flats  @me
 Ask what can be done now:
 
 ```console
-$ sprig next plan.sprig
+$ chea next plan.chea
 - Book a van          Move flats        !!
 - Kitchen             Pack
 - Bank                Change address
@@ -83,22 +86,22 @@ work, and `--limit 3` the top three.
 Then check it, as CI would:
 
 ```console
-$ sprig check plan.sprig
+$ chea check plan.chea
 ```
 
 Nothing printed, exit 0. Misspell the anchor on line 7 and check again:
 
-<!-- edit: plan.sprig: after:^van => after:^vna -->
+<!-- edit: plan.chea: after:^van => after:^vna -->
 ```console
-$ sprig check plan.sprig
-plan.sprig:7:9: error[S0201]: no item ^vna in plan.sprig
+$ chea check plan.chea
+plan.chea:7:9: error[C0201]: no item ^vna in plan.chea
 ```
 
 Every problem has a code from [`spec/diagnostics.md`](spec/diagnostics.md), and
 the exit code is 1, so a CI job fails. In GitHub Actions it is one step:
 
 ```yaml
-- run: cargo install --locked --git https://github.com/oddurs/sprig sprig-cli && sprig check --strict .
+- run: cargo install --locked --git https://github.com/oddurs/chea chea-cli && chea check --strict .
 ```
 
 ## The whole format
@@ -136,39 +139,39 @@ Progress, what is blocked and who is on what are worked out from the text,
 never written into it.
 <!-- card:end -->
 
-The [specification](spec/sprig.md) has the exact rules, each numbered and
+The [specification](spec/chea.md) has the exact rules, each numbered and
 each with an example.
 
 ## Going further
 
 - [`examples/bakery/`](examples/bakery): six plans for opening a bakery that
-  graft into one. Try `sprig next examples/bakery`.
-- `sprig lsp`: a language server for any editor that speaks LSP. It shows
+  graft into one. Try `chea next examples/bakery`.
+- `chea lsp`: a language server for any editor that speaks LSP. It shows
   problems as you type, including ones another file causes, and completes
   people, anchors and file links. It also follows links, and its hover shows
   progress and what an item waits on. Point your editor's LSP client at
-  `sprig lsp` for `*.sprig` files.
-- [Sprig in the shell](https://oddurs.github.io/sprig/docs/shell/): `find`,
+  `chea lsp` for `*.chea` files.
+- [Chea in the shell](https://oddurs.github.io/chea/docs/shell/): `find`,
   `tick`, `export` and `import`, and recipes for fzf, jq, a pre-commit hook, a
   calendar feed and a picture of the dependency graph. [`action/`](action) checks plans
   in GitHub Actions and summarises what a pull request did to them.
-- [`sprig tui`](https://oddurs.github.io/sprig/docs/tui/): the tree, what's
+- [`chea tui`](https://oddurs.github.io/chea/docs/tui/): the tree, what's
   next and the agenda on one screen, with vim keys, and reloads when an editor
   or an agent saves.
-- [Plans for coding agents](https://oddurs.github.io/sprig/docs/agents/): the
-  `PLAN.sprig` convention, `sprig mcp --instructions --write AGENTS.md`, and
-  `sprig mcp`,
+- [Plans for coding agents](https://oddurs.github.io/chea/docs/agents/): the
+  `PLAN.chea` convention, `chea mcp --instructions --write AGENTS.md`, and
+  `chea mcp`,
   which lets an agent read the plans and change them through checked,
   diffed edits.
 - [`docs/stability.md`](docs/stability.md): what will not change under you
   after 1.0, each promise with the test that keeps it, and
   [`rfcs/`](rfcs), how the spec changes.
-- [`spec/sprig.md`](spec/sprig.md): the specification, every rule numbered,
+- [`spec/chea.md`](spec/chea.md): the specification, every rule numbered,
   each with an example, and [`tests/conformance/`](tests/conformance) holding
   the implementation to it.
-- [The website](https://oddurs.github.io/sprig/), with a
-  [playground](https://oddurs.github.io/sprig/play/) and a
-  [first-plan tutorial](https://oddurs.github.io/sprig/docs/first-plan/).
+- [The website](https://oddurs.github.io/chea/), with a
+  [playground](https://oddurs.github.io/chea/play/) and a
+  [first-plan tutorial](https://oddurs.github.io/chea/docs/first-plan/).
 - [`ROADMAP.md`](ROADMAP.md): what comes next, generated from the
   [cairn](https://oddurs.github.io/cairn) items in [`cairn/items/`](cairn/items).
 

@@ -16,7 +16,7 @@ area: spec
 
 ## Reader and question
 
-Anyone implementing Sprig, or writing it by hand, asks what each date field does and what happens when a plan grafts the same content twice. Draft 0.3 had two date words for the same meaning, a date field with no effect, and a graft case left to "the author's error".
+Anyone implementing Chea, or writing it by hand, asks what each date field does and what happens when a plan grafts the same content twice. Draft 0.3 had two date words for the same meaning, a date field with no effect, and a graft case left to "the author's error".
 
 ## Change
 

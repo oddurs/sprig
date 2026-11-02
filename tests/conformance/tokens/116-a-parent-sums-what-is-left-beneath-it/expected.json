@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Rollup",
     "status": "doing",
@@ -13,7 +13,7 @@
     "estimate": 20,
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "Room",
@@ -26,7 +26,7 @@
         "estimate": 20,
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 4,
             "mark": "-",
             "label": "Walls",
@@ -39,7 +39,7 @@
             "estimate": 16
           },
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 5,
             "mark": "-",
             "label": "Floor",
@@ -52,7 +52,7 @@
             "estimate": 4
           },
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 6,
             "mark": "x",
             "label": "Ceiling",
@@ -65,7 +65,7 @@
             }
           },
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 7,
             "mark": "/",
             "label": "Mural",

@@ -15,12 +15,12 @@ due: 2027-04-02
 
 ## Ships
 
-`sprig mcp` lets a coding agent read a repository's `PLAN.sprig`, find ready work, tick, add and answer items, where every change is an ordinary file edit a person can review. Plans export to calendars and JSON, and existing checklists import. From the shell, `mark`, `add`, `answer`, `find`, `agenda` and `graph` cover the everyday writes and questions, through the same edit API the agents use.
+`chea mcp` lets a coding agent read a repository's `PLAN.chea`, find ready work, tick, add and answer items, where every change is an ordinary file edit a person can review. Plans export to calendars and JSON, and existing checklists import. From the shell, `mark`, `add`, `answer`, `find`, `agenda` and `graph` cover the everyday writes and questions, through the same edit API the agents use.
 
 ## Done when
 
-- [ ] An MCP client drives `sprig mcp` end to end in CI against `examples/bakery/`.
-- [ ] The PLAN.sprig convention is documented and `sprig agent` writes agent instructions.
+- [ ] An MCP client drives `chea mcp` end to end in CI against `examples/bakery/`.
+- [ ] The PLAN.chea convention is documented and `chea agent` writes agent instructions.
 - [ ] The three spec questions blocking 1.0 each have a written answer.
 
 ## Explicitly not in this milestone

@@ -24,4 +24,4 @@ A curated gallery of templates in the web viewer.
 
 ## Acceptance criteria
 
-- [ ] At least six templates, each checked clean by `sprig check`.
+- [ ] At least six templates, each checked clean by `chea check`.

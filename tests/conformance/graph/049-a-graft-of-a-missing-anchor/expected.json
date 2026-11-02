@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Missing",
     "status": "empty",
@@ -12,15 +12,15 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "+",
-        "label": "lease.sprig",
+        "label": "lease.chea",
         "status": "empty",
         "graft": {
-          "path": "lease.sprig",
+          "path": "lease.chea",
           "anchor": "nowhere",
-          "title": "lease.sprig",
+          "title": "lease.chea",
           "mounted": false
         },
         "progress": {
@@ -33,9 +33,9 @@
   },
   "diagnostics": [
     {
-      "code": "S0102",
+      "code": "C0102",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 3,
       "span": [11, 28]

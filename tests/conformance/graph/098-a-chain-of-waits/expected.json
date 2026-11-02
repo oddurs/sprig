@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Block",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "A",
@@ -24,7 +24,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "-",
         "label": "B",
@@ -39,13 +39,13 @@
           {
             "after": "^a",
             "label": "A",
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 3
           }
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 5,
         "mark": "-",
         "label": "C",
@@ -60,7 +60,7 @@
           {
             "after": "^b",
             "label": "B",
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 4
           }
         ]

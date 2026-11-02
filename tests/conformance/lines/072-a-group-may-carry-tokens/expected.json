@@ -1,5 +1,5 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "syntax": {
     "title": "Groups",
     "root": {
@@ -27,7 +27,7 @@
     }
   },
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Groups",
     "status": "todo",
@@ -38,7 +38,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "#",
         "label": "Shop",
@@ -51,7 +51,7 @@
         "people": ["jo"],
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 4,
             "mark": "-",
             "label": "Bread",

@@ -17,7 +17,7 @@ area: docs
 
 ## Reader and question
 
-A developer outside VS Code who wants highlighting and diagnostics for `.sprig` files.
+A developer outside VS Code who wants highlighting and diagnostics for `.chea` files.
 
 ## Change
 
@@ -32,7 +32,7 @@ A developer outside VS Code who wants highlighting and diagnostics for `.sprig` 
 `site/src/content/docs/docs/editors.md` covers VS Code, Neovim, Helix, Zed and any other LSP editor.
 
 - **VS Code:** followed by the extension's CI test.
-- **Neovim:** followed from scratch on a clean config by `editors/neovim/test.lua`. It loads `editors/neovim/sprig.lua` and the parser, opens `examples/bakery/lease.sprig`, deletes `^signed`, and gets the two problems. It runs in the `editors` CI job with Ubuntu's Neovim 0.9.
+- **Neovim:** followed from scratch on a clean config by `editors/neovim/test.lua`. It loads `editors/neovim/chea.lua` and the parser, opens `examples/bakery/lease.chea`, deletes `^signed`, and gets the two problems. It runs in the `editors` CI job with Ubuntu's Neovim 0.9.
 - **Helix:** written from Helix's documentation but not followed. There is no Helix binary here, and GitHub, where its releases live, is unreachable from this machine.
 - **Zed:** reaches a grammar and a language server only through an extension, and there isn't one (0147), so the guide says so.
 
@@ -40,4 +40,4 @@ The criterion stays open until someone follows the Helix section on a clean conf
 
 ## 2026-10-29
 
-Unticked: the criterion was ticked while the Helix section was still unfollowed, which this item's own note said keeps it open. Helix can't be installed here: there is no package, crates.io has only a placeholder, and building it from source wasn't permitted in this environment. Someone with Helix needs to follow the section on a clean config (hx --health sprig, then open examples/bakery/lease.sprig, delete ^signed, and see bakery.sprig report S0203).
+Unticked: the criterion was ticked while the Helix section was still unfollowed, which this item's own note said keeps it open. Helix can't be installed here: there is no package, crates.io has only a placeholder, and building it from source wasn't permitted in this environment. Someone with Helix needs to follow the section on a clean config (hx --health chea, then open examples/bakery/lease.chea, delete ^signed, and see bakery.chea report C0203).

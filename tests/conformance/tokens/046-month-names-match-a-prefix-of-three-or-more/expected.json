@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Typed",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "One",
@@ -25,7 +25,7 @@
         "due": "2026-09-30"
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "-",
         "label": "Two",
@@ -38,7 +38,7 @@
         "due": "2026-09-30"
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 5,
         "mark": "-",
         "label": "Three",
@@ -53,9 +53,9 @@
   },
   "diagnostics": [
     {
-      "code": "S0001",
+      "code": "C0001",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 5,
       "col": 10,
       "span": [57, 65]

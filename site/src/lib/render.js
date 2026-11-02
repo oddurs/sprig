@@ -1,10 +1,10 @@
-// Build-time helpers around sprig-core: render a plan to HTML, and the small
+// Build-time helpers around chea-core: render a plan to HTML, and the small
 // facts the landing page states about its examples. Computing them here is
 // what keeps a sentence like "Ship waits on Tests" true: if the core
 // disagrees, the page changes with it. Pages `await ready` before calling.
-import * as sprig from './view.js';
+import * as chea from './view.js';
 
-export const ready = sprig.ready;
+export const ready = chea.ready;
 
 /**
  * @param {Record<string, string>} files
@@ -12,21 +12,21 @@ export const ready = sprig.ready;
  * @param {'tree' | 'next'} [vm]
  */
 export function render(files, active, vm = 'tree') {
-	sprig.useWorkspace(files);
-	sprig.setView({ vm });
-	sprig.beginRender();
-	const doc = sprig.buildDoc(active);
+	chea.useWorkspace(files);
+	chea.setView({ vm });
+	chea.beginRender();
+	const doc = chea.buildDoc(active);
 	const html =
 		vm === 'next'
-			? sprig.nextHTML(doc)
-			: `<ul class="tree">${doc.root.children.map((c) => sprig.nodeHTML(c, null)).join('')}</ul>`;
-	sprig.endRender();
+			? chea.nextHTML(doc)
+			: `<ul class="tree">${doc.root.children.map((c) => chea.nodeHTML(c, null)).join('')}</ul>`;
+	chea.endRender();
 	let ready = 0;
 	let waiting = 0;
 	const readyText = [];
 	const waitingText = [];
-	sprig.walkLeaves(doc.root, (n, _path, blocked) => {
-		if (!sprig.OPEN.has(n.view)) return;
+	chea.walkLeaves(doc.root, (n, _path, blocked) => {
+		if (!chea.OPEN.has(n.view)) return;
 		if (blocked) {
 			waiting++;
 			waitingText.push(n.meta.text);
@@ -50,10 +50,10 @@ export function find(doc, text) {
 	return hit;
 }
 
-export const highlight = sprig.highlight;
-export const linesHTML = sprig.linesHTML;
-export const blockers = sprig.blockers;
-export const fmtEst = sprig.fmtEst;
+export const highlight = chea.highlight;
+export const linesHTML = chea.linesHTML;
+export const blockers = chea.blockers;
+export const fmtEst = chea.fmtEst;
 
 /** Heading slugs as Starlight makes them (github-slugger's rules). */
 export function slug(text) {

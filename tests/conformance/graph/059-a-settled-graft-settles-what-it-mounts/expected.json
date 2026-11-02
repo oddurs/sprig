@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "House",
     "status": "done",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "Rooms",
@@ -25,7 +25,7 @@
         "ready_to_close": true,
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 4,
             "mark": "x",
             "label": "Done here",
@@ -40,7 +40,7 @@
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 5,
         "mark": "/",
         "label": "Garden",
@@ -53,14 +53,14 @@
         },
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 6,
             "mark": "+",
             "label": "Garden",
             "status": "dropped",
             "settled": true,
             "graft": {
-              "path": "garden.sprig",
+              "path": "garden.chea",
               "title": "Garden",
               "mounted": true
             },
@@ -71,7 +71,7 @@
             },
             "children": [
               {
-                "file": "garden.sprig",
+                "file": "garden.chea",
                 "line": 3,
                 "mark": "-",
                 "label": "Dig",
@@ -85,7 +85,7 @@
                 }
               },
               {
-                "file": "garden.sprig",
+                "file": "garden.chea",
                 "line": 4,
                 "mark": "-",
                 "label": "Plant",

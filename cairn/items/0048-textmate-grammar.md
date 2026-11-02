@@ -21,7 +21,7 @@ VS Code highlights with TextMate grammars, and GitHub's Linguist does too.
 
 ## Proposal
 
-`editors/sprig.tmLanguage.json`, with the same scopes as the tree-sitter highlight queries.
+`editors/chea.tmLanguage.json`, with the same scopes as the tree-sitter highlight queries.
 
 ## Acceptance criteria
 
@@ -30,7 +30,7 @@ VS Code highlights with TextMate grammars, and GitHub's Linguist does too.
 
 ## 2026-09-28
 
-A first TextMate grammar exists at editors/sprig.tmLanguage.json (from the website work, 0099); the site uses it to highlight sprig code blocks. It has no vscode-tmgrammar-test snapshots yet, which this item still requires.
+A first TextMate grammar exists at editors/chea.tmLanguage.json (from the website work, 0099); the site uses it to highlight chea code blocks. It has no vscode-tmgrammar-test snapshots yet, which this item still requires.
 
 ## 2026-10-28
 

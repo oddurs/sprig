@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Derived",
     "status": "doing",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "#",
         "label": "Dairy",
@@ -24,7 +24,7 @@
         },
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 4,
             "mark": "x",
             "label": "Butter",
@@ -37,7 +37,7 @@
             }
           },
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 5,
             "mark": "x",
             "label": "Milk",
@@ -52,7 +52,7 @@
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 6,
         "mark": "#",
         "label": "Seeds",
@@ -64,7 +64,7 @@
         },
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 7,
             "mark": "-",
             "label": "Sesame",
@@ -78,7 +78,7 @@
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 8,
         "mark": "#",
         "label": "Flour",
@@ -90,7 +90,7 @@
         },
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 9,
             "mark": "x",
             "label": "Rye",
@@ -103,7 +103,7 @@
             }
           },
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 10,
             "mark": "-",
             "label": "Spelt",
@@ -117,7 +117,7 @@
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 11,
         "mark": "#",
         "label": "Empty",
@@ -129,7 +129,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 12,
         "mark": "#",
         "label": "Dropped only",
@@ -141,7 +141,7 @@
         },
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 13,
             "mark": "/",
             "label": "Oat",

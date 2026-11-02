@@ -1,6 +1,6 @@
-# Sprig tool behaviour
+# Chea tool behaviour
 
-The specification (`spec/sprig.md`) says what a file means. This document says
+The specification (`spec/chea.md`) says what a file means. This document says
 how tools that act on files should behave where two tools could reasonably
 differ: how a person names an item from outside a file, and what formatting
 changes. None of it changes what a file means. A tool may do less; a tool that
@@ -27,7 +27,7 @@ A tool tries these forms in order and uses the first that applies:
    whose text contains it, ignoring case. If exactly one item's text equals it,
    ignoring case, that item is meant.
 
-A file part names a workspace path with `/` between directories; `.sprig` may
+A file part names a workspace path with `/` between directories; `.chea` may
 be left off. If no path matches, a file name alone matches when exactly one
 file in the workspace has it.
 
@@ -59,7 +59,7 @@ changes nothing if any ref fails.
 ```
 ^signed
 lease^signed
-lease.sprig:13
+lease.chea:13
 grease trap
 ```
 
@@ -101,7 +101,7 @@ ticking an open item with `every:` moves its `due:` instead (§10.4).
 
 ## T4. Output for scripts
 
-`sprig` prints tables for people and, with `--plain`, tab-separated lines for
+`chea` prints tables for people and, with `--plain`, tab-separated lines for
 scripts, the way git's `--porcelain` does: no colour, nothing cut to fit, and a
 column order that is kept from one release to the next. New columns are added
 only at the end. The first field is always a ref (T1) or a path, so
@@ -155,9 +155,9 @@ once, on the date its `due:` names; the dates after it are the next tick's.
 ### T5.3 Calendars
 
 An iCalendar export (RFC 5545) has one all-day `VEVENT` for each item the
-agenda would list, without a window. Its `UID` is `file^anchor@sprig` for an
+agenda would list, without a window. Its `UID` is `file^anchor@chea` for an
 item with an anchor, so renaming the item keeps the event, and
-`file:words@sprig` otherwise, from the item's text in lowercase with
+`file:words@chea` otherwise, from the item's text in lowercase with
 hyphens. `DTSTAMP` is today at midnight UTC, so the same files and the same
 today give the same bytes. A recurring item's `every:` is in the
 description, not an `RRULE`: the file, not the calendar, decides when it
@@ -169,7 +169,7 @@ A dependency graph has a node for each open item with an `after:` that names
 something, and one for each thing named, whatever its status, grouped by
 file. An edge runs from what is named to the item that waits on it, so the
 graph reads in the order work can happen. A node's id is the file name
-without `.sprig`, then `_` and the anchor when there is one or `l` and the
+without `.chea`, then `_` and the anchor when there is one or `l` and the
 line otherwise, with every character that is not an ASCII letter or digit as
 `_`: `bakery_loan`, `launch_l6`. The same files give the same output, and a
 diff shows only what changed.
@@ -184,7 +184,7 @@ tree that is not grafted into another.
 
 ### T5.6 Conversions
 
-An import writes a file that `sprig check` accepts and `sprig fmt` leaves as it
+An import writes a file that `chea check` accepts and `chea fmt` leaves as it
 is. Tokens in the imported text keep their meaning, so a title such as
 `Fix #12` gets the tag `12`.
 
@@ -198,18 +198,18 @@ is. Tokens in the imported text keep their meaning, so a title such as
 
 ### T6.1 The convention
 
-A repository's plan for the work in progress is `PLAN.sprig` at its root. An
+A repository's plan for the work in progress is `PLAN.chea` at its root. An
 agent reads it before starting, writes its steps into it before changing code,
 ticks each step in the same change as the work, and asks a person by adding a
 `?` item that names them, which it does not answer itself.
-`sprig mcp --instructions` prints these instructions;
-`sprig mcp --instructions --write FILE` keeps them in FILE
-between the lines `<!-- sprig:start: ... -->` and `<!-- sprig:end -->`,
+`chea mcp --instructions` prints these instructions;
+`chea mcp --instructions --write FILE` keeps them in FILE
+between the lines `<!-- chea:start: ... -->` and `<!-- chea:end -->`,
 replacing only what is between them.
 
 ### T6.2 The MCP server
 
-`sprig mcp` speaks the Model Context Protocol (revision 2025-11-25, and
+`chea mcp` speaks the Model Context Protocol (revision 2025-11-25, and
 2025-06-18 and 2025-03-26 to a client that asks for one of those) over stdio,
 one JSON-RPC message per line. It serves one folder, `--in PATH`, and paths in
 its results are relative to that folder, as refs are (T1). It reads the files
@@ -236,7 +236,7 @@ still waits on:
 | --- | --- |
 | `tick_items` | `refs`: a list |
 | `mark_item` | `ref`, `mark`: a mark or its name |
-| `add_items` | `items`: a list of lines; `under` or `after`, a ref, or neither for the end of `PLAN.sprig` |
+| `add_items` | `items`: a list of lines; `under` or `after`, a ref, or neither for the end of `PLAN.chea` |
 | `answer_question` | `ref`, `text` |
 | `set_field` | `ref`, `key`, `value`, empty to remove the field |
 
@@ -252,7 +252,7 @@ model can act on. An unknown tool is a protocol error (`-32602`).
 
 ## T7. The terminal interface
 
-`sprig tui [PATH]` shows a folder's plans in three views on one screen:
+`chea tui [PATH]` shows a folder's plans in three views on one screen:
 - **the tree,** with grafts mounted;
 - **next up,** the items `next` lists, in its order;
 - **the agenda,** the open items with a date in the next fourteen days, by
@@ -266,7 +266,7 @@ columns, where nothing wraps.
 | `j` `k`, arrows | move |
 | `h` `l` | fold and unfold; `h` on a leaf goes to its parent |
 | `g` `G` | first and last item |
-| `x` | tick, as `sprig tick` does, recurrence included |
+| `x` | tick, as `chea tick` does, recurrence included |
 | `~` | mark as doing |
 | `a` `A` | add a sibling after the item, or a child under it, indented to match |
 | `e` | open `$VISUAL` or `$EDITOR` at the item's line |

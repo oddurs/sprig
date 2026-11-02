@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "References",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "Order",
@@ -32,7 +32,7 @@
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "-",
         "label": "Sign",
@@ -55,17 +55,17 @@
   },
   "diagnostics": [
     {
-      "code": "S0202",
+      "code": "C0202",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 10,
       "span": [21, 38]
     },
     {
-      "code": "S0202",
+      "code": "C0202",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 4,
       "col": 9,
       "span": [47, 71]

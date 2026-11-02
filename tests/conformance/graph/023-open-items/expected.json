@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Open",
     "status": "doing",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "First",
@@ -24,7 +24,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "~",
         "label": "Second",
@@ -36,7 +36,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 5,
         "mark": "?",
         "label": "Third",
@@ -48,7 +48,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 6,
         "mark": "x",
         "label": "Fourth",
@@ -61,7 +61,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 7,
         "mark": "/",
         "label": "Fifth",
@@ -74,7 +74,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 8,
         "mark": ">",
         "label": "Sixth",
@@ -87,7 +87,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 9,
         "mark": "-",
         "label": "Waits",
@@ -102,25 +102,25 @@
           {
             "after": "^a",
             "label": "First",
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 3
           },
           {
             "after": "^b",
             "label": "Second",
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 4
           },
           {
             "after": "^c",
             "label": "Third",
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 5
           },
           {
             "after": "^f",
             "label": "Sixth",
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 8
           }
         ]

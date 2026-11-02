@@ -1,8 +1,8 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
-    "label": "main.sprig",
+    "file": "main.chea",
+    "label": "main.chea",
     "status": "empty",
     "progress": {
       "done": 0,

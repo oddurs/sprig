@@ -17,11 +17,11 @@ area: editors
 
 ## Problem
 
-Neovim, Helix and Zed highlight through tree-sitter. Without a grammar, Sprig is plain text there.
+Neovim, Helix and Zed highlight through tree-sitter. Without a grammar, Chea is plain text there.
 
 ## Proposal
 
-`editors/tree-sitter-sprig`, a flat, line-level grammar: marks, tokens, links, notes, comments and escapes, with no indentation tracking. Nesting comes from the language server, which avoids writing an external scanner in C. Highlight queries ship with it.
+`editors/tree-sitter-chea`, a flat, line-level grammar: marks, tokens, links, notes, comments and escapes, with no indentation tracking. Nesting comes from the language server, which avoids writing an external scanner in C. Highlight queries ship with it.
 
 ## Acceptance criteria
 
@@ -31,14 +31,14 @@ Neovim, Helix and Zed highlight through tree-sitter. Without a grammar, Sprig is
 
 ## 2026-10-28
 
-`editors/tree-sitter-sprig` is a line-level grammar with no external scanner. Lexical conflicts are resolved the way the core resolves them:
+`editors/tree-sitter-chea` is a line-level grammar with no external scanner. Lexical conflicts are resolved the way the core resolves them:
 - **Precedence:** a mark beats note text, and a bare mark takes its line ending, so the `x` of `x-ray` is not a mark.
 - **Longest match:** `@jo,` is a word, not a person.
 - **Rule order:** when two matches are equally long, the token defined first wins, so `@jo` is a person.
 
 The grammar is generated for ABI 14, so it loads in Neovim 0.9 and every newer host.
 
-`tests/agrees_with_core.rs` holds it to the core. It parses every input in the conformance suite and `examples/` (226 files) and compares each line's kind, and each item's, answer's and title's tokens, with `sprig_core::syntax::lex`. There are no differences and no ERROR nodes.
+`tests/agrees_with_core.rs` holds it to the core. It parses every input in the conformance suite and `examples/` (226 files) and compares each line's kind, and each item's, answer's and title's tokens, with `chea_core::syntax::lex`. There are no differences and no ERROR nodes.
 
 1. No conformance input parses with an ERROR node: `no_input_parses_with_an_error`.
 2. `tree-sitter test` passes 40 corpus cases, drawn from the lines and tokens suites.

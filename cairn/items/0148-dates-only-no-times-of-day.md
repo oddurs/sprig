@@ -20,7 +20,7 @@ A time would let a plan say when in a day something happens. It would also need 
 
 ## Decision
 
-Dates only. A plan's grain is the day. A value such as `2027-03-01T14:00` is unreadable (§9.2, §9.5): kept as text, warned about with S0001, and never misread.
+Dates only. A plan's grain is the day. A value such as `2027-03-01T14:00` is unreadable (§9.2, §9.5): kept as text, warned about with C0001, and never misread.
 
 ## Revisit when
 

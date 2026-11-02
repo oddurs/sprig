@@ -17,24 +17,24 @@ area: lsp
 
 ## Problem
 
-`sprig check` only helps when someone runs it. An editor should show the same problems while you type, including ones caused by another file.
+`chea check` only helps when someone runs it. An editor should show the same problems while you type, including ones caused by another file.
 
 ## Proposal
 
-`sprig lsp` (or `sprig-lsp`) over stdio, built on `lsp-server` and `lsp-types`, the small synchronous crates rust-analyzer uses, rather than an async framework. It watches the workspace folder and republishes diagnostics for every file affected by a change.
+`chea lsp` (or `chea-lsp`) over stdio, built on `lsp-server` and `lsp-types`, the small synchronous crates rust-analyzer uses, rather than an async framework. It watches the workspace folder and republishes diagnostics for every file affected by a change.
 
 ## Acceptance criteria
 
 - [x] Diagnostics appear on open and on change, driven by a scripted JSON-RPC test client.
-- [x] Deleting `^signed` in `lease.sprig` produces a diagnostic in `bakery.sprig`, which links to it, without `bakery.sprig` being edited.
+- [x] Deleting `^signed` in `lease.chea` produces a diagnostic in `bakery.chea`, which links to it, without `bakery.chea` being edited.
 - [x] Rechecking a 5,000-line workspace after a keystroke takes under 50 ms on the CI runner.
 
 ## 2026-10-28
 
-`sprig lsp` lives in `crates/sprig-lsp`, built on `lsp-server` 0.7 and `lsp-types` 0.97. It runs as a plain loop on one thread with full-text sync. Each change marks the workspace stale, and it is resolved once the message queue is empty, so a burst of keystrokes costs one resolution. Only files whose diagnostics changed are republished. The server reads the folder the editor opened, takes today from the CLI (`--today` still fixes it) and negotiates UTF-8 positions when the client offers them.
+`chea lsp` lives in `crates/chea-lsp`, built on `lsp-server` 0.7 and `lsp-types` 0.97. It runs as a plain loop on one thread with full-text sync. Each change marks the workspace stale, and it is resolved once the message queue is empty, so a burst of keystrokes costs one resolution. Only files whose diagnostics changed are republished. The server reads the folder the editor opened, takes today from the CLI (`--today` still fixes it) and negotiates UTF-8 positions when the client offers them.
 
-1. `crates/sprig-lsp/tests/lsp.rs` drives the server over an in-memory connection. `diagnostics_appear_on_open_and_follow_each_change` covers open, change and the clear. `crates/sprig-cli/tests/cli.rs` does the same over real stdio with the built binary.
-2. `deleting_an_anchor_reports_the_files_that_name_it_without_editing_them`: removing `^signed` from `lease.sprig` publishes S0203 for `bakery.sprig:15` and `kitchen.sprig:18`, and restoring it clears both.
+1. `crates/chea-lsp/tests/lsp.rs` drives the server over an in-memory connection. `diagnostics_appear_on_open_and_follow_each_change` covers open, change and the clear. `crates/chea-cli/tests/cli.rs` does the same over real stdio with the built binary.
+2. `deleting_an_anchor_reports_the_files_that_name_it_without_editing_them`: removing `^signed` from `lease.chea` publishes C0203 for `bakery.chea:15` and `kitchen.chea:18`, and restoring it clears both.
 3. Not ticked: it is measured but not yet held on CI. The test uses 50 files of 100 lines each, one grafting the other 49, with every item naming an anchor in another file.
    - Round trip from didChange to publish here: release about 30 ms typical and 41 ms worst; debug 125 ms.
    - The test asserts under 50 ms in release and under 500 ms in debug, but CI runs debug.

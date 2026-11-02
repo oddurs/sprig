@@ -2,7 +2,7 @@
 # The seam between this project and everything that automates it.
 #
 # CI, the git hooks and scripts/agent know only the verbs below. Nothing outside
-# this file knows Sprig is written in Rust, so CI and a local hook cannot drift
+# this file knows Chea is written in Rust, so CI and a local hook cannot drift
 # apart: they run the same line.
 set -eu
 
@@ -24,30 +24,30 @@ usage: scripts/task <target>
   install    cargo install the CLI into target/install, as a stranger would, and run it
   check      fmt:check, lint, test, build, and backlog when cairn is installed
   backlog    cairn check --strict, and ROADMAP.md is up to date (needs cairn)
-  wasm       build sprig-core for the browser, into site/src/generated/sprig.wasm
+  wasm       build chea-core for the browser, into site/src/generated/chea.wasm
   site       build the website; check tokens, contrast, links, accessibility, touch and the playground (needs node, chrome)
   editors    test the TextMate and tree-sitter grammars and the VS Code extension (needs node, a display)
   perf       time parse, resolve and check against the committed baseline, in release builds
-  mcp        a scripted session with sprig mcp through the official MCP client (needs node)
+  mcp        a scripted session with chea mcp through the official MCP client (needs node)
   fuzz       fuzz the parser and the edit API, FUZZ_SECONDS each (default 60; needs nightly and cargo-fuzz)
   audit      every lockfile against the RustSec and npm advisory databases (needs network)
 USAGE
 }
 
-# sprig-core promises the same answer on every machine and every day, which it
+# chea-core promises the same answer on every machine and every day, which it
 # can only keep if it never reads the filesystem, the environment or the clock.
 # A grep is crude, and that is the point: it is impossible to argue with.
 purity() {
-  if grep -rnE 'std::(fs|env|net|process)|SystemTime|Instant::now' crates/sprig-core/src; then
-    printf '\nlint: sprig-core must not touch the filesystem, environment, network or clock.\n' >&2
+  if grep -rnE 'std::(fs|env|net|process)|SystemTime|Instant::now' crates/chea-core/src; then
+    printf '\nlint: chea-core must not touch the filesystem, environment, network or clock.\n' >&2
     printf '      Take the value as a parameter; the CLI supplies it.\n' >&2
     exit 1
   fi
   # Every answer depends on the date only through --today, so the system date
   # is read in one place: the CLI's argument parser.
   if grep -rnE 'SystemTime|Instant::now|Zoned::now|Timestamp::now|chrono::|Local::' crates/*/src \
-    | grep -v '^crates/sprig-cli/src/args.rs:'; then
-    printf '\nlint: only crates/sprig-cli/src/args.rs may read the clock; take --today instead.\n' >&2
+    | grep -v '^crates/chea-cli/src/args.rs:'; then
+    printf '\nlint: only crates/chea-cli/src/args.rs may read the clock; take --today instead.\n' >&2
     exit 1
   fi
 }
@@ -99,7 +99,7 @@ case "${1:-}" in
     cargo clippy --all-targets --all-features -- -D warnings
     # The core's documentation is part of its API: complete, and with links
     # that resolve (docs/stability.md).
-    RUSTDOCFLAGS="-D warnings" cargo doc --no-deps -p sprig-core
+    RUSTDOCFLAGS="-D warnings" cargo doc --no-deps -p chea-core
     ;;
   test)
     cargo test --all-targets
@@ -117,19 +117,19 @@ case "${1:-}" in
   install)
     # What the README tells a stranger to run, from this checkout, into a
     # directory of its own so nothing on the machine is touched.
-    cargo install --locked --path crates/sprig-cli --root target/install
-    target/install/bin/sprig --version
+    cargo install --locked --path crates/chea-cli --root target/install
+    target/install/bin/chea --version
     ;;
   wasm)
     # The site has no parser of its own: it runs this one (cairn 0109).
-    cargo build --locked -p sprig-wasm --target wasm32-unknown-unknown --profile wasm
+    cargo build --locked -p chea-wasm --target wasm32-unknown-unknown --profile wasm
     mkdir -p site/src/generated
-    cp target/wasm32-unknown-unknown/wasm/sprig_wasm.wasm site/src/generated/sprig.wasm
+    cp target/wasm32-unknown-unknown/wasm/chea_wasm.wasm site/src/generated/chea.wasm
     ;;
   site)
     "$0" wasm
     # The command reference page is the binary's own --help.
-    cargo build --locked -p sprig-cli
+    cargo build --locked -p chea-cli
     command -v npm >/dev/null 2>&1 || {
       printf 'scripts/task: npm is not installed; the site needs Node %s\n' "$(cat site/.node-version)" >&2
       exit 1
@@ -157,29 +157,29 @@ case "${1:-}" in
     npm --prefix editors run test:textmate
     ts=${TREE_SITTER:-$PWD/editors/node_modules/.bin/tree-sitter}
     (
-      cd editors/tree-sitter-sprig
+      cd editors/tree-sitter-chea
       # ABI 14 loads in Neovim 0.9 and every newer tree-sitter host.
       TREE_SITTER_DIR="$PWD/test/config" "$ts" generate --abi 14
       # The generated parser is committed, so it must be what grammar.js says.
       git diff --exit-code -- src || {
-        printf '\nscripts/task: src/ is stale; run tree-sitter generate in editors/tree-sitter-sprig and commit it\n' >&2
+        printf '\nscripts/task: src/ is stale; run tree-sitter generate in editors/tree-sitter-chea and commit it\n' >&2
         exit 1
       }
       TREE_SITTER_DIR="$PWD/test/config" "$ts" test
       TREE_SITTER="$ts" test/highlight.sh
       # The Neovim section of the editor guide, followed on a clean config.
       if command -v nvim >/dev/null 2>&1; then
-        so=$(mktemp -d)/sprig.so
+        so=$(mktemp -d)/chea.so
         TREE_SITTER_DIR="$PWD/test/config" "$ts" build -o "$so"
-        cargo build --locked -p sprig-cli
+        cargo build --locked -p chea-cli
         work=$(mktemp -d)
-        cp ../../examples/bakery/*.sprig "$work"
-        nvim --headless --clean -u NONE -l ../neovim/test.lua "$(cd ../.. && pwd)/target/debug/sprig" "$so" "$work"
+        cp ../../examples/bakery/*.chea "$work"
+        nvim --headless --clean -u NONE -l ../neovim/test.lua "$(cd ../.. && pwd)/target/debug/chea" "$so" "$work"
       else
         printf 'scripts/task: nvim is not installed; the Neovim guide was not followed\n' >&2
       fi
     )
-    cargo build --locked -p sprig-cli
+    cargo build --locked -p chea-cli
     npm --prefix editors/vscode ci --no-audit --no-fund
     npm --prefix editors/vscode test
     ;;
@@ -190,21 +190,21 @@ case "${1:-}" in
       printf 'scripts/task: npm is not installed; the MCP session needs Node\n' >&2
       exit 1
     }
-    cargo build --locked -p sprig-cli
+    cargo build --locked -p chea-cli
     npm --prefix tests/mcp ci --no-audit --no-fund
-    node tests/mcp/session.mjs target/debug/sprig
+    node tests/mcp/session.mjs target/debug/chea
     ;;
   fuzz)
     # Seeded with every file the suite and the examples hold, so the fuzzer
     # starts from plans rather than from nothing. A crash lands in
-    # crates/sprig-core/fuzz/artifacts/ and becomes a test (cairn 0080).
+    # crates/chea-core/fuzz/artifacts/ and becomes a test (cairn 0080).
     seconds=${FUZZ_SECONDS:-60}
     rustup toolchain list | grep -q '^nightly' || rustup toolchain install nightly --profile minimal
     command -v cargo-fuzz >/dev/null 2>&1 || cargo install --locked cargo-fuzz
-    cd crates/sprig-core/fuzz
+    cd crates/chea-core/fuzz
     for target in parse edits; do
       mkdir -p "corpus/$target"
-      find ../../../tests/conformance ../../../examples -name '*.sprig' | {
+      find ../../../tests/conformance ../../../examples -name '*.chea' | {
         n=0
         while IFS= read -r f; do
           n=$((n + 1))
@@ -220,7 +220,7 @@ case "${1:-}" in
     # workspace, the site, the editors and the MCP client test.
     command -v cargo-audit >/dev/null 2>&1 || cargo install --locked cargo-audit
     cargo audit --deny warnings --file Cargo.lock
-    cargo audit --deny warnings --file crates/sprig-core/fuzz/Cargo.lock
+    cargo audit --deny warnings --file crates/chea-core/fuzz/Cargo.lock
     for dir in site editors editors/vscode tests/mcp; do
       printf '%s: ' "$dir"
       npm --prefix "$dir" audit --audit-level=low
@@ -228,9 +228,9 @@ case "${1:-}" in
     ;;
   perf)
     # The baseline gate and the language server's 50 ms keystroke criterion,
-    # both in release builds; see crates/sprig-core/benches/README.md.
-    cargo bench --locked -p sprig-core --bench workspace
-    cargo test --locked --release -p sprig-lsp --test lsp rechecking_a_large_workspace_after_a_keystroke_is_quick -- --nocapture
+    # both in release builds; see crates/chea-core/benches/README.md.
+    cargo bench --locked -p chea-core --bench workspace
+    cargo test --locked --release -p chea-lsp --test lsp rechecking_a_large_workspace_after_a_keystroke_is_quick -- --nocapture
     ;;
   backlog)
     command -v cairn >/dev/null 2>&1 || {

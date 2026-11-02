@@ -1,9 +1,9 @@
 ---
-title: Sprig in the shell
+title: Chea in the shell
 description: Pick and tick with fzf, your next task in the prompt, a pre-commit hook, jq over the tree, a calendar feed and the graph as a picture.
 ---
 
-Sprig has no plugins. It doesn't need them, because every command can feed the
+Chea has no plugins. It doesn't need them, because every command can feed the
 tools already on your machine:
 
 - `--plain` prints tab-separated lines whose first field is always a ref that
@@ -12,10 +12,10 @@ tools already on your machine:
 - Exit codes mean something: `next` exits 1 when nothing is ready, `find`
   when nothing matches, and `check` when a plan is broken.
 
-The recipes below run in the [bakery example](https://github.com/oddurs/sprig/tree/main/examples/bakery).
+The recipes below run in the [bakery example](https://github.com/oddurs/chea/tree/main/examples/bakery).
 CI runs each one that needs no keyboard, so they stay true. The columns of each
 `--plain` command are listed in
-[the tools document](https://github.com/oddurs/sprig/blob/main/spec/tools.md#t4-output-for-scripts).
+[the tools document](https://github.com/oddurs/chea/blob/main/spec/tools.md#t4-output-for-scripts).
 
 ## Pick and tick with fzf
 
@@ -23,7 +23,7 @@ Choose from what's ready, and tick what you chose:
 
 <!-- run -->
 ```sh
-sprig next --plain | fzf | cut -f1 | sprig tick -
+chea next --plain | fzf | cut -f1 | chea tick -
 ```
 
 `tick -` reads refs from standard input, one per line, so `fzf --multi` ticks
@@ -37,8 +37,8 @@ its next date and can set any mark.
 
 <!-- run -->
 ```sh
-sprig tick ^logo
-sprig tick ^design --mark '~'
+chea tick ^logo
+chea tick ^design --mark '~'
 ```
 
 Each prints the line it changed, and then, on standard error, the items that
@@ -48,19 +48,19 @@ editor lands in the file as a date.
 ## Your next task in the prompt
 
 A [Starship](https://starship.rs) custom module, shown in folders with a
-`PLAN.sprig`:
+`PLAN.chea`:
 
 ```toml
-[custom.sprig]
-command = "sprig next --who me --limit 1 --plain | cut -f3"
-when = "test -f PLAN.sprig"
+[custom.chea]
+command = "chea next --who me --limit 1 --plain | cut -f3"
+when = "test -f PLAN.chea"
 ```
 
 The command on its own:
 
 <!-- run -->
 ```sh
-sprig next --who teo --limit 1 --plain | cut -f3
+chea next --who teo --limit 1 --plain | cut -f3
 ```
 
 ## The folder in a status bar
@@ -69,12 +69,12 @@ sprig next --who teo --limit 1 --plain | cut -f3
 anything is late, for a prompt that wants to turn red:
 
 ```sh
-set -g status-right '#(cd ~/plans && sprig tree --summary --oneline)'
+set -g status-right '#(cd ~/plans && chea tree --summary --oneline)'
 ```
 
 <!-- run -->
 ```sh
-sprig tree --summary --oneline
+chea tree --summary --oneline
 ```
 
 ## Gate a commit
@@ -86,12 +86,12 @@ it executable:
 <!-- run -->
 ```sh
 #!/bin/sh
-git diff --cached --quiet -- '*.sprig' ||
-  git diff --cached -z --name-only --diff-filter=ACMR -- '*.sprig' |
-  xargs -0 sprig check --strict
+git diff --cached --quiet -- '*.chea' ||
+  git diff --cached -z --name-only --diff-filter=ACMR -- '*.chea' |
+  xargs -0 chea check --strict
 ```
 
-In CI, the [Sprig action](https://github.com/oddurs/sprig/tree/main/action) checks
+In CI, the [Chea action](https://github.com/oddurs/chea/tree/main/action) checks
 the plans too, and writes a summary of what the pull request did to them.
 
 ## What is everyone waiting on?
@@ -101,7 +101,7 @@ With `--json`, each item carries what it waits on:
 
 <!-- run: needs jq -->
 ```sh
-sprig find is:blocked --json |
+chea find is:blocked --json |
   jq -r '.[] | select(.node.waits_on)
     | "\(.node.label)\t\([.node.waits_on[] | .label // "starts \(.start)"] | join(", "))"'
 ```
@@ -116,17 +116,17 @@ on a timer, and point a calendar at the file:
 
 <!-- run -->
 ```sh
-sprig export --format ics > plans.ics
+chea export --format ics > plans.ics
 ```
 
 ```sh
 # crontab -e: every hour, into a folder your calendar can subscribe to
-0 * * * *  cd ~/plans && sprig export --format ics > ~/Sync/plans.ics
+0 * * * *  cd ~/plans && chea export --format ics > ~/Sync/plans.ics
 ```
 
 Each event's UID comes from the item's anchor when it has one, so renaming an
 item moves its event rather than adding another. In the terminal,
-`sprig find is:open 'due:<=+2w'` lists the same work, and `sprig tui` shows it
+`chea find is:open 'due:<=+2w'` lists the same work, and `chea tui` shows it
 by day.
 
 ## The graph as a picture
@@ -135,7 +135,7 @@ by day.
 
 <!-- run: needs dot -->
 ```sh
-sprig export --format dot | dot -Tsvg > plan.svg
+chea export --format dot | dot -Tsvg > plan.svg
 ```
 
 `--format mermaid` writes the same graph for a Markdown file on GitHub, inside a
@@ -144,10 +144,10 @@ sprig export --format dot | dot -Tsvg > plan.svg
 ## Bring a list in
 
 `import` converts a Markdown checklist, a todo.txt file, or GitHub issues from
-the `gh` command, and prints Sprig:
+the `gh` command, and prints Chea:
 
 ```sh
-sprig import TODO.md > PLAN.sprig
+chea import TODO.md > PLAN.chea
 gh issue list --json number,title,state,stateReason,labels,assignees,milestone > issues.json
-sprig import issues.json --from github > issues.sprig
+chea import issues.json --from github > issues.chea
 ```

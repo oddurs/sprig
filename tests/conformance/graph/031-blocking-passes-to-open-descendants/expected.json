@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Blocked",
     "status": "doing",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "Design",
@@ -24,7 +24,7 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "-",
         "label": "Build",
@@ -39,13 +39,13 @@
           {
             "after": "^design",
             "label": "Design",
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 3
           }
         ],
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 5,
             "mark": "-",
             "label": "Strip out",
@@ -58,7 +58,7 @@
             "blocked": true
           },
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 6,
             "mark": "x",
             "label": "Old units",
@@ -71,7 +71,7 @@
             }
           },
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 7,
             "mark": "-",
             "label": "Tiling",
@@ -84,7 +84,7 @@
             "blocked": true,
             "children": [
               {
-                "file": "main.sprig",
+                "file": "main.chea",
                 "line": 8,
                 "mark": "-",
                 "label": "Grout",

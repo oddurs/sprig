@@ -20,7 +20,7 @@ Browser tools, the web viewer and JavaScript developers need the core without a 
 
 ## Proposal
 
-Compile `sprig-core` to WebAssembly and publish an npm package with TypeScript types.
+Compile `chea-core` to WebAssembly and publish an npm package with TypeScript types.
 
 ## Acceptance criteria
 

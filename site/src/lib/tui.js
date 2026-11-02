@@ -1,34 +1,34 @@
-// A working model of `sprig tui` (cairn 0131 to 0134) for the tools page. The
+// A working model of `chea tui` (cairn 0131 to 0134) for the tools page. The
 // state is plain data and the frame is a pure function of state and files, so
 // the page can render the first frame at build time and the browser only takes
 // over once someone presses a key.
-import * as sprig from './view.js';
+import * as chea from './view.js';
 import { dayMonth, markOf, pinned, readyList, rel, shortDate, waitsText } from './terminal.js';
 
 const ROWS = 17;
-const ROOT = 'bakery.sprig';
-const esc = sprig.esc;
+const ROOT = 'bakery.chea';
+const esc = chea.esc;
 
-export const ready = sprig.ready;
+export const ready = chea.ready;
 const keyOf = (n) => `${n.file}:${n.line}`;
 const span = (s) => `<span class="${s.c}">${esc(s.t)}</span>`;
 
 export const initialState = () => ({ view: 'tree', cursor: 0, top: 0, collapsed: [], filter: '', typing: false, flash: '', help: false });
 
 function docs(files) {
-	sprig.useWorkspace(files);
-	sprig.beginRender();
-	return Object.fromEntries(Object.keys(files).map((f) => [f, sprig.buildDoc(f)]));
+	chea.useWorkspace(files);
+	chea.beginRender();
+	return Object.fromEntries(Object.keys(files).map((f) => [f, chea.buildDoc(f)]));
 }
 
 function dated(all, files, match) {
 	const out = [];
-	for (const f of Object.keys(files).filter((x) => x !== 'dana.sprig')) {
+	for (const f of Object.keys(files).filter((x) => x !== 'dana.chea')) {
 		(function w(n) {
 			for (const c of n.children) {
 				if (c.cloned) continue;
-				const d = sprig.parseDate(c.meta.fields.due);
-				if (d && sprig.OPEN.has(c.view) && match(c)) out.push({ n: c, d, sub: f.replace('.sprig', ''), depth: 0 });
+				const d = chea.parseDate(c.meta.fields.due);
+				if (d && chea.OPEN.has(c.view) && match(c)) out.push({ n: c, d, sub: f.replace('.chea', ''), depth: 0 });
 				w(c);
 			}
 		})(all[f].root);
@@ -38,7 +38,7 @@ function dated(all, files, match) {
 
 function rows(state, all, files) {
 	const q = state.filter.toLowerCase();
-	const match = (n) => !q || sprig.labelOf(n).toLowerCase().includes(q);
+	const match = (n) => !q || chea.labelOf(n).toLowerCase().includes(q);
 	const doc = all[ROOT];
 	if (state.view === 'next') return readyList(doc).ready.filter((r) => match(r.n)).map((r) => ({ n: r.n, depth: 0, sub: r.path.at(-1) ?? '' }));
 	if (state.view === 'agenda') return dated(all, files, match);
@@ -57,12 +57,12 @@ function rows(state, all, files) {
 function detail(n) {
 	if (!n) return '<p class="kv">Nothing matches.</p>';
 	const f = n.meta.fields;
-	const own = sprig.blockers(n);
+	const own = chea.blockers(n);
 	const kv = (k, v) => (v ? `<p class="kv">${k} <b>${esc(v)}</b></p>` : '');
 	const notes = n.notes.filter(Boolean).join(' ');
 	const answers = n.answers.concat(n.graftAnswers ?? []).map((a) => a.words.join(' '));
 	return (
-		`<p class="title">${span(markOf(n))} ${esc(sprig.labelOf(n))}</p>` +
+		`<p class="title">${span(markOf(n))} ${esc(chea.labelOf(n))}</p>` +
 		kv('at', `${n.file}:${n.line + 1}`) +
 		kv('status', n.answered ? 'answered' : n.view) +
 		kv('owner', n.who?.length ? '@' + n.who.join(' @') : '') +
@@ -72,13 +72,13 @@ function detail(n) {
 		kv('progress', n.children.length && n.stats.total ? `${n.stats.done} of ${n.stats.total} done` : '') +
 		(own ? `<p class="kv">${esc(waitsText(own))}</p>` : '') +
 		kv('answer', answers[0]) +
-		(notes ? `<p class="note">${esc(sprig.unbracket(notes))}</p>` : '')
+		(notes ? `<p class="note">${esc(chea.unbracket(notes))}</p>` : '')
 	);
 }
 
 /** One frame, as HTML. */
 export function frame(state, files) {
-	return sprig.withToday(pinned, () => {
+	return chea.withToday(pinned, () => {
 		const all = docs(files);
 		const list = rows(state, all, files);
 		state.cursor = Math.max(0, Math.min(state.cursor, list.length - 1));
@@ -107,8 +107,8 @@ export function frame(state, files) {
 					lastDay = day;
 				}
 				const where = state.view === 'next' && r.sub ? `<span class="t-dim">  ${esc(r.sub)}</span>` : '';
-				const waits = sprig.blockers(n) ? '<span class="t-dim"> ⧗</span>' : '';
-				return `${head}<div class="row${on ? ' sel' : ''}"><span class="txt"><span class="cur">${on ? '›' : ' '}</span>${'  '.repeat(r.depth)}<span class="t-dim">${caret}</span> ${span(markOf(n))} ${esc(sprig.labelOf(n))}${where}${waits}</span><span class="t-dim">${esc(right)}</span></div>`;
+				const waits = chea.blockers(n) ? '<span class="t-dim"> ⧗</span>' : '';
+				return `${head}<div class="row${on ? ' sel' : ''}"><span class="txt"><span class="cur">${on ? '›' : ' '}</span>${'  '.repeat(r.depth)}<span class="t-dim">${caret}</span> ${span(markOf(n))} ${esc(chea.labelOf(n))}${where}${waits}</span><span class="t-dim">${esc(right)}</span></div>`;
 			})
 			.join('');
 		const views = ['tree', 'next up', 'agenda'].map((v, i) => `<span${state.view === v.split(' ')[0] ? ' class="on"' : ''}>${i + 1} ${v}</span>`).join('');
@@ -130,7 +130,7 @@ function tick(state, files, n, to) {
 	}
 	const lines = files[n.file].split('\n');
 	const ln = lines[n.line];
-	const { marker } = sprig.classify(ln);
+	const { marker } = chea.classify(ln);
 	if (!marker) return files;
 	const from = ln[marker[0]];
 	let edited;
@@ -139,7 +139,7 @@ function tick(state, files, n, to) {
 		state.flash = `${n.file}:${n.line + 1}  ${from} → ${to}`;
 	} else {
 		// A recurring item stays open and its due date moves on (spec 10.4).
-		const t = sprig.tickLine(ln);
+		const t = chea.tickLine(ln);
 		if (!t) return files;
 		edited = t.line;
 		state.flash = t.movedTo ? `${n.file}:${n.line + 1}  due → ${t.movedTo}` : `${n.file}:${n.line + 1}  ${from} → ${edited[marker[0]]}`;
@@ -166,7 +166,7 @@ export function press(state, files, k) {
 		state.cursor = 0;
 		return files;
 	}
-	const sel = sprig.withToday(pinned, () => rows(state, docs(files), files)[state.cursor]);
+	const sel = chea.withToday(pinned, () => rows(state, docs(files), files)[state.cursor]);
 	state.flash = '';
 	switch (k) {
 		case 'j': case 'ArrowDown': state.cursor++; break;
@@ -179,8 +179,8 @@ export function press(state, files, k) {
 		case 'l': case 'ArrowRight':
 			if (sel) state.collapsed = state.collapsed.filter((c) => c !== keyOf(sel.n));
 			break;
-		case 'x': return sprig.withToday(pinned, () => tick(state, files, sel?.n));
-		case '~': return sprig.withToday(pinned, () => tick(state, files, sel?.n, '~'));
+		case 'x': return chea.withToday(pinned, () => tick(state, files, sel?.n));
+		case '~': return chea.withToday(pinned, () => tick(state, files, sel?.n, '~'));
 		case '1': [state.view, state.cursor] = ['tree', 0]; break;
 		case '2': [state.view, state.cursor] = ['next', 0]; break;
 		case '3': [state.view, state.cursor] = ['agenda', 0]; break;

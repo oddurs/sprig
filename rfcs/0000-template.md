@@ -9,7 +9,7 @@
 ## The question
 
 What a file, or a reader, cannot tell today. One paragraph, with the smallest
-`.sprig` example that shows it.
+`.chea` example that shows it.
 
 ## The case for
 
@@ -19,16 +19,16 @@ plain-text formats handled the same question, counts for more than taste.
 
 ## What it adds to the card
 
-The whole format fits on one card, at the top of `spec/sprig.md`, and that is
-what keeps Sprig simple. Say what this proposal adds to it: a line, a row, a
+The whole format fits on one card, at the top of `spec/chea.md`, and that is
+what keeps Chea simple. Say what this proposal adds to it: a line, a row, a
 word. The best answer is nothing. A proposal that adds a mark, or a field with
-a meaning, raises a number in `crates/sprig-cli/tests/budget.rs`, and needs a
+a meaning, raises a number in `crates/chea-cli/tests/budget.rs`, and needs a
 case strong enough to pay for it.
 
 ## The case against
 
 The strongest argument you can make against your own proposal. What it costs:
-in the grammar, in every tool that reads Sprig, in files that exist today. An
+in the grammar, in every tool that reads Chea, in files that exist today. An
 RFC with no case against is not ready for review.
 
 ## The ruling

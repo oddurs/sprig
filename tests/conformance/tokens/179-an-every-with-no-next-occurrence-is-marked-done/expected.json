@@ -1,10 +1,10 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "diagnostics": [
     {
-      "code": "S0006",
+      "code": "C0006",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 10,
       "span": [17, 28]

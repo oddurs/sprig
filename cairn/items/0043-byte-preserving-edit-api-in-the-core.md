@@ -18,7 +18,7 @@ area: core
 
 ## Problem
 
-The formatter, `sprig tick`, the language server's code actions and the MCP write tools all edit files. They must share one implementation that never disturbs what it wasn't asked to change.
+The formatter, `chea tick`, the language server's code actions and the MCP write tools all edit files. They must share one implementation that never disturbs what it wasn't asked to change.
 
 ## Proposal
 
@@ -32,7 +32,7 @@ Operations: set mark, set or remove a field, add a child or sibling item at an a
 
 ## 2026-10-28
 
-`sprig_core::edit`: `set_mark`, `tick`, `set_field` (set, append or remove, quoting values with spaces), `add_item` (child or sibling), `add_answer` and `format`. Each returns a `Change`: the new source, and sorted, non-overlapping replacements in the old source's bytes, which is what an LSP `TextEdit` wants. (1) `random_edit_sequences_touch_only_the_lines_they_edit` applies random sequences of every operation to every conformance input and example. Every line no replacement touches comes out byte-identical (20,000 cases run once, 1,000 in CI). (2) The same test parses each result and checks the promise: the mark set, the field's value, the new child last under its parent, one more answer. (3) Each change's replacements, applied, give its source, never overlap, and are compared line by line against the old and new text. Added lines take the file's line ending and their siblings' indentation; a last line without an ending gets one first.
+`chea_core::edit`: `set_mark`, `tick`, `set_field` (set, append or remove, quoting values with spaces), `add_item` (child or sibling), `add_answer` and `format`. Each returns a `Change`: the new source, and sorted, non-overlapping replacements in the old source's bytes, which is what an LSP `TextEdit` wants. (1) `random_edit_sequences_touch_only_the_lines_they_edit` applies random sequences of every operation to every conformance input and example. Every line no replacement touches comes out byte-identical (20,000 cases run once, 1,000 in CI). (2) The same test parses each result and checks the promise: the mark set, the field's value, the new child last under its parent, one more answer. (3) Each change's replacements, applied, give its source, never overlap, and are compared line by line against the old and new text. Added lines take the file's line ending and their siblings' indentation; a last line without an ending gets one first.
 
 ## Result
 

@@ -1,7 +1,7 @@
 name: vscode
 
 # One VS Code extension package per platform, each with that platform's
-# `sprig` binary bundled as its language server, so it works offline with
+# `chea` binary bundled as its language server, so it works offline with
 # nothing else installed. Packages are uploaded as artifacts; publishing to
 # the Marketplace waits on the name (cairn 0006, 0054).
 on:
@@ -35,16 +35,16 @@ jobs:
         with:
           node-version-file: site/.node-version
       - run: rustup target add ${{ matrix.rust }}
-      - run: cargo build --locked --release -p sprig-cli --target ${{ matrix.rust }}
+      - run: cargo build --locked --release -p chea-cli --target ${{ matrix.rust }}
       - name: Package
         working-directory: editors/vscode
         run: |
           set -eu
-          exe=sprig; case "${{ matrix.target }}" in win32-*) exe=sprig.exe;; esac
+          exe=chea; case "${{ matrix.target }}" in win32-*) exe=chea.exe;; esac
           npm ci --no-audit --no-fund
-          SPRIG_SERVER="$GITHUB_WORKSPACE/target/${{ matrix.rust }}/release/$exe" node scripts/prepare.js
-          npx vsce package --target ${{ matrix.target }} -o sprig-${{ matrix.target }}.vsix
+          CHEA_SERVER="$GITHUB_WORKSPACE/target/${{ matrix.rust }}/release/$exe" node scripts/prepare.js
+          npx vsce package --target ${{ matrix.target }} -o chea-${{ matrix.target }}.vsix
       - uses: actions/upload-artifact@v4
         with:
-          name: sprig-${{ matrix.target }}.vsix
-          path: editors/vscode/sprig-${{ matrix.target }}.vsix
+          name: chea-${{ matrix.target }}.vsix
+          path: editors/vscode/chea-${{ matrix.target }}.vsix

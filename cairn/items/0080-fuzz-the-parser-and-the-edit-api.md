@@ -35,7 +35,7 @@ First long run, 2026-10-29: both targets ran about 25 minutes before the machine
 
 ## 2026-10-29
 
-Full hour, 2026-10-29, against sprig-core as merged in #34: parse made 640,126 runs in 3,601 seconds, reaching 4,279 coverage points; edits made 88,253 runs in 3,602 seconds, reaching 2,965. Neither found a crash, and the artifacts folders are empty. The second long run was cut short at 14 minutes by another restart, so this one ran as a tracked task. Criterion 2 holds because there was nothing to turn into a test: no crash was found.
+Full hour, 2026-10-29, against chea-core as merged in #34: parse made 640,126 runs in 3,601 seconds, reaching 4,279 coverage points; edits made 88,253 runs in 3,602 seconds, reaching 2,965. Neither found a crash, and the artifacts folders are empty. The second long run was cut short at 14 minutes by another restart, so this one ran as a tracked task. Criterion 2 holds because there was nothing to turn into a test: no crash was found.
 
 ## Result
 

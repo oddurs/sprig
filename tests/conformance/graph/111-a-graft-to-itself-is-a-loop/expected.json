@@ -1,10 +1,10 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "diagnostics": [
     {
-      "code": "S0103",
+      "code": "C0103",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 3,
       "span": [8, 16]

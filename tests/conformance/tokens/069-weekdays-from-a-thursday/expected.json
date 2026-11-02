@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Dates on 2026-10-08",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "Item 1",
@@ -25,7 +25,7 @@
         "due": "2026-10-12"
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "-",
         "label": "Item 2",
@@ -38,7 +38,7 @@
         "due": "2026-10-13"
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 5,
         "mark": "-",
         "label": "Item 3",
@@ -51,7 +51,7 @@
         "due": "2026-10-14"
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 6,
         "mark": "-",
         "label": "Item 4",
@@ -64,7 +64,7 @@
         "due": "2026-10-08"
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 7,
         "mark": "-",
         "label": "Item 5",
@@ -77,7 +77,7 @@
         "due": "2026-10-09"
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 8,
         "mark": "-",
         "label": "Item 6",
@@ -90,7 +90,7 @@
         "due": "2026-10-10"
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 9,
         "mark": "-",
         "label": "Item 7",

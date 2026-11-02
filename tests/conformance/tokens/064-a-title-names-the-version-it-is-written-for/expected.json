@@ -1,22 +1,22 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "syntax": {
     "title": "Plan",
     "root": {
       "line": 1,
-      "span": [0, 13],
+      "span": [0, 12],
       "text": "Plan",
       "fields": {
-        "sprig": "1"
+        "chea": "1"
       },
       "children": [
         {
           "line": 3,
-          "span": [15, 29],
+          "span": [14, 27],
           "mark": "-",
           "text": "One",
           "fields": {
-            "sprig": "9"
+            "chea": "9"
           }
         }
       ]

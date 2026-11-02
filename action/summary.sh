@@ -5,14 +5,14 @@
 #   summary.sh BASE_DIR HEAD_DIR [PATH...]
 #
 # BASE_DIR and HEAD_DIR are checkouts of the two commits; each PATH is read
-# relative to both. SPRIG names the binary, `sprig` by default.
+# relative to both. CHEA names the binary, `chea` by default.
 set -euo pipefail
 
 base=$1
 head=$2
 shift 2
 if [ $# -eq 0 ]; then set -- .; fi
-sprig=${SPRIG:-sprig}
+chea=${CHEA:-chea}
 
 # The PATHs that exist in a checkout: a pull request may add or remove one.
 present() {
@@ -31,7 +31,7 @@ status() {
   # Not mapfile: macOS still ships bash 3.2.
   while IFS= read -r p; do paths+=("$p"); done < <(present "$dir" "$@")
   if [ ${#paths[@]} -gt 0 ]; then
-    (cd "$dir" && "$sprig" tree --summary --plain "${paths[@]}")
+    (cd "$dir" && "$chea" tree --summary --plain "${paths[@]}")
   fi
 }
 
@@ -45,7 +45,7 @@ items() {
   local p code prefix
   present "$dir" "$@" | while IFS= read -r p; do
     code=0
-    (cd "$dir" && "$sprig" find --plain --in "$p" "$query") >"$scratch/found" || code=$?
+    (cd "$dir" && "$chea" find --plain --in "$p" "$query") >"$scratch/found" || code=$?
     if [ "$code" -gt 1 ]; then exit "$code"; fi
     # `find` names a file relative to the folder it searched, which for a
     # file is the folder the file is in.
