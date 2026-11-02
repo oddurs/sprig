@@ -56,7 +56,9 @@ scripts/agent done feat/0017-resolve-grafts
 
 `scripts/agent list` shows every worktree, its branch and its pull request.
 Worktrees live in `../.worktrees/sprig/<branch>/`, outside the repository, so
-two branches never share an index or a `target/` directory.
+two branches never share an index or a `target/` directory. Anything you list
+in `.git/info/exclude`, such as your editor's or agent's own notes, is linked
+into each new worktree, so it never needs committing.
 
 ## Keep it small
 

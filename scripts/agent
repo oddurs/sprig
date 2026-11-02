@@ -147,6 +147,24 @@ cmd_doctor() {
 
 # ── start ───────────────────────────────────────────────────────────────────
 
+# What a contributor keeps out of git on purpose, listed in .git/info/exclude
+# (one tool's own instructions, say), follows the work into each new worktree
+# as a link, so the tracked tree never has to name it. List a directory without
+# a trailing slash: in the worktree it is a link, which `dir/` does not match.
+link_local() {
+  main=$(primary)
+  exclude=$(git rev-parse --path-format=absolute --git-common-dir)/info/exclude
+  [ -f "$exclude" ] || return 0
+  grep -v -e '^#' -e '^[[:space:]]*$' "$exclude" | while IFS= read -r pattern; do
+    path=${pattern#/}
+    path=${path%/}
+    [ -e "$main/$path" ] && [ ! -e "$1/$path" ] || continue
+    mkdir -p "$(dirname "$1/$path")"
+    ln -s "$main/$path" "$1/$path"
+    say "linked $path"
+  done
+}
+
 cmd_start() {
   branch=${1:-}
   [ -n "$branch" ] || die 'usage: scripts/agent start <type>/<slug>'
@@ -173,6 +191,7 @@ cmd_start() {
   say "creating $branch from $from"
   mkdir -p "$(dirname "$dir")"
   git worktree add --quiet -b "$branch" "$dir" "$from"
+  link_local "$dir"
 
   printf '\nworktree ready:\n\n  cd %s\n\n' "$dir"
 }

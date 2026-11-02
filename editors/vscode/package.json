@@ -47,6 +47,7 @@
     "@vscode/vsce": "4.1.0"
   },
   "overrides": {
-    "@azure/msal-node": "7.1.2"
+    "@azure/msal-node": "7.1.2",
+    "minimatch": "11.0.4"
   }
 }
