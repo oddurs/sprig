@@ -98,13 +98,22 @@ fn the_policy_is_linked_from_the_readme_the_spec_and_the_crate() {
     }
 }
 
+/// git in this checkout. Under a hook, GIT_DIR and its siblings are set, and
+/// git follows them rather than the directory it runs in (cairn 0157).
+fn git() -> std::process::Command {
+    let mut c = std::process::Command::new("git");
+    c.current_dir(repo(""));
+    for (k, _) in std::env::vars_os() {
+        if k.to_string_lossy().starts_with("GIT_") {
+            c.env_remove(k);
+        }
+    }
+    c
+}
+
 /// Every file git tracks, and every folder that holds one.
 fn tracked() -> (Vec<String>, std::collections::BTreeSet<String>) {
-    let o = std::process::Command::new("git")
-        .args(["ls-files", "-z"])
-        .current_dir(repo(""))
-        .output()
-        .expect("git runs");
+    let o = git().args(["ls-files", "-z"]).output().expect("git runs");
     assert!(o.status.success());
     let files: Vec<String> = String::from_utf8(o.stdout)
         .unwrap()
@@ -188,9 +197,8 @@ fn paths(line: &str) -> Vec<&str> {
 fn every_path_a_document_names_exists() {
     let (files, known) = tracked();
     let ignored = |p: &str| {
-        std::process::Command::new("git")
+        git()
             .args(["check-ignore", "-q", "--no-index", p])
-            .current_dir(repo(""))
             .status()
             .unwrap()
             .success()

@@ -44,6 +44,21 @@ fn have(cmd: &str) -> bool {
         .is_ok_and(|o| o.status.success())
 }
 
+/// `program` in `dir`, where any git it runs sees only `dir`. A hook exports
+/// GIT_DIR and its siblings naming the repository being pushed; passed on,
+/// `git init && git add -A` re-initialised that one and staged the bakery
+/// into its index (cairn 0157).
+fn here(dir: &Path, program: &str) -> Command {
+    let mut c = Command::new(program);
+    c.current_dir(dir);
+    for (k, _) in std::env::vars_os() {
+        if k.to_string_lossy().starts_with("GIT_") {
+            c.env_remove(k);
+        }
+    }
+    c
+}
+
 #[test]
 fn every_recipe_in_the_shell_guide_runs_against_the_bakery() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
@@ -59,9 +74,8 @@ fn every_recipe_in_the_shell_guide_runs_against_the_bakery() {
         fs::copy(e.path(), dir.join(e.file_name())).unwrap();
     }
     // The pre-commit recipe reads what is staged.
-    let git = Command::new("sh")
+    let git = here(&dir, "sh")
         .args(["-c", "git init -q && git add -A"])
-        .current_dir(&dir)
         .output()
         .unwrap();
     assert!(
@@ -95,9 +109,8 @@ fn every_recipe_in_the_shell_guide_runs_against_the_bakery() {
             eprintln!("skipped, without {missing:?}:\n{body}");
             continue;
         }
-        let o = Command::new("bash")
+        let o = here(&dir, "bash")
             .args(["-euo", "pipefail", "-c", &body])
-            .current_dir(&dir)
             .env("PATH", &path)
             .env("SPRIG_TODAY", "2026-10-01")
             .env("NO_COLOR", "1")
