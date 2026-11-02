@@ -18,22 +18,22 @@ area: site
 
 ## Problem
 
-The spec is the page Hacker News readers open second, and it must never drift from `spec/sprig.md`.
+The spec is the page Hacker News readers open second, and it must never drift from `spec/chea.md`.
 
 ## Proposal
 
-The build copies `spec/sprig.md` into the docs as `/spec/`, with one heading per rule so each rule has a stable anchor, and publishes the raw file at `/spec.md`.
+The build copies `spec/chea.md` into the docs as `/spec/`, with one heading per rule so each rule has a stable anchor, and publishes the raw file at `/spec.md`.
 
 ## Acceptance criteria
 
-- [x] `/spec/` is generated at build time from `spec/sprig.md`; nothing in `site/` repeats its text.
+- [x] `/spec/` is generated at build time from `spec/chea.md`; nothing in `site/` repeats its text.
 - [x] Every numbered rule has its own anchor.
 - [x] `/spec.md` serves the file byte for byte.
 
 ## 2026-09-28
 
-site/scripts/sync.mjs writes /spec/ from spec/sprig.md at build time (the generated page is gitignored), and copies the file to /spec.md; cmp confirms the served copy is byte-identical. The built page has 53 rule anchors, one per numbered rule.
+site/scripts/sync.mjs writes /spec/ from spec/chea.md at build time (the generated page is gitignored), and copies the file to /spec.md; cmp confirms the served copy is byte-identical. The built page has 53 rule anchors, one per numbered rule.
 
 ## Result
 
-/spec/ is generated from spec/sprig.md with one anchor per rule, and /spec.md serves the source byte for byte.
+/spec/ is generated from spec/chea.md with one anchor per rule, and /spec.md serves the source byte for byte.

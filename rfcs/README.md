@@ -1,13 +1,13 @@
 # Requests for comment
 
-A change to what a `.sprig` file means goes through an RFC: a short document
+A change to what a `.chea` file means goes through an RFC: a short document
 with the same shape as the arguments the format already settled (`cairn list
 --view decisions`). It states the question, the case for, the case against, and
 the ruling.
 
 ## When one is needed
 
-- A new mark, token, key with a defined meaning, or rule in `spec/sprig.md`.
+- A new mark, token, key with a defined meaning, or rule in `spec/chea.md`.
 - A change to what any valid file means. After 1.0 that is only possible in a
   2.0 (`docs/stability.md`), and the RFC says why it is worth one.
 - A new diagnostic code, or a change to when an existing one is reported.

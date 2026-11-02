@@ -1,6 +1,6 @@
 # Moving house
 
-A checklist kept in Markdown before it moved to Sprig.
+A checklist kept in Markdown before it moved to Chea.
 
 ## Before the day
 

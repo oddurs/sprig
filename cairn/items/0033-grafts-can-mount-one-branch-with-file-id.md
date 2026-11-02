@@ -24,7 +24,7 @@ Files only (one owner, simple) or branches too (flexible, and a branch grafted t
 
 ## Revisit when
 
-If double counting causes real confusion; then `sprig check` should warn on it.
+If double counting causes real confusion; then `chea check` should warn on it.
 
 ## Acceptance criteria
 

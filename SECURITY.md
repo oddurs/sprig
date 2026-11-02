@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Sprig has not had a release yet. Until v0.1, reports against `main` are
+Chea has not had a release yet. Until v0.1, reports against `main` are
 welcome; from v0.1 until 1.0, only the latest release receives fixes.
 
 ## Reporting a vulnerability
@@ -11,9 +11,9 @@ welcome; from v0.1 until 1.0, only the latest release receives fixes.
 
 Report privately through GitHub Security Advisories:
 
-<https://github.com/oddurs/sprig/security/advisories/new>
+<https://github.com/oddurs/chea/security/advisories/new>
 
-Include the version or commit, your platform, and the smallest `.sprig` input
+Include the version or commit, your platform, and the smallest `.chea` input
 that reproduces the problem.
 
 ## What to expect
@@ -27,14 +27,14 @@ that reproduces the problem.
 
 ## Scope
 
-Sprig reads plain-text plans, often from repositories somebody else wrote. The
+Chea reads plain-text plans, often from repositories somebody else wrote. The
 boundaries that matter:
 
-- **Every `.sprig` file is untrusted input.** A malformed or hostile file must
+- **Every `.chea` file is untrusted input.** A malformed or hostile file must
   never do more than produce a diagnostic. A panic, a hang or unbounded memory
   from a file is a real finding.
 - **Grafts must not escape the workspace.** `+ [[../../somewhere]]` is refused.
-  A path that reads a file outside the directory Sprig was pointed at is a
+  A path that reads a file outside the directory Chea was pointed at is a
   vulnerability.
 - **Nothing in a plan is executed.** No field, link or note ever reaches a shell
   or a network request.

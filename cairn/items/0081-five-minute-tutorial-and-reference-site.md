@@ -17,15 +17,15 @@ area: docs
 
 ## Reader and question
 
-A stranger deciding in five minutes whether Sprig fits their project, then looking up a command later.
+A stranger deciding in five minutes whether Chea fits their project, then looking up a command later.
 
 ## Change
 
-A tutorial that ends with the reader's own `PLAN.sprig` checked, ticked from the editor and read by an agent. The reference covers every CLI command, MCP tool and diagnostic code, generated from the same sources the tools use.
+A tutorial that ends with the reader's own `PLAN.chea` checked, ticked from the editor and read by an agent. The reference covers every CLI command, MCP tool and diagnostic code, generated from the same sources the tools use.
 
 ## Acceptance criteria
 
-- [ ] Two people new to Sprig complete the tutorial in under five minutes, with times noted here.
+- [ ] Two people new to Chea complete the tutorial in under five minutes, with times noted here.
 - [x] The reference is generated, and CI fails if a command or diagnostic is undocumented.
 
 ## 2026-10-29

@@ -17,7 +17,7 @@ area: interop
 
 ## Problem
 
-Teams on GitHub Issues want to see their issues as a plan without Sprig touching the network.
+Teams on GitHub Issues want to see their issues as a plan without Chea touching the network.
 
 ## Proposal
 
@@ -25,7 +25,7 @@ Read the output of `gh issue list --json number,title,state,labels,assignees,mil
 
 ## Acceptance criteria
 
-- [x] A fixture from a real repository converts and passes `sprig check`.
+- [x] A fixture from a real repository converts and passes `chea check`.
 - [x] The importer makes no network calls; a test runs it with networking unavailable.
 
 ## 2026-10-29
@@ -34,4 +34,4 @@ The fixture is this repository's own pull requests (30 of them), in gh pr list -
 
 ## Result
 
-sprig import --from github converts gh issue list or gh pr list JSON: milestones become groups, labels tags, assignees people, and each item carries issue:NUMBER.
+chea import --from github converts gh issue list or gh pr list JSON: milestones become groups, labels tags, assignees people, and each item carries issue:NUMBER.

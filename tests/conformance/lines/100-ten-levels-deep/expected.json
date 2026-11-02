@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Deep",
     "status": "todo",
@@ -12,7 +12,7 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "L0",
@@ -24,7 +24,7 @@
         },
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 4,
             "mark": "-",
             "label": "L1",
@@ -36,7 +36,7 @@
             },
             "children": [
               {
-                "file": "main.sprig",
+                "file": "main.chea",
                 "line": 5,
                 "mark": "-",
                 "label": "L2",
@@ -48,7 +48,7 @@
                 },
                 "children": [
                   {
-                    "file": "main.sprig",
+                    "file": "main.chea",
                     "line": 6,
                     "mark": "-",
                     "label": "L3",
@@ -60,7 +60,7 @@
                     },
                     "children": [
                       {
-                        "file": "main.sprig",
+                        "file": "main.chea",
                         "line": 7,
                         "mark": "-",
                         "label": "L4",
@@ -72,7 +72,7 @@
                         },
                         "children": [
                           {
-                            "file": "main.sprig",
+                            "file": "main.chea",
                             "line": 8,
                             "mark": "-",
                             "label": "L5",
@@ -84,7 +84,7 @@
                             },
                             "children": [
                               {
-                                "file": "main.sprig",
+                                "file": "main.chea",
                                 "line": 9,
                                 "mark": "-",
                                 "label": "L6",
@@ -96,7 +96,7 @@
                                 },
                                 "children": [
                                   {
-                                    "file": "main.sprig",
+                                    "file": "main.chea",
                                     "line": 10,
                                     "mark": "-",
                                     "label": "L7",
@@ -108,7 +108,7 @@
                                     },
                                     "children": [
                                       {
-                                        "file": "main.sprig",
+                                        "file": "main.chea",
                                         "line": 11,
                                         "mark": "-",
                                         "label": "L8",
@@ -120,7 +120,7 @@
                                         },
                                         "children": [
                                           {
-                                            "file": "main.sprig",
+                                            "file": "main.chea",
                                             "line": 12,
                                             "mark": "-",
                                             "label": "L9",

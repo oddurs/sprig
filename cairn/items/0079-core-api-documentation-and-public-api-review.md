@@ -17,7 +17,7 @@ area: core
 
 ## Reader and question
 
-A developer building their own Sprig tool on the core crate.
+A developer building their own Chea tool on the core crate.
 
 ## Change
 
@@ -31,4 +31,4 @@ Complete docs.rs documentation with `#![deny(missing_docs)]`, compiling examples
 
 ## Result
 
-sprig-core builds with missing_docs denied, and cargo doc runs with warnings denied in lint. Every module has an example that runs as a doctest (now part of scripts/task test), and tests/api.rs holds every public function to one. The review made seven enums non_exhaustive and four helpers crate-private, as the CHANGELOG lists.
+chea-core builds with missing_docs denied, and cargo doc runs with warnings denied in lint. Every module has an example that runs as a doctest (now part of scripts/task test), and tests/api.rs holds every public function to one. The review made seven enums non_exhaustive and four helpers crate-private, as the CHANGELOG lists.

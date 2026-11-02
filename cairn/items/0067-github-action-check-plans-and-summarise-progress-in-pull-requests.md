@@ -21,7 +21,7 @@ A plan changed in a pull request should be checked, and the reviewer should see 
 
 ## Proposal
 
-A composite action that installs a released binary, runs `sprig check`, and writes a job summary: per-file progress on base and head, and items newly unblocked.
+A composite action that installs a released binary, runs `chea check`, and writes a job summary: per-file progress on base and head, and items newly unblocked.
 
 ## Acceptance criteria
 
@@ -30,8 +30,8 @@ A composite action that installs a released binary, runs `sprig check`, and writ
 
 ## 2026-10-29
 
-The action now also writes its summary to the job log, so a reviewer, or a script reading the logs, can see it without the summary page. The summary's unblocked list is tested in crates/sprig-cli/tests/tools.rs on two copies of the bakery. It still needs one pull request that unblocks something, read by a person.
+The action now also writes its summary to the job log, so a reviewer, or a script reading the logs, can see it without the summary page. The summary's unblocked list is tested in crates/chea-cli/tests/tools.rs on two copies of the bakery. It still needs one pull request that unblocks something, read by a person.
 
 ## 2026-10-29
 
-Criterion 1: the plans job in ci.yml runs this repository's action, `uses: ./action`, on examples and tests/import, and branch protection requires it through the required job. Trying the summary on the real examples folder showed the unblocked item as examples/bakery/bakery/bakery.sprig:15: the script added the searched folder's parent back to a path find had already made relative to that folder. It is fixed, and tools.rs now covers a folder of folders, a trailing slash and a single file.
+Criterion 1: the plans job in ci.yml runs this repository's action, `uses: ./action`, on examples and tests/import, and branch protection requires it through the required job. Trying the summary on the real examples folder showed the unblocked item as examples/bakery/bakery/bakery.chea:15: the script added the searched folder's parent back to a path find had already made relative to that folder. It is fixed, and tools.rs now covers a folder of folders, a trailing slash and a single file.

@@ -1,5 +1,5 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "syntax": {
     "title": "Marks",
     "root": {
@@ -14,7 +14,7 @@
           "text": "kitchen",
           "links": [
             {
-              "path": "kitchen.sprig"
+              "path": "kitchen.chea"
             }
           ]
         }
@@ -23,9 +23,9 @@
   },
   "diagnostics": [
     {
-      "code": "S0101",
+      "code": "C0101",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 3,
       "span": [9, 20]

@@ -1,0 +1,28 @@
+{
+  "chea_tree": 1,
+  "syntax": {
+    "title": "Tokens",
+    "root": {
+      "line": 1,
+      "span": [0, 6],
+      "text": "Tokens",
+      "children": [
+        {
+          "line": 3,
+          "span": [8, 39],
+          "mark": "-",
+          "text": "Read ./a/b and c.chea",
+          "links": [
+            {
+              "path": "a/b.chea"
+            },
+            {
+              "path": "c.chea"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "diagnostics": []
+}

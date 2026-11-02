@@ -21,7 +21,7 @@ The first hour decides a Show HN, and a broken install on a platform nobody test
 
 ## Approach
 
-A week before the launch, ask five to ten people who would use Sprig on a real plan to try the site and the binaries, and report problems. Nobody is asked to vote or comment on the day.
+A week before the launch, ask five to ten people who would use Chea on a real plan to try the site and the binaries, and report problems. Nobody is asked to vote or comment on the day.
 
 ## Acceptance criteria
 

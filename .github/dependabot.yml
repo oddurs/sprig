@@ -12,10 +12,10 @@ updates:
       actions:
         update-types: [minor, patch]
 
-  # Every committed lockfile is listed here; crates/sprig-cli/tests/docs.rs
+  # Every committed lockfile is listed here; crates/chea-cli/tests/docs.rs
   # fails when one is not, so a new one cannot go unwatched.
   - package-ecosystem: cargo
-    directories: ["/", "/crates/sprig-core/fuzz"]
+    directories: ["/", "/crates/chea-core/fuzz"]
     schedule:
       interval: weekly
     commit-message:

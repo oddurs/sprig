@@ -6,9 +6,16 @@ All notable changes to this project are recorded here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- The project is Chea, renamed from Sprig before anything was published:
+  the `chea` command and crates, `.chea` files and `PLAN.chea`, the reserved
+  `chea:` title key, and `CHEA_` environment variables. Diagnostic codes read
+  `C0201` where they read `S0201`.
+
 ### Added
 
-- Simplicity is a tested budget (`crates/sprig-cli/tests/budget.rs`): the
+- Simplicity is a tested budget (`crates/chea-cli/tests/budget.rs`): the
   number of marks, commands, flags, fields with a meaning, diagnostic codes and
   MCP tools is pinned, and the card and the core of the spec have a ceiling.
   Adding one fails until the number is raised in the same pull request.
@@ -16,13 +23,13 @@ All notable changes to this project are recorded here. The format follows
   to §2.2's marks and §4.6's fields. The RFC template asks what a proposal adds
   to it.
 - The spec is a core and an annex: the rules a reader needs in
-  `spec/sprig.md`, and the rulings on edge cases, under their own numbers, with
+  `spec/chea.md`, and the rulings on edge cases, under their own numbers, with
   the grammar and the tree format, in `spec/annex.md`. The site shows both on
   one page.
 - CONTRIBUTING.md starts with a first change that needs only Rust, and the
-  home page starts with a plan and what Sprig says about it.
+  home page starts with a plan and what Chea says about it.
 
-- The playground shows what `sprig check` would say as you type: each problem
+- The playground shows what `chea check` would say as you type: each problem
   with its code, linked to its note, and what to do about it. Choosing one goes
   to its line, a line with a problem is marked in the editor, and a file's tab
   carries a dot.
@@ -91,7 +98,7 @@ All notable changes to this project are recorded here. The format follows
 - `tick` reports what a change unblocked, on standard error, so its standard
   output stays a line per ref.
 
-- `sprig-core`'s public API, reviewed for 1.0:
+- `chea-core`'s public API, reviewed for 1.0:
   - Every public item is documented, and every public function has an
     example that runs as a test.
   - These are now `#[non_exhaustive]`, so a later version can add to them:
@@ -120,10 +127,10 @@ All notable changes to this project are recorded here. The format follows
   which the new conformance examples found. An external scanner ends a line
   at a newline or at the end of the file.
 - The GitHub Action's summary named an unblocked item by a wrong path
-  (`plans/bakery/bakery/bakery.sprig`) when it checked a folder of folders or
+  (`plans/bakery/bakery/bakery.chea`) when it checked a folder of folders or
   a single file. Only a folder one level deep came out right.
 
-- `sprig tui`: the tree, next up and the agenda on one screen.
+- `chea tui`: the tree, next up and the agenda on one screen.
   - Vim keys, a detail pane, and a filter that keeps every match's ancestors.
   - Ticks, marks, adds and undo through the edit API.
   - Live reload when a file changes, keeping the cursor on its item.
@@ -132,34 +139,34 @@ All notable changes to this project are recorded here. The format follows
   - `--screenshot WxH` prints a frame as text, and `--keys` presses keys
     first.
 - `spec/tools.md` T7, and a guide to the TUI.
-- `sprig mcp`: the plans for coding agents, over the Model Context Protocol.
+- `chea mcp`: the plans for coding agents, over the Model Context Protocol.
   - Five read tools return what the matching `--json` command prints.
   - Five write tools go through the edit API, refuse a change that would add
     a `check` error, and return the diff they applied and what stopped
     waiting.
   - `--max-new-items`, 20 by default, caps how many items a session may add.
   - `--config` prints the snippet that registers the server with a client.
-- `sprig agent` prints the convention for AGENTS.md or CLAUDE.md, and
+- `chea agent` prints the convention for AGENTS.md or CLAUDE.md, and
   `--write FILE` keeps it in a marked block there.
 - `status --json` and `check --json`.
 - `spec/tools.md` T6, and a guide to plans for coding agents with a worked
   session.
 - Tools for the shell, each sharing the core's edit API or tree:
-  - `sprig find` searches by words, `@who`, `#tag`, `is:STATE` and
+  - `chea find` searches by words, `@who`, `#tag`, `is:STATE` and
     `due:<DATE`.
-  - `sprig agenda` shows dated work by day.
-  - `sprig mark`, `sprig answer` and `sprig add` change a plan from the
+  - `chea agenda` shows dated work by day.
+  - `chea mark`, `chea answer` and `chea add` change a plan from the
     command line and say what stopped waiting.
-  - `sprig edit` opens an editor at an item.
-  - `sprig graph` prints the dependencies for Graphviz or Mermaid.
-  - `sprig export` writes JSON, iCalendar or CSV.
-  - `sprig import` reads Markdown checklists, todo.txt and GitHub issues.
+  - `chea edit` opens an editor at an item.
+  - `chea graph` prints the dependencies for Graphviz or Mermaid.
+  - `chea export` writes JSON, iCalendar or CSV.
+  - `chea import` reads Markdown checklists, todo.txt and GitHub issues.
   - `next --json` and `find --json` print items in the tree format.
 - `spec/tools.md` T5: what queries mean, the agenda, calendar UIDs, graph ids
   and conversions.
 - A GitHub Action in `action/`. It checks plans, annotates problems, and
   summarises a pull request's effect on done counts and on what it unblocked.
-- A guide to Sprig in the shell, whose recipes run in CI.
+- A guide to Chea in the shell, whose recipes run in CI.
 - Spec draft 0.5:
   - It rules on every ambiguity Appendix B listed, folded into the numbered
     rules.
@@ -167,18 +174,18 @@ All notable changes to this project are recorded here. The format follows
     that must name a file, answers, indentation whitespace, date shortcuts,
     `est:` and `every:`, month-end recurrence, and due dates and priority
     that reach down.
-  - New warnings: S0006 for an `every:` that is not a recurrence, S0206 for an
-    `after:` naming something with nothing to do, and S0007 for a title naming
-    a version of Sprig the tool does not read.
+  - New warnings: C0006 for an `every:` that is not a recurrence, C0206 for an
+    `after:` naming something with nothing to do, and C0007 for a title naming
+    a version of Chea the tool does not read.
   - Dates have no time of day, an email address is not a person, and the
-    title's `sprig:` key is reserved for a future major version.
+    title's `chea:` key is reserved for a future major version.
 
-- `sprig next`: open, unblocked work across a folder of plans, in progress
+- `chea next`: open, unblocked work across a folder of plans, in progress
   first, then priority, then due date, with `--who` and `--limit`.
-- `sprig check`: every problem as `file:line:col: severity[code]: message`,
+- `chea check`: every problem as `file:line:col: severity[code]: message`,
   exit 1 on errors, and on warnings with `--strict`.
 - `--today` on every command, so any answer can be reproduced.
-- `sprig-core`: the parser and resolver. Grafts across files and directories,
+- `chea-core`: the parser and resolver. Grafts across files and directories,
   loops reported once, paths outside the workspace refused, settling,
   progress, estimates, people and blocking, with no I/O and no clock.
 - `spec/diagnostics.md`, the catalogue of stable diagnostic codes.
@@ -188,21 +195,21 @@ All notable changes to this project are recorded here. The format follows
   blocking and grafts, each section citing every rule it covers.
 - Typed date shortcuts: `due:fri`, `start:+2w`, `oct3`, `q4` and the rest of
   §9.3 resolve against `--today`.
-- The website runs `sprig-core` compiled to WebAssembly (109 KB compressed)
+- The website runs `chea-core` compiled to WebAssembly (109 KB compressed)
   instead of a JavaScript parser of its own.
-- A command-line reference page on the site, generated from `sprig --help`,
+- A command-line reference page on the site, generated from `chea --help`,
   and the first-plan tutorial now ends in the terminal.
-- `sprig fmt` and `sprig fmt --check`: two spaces per level, typed dates
+- `chea fmt` and `chea fmt --check`: two spaces per level, typed dates
   written out, trailing whitespace gone, and nothing else.
-- `sprig tick REF...`: done, reopened, or a recurring item's due date moved
+- `chea tick REF...`: done, reopened, or a recurring item's due date moved
   on, changing only that byte range. Refs are `^anchor`, `file^anchor`,
   `file:line` or words from an item, and `-` reads them from standard input.
-- `sprig_core::edit`, a byte-preserving edit API, and `spec/tools.md`, which
+- `chea_core::edit`, a byte-preserving edit API, and `spec/tools.md`, which
   states how refs, formatting and edits behave for other implementations.
-- `sprig tree`, `sprig why` and `sprig status` (with `--oneline` for prompts).
+- `chea tree`, `chea why` and `chea status` (with `--oneline` for prompts).
 - `--plain` on every reading command, tab-separated with a ref first, and
   `--color auto|always|never`, which respects `NO_COLOR`.
-- `sprig lsp`, a language server built on `lsp-server`:
+- `chea lsp`, a language server built on `lsp-server`:
   - It republishes diagnostics for every file a change affects, so deleting an
     anchor flags the files that name it.
   - It completes people, anchors, file links and field keys.
@@ -211,7 +218,7 @@ All notable changes to this project are recorded here. The format follows
   - Code actions tick an item, cycle its mark and write out a typed date.
   - It formats documents.
 - Editors:
-  - a tree-sitter grammar in `editors/tree-sitter-sprig`, held to the core's
+  - a tree-sitter grammar in `editors/tree-sitter-chea`, held to the core's
     reading of every conformance input;
   - TextMate grammar snapshots;
   - a VS Code extension that bundles the language server;
@@ -220,8 +227,8 @@ All notable changes to this project are recorded here. The format follows
 - A performance gate: parse, resolve and check on 5,000 lines must stay
   within twice a committed baseline. Re-inserting a file whose text is
   unchanged keeps its parse, so a keystroke reparses one file.
-- `sprig completions bash|zsh|fish|powershell|elvish`, completing refs from
-  the current folder, and `sprig man`.
+- `chea completions bash|zsh|fish|powershell|elvish`, completing refs from
+  the current folder, and `chea man`.
 
 ### Changed
 

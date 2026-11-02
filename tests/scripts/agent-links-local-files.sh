@@ -15,9 +15,9 @@ here=$(cd "$(dirname "$0")/../.." && pwd)
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 
-git init -q --bare -b main "$tmp/sprig.git"
-git clone -q "$tmp/sprig.git" "$tmp/sprig" 2>/dev/null
-cd "$tmp/sprig"
+git init -q --bare -b main "$tmp/chea.git"
+git clone -q "$tmp/chea.git" "$tmp/chea" 2>/dev/null
+cd "$tmp/chea"
 git -c user.name=test -c user.email=test@example.org commit -q --allow-empty -m 'chore: seed'
 git push -q origin main
 mkdir scripts
@@ -28,7 +28,7 @@ mkdir -p .private/rules
 printf '# a comment\n\n/NOTES.local.md\n/.private\n/never-created\n' >>.git/info/exclude
 
 scripts/agent start chore/probe >/dev/null
-wt=$tmp/.worktrees/sprig/chore/probe
+wt=$tmp/.worktrees/chea/chore/probe
 
 fail() {
   printf 'agent-links-local-files: %s\n' "$1" >&2

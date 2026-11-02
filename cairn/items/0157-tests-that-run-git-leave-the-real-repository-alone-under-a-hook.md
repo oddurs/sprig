@@ -16,7 +16,7 @@ area: release
 
 ## Problem
 
-The pre-push hook runs the full suite with GIT_DIR and its siblings set to the repository being pushed. crates/sprig-cli/tests/tui.rs builds a scratch repository with git init, add -A and commit, and passes those variables straight through, so under the hook it acted on the real repository instead: it set core.bare=true in the shared config, so `git status` refused to run in the primary checkout, and committed a stray "base" commit onto the branch being pushed. docs.rs reads `git ls-files` the same way. The scripts under tests/scripts already clear these variables, for the same reason, after it happened once before.
+The pre-push hook runs the full suite with GIT_DIR and its siblings set to the repository being pushed. crates/chea-cli/tests/tui.rs builds a scratch repository with git init, add -A and commit, and passes those variables straight through, so under the hook it acted on the real repository instead: it set core.bare=true in the shared config, so `git status` refused to run in the primary checkout, and committed a stray "base" commit onto the branch being pushed. docs.rs reads `git ls-files` the same way. The scripts under tests/scripts already clear these variables, for the same reason, after it happened once before.
 
 ## Approach
 

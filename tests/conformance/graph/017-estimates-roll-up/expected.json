@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Rollup",
     "status": "doing",
@@ -13,7 +13,7 @@
     "estimate": 60,
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "Kitchen",
@@ -26,7 +26,7 @@
         "estimate": 56,
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 4,
             "mark": "x",
             "label": "Strip out",
@@ -39,7 +39,7 @@
             }
           },
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 5,
             "mark": "-",
             "label": "Tiling",
@@ -52,7 +52,7 @@
             "estimate": 40
           },
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 6,
             "mark": "-",
             "label": "Paint",
@@ -67,7 +67,7 @@
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 7,
         "mark": "-",
         "label": "Garden",
@@ -80,7 +80,7 @@
         "estimate": 4,
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 8,
             "mark": "-",
             "label": "Dig",

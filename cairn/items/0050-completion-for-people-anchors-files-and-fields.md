@@ -26,16 +26,16 @@ Complete `@` with people in the workspace, `^` and `after:^` with anchors in the
 ## Acceptance criteria
 
 - [x] Each trigger has a scripted test that asserts the offered items.
-- [x] Completing `[[lease^` in `bakery.sprig` offers exactly the anchors in `lease.sprig`.
+- [x] Completing `[[lease^` in `bakery.chea` offers exactly the anchors in `lease.chea`.
 
 ## 2026-10-28
 
-Each trigger has a test in `crates/sprig-lsp/tests/lsp.rs`:
+Each trigger has a test in `crates/chea-lsp/tests/lsp.rs`:
 
 - `@` offers everyone in the workspace.
 - `^` and `after:^` offer this file's anchors, but not the one being typed.
 - `[[` offers other files, relative to this one.
-- `[[lease^` offers exactly the anchors `lease.sprig` writes; the test computes them from the parser.
+- `[[lease^` offers exactly the anchors `lease.chea` writes; the test computes them from the parser.
 - Field keys are offered once their first letter is typed.
 
 Nothing is offered in notes or comments (§2.6). The closing `]]` is added unless the editor already put it there.

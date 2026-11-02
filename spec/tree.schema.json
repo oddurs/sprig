@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/oddurs/sprig/blob/main/spec/tree.schema.json",
-  "title": "Sprig tree",
-  "description": "One Sprig file read and resolved, version 1. Appendix D of spec/annex.md documents every field. Keys whose value would be empty, zero or false may be left out, and a reader treats a missing key as that value.",
+  "$id": "https://github.com/oddurs/chea/blob/main/spec/tree.schema.json",
+  "title": "Chea tree",
+  "description": "One Chea file read and resolved, version 1. Appendix D of spec/annex.md documents every field. Keys whose value would be empty, zero or false may be left out, and a reader treats a missing key as that value.",
   "type": "object",
-  "required": ["sprig_tree"],
+  "required": ["chea_tree"],
   "additionalProperties": false,
   "properties": {
-    "sprig_tree": { "const": 1 },
+    "chea_tree": { "const": 1 },
     "file": { "$ref": "#/$defs/path" },
     "today": { "$ref": "#/$defs/date" },
     "syntax": { "$ref": "#/$defs/syntax" },
@@ -21,7 +21,7 @@
     "path": {
       "description": "Relative to the workspace root, with / between components.",
       "type": "string",
-      "pattern": "^[^/].*\\.sprig$"
+      "pattern": "^[^/].*\\.chea$"
     },
     "date": {
       "type": "string",
@@ -184,7 +184,7 @@
       "required": ["code", "file", "line"],
       "additionalProperties": false,
       "properties": {
-        "code": { "type": "string", "pattern": "^S[0-9]{4}$" },
+        "code": { "type": "string", "pattern": "^C[0-9]{4}$" },
         "severity": { "enum": ["error", "warning"] },
         "file": { "$ref": "#/$defs/path" },
         "line": { "$ref": "#/$defs/line" },

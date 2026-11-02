@@ -21,17 +21,17 @@ A site that only builds in CI isn't a website.
 
 ## Approach
 
-A workflow that builds the site on every push to main and deploys it to GitHub Pages at `oddurs.github.io/sprig` until the name spike settles the domain. The base path comes from one setting, so moving to a domain is one change.
+A workflow that builds the site on every push to main and deploys it to GitHub Pages at `oddurs.github.io/chea` until the name spike settles the domain. The base path comes from one setting, so moving to a domain is one change.
 
 ## Acceptance criteria
 
-- [x] A merge to main deploys, and the deployed site's links work under the `/sprig/` base path.
+- [x] A merge to main deploys, and the deployed site's links work under the `/chea/` base path.
 - [x] The workflow has the least permissions Pages needs.
 
 ## 2026-09-28
 
-First deploy from main after #7: pages workflow run 36510315800, build and deploy both succeeded. Live at https://oddurs.github.io/sprig/: every page (/, /play/, /spec/, /docs/first-plan/, /decisions/, /compare/, /roadmap/, /changelog/) and /spec.md, /feed.xml, /llms.txt, /og.png, /favicon.svg, /sitemap-index.xml and the Pagefind index returned 200; every internal link on the live front page resolved under /sprig/; an unknown URL serves the Sprig 404; the live /spec.md is byte-identical to spec/sprig.md. The workflow's permissions are contents: read at the top, with pages: write and id-token: write only on the deploy job. The base path is one setting (SITE_BASE, default /sprig) in site/astro.config.mjs.
+First deploy from main after #7: pages workflow run 36510315800, build and deploy both succeeded. Live at https://oddurs.github.io/chea/: every page (/, /play/, /spec/, /docs/first-plan/, /decisions/, /compare/, /roadmap/, /changelog/) and /spec.md, /feed.xml, /llms.txt, /og.png, /favicon.svg, /sitemap-index.xml and the Pagefind index returned 200; every internal link on the live front page resolved under /chea/; an unknown URL serves the Chea 404; the live /spec.md is byte-identical to spec/chea.md. The workflow's permissions are contents: read at the top, with pages: write and id-token: write only on the deploy job. The base path is one setting (SITE_BASE, default /chea) in site/astro.config.mjs.
 
 ## Result
 
-Every push to main deploys the site to GitHub Pages at oddurs.github.io/sprig, verified live after the first deploy.
+Every push to main deploys the site to GitHub Pages at oddurs.github.io/chea, verified live after the first deploy.

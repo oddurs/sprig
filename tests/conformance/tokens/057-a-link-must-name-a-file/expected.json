@@ -1,5 +1,5 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "syntax": {
     "title": "Links",
     "root": {
@@ -32,9 +32,9 @@
   },
   "diagnostics": [
     {
-      "code": "S0205",
+      "code": "C0205",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 5,
       "col": 9,
       "span": [48, 60]

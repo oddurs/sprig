@@ -1,7 +1,7 @@
-# Sprig diagnostics
+# Chea diagnostics
 
-Every problem a Sprig tool reports about a file has a code from this catalogue.
-The code is the problem's identity: search for `S0103` and you find the same
+Every problem a Chea tool reports about a file has a code from this catalogue.
+The code is the problem's identity: search for `C0103` and you find the same
 problem in every version of every tool. The wording of a message may improve;
 the code may not move.
 
@@ -16,8 +16,8 @@ specification it accompanies.
 - **A code names one problem.** Two problems that need different fixes get two
   codes, even when one message could describe both.
 - **Severity is part of the code.** An *error* means the file does not say what
-  its author meant, and `sprig check` exits 1. A *warning* means a tool kept
-  going on a best reading, and `sprig check` exits 1 only with `--strict`.
+  its author meant, and `chea check` exits 1. A *warning* means a tool kept
+  going on a best reading, and `chea check` exits 1 only with `--strict`.
 - **Ranges.** `S00xx` are problems one line has on its own, `S01xx` are grafts,
   and `S02xx` are references.
 
@@ -25,78 +25,78 @@ A diagnostic is printed the way compilers print one, with a 1-based line and a
 column counted in characters:
 
 ```
-lease.sprig:13:31: error[S0201]: no item ^permt in lease.sprig
+lease.chea:13:31: error[C0201]: no item ^permt in lease.chea
 ```
 
 ## Catalogue
 
 | Code | Severity | Rule | Problem |
 | --- | --- | --- | --- |
-| S0001 | warning | §9.5 | A date field that is not a YYYY-MM-DD date |
-| S0002 | warning | §10.1 | An estimate that is not a number and a unit |
-| S0003 | warning | §4.5 | An item with more than one anchor |
-| S0004 | warning | §4.5 | An anchor already used in the same file |
-| S0005 | error | §8.1 | A graft line with no link |
-| S0006 | warning | §10.3 | An every: value that is not a recurrence |
-| S0007 | warning | §4.6 | A title naming a version of Sprig the tool does not read |
-| S0101 | error | §8.5 | A graft naming a file that does not exist |
-| S0102 | error | §8.5 | A graft naming an anchor its file does not write |
-| S0103 | error | §8.4 | A graft that would loop |
-| S0104 | error | §8.2 | A graft whose path leaves the workspace |
-| S0105 | error | §8.8 | A graft whose content is already in the tree |
-| S0201 | error | §7.2 | A reference to an anchor the file does not write |
-| S0202 | error | §7.2 | A reference to a file that does not exist |
-| S0203 | error | §7.2 | A reference to an anchor its file does not write |
-| S0204 | error | §8.2 | A reference whose path leaves the workspace |
-| S0205 | error | §7.2 | An after: value that is not a reference |
-| S0206 | warning | §5.7 | A reference to something with nothing to do |
+| C0001 | warning | §9.5 | A date field that is not a YYYY-MM-DD date |
+| C0002 | warning | §10.1 | An estimate that is not a number and a unit |
+| C0003 | warning | §4.5 | An item with more than one anchor |
+| C0004 | warning | §4.5 | An anchor already used in the same file |
+| C0005 | error | §8.1 | A graft line with no link |
+| C0006 | warning | §10.3 | An every: value that is not a recurrence |
+| C0007 | warning | §4.6 | A title naming a version of Chea the tool does not read |
+| C0101 | error | §8.5 | A graft naming a file that does not exist |
+| C0102 | error | §8.5 | A graft naming an anchor its file does not write |
+| C0103 | error | §8.4 | A graft that would loop |
+| C0104 | error | §8.2 | A graft whose path leaves the workspace |
+| C0105 | error | §8.8 | A graft whose content is already in the tree |
+| C0201 | error | §7.2 | A reference to an anchor the file does not write |
+| C0202 | error | §7.2 | A reference to a file that does not exist |
+| C0203 | error | §7.2 | A reference to an anchor its file does not write |
+| C0204 | error | §8.2 | A reference whose path leaves the workspace |
+| C0205 | error | §7.2 | An after: value that is not a reference |
+| C0206 | warning | §5.7 | A reference to something with nothing to do |
 
 ## Notes on each code
 
-**S0001.** `due:` and `start:` hold dates (§9.1). A value in neither the stored
+**C0001.** `due:` and `start:` hold dates (§9.1). A value in neither the stored
 form nor a typed shortcut (§9.3) is kept as text and does not count as a date:
 it sets no deadline and blocks nothing. The message quotes the value.
 
-**S0002.** An estimate is a number and `h`, `d` or `w` (§10.1). Anything else
+**C0002.** An estimate is a number and `h`, `d` or `w` (§10.1). Anything else
 is ignored when estimates are summed.
 
-**S0003.** An item names one anchor. When it writes several, the last one names
+**C0003.** An item names one anchor. When it writes several, the last one names
 it (§4.5), and the others reach nothing.
 
-**S0004.** Anchors should be unique within a file (§4.5). References to a
+**C0004.** Anchors should be unique within a file (§4.5). References to a
 repeated anchor reach the first item that writes it.
 
-**S0005.** A `+` line grafts the file or branch its link names (§8.1); without
+**C0005.** A `+` line grafts the file or branch its link names (§8.1); without
 a link it grafts nothing. Reported on the line.
 
-**S0006.** `every:` takes `day`, `week`, `month`, a count such as `3d` or a
+**C0006.** `every:` takes `day`, `week`, `month`, a count such as `3d` or a
 weekday (§10.3). An item with any other value is still recurring, so it never
 counts toward progress, but it has no next occurrence, and ticking it marks it
 done (§10.4). The message quotes the value.
 
-**S0007.** A file needs no version: every 1.x tool reads every 1.x file. The
-title's `sprig:` field is reserved for a later major version (§4.6). A tool
+**C0007.** A file needs no version: every 1.x tool reads every 1.x file. The
+title's `chea:` field is reserved for a later major version (§4.6). A tool
 that meets one it does not know reads the file as best it can and says so.
 
-**S0101, S0102.** A graft whose target does not exist mounts nothing (§8.5).
+**C0101, C0102.** A graft whose target does not exist mounts nothing (§8.5).
 Reported on the link.
 
-**S0103.** A graft to a file that is already being mounted above it would
+**C0103.** A graft to a file that is already being mounted above it would
 never end (§8.4). Files are walked in path order and each file's grafts in
 document order, and the graft that closes the loop is the one reported, so a
 loop through three files is one error on one line, wherever a tool starts.
 
-**S0104, S0204.** A link's path is resolved from the file that writes it
+**C0104, C0204.** A link's path is resolved from the file that writes it
 (§4.8). A path that climbs above the directory a tool was asked to read, or is
 absolute, is refused and nothing outside is read (§8.2).
 
-**S0105.** Within one tree an item appears once (§8.8). Reported on the later
+**C0105.** Within one tree an item appears once (§8.8). Reported on the later
 graft line in document order.
 
-**S0201, S0202, S0203, S0205.** A reference that names no existing file or
+**C0201, C0202, C0203, C0205.** A reference that names no existing file or
 anchor is unknown (§7.2), and the item that waits on it is blocked until it is
 fixed (§7.3).
 
-**S0206.** An empty group, graft or file has nothing to finish (§5.5), so an
+**C0206.** An empty group, graft or file has nothing to finish (§5.5), so an
 item that waits on it waits until something beneath it is added and finished
 (§5.7). That is usually a reference to a placeholder, or to the wrong thing.

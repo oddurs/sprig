@@ -17,29 +17,29 @@ await ready;
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const url = (path: string) => `${base}${path}`;
-const repo = 'https://github.com/oddurs/sprig';
+const repo = 'https://github.com/oddurs/chea';
 
-// Every screen is sprig-core's reading of examples/bakery, with the
+// Every screen is chea-core's reading of examples/bakery, with the
 // date pinned, so nothing here is drawn by hand.
 const files: Record<string, string> = examples;
 const next = screen('next', files, { limit: 6, compact: true });
-const tree = screen('tree', files, 'kitchen.sprig');
-const why = screen('why', files, 'kitchen.sprig', 'Tiling');
+const tree = screen('tree', files, 'kitchen.chea');
+const why = screen('why', files, 'kitchen.chea', 'Tiling');
 const status = screen('status', files);
-const colour = screen('tree', files, 'lease.sprig');
-const mono = screen('tree', files, 'lease.sprig', { env: 'NO_COLOR=1 ' });
+const colour = screen('tree', files, 'lease.chea');
+const mono = screen('tree', files, 'lease.chea', { env: 'NO_COLOR=1 ' });
 // Two planted mistakes, so check has something to say.
 const broken = {
 	...files,
-	'bakery.sprig': files['bakery.sprig'].replace('+ [[kitchen]]', '+ [[kitchn]]'),
-	'lease.sprig': files['lease.sprig'].replace('after:^permit', 'after:^permt'),
+	'bakery.chea': files['bakery.chea'].replace('+ [[kitchen]]', '+ [[kitchn]]'),
+	'lease.chea': files['lease.chea'].replace('after:^permit', 'after:^permt'),
 };
 const check = screen('check', broken);
 const tui = frame(initialState(), files);
 
 type Cmd = { sig: string; when: string; body: string };
 // A command the built binary has is here today, whatever milestone it was
-// planned for; the list comes from `sprig --help`, so this cannot go stale.
+// planned for; the list comes from `chea --help`, so this cannot go stale.
 const have = new Set<string>(facts.commands);
 const today = (c: Cmd) => have.has(c.sig.split(' ')[1]);
 const groups: { name: string; note: string; cmds: Cmd[] }[] = [
@@ -47,46 +47,46 @@ const groups: { name: string; note: string; cmds: Cmd[] }[] = [
 		name: 'Read',
 		note: 'answer a question, change nothing',
 		cmds: [
-			{ sig: 'sprig next', when: 'v0.1', body: 'Open, unblocked work: in progress first, then priority, then due date.' },
-			{ sig: 'sprig tree', when: 'v0.2', body: 'The plan as Sprig reads it, grafts expanded, progress rolled up. --summary for the whole folder on one screen.' },
-			{ sig: 'sprig why <ref>', when: 'v0.2', body: 'What an item waits on, all the way down, with file and line.' },
-			{ sig: 'sprig find <query>', when: 'v0.3', body: 'Search by text, @who, #tag, is:blocked, due:<fri.' },
+			{ sig: 'chea next', when: 'v0.1', body: 'Open, unblocked work: in progress first, then priority, then due date.' },
+			{ sig: 'chea tree', when: 'v0.2', body: 'The plan as Chea reads it, grafts expanded, progress rolled up. --summary for the whole folder on one screen.' },
+			{ sig: 'chea why <ref>', when: 'v0.2', body: 'What an item waits on, all the way down, with file and line.' },
+			{ sig: 'chea find <query>', when: 'v0.3', body: 'Search by text, @who, #tag, is:blocked, due:<fri.' },
 		],
 	},
 	{
 		name: 'Check',
 		note: 'fail loudly, fix nothing silently',
 		cmds: [
-			{ sig: 'sprig check', when: 'v0.1', body: 'Broken links, loops and unknown anchors as file:line:col. Exit 1 on any error.' },
-			{ sig: 'sprig fmt', when: 'v0.2', body: 'Two spaces per level, typed dates expanded to ISO. --check for CI.' },
+			{ sig: 'chea check', when: 'v0.1', body: 'Broken links, loops and unknown anchors as file:line:col. Exit 1 on any error.' },
+			{ sig: 'chea fmt', when: 'v0.2', body: 'Two spaces per level, typed dates expanded to ISO. --check for CI.' },
 		],
 	},
 	{
 		name: 'Write',
 		note: 'everything else is a line in your editor',
 		cmds: [
-			{ sig: 'sprig tick <ref>', when: 'v0.2', body: 'Done, or reopen; --mark sets any status. A recurring item moves its due date instead.' },
+			{ sig: 'chea tick <ref>', when: 'v0.2', body: 'Done, or reopen; --mark sets any status. A recurring item moves its due date instead.' },
 		],
 	},
 	{
 		name: 'Connect',
 		note: 'other tools, other formats',
 		cmds: [
-			{ sig: 'sprig export', when: 'v0.3', body: 'The resolved tree as JSON, due dates as an iCalendar feed, the dependency graph for Graphviz or Mermaid.' },
-			{ sig: 'sprig import', when: 'v0.3', body: 'Markdown checkboxes in, a Sprig file out.' },
-			{ sig: 'sprig lsp', when: 'v0.2', body: 'A language server for any editor: problems as you type, completion, go to definition, hover and ticking.' },
-			{ sig: 'sprig mcp', when: 'v0.3', body: 'The plans, served to coding agents.' },
-			{ sig: 'sprig generate', when: 'v0.2', body: 'Completion that knows your anchors and people, and a man page.' },
+			{ sig: 'chea export', when: 'v0.3', body: 'The resolved tree as JSON, due dates as an iCalendar feed, the dependency graph for Graphviz or Mermaid.' },
+			{ sig: 'chea import', when: 'v0.3', body: 'Markdown checkboxes in, a Chea file out.' },
+			{ sig: 'chea lsp', when: 'v0.2', body: 'A language server for any editor: problems as you type, completion, go to definition, hover and ticking.' },
+			{ sig: 'chea mcp', when: 'v0.3', body: 'The plans, served to coding agents.' },
+			{ sig: 'chea generate', when: 'v0.2', body: 'Completion that knows your anchors and people, and a man page.' },
 		],
 	},
 ];
 
 const refs = [
-	['^signed', 'An anchor, searched across the folder', 'sprig tick ^signed'],
-	['lease^signed', 'An anchor in one file', 'sprig why lease^signed'],
-	['lease.sprig:13', 'A line, the way compilers print one', 'sprig tick lease.sprig:13'],
-	['"grease trap"', 'Words from exactly one item’s text', 'sprig tick "grease trap"'],
-	['-', 'Refs on stdin, one per line', 'sprig next --plain | cut -f1 | sprig tick -'],
+	['^signed', 'An anchor, searched across the folder', 'chea tick ^signed'],
+	['lease^signed', 'An anchor in one file', 'chea why lease^signed'],
+	['lease.chea:13', 'A line, the way compilers print one', 'chea tick lease.chea:13'],
+	['"grease trap"', 'Words from exactly one item’s text', 'chea tick "grease trap"'],
+	['-', 'Refs on stdin, one per line', 'chea next --plain | cut -f1 | chea tick -'],
 ];
 
 // Rules are prose with `code` spans.
@@ -94,17 +94,17 @@ const code = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').repla
 const rules = [
 	['The file is the truth', 'Tools compute progress and blockers; they never store them. Delete every tool and the plan still reads.'],
 	['A write touches one line', '`tick`, the TUI and the MCP server change only the bytes they mean to, so `git diff` shows exactly what happened.'],
-	['Three kinds of output', 'Aligned for people, tab-separated with `--plain`, and the whole resolved tree as JSON from `sprig export`. The `--plain` columns are covered by the stability policy.'],
+	['Three kinds of output', 'Aligned for people, tab-separated with `--plain`, and the whole resolved tree as JSON from `chea export`. The `--plain` columns are covered by the stability policy.'],
 	['Exit codes mean something', '`0` fine, `1` the answer is no, `2` you asked wrong. Scripts branch on them.'],
 	['Every answer is reproducible', '`--today` pins the date, so any output can be tested, diffed and pasted into a bug report.'],
 	['Nothing to set up', 'No config file, no daemon, no plugins, no network. Flags and environment variables only.'],
 ];
 
 const recipes = [
-	['Pick and tick with fzf', 'The first column of --plain is always a ref.', 'sprig next --plain | fzf | cut -f1 | sprig tick -'],
-	['Gate a commit', 'A pre-commit hook that checks only the plans that changed.', "git diff --cached --name-only -- '*.sprig' | xargs sprig check --strict"],
-	['Deadlines in any calendar', 'Regenerate on a timer; the calendar subscribes to the file.', 'sprig export --format ics > ~/Sync/plans.ics'],
-	['Your next task in the prompt', 'For Starship, tmux, or any prompt that runs a command.', 'sprig next @me --limit 1 --plain | cut -f2'],
+	['Pick and tick with fzf', 'The first column of --plain is always a ref.', 'chea next --plain | fzf | cut -f1 | chea tick -'],
+	['Gate a commit', 'A pre-commit hook that checks only the plans that changed.', "git diff --cached --name-only -- '*.chea' | xargs chea check --strict"],
+	['Deadlines in any calendar', 'Regenerate on a timer; the calendar subscribes to the file.', 'chea export --format ics > ~/Sync/plans.ics'],
+	['Your next task in the prompt', 'For Starship, tmux, or any prompt that runs a command.', 'chea next @me --limit 1 --plain | cut -f2'],
 ];
 
 const keys = [
@@ -120,8 +120,8 @@ const strip = ['k', 'j', 'h', 'l', 'x', '~', '1', '2', '3', '/', '?'];
 ---
 
 <Base
-	title="Tools · Sprig"
-	description="The Sprig toolchain: one small binary with verbs that read a folder of plans, an editor language server, an agent server and a TUI, all built on one parser. What exists today and when each piece lands."
+	title="Tools · Chea"
+	description="The Chea toolchain: one small binary with verbs that read a folder of plans, an editor language server, an agent server and a TUI, all built on one parser. What exists today and when each piece lands."
 	current="tools"
 >
 	<section class="hero" aria-labelledby="tools-h">
@@ -129,9 +129,9 @@ const strip = ['k', 'j', 'h', 'l', 'x', '~', '1', '2', '3', '/', '?'];
 			<Stack gap={5}>
 				<Text size="sm" tone="muted">The toolchain</Text>
 				<Text as="h1" id="tools-h" size="2xl" weight="bold">A toolbelt, not an app.</Text>
-				<Text size="md" tone="muted" measure>Sprig is a file format first. The tools around it are small, read the same files, and agree with each other because they share one parser. None of them needs an account, a server or a config file.</Text>
+				<Text size="md" tone="muted" measure>Chea is a file format first. The tools around it are small, read the same files, and agree with each other because they share one parser. None of them needs an account, a server or a config file.</Text>
 				<Text size="sm" measure>No release is published yet, but the command line installs from source with Rust today. Commands marked <em>Today</em> are in it; the rest arrive milestone by milestone.</Text>
-				<pre class="install"><code>cargo install --locked --git {repo} sprig-cli</code></pre>
+				<pre class="install"><code>cargo install --locked --git {repo} chea-cli</code></pre>
 			</Stack>
 			<Inline gap={3}>
 				<Button href={url('/roadmap/')}>The roadmap</Button>
@@ -145,7 +145,7 @@ const strip = ['k', 'j', 'h', 'l', 'x', '~', '1', '2', '3', '/', '?'];
 		<div class="narrow"><Surfaces /></div>
 	</Section>
 
-	<Section id="cli-h" title="Small verbs, one question each." intro="Every command reads a folder of plans and answers one question, in text a person can read and a pipe can parse; writing is a line in your editor. The screens below are sprig-core’s output for the example bakery plans, with the date pinned by --today the way the tests will run.">
+	<Section id="cli-h" title="Small verbs, one question each." intro="Every command reads a folder of plans and answers one question, in text a person can read and a pipe can parse; writing is a line in your editor. The screens below are chea-core’s output for the example bakery plans, with the date pinned by --today the way the tests will run.">
 		<Grid cols={2} gap={7} rowGap={7}>
 			{
 				groups.map((g) => (
@@ -219,10 +219,10 @@ const strip = ['k', 'j', 'h', 'l', 'x', '~', '1', '2', '3', '/', '?'];
 		</div>
 	</Section>
 
-	<Section id="tui-h" title="The same verbs, on one screen." intro="sprig tui shows the tree, what’s next and the agenda, with vim keys. Its writes go through the same one-line edits as the commands, and it reloads when an editor or an agent changes a file underneath it. This one runs sprig-core in the browser: focus it and use the keys.">
+	<Section id="tui-h" title="The same verbs, on one screen." intro="chea tui shows the tree, what’s next and the agenda, with vim keys. Its writes go through the same one-line edits as the commands, and it reloads when an editor or an agent changes a file underneath it. This one runs chea-core in the browser: focus it and use the keys.">
 		<div class="tui-wrap">
 			<Stack gap={3}>
-				<div class="tui" id="tui" tabindex="0" role="application" aria-label="sprig tui demo" aria-describedby="tui-help" set:html={tui} />
+				<div class="tui" id="tui" tabindex="0" role="application" aria-label="chea tui demo" aria-describedby="tui-help" set:html={tui} />
 				<div class="strip" id="tui-keys" aria-label="Keys">
 					{strip.map((k) => <button type="button" data-key={k} aria-label={`Press ${k}`}>{k}</button>)}
 				</div>
@@ -238,7 +238,7 @@ const strip = ['k', 'j', 'h', 'l', 'x', '~', '1', '2', '3', '/', '?'];
 		</div>
 	</Section>
 
-	<Section id="pipes-h" title="Pipes, not plugins." intro="Plain output and meaningful exit codes let Sprig work with the tools already on the machine, so it needs no plugin system.">
+	<Section id="pipes-h" title="Pipes, not plugins." intro="Plain output and meaningful exit codes let Chea work with the tools already on the machine, so it needs no plugin system.">
 		<Grid cols={2} gap={6} rowGap={6}>
 			{
 				recipes.map(([title, body, cmd]) => (

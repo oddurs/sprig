@@ -1,18 +1,18 @@
 // The playground: several files, an editor with highlighting, the computed
-// view, what `sprig check` would say, and links that carry the whole workspace
-// in the URL fragment. It runs on sprig-core compiled to WebAssembly.
+// view, what `chea check` would say, and links that carry the whole workspace
+// in the URL fragment. It runs on chea-core compiled to WebAssembly.
 //
 // Wide, the source, its problems and the plan share one frame, each pane
 // scrolling on its own. Narrow, a switch shows one at a time and each grows
 // with what it holds, so the page is the only thing that scrolls.
 import { shiftExamples } from '../lib/dates.js';
-import * as sprig from '../lib/view.js';
+import * as chea from '../lib/view.js';
 
 const $ = (s) => document.querySelector(s);
 const seed = JSON.parse($('#examples').textContent);
 const EXAMPLES = shiftExamples(seed.files, new Date());
 const EXAMPLE_ORDER = seed.order;
-const STORE = 'sprig-playground-v1';
+const STORE = 'chea-playground-v1';
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const pg = $('#pg');
@@ -49,15 +49,15 @@ let PROBLEMS = [];
 /* ---------- rendering ---------- */
 
 function renderView() {
-	sprig.useWorkspace(files);
-	sprig.setView({ fp: FP, hide: HIDE, vm: VM, collapsed: [...COLL] });
-	sprig.beginRender();
+	chea.useWorkspace(files);
+	chea.setView({ fp: FP, hide: HIDE, vm: VM, collapsed: [...COLL] });
+	chea.beginRender();
 	renderProblems();
-	const doc = sprig.buildDoc(active);
+	const doc = chea.buildDoc(active);
 	if (!doc || doc === 'cycle') {
 		rvHead.innerHTML = '';
 		rvBody.innerHTML = '<p class="empty">This file could not be read.</p>';
-		REF = sprig.endRender();
+		REF = chea.endRender();
 		return;
 	}
 	const who = new Set();
@@ -69,18 +69,18 @@ function renderView() {
 	})(doc.root);
 	if (FP && !who.has(FP)) {
 		FP = null;
-		sprig.setView({ fp: FP, hide: HIDE, vm: VM, collapsed: [...COLL] });
+		chea.setView({ fp: FP, hide: HIDE, vm: VM, collapsed: [...COLL] });
 	}
 	people.innerHTML = [`<button type="button" class="pchip" data-fp="" aria-pressed="${!FP}"><span>everyone</span></button>`]
-		.concat([...who].sort().map((p) => `<button type="button" class="pchip" data-fp="${sprig.esc(p)}" aria-pressed="${FP === p}"><span>@${sprig.esc(p)}</span></button>`))
+		.concat([...who].sort().map((p) => `<button type="button" class="pchip" data-fp="${chea.esc(p)}" aria-pressed="${FP === p}"><span>@${chea.esc(p)}</span></button>`))
 		.join('');
 
 	const s = doc.root.stats;
 	let waiting = 0;
 	let asks = 0;
 	let parked = 0;
-	sprig.walkLeaves(doc.root, (n, _p, b) => {
-		if (b && sprig.OPEN.has(n.view)) waiting++;
+	chea.walkLeaves(doc.root, (n, _p, b) => {
+		if (b && chea.OPEN.has(n.view)) waiting++;
 		if (n.view === 'ask') asks++;
 		if (n.view === 'later') parked++;
 	});
@@ -91,26 +91,26 @@ function renderView() {
 	if (waiting) parts.push(`${waiting} waiting`);
 	if (asks) parts.push(`${asks} open question${asks > 1 ? 's' : ''}`);
 	if (parked) parts.push(`${parked} parked`);
-	if (s.est) parts.push(`${sprig.fmtEst(s.est)} of estimated work left`);
-	const props = sprig.propsHTML(doc);
+	if (s.est) parts.push(`${chea.fmtEst(s.est)} of estimated work left`);
+	const props = chea.propsHTML(doc);
 	rvHead.innerHTML =
-		`<div class="rv-file">${sprig.esc(active)}</div><h2>${sprig.esc(doc.title || active)}</h2>` +
+		`<div class="rv-file">${chea.esc(active)}</div><h2>${chea.esc(doc.title || active)}</h2>` +
 		(props ? `<dl class="props">${props}</dl>` : '') +
-		(doc.root.notes.length ? `<div class="rv-notes">${sprig.notesHTML(doc.root.notes)}</div>` : '') +
+		(doc.root.notes.length ? `<div class="rv-notes">${chea.notesHTML(doc.root.notes)}</div>` : '') +
 		`<div class="big"><span class="bar"><i style="width:${pct}%"></i><b style="width:${dp}%"></b></span><span class="pct">${Math.round(pct)}%</span></div>` +
 		`<p class="stats">${parts.join(' · ')}</p>`;
 
 	const top = rvBody.scrollTop;
-	if (VM === 'next') rvBody.innerHTML = sprig.nextHTML(doc);
+	if (VM === 'next') rvBody.innerHTML = chea.nextHTML(doc);
 	else {
-		const items = doc.root.children.map((c) => sprig.nodeHTML(c, null)).join('');
+		const items = doc.root.children.map((c) => chea.nodeHTML(c, null)).join('');
 		rvBody.innerHTML = items ? `<ul class="tree">${items}</ul>` : '<p class="empty">No items yet. Start a line with - and a space.</p>';
 	}
 	rvBody.scrollTop = top;
-	REF = sprig.endRender();
+	REF = chea.endRender();
 }
 
-/* ---------- problems: what `sprig check` would say ---------- */
+/* ---------- problems: what `chea check` would say ---------- */
 
 const plural = (n, one) => `${n} ${one}${n === 1 ? '' : 's'}`;
 
@@ -118,7 +118,7 @@ function renderProblems() {
 	// Errors first, then by file in tab order, then by line.
 	const rank = (f) => (order.includes(f) ? order.indexOf(f) : order.length);
 	const weight = (p) => (p.severity === 'error' ? 0 : 1);
-	PROBLEMS = sprig
+	PROBLEMS = chea
 		.diagnostics()
 		.slice()
 		.sort((a, b) => weight(a) - weight(b) || rank(a.file) - rank(b.file) || a.line - b.line || a.col - b.col);
@@ -127,17 +127,17 @@ function renderProblems() {
 	pcount.textContent = PROBLEMS.length ? String(PROBLEMS.length) : '';
 	pcount.classList.toggle('warning', !errors && warnings > 0);
 	if (!PROBLEMS.length) {
-		probsHead.innerHTML = '✓ No problems: <code>sprig check</code> would exit 0.';
+		probsHead.innerHTML = '✓ No problems: <code>chea check</code> would exit 0.';
 		probsList.innerHTML = '';
 	} else {
 		const said = [errors && plural(errors, 'error'), warnings && plural(warnings, 'warning')].filter(Boolean).join(' and ');
-		probsHead.innerHTML = `<b>${said}</b>: <code>sprig check</code> would exit ${errors ? '1' : '0, or 1 with --strict'}.`;
+		probsHead.innerHTML = `<b>${said}</b>: <code>chea check</code> would exit ${errors ? '1' : '0, or 1 with --strict'}.`;
 		probsList.innerHTML = PROBLEMS.map((p, i) => {
-			const help = p.help ? `<span class="help">${sprig.esc(p.help)}</span>` : '';
+			const help = p.help ? `<span class="help">${chea.esc(p.help)}</span>` : '';
 			return (
 				`<li class="prob ${p.severity}">` +
 				`<button type="button" class="prob-go" data-prob="${i}"><span class="sev" aria-hidden="true">${p.severity === 'error' ? '✕' : '!'}</span>` +
-				`<span><span class="msg"><span class="sr-only">${p.severity}: </span>${sprig.esc(p.message)}</span><span class="where">${sprig.esc(p.file)}:${p.line}:${p.col}</span>${help}</span></button>` +
+				`<span><span class="msg"><span class="sr-only">${p.severity}: </span>${chea.esc(p.message)}</span><span class="where">${chea.esc(p.file)}:${p.line}:${p.col}</span>${help}</span></button>` +
 				`<a class="code" href="${BASE}/docs/reference/diagnostics/#${p.code.toLowerCase()}" title="What ${p.code} means">${p.code}</a></li>`
 			);
 		}).join('');
@@ -162,7 +162,7 @@ const syncScroll = () => {
 function paintHL() {
 	const marks = {};
 	for (const p of PROBLEMS) if (p.file === active && marks[p.line - 1] !== 'l-error') marks[p.line - 1] = `l-${p.severity}`;
-	hl.innerHTML = sprig.linesHTML(ta.value, marks) + '<span class="ln">​</span>';
+	hl.innerHTML = chea.linesHTML(ta.value, marks) + '<span class="ln">​</span>';
 	fit();
 	syncScroll();
 }
@@ -212,8 +212,8 @@ function lineAt(v, pos) {
 }
 // Fields, and so dates, live on the title and on lines that start with a mark.
 function carriesFields(v, s) {
-	const kind = sprig.lineKinds(v)[v.slice(0, s).split('\n').length - 1];
-	return kind === 'title' || sprig.isItemKind(kind);
+	const kind = chea.lineKinds(v)[v.slice(0, s).split('\n').length - 1];
+	return kind === 'title' || chea.isItemKind(kind);
 }
 
 function indentBy(dir) {
@@ -251,7 +251,7 @@ function continueLine() {
 	if (!line.trim()) return false;
 	const atEnd = a === e;
 	// Leaving a line is when typed dates become stored ones (spec §9.4).
-	const settled = atEnd && carriesFields(v, s) ? sprig.expandDates(line) : line;
+	const settled = atEnd && carriesFields(v, s) ? chea.expandDates(line) : line;
 	const put = (ins) => {
 		if (atEnd) {
 			const t = settled + ins;
@@ -259,8 +259,8 @@ function continueLine() {
 		} else replace(a, a, ins, a + ins.length, a + ins.length);
 		return true;
 	};
-	const c = sprig.classify(line);
-	if (c.marker && sprig.isItemKind(c.kind)) {
+	const c = chea.classify(line);
+	if (c.marker && chea.isItemKind(c.kind)) {
 		const ind = line.slice(0, c.marker[0]);
 		const mark = line.slice(c.marker[0], c.marker[1]);
 		if (a < s + ind.length + 1) return false;
@@ -284,7 +284,7 @@ function newItem() {
 	const v = ta.value;
 	const [s, e] = lineAt(v, ta.selectionStart);
 	const line = v.slice(s, e);
-	const c = sprig.classify(line);
+	const c = chea.classify(line);
 	const group = c.marker && line.slice(c.marker[0], c.marker[1]) === '#';
 	const ins = `\n${line.match(/^\s*/)[0]}${group ? '  ' : ''}- `;
 	replace(e, e, ins, e + ins.length, e + ins.length);
@@ -298,7 +298,7 @@ function cycleLine() {
 	const line = v.slice(s, e);
 	const i = line.search(/\S/);
 	if (i < 0) return;
-	if (sprig.isItemKind(sprig.classify(line).kind)) {
+	if (chea.isItemKind(chea.classify(line).kind)) {
 		const nx = { '-': '~', '~': 'x', x: '-', '/': '-', '>': '-', '?': '-' }[line[i]];
 		if (nx) replace(s + i, s + i + 1, nx, a, b);
 	} else replace(s + i, s + i, '- ', a + 2, b + 2);
@@ -329,8 +329,8 @@ ta.addEventListener('focus', () => {
 ta.addEventListener('blur', () => {
 	editingTimer = setTimeout(() => pg.classList.remove('editing'), 300);
 	const lines = ta.value.split('\n');
-	const kinds = sprig.lineKinds(ta.value);
-	const out = lines.map((l, i) => (kinds[i] === 'title' || sprig.isItemKind(kinds[i]) ? sprig.expandDates(l) : l)).join('\n');
+	const kinds = chea.lineKinds(ta.value);
+	const out = lines.map((l, i) => (kinds[i] === 'title' || chea.isItemKind(kinds[i]) ? chea.expandDates(l) : l)).join('\n');
 	if (out === ta.value) return;
 	ta.value = out;
 	files[active] = out;
@@ -486,7 +486,7 @@ $('#share').addEventListener('click', async () => {
 	// Closing it without sharing is a choice, not a failure.
 	if (touch.matches && navigator.share) {
 		try {
-			await navigator.share({ title: 'A Sprig plan', url: link });
+			await navigator.share({ title: 'A Chea plan', url: link });
 			return;
 		} catch (e) {
 			if (e && e.name === 'AbortError') return;
@@ -504,11 +504,11 @@ $('#share').addEventListener('click', async () => {
 let naming = null;
 function renderTabs() {
 	tabs.innerHTML = order
-		.map((f) => `<button type="button" class="tab" role="tab" aria-selected="${f === active}" data-file="${sprig.esc(f)}">${sprig.esc(f)}</button>`)
+		.map((f) => `<button type="button" class="tab" role="tab" aria-selected="${f === active}" data-file="${chea.esc(f)}">${chea.esc(f)}</button>`)
 		.join('');
 	// The new-file control is not a tab, so it lives beside the tab list, not in it.
-	const value = naming === 'rename' ? sprig.esc(active.replace(/\.sprig$/, '')) : '';
-	const label = naming === 'rename' ? `New name for ${sprig.esc(active)}` : 'New file name';
+	const value = naming === 'rename' ? chea.esc(active.replace(/\.chea$/, '')) : '';
+	const label = naming === 'rename' ? `New name for ${chea.esc(active)}` : 'New file name';
 	newFile.innerHTML = naming
 		? `<input id="newName" class="tab-input" placeholder="file name" aria-label="${label}" maxlength="40" value="${value}">`
 		: '<button type="button" class="tab" data-new="1">+ new file</button>';
@@ -542,17 +542,17 @@ function renderTabs() {
 
 const fileKey = (n) => {
 	n = n.trim().replace(/^\.\//, '');
-	return /\.sprig$/.test(n) ? n : n + '.sprig';
+	return /\.chea$/.test(n) ? n : n + '.chea';
 };
 function titleFrom(key) {
-	const name = key.replace(/\.sprig$/, '').replace(/[-_]+/g, ' ');
+	const name = key.replace(/\.chea$/, '').replace(/[-_]+/g, ' ');
 	return name.charAt(0).toUpperCase() + name.slice(1);
 }
 const cleanName = (name) =>
 	String(name)
 		.trim()
 		.toLowerCase()
-		.replace(/\.sprig$/, '')
+		.replace(/\.chea$/, '')
 		.replace(/\s+/g, '-')
 		.replace(/[^\w-]/g, '');
 function createFile(name) {
@@ -569,7 +569,7 @@ function createFile(name) {
 	switchFile(key);
 }
 
-// A rename carries every link to the file with it: `[[old]]`, `[[old.sprig]]`
+// A rename carries every link to the file with it: `[[old]]`, `[[old.chea]]`
 // and `[[old^anchor]]` in every file become the new name, so renaming here
 // never breaks a graft the way renaming on disk would.
 function renameFile(name) {
@@ -585,14 +585,14 @@ function renameFile(name) {
 		renderTabs();
 		return;
 	}
-	const stem = from.replace(/\.sprig$/, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-	const link = new RegExp(`\\[\\[(\\./)?${stem}(\\.sprig)?(?=[\\]^])`, 'g');
+	const stem = from.replace(/\.chea$/, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	const link = new RegExp(`\\[\\[(\\./)?${stem}(\\.chea)?(?=[\\]^])`, 'g');
 	let moved = 0;
 	const next = {};
 	for (const f of order) {
 		next[f === from ? to : f] = files[f].replace(link, () => {
 			moved++;
-			return `[[${to.replace(/\.sprig$/, '')}`;
+			return `[[${to.replace(/\.chea$/, '')}`;
 		});
 	}
 	files = next;
@@ -713,8 +713,8 @@ function go(file, id) {
 	}
 	switchFile(file);
 	if (id) {
-		sprig.useWorkspace(files);
-		const d = sprig.buildDoc(file);
+		chea.useWorkspace(files);
+		const d = chea.buildDoc(file);
 		const nd = d && d !== 'cycle' ? d.anchors[id] : null;
 		if (nd) {
 			flash(file, nd.line);
@@ -728,7 +728,7 @@ function toggle(n) {
 	const lines = files[n.file].split('\n');
 	const ln = lines[n.line];
 	if (ln == null) return;
-	const ticked = sprig.tickLine(ln);
+	const ticked = chea.tickLine(ln);
 	if (!ticked) return;
 	// Recurring (spec §10.4): the core records what's next, not what happened.
 	const recurred = ticked.movedTo !== null;
@@ -866,4 +866,4 @@ async function start() {
 	resetExamples();
 	switchFile(active);
 }
-sprig.ready.then(start);
+chea.ready.then(start);

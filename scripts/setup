@@ -8,7 +8,7 @@ say() {
   printf '  %s\n' "$1"
 }
 
-printf 'setting up sprig\n'
+printf 'setting up chea\n'
 
 git config core.hooksPath .githooks
 say "hooks: core.hooksPath = .githooks"

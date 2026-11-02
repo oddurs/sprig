@@ -36,7 +36,7 @@ Evidence from comparable plain-text formats:
 - TaskPaper allows an optional `HH:MM` in `@due(2016-03-02 16:00)` but stores no zone, so the time is ambiguous between machines.
 - None of the plans in `examples/` needs a time.
 
-**It stays possible later.** Today `due:2027-03-01T14:00` is unreadable (§9.5): it is kept as text and warned about (S0001), and never misread as a date. A later version could give that form a meaning without changing what any valid 1.x file says.
+**It stays possible later.** Today `due:2027-03-01T14:00` is unreadable (§9.5): it is kept as text and warned about (C0001), and never misread as a date. A later version could give that form a meaning without changing what any valid 1.x file says.
 
 ## Acceptance criteria
 

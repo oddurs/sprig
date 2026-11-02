@@ -17,7 +17,7 @@ area: site
 
 ## Reader and question
 
-Someone who has never seen Sprig and wants to write a real plan in five minutes, before any tool is installed.
+Someone who has never seen Chea and wants to write a real plan in five minutes, before any tool is installed.
 
 ## Change
 
@@ -25,12 +25,12 @@ A tutorial that takes the reader through marks, nesting, a dependency, a questio
 
 ## Acceptance criteria
 
-- [x] Every snippet in the tutorial is a valid Sprig file.
+- [x] Every snippet in the tutorial is a valid Chea file.
 - [x] The tutorial names v0.1 as the release that brings the same steps to the terminal, without describing commands that don't exist yet.
 
 ## 2026-09-28
 
-/docs/first-plan/ walks through marks, nesting, anchors and after:, a question and its answer, people and dates, and grafting a second file. Each of its seven Sprig snippets parses without diagnostics, and each step has an Open in the playground link that carries the example in the fragment. It says the sprig command arrives in v0.1 and describes no commands.
+/docs/first-plan/ walks through marks, nesting, anchors and after:, a question and its answer, people and dates, and grafting a second file. Each of its seven Chea snippets parses without diagnostics, and each step has an Open in the playground link that carries the example in the fragment. It says the chea command arrives in v0.1 and describes no commands.
 
 ## Result
 

@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Anchors across files",
     "status": "doing",
@@ -12,13 +12,13 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "+",
         "label": "Lease",
         "status": "doing",
         "graft": {
-          "path": "lease.sprig",
+          "path": "lease.chea",
           "title": "Lease",
           "mounted": true
         },
@@ -30,7 +30,7 @@
         "people": ["dana"],
         "children": [
           {
-            "file": "lease.sprig",
+            "file": "lease.chea",
             "line": 3,
             "mark": "-",
             "label": "Negotiate",
@@ -44,7 +44,7 @@
             "people": ["dana"],
             "children": [
               {
-                "file": "lease.sprig",
+                "file": "lease.chea",
                 "line": 4,
                 "mark": "x",
                 "label": "Rent",
@@ -59,7 +59,7 @@
                 "people": ["dana"]
               },
               {
-                "file": "lease.sprig",
+                "file": "lease.chea",
                 "line": 5,
                 "mark": "-",
                 "label": "Break clause",
@@ -75,7 +75,7 @@
             ]
           },
           {
-            "file": "lease.sprig",
+            "file": "lease.chea",
             "line": 6,
             "mark": "-",
             "label": "Sign",
@@ -91,7 +91,7 @@
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "-",
         "label": "Supplier credit",
@@ -106,13 +106,13 @@
           {
             "after": "[[lease^signed]]",
             "label": "Sign",
-            "file": "lease.sprig",
+            "file": "lease.chea",
             "line": 6
           }
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 5,
         "mark": "-",
         "label": "Wrong",
@@ -135,9 +135,9 @@
   },
   "diagnostics": [
     {
-      "code": "S0201",
+      "code": "C0201",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 5,
       "col": 10,
       "span": [85, 98]

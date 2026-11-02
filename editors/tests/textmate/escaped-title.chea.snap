@@ -1,0 +1,9 @@
+>\x marks the spot  @dana
+#^ source.chea constant.character.escape.chea
+# ^^^^^^^^^^^^^^^^^^ source.chea markup.heading.title.chea
+#                   ^^^^^ source.chea markup.heading.title.chea variable.other.person.chea
+>
+>- Dig
+#^ source.chea keyword.mark.todo.chea
+# ^^^^ source.chea
+>

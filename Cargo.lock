@@ -309,6 +309,58 @@ dependencies = [
 ]
 
 [[package]]
+name = "chea-cli"
+version = "0.0.0"
+dependencies = [
+ "chea-core",
+ "chea-lsp",
+ "clap",
+ "clap_complete",
+ "clap_mangen",
+ "crossterm",
+ "icalendar",
+ "jiff",
+ "jsonschema",
+ "notify",
+ "ratatui",
+ "serde_json",
+ "similar",
+ "terminal_size",
+ "unicode-width",
+]
+
+[[package]]
+name = "chea-core"
+version = "0.0.0"
+dependencies = [
+ "jsonschema",
+ "proptest",
+ "serde_json",
+ "toml",
+]
+
+[[package]]
+name = "chea-lsp"
+version = "0.0.0"
+dependencies = [
+ "chea-core",
+ "lsp-server",
+ "lsp-types",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "url",
+]
+
+[[package]]
+name = "chea-wasm"
+version = "0.0.0"
+dependencies = [
+ "chea-core",
+ "serde_json",
+]
+
+[[package]]
 name = "chrono"
 version = "0.4.45"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2300,58 +2352,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d0d5d4b1981b8bbbb7aed204cae5726d683d5d6ac7e74ec54122ea28f315e7c8"
 
 [[package]]
-name = "sprig-cli"
-version = "0.0.0"
-dependencies = [
- "clap",
- "clap_complete",
- "clap_mangen",
- "crossterm",
- "icalendar",
- "jiff",
- "jsonschema",
- "notify",
- "ratatui",
- "serde_json",
- "similar",
- "sprig-core",
- "sprig-lsp",
- "terminal_size",
- "unicode-width",
-]
-
-[[package]]
-name = "sprig-core"
-version = "0.0.0"
-dependencies = [
- "jsonschema",
- "proptest",
- "serde_json",
- "toml",
-]
-
-[[package]]
-name = "sprig-lsp"
-version = "0.0.0"
-dependencies = [
- "lsp-server",
- "lsp-types",
- "serde",
- "serde_json",
- "sprig-core",
- "tempfile",
- "url",
-]
-
-[[package]]
-name = "sprig-wasm"
-version = "0.0.0"
-dependencies = [
- "serde_json",
- "sprig-core",
-]
-
-[[package]]
 name = "stable_deref_trait"
 version = "1.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2697,20 +2697,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "tree-sitter-chea"
+version = "0.0.0"
+dependencies = [
+ "cc",
+ "chea-core",
+ "tree-sitter",
+ "tree-sitter-language",
+]
+
+[[package]]
 name = "tree-sitter-language"
 version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d0af592be68c579aa78a16846bd19422978c3c52e438523d45ff5d1bff1f9d4a"
-
-[[package]]
-name = "tree-sitter-sprig"
-version = "0.0.0"
-dependencies = [
- "cc",
- "sprig-core",
- "tree-sitter",
- "tree-sitter-language",
-]
 
 [[package]]
 name = "typenum"

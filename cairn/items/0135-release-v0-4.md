@@ -18,7 +18,7 @@ area: release
 
 ## Purpose
 
-Ship `sprig tui` with the binaries, and show it in the docs.
+Ship `chea tui` with the binaries, and show it in the docs.
 
 ## Approach
 

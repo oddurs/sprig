@@ -1,6 +1,6 @@
 ---
 title: Design system
-description: The tokens, the nine marks and the components the Sprig site is built from, and the rules that keep them consistent.
+description: The tokens, the nine marks and the components the Chea site is built from, and the rules that keep them consistent.
 ---
 
 import Button from '../../../components/Button.astro';
@@ -120,7 +120,7 @@ Secondary is an alternative, ghost a quiet way out.
 
 ### Code
 
-A Sprig example, highlighted by the same rules everywhere: marks in their
+A Chea example, highlighted by the same rules everywhere: marks in their
 colours, everything else neutral.
 
 <Code code={`Release 2.0  @kim
@@ -128,18 +128,18 @@ colours, everything else neutral.
 - Migration guide  ^guide
 ? Keep the free tier?  ^tier
   = Yes, capped at three devices.
-- Announce  after:^guide  after:^tier`} file="release.sprig" />
+- Announce  after:^guide  after:^tier`} file="release.chea" />
 
 ### Plan
 
-A plan as Sprig reads it, rendered at build time by the parser.
+A plan as Chea reads it, rendered at build time by the parser.
 
-<Plan files={{ 'release.sprig': `Release 2.0  @kim
+<Plan files={{ 'release.chea': `Release 2.0  @kim
 
 - Migration guide  ^guide
 ? Keep the free tier?  ^tier
   = Yes, capped at three devices.
-- Announce  after:^guide  after:^tier` }} active="release.sprig" caption="release.sprig, as Sprig reads it" />
+- Announce  after:^guide  after:^tier` }} active="release.chea" caption="release.chea, as Chea reads it" />
 
 ### Primitives
 

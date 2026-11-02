@@ -24,7 +24,7 @@ Release workflow producing binaries for macOS (arm64, x64), Linux (x64, arm64, m
 
 ## Acceptance criteria
 
-- [ ] A from-scratch CI job per platform installs with one command and runs `sprig --version`.
+- [ ] A from-scratch CI job per platform installs with one command and runs `chea --version`.
 - [ ] Every binary ships with a checksum, and the installers verify it.
 
 ## 2026-10-29

@@ -1,0 +1,59 @@
+>Open the bakery  @dana  due:2026-12-05  where:"41 Mill Street"
+#^^^^^^^^^^^^^^^^^ source.chea markup.heading.title.chea
+#                 ^^^^^ source.chea markup.heading.title.chea variable.other.person.chea
+#                      ^^ source.chea markup.heading.title.chea
+#                        ^^^ source.chea markup.heading.title.chea support.type.property-name.chea
+#                           ^ source.chea markup.heading.title.chea punctuation.separator.key-value.chea
+#                            ^^^^^^^^^^ source.chea markup.heading.title.chea string.unquoted.value.chea
+#                                      ^^ source.chea markup.heading.title.chea
+#                                        ^^^^^ source.chea markup.heading.title.chea support.type.property-name.chea
+#                                             ^ source.chea markup.heading.title.chea punctuation.separator.key-value.chea
+#                                              ^^^^^^^^^^^^^^^^ source.chea markup.heading.title.chea string.unquoted.value.chea
+>
+>Corner unit, 62 m². A note carries no @tokens or #tags.
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.chea
+>// A comment, never shown
+#^^^^^^^^^^^^^^^^^^^^^^^^^ source.chea comment.line.double-slash.chea
+>- to do  ^lease
+#^ source.chea keyword.mark.todo.chea
+# ^^^^^^^^ source.chea
+#         ^^^^^^ source.chea entity.name.label.anchor.chea
+>~ doing  !!
+#^ source.chea keyword.mark.doing.chea
+# ^^^^^^^^ source.chea
+#         ^^ source.chea keyword.other.priority.chea
+>x done
+#^ source.chea keyword.mark.done.chea
+# ^^^^^ source.chea markup.done.chea
+>/ dropped
+#^ source.chea keyword.mark.dropped.chea
+# ^^^^^^^^ source.chea markup.strikethrough.chea
+>> later
+#^ source.chea keyword.mark.later.chea
+# ^^^^^^ source.chea
+>? a question
+#^ source.chea keyword.mark.ask.chea
+# ^^^^^^^^^^^ source.chea
+>  = its answer  @dana
+#^^ source.chea
+#  ^ source.chea keyword.mark.answer.chea
+#   ^^^^^^^^^^^^^ source.chea markup.italic.answer.chea
+#                ^^^^^ source.chea markup.italic.answer.chea variable.other.person.chea
+># a group  #finance
+#^ source.chea keyword.mark.group.chea
+# ^^^^^^^^^^ source.chea markup.heading.group.chea
+#           ^^^^^^^^ source.chea markup.heading.group.chea entity.name.tag.chea
+>  + [[kitchen]]  @teo
+#^^ source.chea
+#  ^ source.chea keyword.mark.graft.chea
+#   ^ source.chea
+#    ^^^^^^^^^^^ source.chea markup.underline.link.chea
+#               ^^ source.chea
+#                 ^^^^ source.chea variable.other.person.chea
+>  \- an escaped note
+#^^ source.chea
+#  ^ source.chea constant.character.escape.chea
+#   ^^^^^^^^^^^^^^^^^ source.chea
+>x-ray is a note, and so is #tag at the start
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ source.chea
+>

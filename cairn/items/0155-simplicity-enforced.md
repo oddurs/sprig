@@ -15,7 +15,7 @@ area: docs
 
 ## Problem
 
-Sprig's essence is simplicity, and nothing in the repository protects it. Every other promise has a test; the size of the format, the command and the spec only ever grew, each addition reasonable on its own.
+Chea's essence is simplicity, and nothing in the repository protects it. Every other promise has a test; the size of the format, the command and the spec only ever grew, each addition reasonable on its own.
 
 ## Approach
 
@@ -27,7 +27,7 @@ Treat simplicity as an invariant with a test, as purity and stability are: a bud
 - [x] The whole format fits on one card, generated from the spec and shown in the README and on the site; the RFC template asks what a proposal adds to it.
 - [x] The spec opens with a normative core readable in one sitting, under 3,400 words of prose and held there by the budget; rulings on edge cases are in an annex, with every rule number and conformance citation still valid.
 - [x] CONTRIBUTING.md starts with clone, check and a pull request; the cairn and worktree loop follows for people who stay.
-- [x] The home page leads with one plan and what Sprig says about it.
+- [x] The home page leads with one plan and what Chea says about it.
 
 ## 2026-10-29
 

@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Resolution",
     "status": "empty",
@@ -12,14 +12,14 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "+",
-        "label": "../secrets.sprig",
+        "label": "../secrets.chea",
         "status": "empty",
         "graft": {
           "path": "",
-          "title": "../secrets.sprig",
+          "title": "../secrets.chea",
           "mounted": false
         },
         "progress": {
@@ -29,14 +29,14 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 4,
         "mark": "+",
-        "label": "rooms/../../etc/passwd.sprig",
+        "label": "rooms/../../etc/passwd.chea",
         "status": "empty",
         "graft": {
           "path": "",
-          "title": "rooms/../../etc/passwd.sprig",
+          "title": "rooms/../../etc/passwd.chea",
           "mounted": false
         },
         "progress": {
@@ -46,14 +46,14 @@
         }
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 5,
         "mark": "+",
-        "label": "/etc/passwd.sprig",
+        "label": "/etc/passwd.chea",
         "status": "empty",
         "graft": {
           "path": "",
-          "title": "/etc/passwd.sprig",
+          "title": "/etc/passwd.chea",
           "mounted": false
         },
         "progress": {
@@ -66,25 +66,25 @@
   },
   "diagnostics": [
     {
-      "code": "S0104",
+      "code": "C0104",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 3,
       "span": [14, 28]
     },
     {
-      "code": "S0104",
+      "code": "C0104",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 4,
       "col": 3,
       "span": [31, 57]
     },
     {
-      "code": "S0104",
+      "code": "C0104",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 5,
       "col": 3,
       "span": [60, 75]

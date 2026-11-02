@@ -1,5 +1,5 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "syntax": {
     "title": "Links",
     "root": {
@@ -21,7 +21,7 @@
           "text": "Read the notes in kitchen first",
           "links": [
             {
-              "path": "kitchen.sprig"
+              "path": "kitchen.chea"
             }
           ]
         }
@@ -30,9 +30,9 @@
   },
   "diagnostics": [
     {
-      "code": "S0202",
+      "code": "C0202",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 20,
       "span": [26, 48]

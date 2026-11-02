@@ -17,7 +17,7 @@ area: spec
 
 ## Reader and question
 
-Anyone who needs a permanent, citable definition of Sprig 1.0.
+Anyone who needs a permanent, citable definition of Chea 1.0.
 
 ## Change
 
@@ -30,4 +30,4 @@ Publish spec 1.0 at a stable URL with the suite version that matches it.
 
 ## 2026-10-29
 
-Follows 0076. The text is already CC0 (spec/sprig.md). The versioned URL and the suite version that defines 1.0 are set when the review closes.
+Follows 0076. The text is already CC0 (spec/chea.md). The versioned URL and the suite version that defines 1.0 are set when the review closes.

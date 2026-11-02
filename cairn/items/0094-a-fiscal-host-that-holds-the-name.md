@@ -16,7 +16,7 @@ area: community
 
 ## Purpose
 
-'Sprig-compatible' only means something if a neutral party holds the name.
+'Chea-compatible' only means something if a neutral party holds the name.
 
 ## Approach
 

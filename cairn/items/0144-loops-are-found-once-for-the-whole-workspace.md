@@ -16,7 +16,7 @@ area: spec
 
 ## Options and tradeoffs
 
-Per-tree detection reports the line that closes the loop below whichever file is opened, so `a` shows `b` and `b` shows `a`. The cost is that the same workspace gives different diagnostics depending on where a tool starts, and a file's expansion depends on who grafts it, so it can't be computed once. Workspace-wide detection walks files in path order and grafts in document order, and refuses the one graft that closes each loop everywhere. Every file's expansion is then context-free and every tool reports the same line. The cost is that, in a two-file loop, the file later in path order loses its graft in its own tree too: `a.sprig` shows `b.sprig`, but `b.sprig` does not show `a.sprig`.
+Per-tree detection reports the line that closes the loop below whichever file is opened, so `a` shows `b` and `b` shows `a`. The cost is that the same workspace gives different diagnostics depending on where a tool starts, and a file's expansion depends on who grafts it, so it can't be computed once. Workspace-wide detection walks files in path order and grafts in document order, and refuses the one graft that closes each loop everywhere. Every file's expansion is then context-free and every tool reports the same line. The cost is that, in a two-file loop, the file later in path order loses its graft in its own tree too: `a.chea` shows `b.chea`, but `b.chea` does not show `a.chea`.
 
 ## Decision
 

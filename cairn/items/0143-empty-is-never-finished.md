@@ -16,11 +16,11 @@ An empty group, graft or file has derived status empty (§5.5). Appendix B.5 ask
 
 ## Options and tradeoffs
 
-Counting empty as finished, as vacuous truth would, unblocks `after:[[launch]]` the moment `launch.sprig` is created as a stub, before anything in it is done. That is a false green. Keeping empty unfinished is honest: nothing has been finished. Its risk is a silent wait on a placeholder, which a warning removes.
+Counting empty as finished, as vacuous truth would, unblocks `after:[[launch]]` the moment `launch.chea` is created as a stub, before anything in it is done. That is a false green. Keeping empty unfinished is honest: nothing has been finished. Its risk is a silent wait on a placeholder, which a warning removes.
 
 ## Decision
 
-Empty is never finished (§5.5, §5.7). A reference to an empty node is reported as warning S0206, so the wait is visible.
+Empty is never finished (§5.5, §5.7). A reference to an empty node is reported as warning C0206, so the wait is visible.
 
 ## Revisit when
 

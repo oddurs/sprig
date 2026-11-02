@@ -16,7 +16,7 @@ area: editors
 
 ## Problem
 
-Families, carers and volunteers won't use a terminal or an editor. The grocery-list end of Sprig needs a phone app that never says 'file'.
+Families, carers and volunteers won't use a terminal or an editor. The grocery-list end of Chea needs a phone app that never says 'file'.
 
 ## Proposal
 

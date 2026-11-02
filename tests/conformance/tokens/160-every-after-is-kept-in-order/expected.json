@@ -1,5 +1,5 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "syntax": {
     "title": "Tokens",
     "root": {
@@ -19,25 +19,25 @@
   },
   "diagnostics": [
     {
-      "code": "S0201",
+      "code": "C0201",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 9,
       "span": [16, 24]
     },
     {
-      "code": "S0201",
+      "code": "C0201",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 19,
       "span": [26, 34]
     },
     {
-      "code": "S0201",
+      "code": "C0201",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 29,
       "span": [36, 44]

@@ -8,13 +8,13 @@ const path = require('node:path');
 const here = path.join(__dirname, '..');
 const repo = path.join(here, '..', '..');
 fs.mkdirSync(path.join(here, 'syntaxes'), { recursive: true });
-fs.copyFileSync(path.join(repo, 'editors', 'sprig.tmLanguage.json'), path.join(here, 'syntaxes', 'sprig.tmLanguage.json'));
+fs.copyFileSync(path.join(repo, 'editors', 'chea.tmLanguage.json'), path.join(here, 'syntaxes', 'chea.tmLanguage.json'));
 fs.copyFileSync(path.join(repo, 'LICENSE'), path.join(here, 'LICENSE'));
 
-const exe = process.platform === 'win32' ? 'sprig.exe' : 'sprig';
-// SPRIG_SERVER names the binary to bundle; otherwise the newest local build.
+const exe = process.platform === 'win32' ? 'chea.exe' : 'chea';
+// CHEA_SERVER names the binary to bundle; otherwise the newest local build.
 const built =
-	process.env.SPRIG_SERVER ??
+	process.env.CHEA_SERVER ??
 	['release', 'debug']
 		.map((p) => path.join(repo, 'target', p, exe))
 		.filter((p) => fs.existsSync(p))
@@ -25,5 +25,5 @@ if (built) {
 	fs.chmodSync(path.join(here, 'server', exe), 0o755);
 	console.log(`prepare: grammar, and the server from ${path.relative(repo, built)}`);
 } else {
-	console.log('prepare: grammar; no built server, so the extension will look for sprig on PATH');
+	console.log('prepare: grammar; no built server, so the extension will look for chea on PATH');
 }

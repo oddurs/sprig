@@ -35,7 +35,7 @@ never share a checkout.
 cairn next                                     # pick ready work
 cairn claim 17
 scripts/agent start feat/0017-resolve-grafts   # prints the worktree path
-cd ../.worktrees/sprig/feat/0017-resolve-grafts   # move there yourself
+cd ../.worktrees/chea/feat/0017-resolve-grafts   # move there yourself
 
 # ... work; tick criteria as they become true, with evidence ...
 cairn tick 17 2
@@ -79,14 +79,14 @@ period. The body says why. `Refs: 0017` names the item.
 ## Architecture, and what must stay true
 
 - **The spec is the authority, and the conformance suite is its evidence.** A
-  change to how a file is read starts in `spec/sprig.md`, gets an example in
+  change to how a file is read starts in `spec/chea.md`, gets an example in
   `tests/conformance/`, and only then reaches the code. Until the spec exists,
   the behavioural oracle is the JavaScript parser inside
   `design/sprig-draft-0.2.html`.
-- **`sprig-core` performs no I/O.** No filesystem, environment, network or
+- **`chea-core` performs no I/O.** No filesystem, environment, network or
   clock. Callers pass source text and today's date. `scripts/task lint` greps
   for violations.
-- **User input never panics.** Every problem in a `.sprig` file becomes a
+- **User input never panics.** Every problem in a `.chea` file becomes a
   `Diagnostic` with a stable code from `spec/diagnostics.md`. Codes are never
   reused.
 - **Edits preserve every byte they don't mean to change.** Anything that writes

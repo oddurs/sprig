@@ -19,7 +19,7 @@ area: editors
 
 ## Problem
 
-VS Code is where most developers will first meet a `.sprig` file.
+VS Code is where most developers will first meet a `.chea` file.
 
 ## Proposal
 
@@ -34,9 +34,9 @@ An extension that registers the language, ships the TextMate grammar, and bundle
 
 ## 2026-10-28
 
-`editors/vscode` registers `.sprig`, ships the TextMate grammar and starts `sprig lsp` from the binary bundled in `server/`. It falls back to `sprig.server.path`, then to `sprig` on PATH.
+`editors/vscode` registers `.chea`, ships the TextMate grammar and starts `chea lsp` from the binary bundled in `server/`. It falls back to `chea.server.path`, then to `chea` on PATH.
 
-- **Criterion 3:** `npm test` runs `@vscode/test-electron` on a copy of `examples/bakery/`, with every other extension disabled. It asserts that the folder checks clean, then deletes `^signed` and asserts exactly `bakery.sprig:15 S0203` and `kitchen.sprig:18 S0203`. CI runs it under xvfb in the `editors` job.
+- **Criterion 3:** `npm test` runs `@vscode/test-electron` on a copy of `examples/bakery/`, with every other extension disabled. It asserts that the folder checks clean, then deletes `^signed` and asserts exactly `bakery.chea:15 C0203` and `kitchen.chea:18 C0203`. CI runs it under xvfb in the `editors` job.
 - **Criterion 4:** the server is bundled, so nothing else is needed and nothing is fetched.
 - **Criterion 2:** `.github/workflows/vscode.yml` packages one VSIX per target (darwin-arm64, darwin-x64, linux-x64, linux-arm64 and win32-x64), each with that target's release binary. It is ticked once the workflow's first run on main succeeds.
 - **Criterion 1** waits on the name (0006): nothing is published to the Marketplace until it is cleared.

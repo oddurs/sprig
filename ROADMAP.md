@@ -1,4 +1,4 @@
-# Sprig roadmap
+# Chea roadmap
 
 A plain-text format for plans that people and coding agents read, edit and check in the same file.
 
@@ -6,66 +6,65 @@ A plain-text format for plans that people and coding agents read, edit and check
 
 ## v0.1 — Check a plan from the terminal
 
-`··········` 0% · 0 of 3 done · due 2026-11-20
+`··········` 0% · 0 of 2 done · due 2026-11-20
 
-A stranger installs `sprig`, writes a plan across one or more `.sprig` files, and gets two answers: `sprig next` says what can be done right now, and `sprig check` reports broken links, loops and unknown anchors with exit codes CI can use.
+A stranger installs `chea`, writes a plan across one or more `.chea` files, and gets two answers: `chea next` says what can be done right now, and `chea check` reports broken links, loops and unknown anchors with exit codes CI can use.
 
-- [ ] [`0027`](https://github.com/oddurs/sprig/blob/main/cairn/items/0027-release-v0-1.md) Release v0.1 <sup>chore · p0 · release</sup>
-- [ ] [`0006`](https://github.com/oddurs/sprig/blob/main/cairn/items/0006-is-the-name-sprig-free-to-use.md) Is the name Sprig free to use? <sup>spike · p0 · community</sup>
-- [ ] [`0026`](https://github.com/oddurs/sprig/blob/main/cairn/items/0026-readme-install-and-a-first-plan-in-five-minutes.md) README: install and a first plan in five minutes <sup>docs · p0 · docs</sup>
+- [ ] [`0027`](https://github.com/oddurs/chea/blob/main/cairn/items/0027-release-v0-1.md) Release v0.1 <sup>chore · p0 · release</sup>
+- [ ] [`0026`](https://github.com/oddurs/chea/blob/main/cairn/items/0026-readme-install-and-a-first-plan-in-five-minutes.md) README: install and a first plan in five minutes <sup>docs · p0 · docs</sup>
 
 ## launch — Launch the website and Show HN
 
 `··········` 0% · 0 of 3 done · due 2026-12-01
 
-A public website that explains Sprig in ten seconds and lets a visitor edit a real plan in thirty, and a Show HN post that points at it. The site's plan, including the arguments behind its shape, is in `design/site-plan.html`.
+A public website that explains Chea in ten seconds and lets a visitor edit a real plan in thirty, and a Show HN post that points at it. The site's plan, including the arguments behind its shape, is in `design/site-plan.html`.
 
-- [ ] [`0110`](https://github.com/oddurs/sprig/blob/main/cairn/items/0110-prebuilt-binaries-for-the-v0-1-release.md) Prebuilt binaries for the v0.1 release <sup>chore · p0 · release</sup>
-- [ ] [`0111`](https://github.com/oddurs/sprig/blob/main/cairn/items/0111-quiet-preview-with-five-to-ten-real-users.md) Quiet preview with five to ten real users <sup>chore · p1 · community</sup>
-- [ ] [`0112`](https://github.com/oddurs/sprig/blob/main/cairn/items/0112-launch-post-first-comment-and-day-of-checklist.md) Launch post, first comment and day-of checklist <sup>chore · p0 · community</sup>
+- [ ] [`0110`](https://github.com/oddurs/chea/blob/main/cairn/items/0110-prebuilt-binaries-for-the-v0-1-release.md) Prebuilt binaries for the v0.1 release <sup>chore · p0 · release</sup>
+- [ ] [`0111`](https://github.com/oddurs/chea/blob/main/cairn/items/0111-quiet-preview-with-five-to-ten-real-users.md) Quiet preview with five to ten real users <sup>chore · p1 · community</sup>
+- [ ] [`0112`](https://github.com/oddurs/chea/blob/main/cairn/items/0112-launch-post-first-comment-and-day-of-checklist.md) Launch post, first comment and day-of checklist <sup>chore · p0 · community</sup>
 
 ## v0.2 — Write plans in your editor
 
 `··········` 0% · 0 of 3 done · due 2027-01-29
 
-VS Code highlights `.sprig` files, completes people, anchors and file links, shows `sprig check` diagnostics as you type, and ticks items with a code action. `sprig fmt` normalises a file without touching anything it doesn't mean to. In the terminal, `sprig tree`, `status` and `why` show a plan's shape and what holds it up, and every command completes in the shell.
+VS Code highlights `.chea` files, completes people, anchors and file links, shows `chea check` diagnostics as you type, and ticks items with a code action. `chea fmt` normalises a file without touching anything it doesn't mean to. In the terminal, `chea tree`, `status` and `why` show a plan's shape and what holds it up, and every command completes in the shell.
 
-- [ ] [`0057`](https://github.com/oddurs/sprig/blob/main/cairn/items/0057-release-v0-2.md) Release v0.2 <sup>chore · p0 · release</sup>
-- [ ] [`0054`](https://github.com/oddurs/sprig/blob/main/cairn/items/0054-vs-code-extension.md) VS Code extension <sup>feature · p0 · editors</sup>
-- [ ] [`0055`](https://github.com/oddurs/sprig/blob/main/cairn/items/0055-editor-setup-guide-neovim-helix-zed.md) Editor setup guide: Neovim, Helix, Zed <sup>docs · p1 · docs</sup>
+- [ ] [`0057`](https://github.com/oddurs/chea/blob/main/cairn/items/0057-release-v0-2.md) Release v0.2 <sup>chore · p0 · release</sup>
+- [ ] [`0054`](https://github.com/oddurs/chea/blob/main/cairn/items/0054-vs-code-extension.md) VS Code extension <sup>feature · p0 · editors</sup>
+- [ ] [`0055`](https://github.com/oddurs/chea/blob/main/cairn/items/0055-editor-setup-guide-neovim-helix-zed.md) Editor setup guide: Neovim, Helix, Zed <sup>docs · p1 · docs</sup>
 
 ## v0.3 — Agents work the plan
 
 `··········` 0% · 0 of 5 done · due 2027-04-02
 
-`sprig mcp` lets a coding agent read a repository's `PLAN.sprig`, find ready work, tick, add and answer items, where every change is an ordinary file edit a person can review. Plans export to calendars and JSON, and existing checklists import. From the shell, `mark`, `add`, `answer`, `find`, `agenda` and `graph` cover the everyday writes and questions, through the same edit API the agents use.
+`chea mcp` lets a coding agent read a repository's `PLAN.chea`, find ready work, tick, add and answer items, where every change is an ordinary file edit a person can review. Plans export to calendars and JSON, and existing checklists import. From the shell, `mark`, `add`, `answer`, `find`, `agenda` and `graph` cover the everyday writes and questions, through the same edit API the agents use.
 
-- [ ] [`0071`](https://github.com/oddurs/sprig/blob/main/cairn/items/0071-release-v0-3.md) Release v0.3 <sup>chore · p0 · release</sup>
-- [ ] [`0063`](https://github.com/oddurs/sprig/blob/main/cairn/items/0063-end-to-end-test-with-a-real-mcp-client.md) End-to-end test with a real MCP client <sup>chore · p1 · agents</sup>
-- [ ] [`0064`](https://github.com/oddurs/sprig/blob/main/cairn/items/0064-sprig-export-json-and-icalendar.md) sprig export: JSON and iCalendar <sup>feature · p1 · interop</sup>
-- [ ] [`0067`](https://github.com/oddurs/sprig/blob/main/cairn/items/0067-github-action-check-plans-and-summarise-progress-in-pull-requests.md) GitHub Action: check plans and summarise progress in pull requests <sup>feature · p1 · interop</sup>
-- [ ] [`0128`](https://github.com/oddurs/sprig/blob/main/cairn/items/0128-sprig-graph-the-dependency-graph-for-graphviz-and-mermaid.md) sprig graph: the dependency graph for Graphviz and Mermaid <sup>feature · p2 · interop</sup>
+- [ ] [`0071`](https://github.com/oddurs/chea/blob/main/cairn/items/0071-release-v0-3.md) Release v0.3 <sup>chore · p0 · release</sup>
+- [ ] [`0063`](https://github.com/oddurs/chea/blob/main/cairn/items/0063-end-to-end-test-with-a-real-mcp-client.md) End-to-end test with a real MCP client <sup>chore · p1 · agents</sup>
+- [ ] [`0064`](https://github.com/oddurs/chea/blob/main/cairn/items/0064-chea-export-json-and-icalendar.md) chea export: JSON and iCalendar <sup>feature · p1 · interop</sup>
+- [ ] [`0067`](https://github.com/oddurs/chea/blob/main/cairn/items/0067-github-action-check-plans-and-summarise-progress-in-pull-requests.md) GitHub Action: check plans and summarise progress in pull requests <sup>feature · p1 · interop</sup>
+- [ ] [`0128`](https://github.com/oddurs/chea/blob/main/cairn/items/0128-chea-graph-the-dependency-graph-for-graphviz-and-mermaid.md) chea graph: the dependency graph for Graphviz and Mermaid <sup>feature · p2 · interop</sup>
 
 ## v0.4 — Work the plan from one screen
 
 `··········` 0% · 0 of 2 done · due 2027-05-21
 
-`sprig tui`: the tree, what's next and the agenda for a folder of plans on one terminal screen, with vim keys, writes that go through the same one-line edits as the verbs, and live reload when a file changes underneath it. Plan: `design/cli-plan.html`.
+`chea tui`: the tree, what's next and the agenda for a folder of plans on one terminal screen, with vim keys, writes that go through the same one-line edits as the verbs, and live reload when a file changes underneath it. Plan: `design/cli-plan.html`.
 
-- [ ] [`0135`](https://github.com/oddurs/sprig/blob/main/cairn/items/0135-release-v0-4.md) Release v0.4 <sup>chore · p0 · release</sup>
-- [ ] [`0133`](https://github.com/oddurs/sprig/blob/main/cairn/items/0133-sprig-tui-reload-when-a-file-changes-on-disk.md) sprig tui: reload when a file changes on disk <sup>feature · p0 · cli</sup>
+- [ ] [`0135`](https://github.com/oddurs/chea/blob/main/cairn/items/0135-release-v0-4.md) Release v0.4 <sup>chore · p0 · release</sup>
+- [ ] [`0133`](https://github.com/oddurs/chea/blob/main/cairn/items/0133-chea-tui-reload-when-a-file-changes-on-disk.md) chea tui: reload when a file changes on disk <sup>feature · p0 · cli</sup>
 
-## v1.0 — Sprig 1.0
+## v1.0 — Chea 1.0
 
 `··········` 0% · 0 of 5 done · due 2027-07-02
 
 A frozen spec under CC0, a conformance suite that covers every rule, and packaged tools a stranger installs in one command on macOS, Linux and Windows. No new surface: this milestone makes promises about what already exists.
 
-- [ ] [`0076`](https://github.com/oddurs/sprig/blob/main/cairn/items/0076-spec-1-0-release-candidate-and-public-review.md) Spec 1.0 release candidate and public review <sup>docs · p0 · spec</sup>
-- [ ] [`0077`](https://github.com/oddurs/sprig/blob/main/cairn/items/0077-freeze-and-publish-spec-1-0-under-cc0.md) Freeze and publish spec 1.0 under CC0 <sup>docs · p0 · spec</sup>
-- [ ] [`0078`](https://github.com/oddurs/sprig/blob/main/cairn/items/0078-prebuilt-binaries-and-one-command-install-on-three-platforms.md) Prebuilt binaries and one-command install on three platforms <sup>chore · p0 · release</sup>
-- [ ] [`0082`](https://github.com/oddurs/sprig/blob/main/cairn/items/0082-release-1-0.md) Release 1.0 <sup>chore · p0 · release</sup>
-- [ ] [`0081`](https://github.com/oddurs/sprig/blob/main/cairn/items/0081-five-minute-tutorial-and-reference-site.md) Five-minute tutorial and reference site <sup>docs · p0 · docs</sup>
+- [ ] [`0076`](https://github.com/oddurs/chea/blob/main/cairn/items/0076-spec-1-0-release-candidate-and-public-review.md) Spec 1.0 release candidate and public review <sup>docs · p0 · spec</sup>
+- [ ] [`0077`](https://github.com/oddurs/chea/blob/main/cairn/items/0077-freeze-and-publish-spec-1-0-under-cc0.md) Freeze and publish spec 1.0 under CC0 <sup>docs · p0 · spec</sup>
+- [ ] [`0078`](https://github.com/oddurs/chea/blob/main/cairn/items/0078-prebuilt-binaries-and-one-command-install-on-three-platforms.md) Prebuilt binaries and one-command install on three platforms <sup>chore · p0 · release</sup>
+- [ ] [`0082`](https://github.com/oddurs/chea/blob/main/cairn/items/0082-release-1-0.md) Release 1.0 <sup>chore · p0 · release</sup>
+- [ ] [`0081`](https://github.com/oddurs/chea/blob/main/cairn/items/0081-five-minute-tutorial-and-reference-site.md) Five-minute tutorial and reference site <sup>docs · p0 · docs</sup>
 
 ## later — Later
 
@@ -73,21 +72,21 @@ A frozen spec under CC0, a conformance suite that covers every rule, and package
 
 Good ideas that are not on the path to 1.0: the phone app, bindings for other languages, the web viewer, tracker sync and stewardship work that needs adoption first. Items land here instead of being argued about.
 
-- [ ] [`0083`](https://github.com/oddurs/sprig/blob/main/cairn/items/0083-live-co-editing-or-last-write-wins.md) Live co-editing, or last write wins? <sup>spike · p1 · interop</sup>
-- [ ] [`0084`](https://github.com/oddurs/sprig/blob/main/cairn/items/0084-phone-app-for-shared-lists.md) Phone app for shared lists <sup>feature · p1 · editors</sup>
-- [ ] [`0085`](https://github.com/oddurs/sprig/blob/main/cairn/items/0085-webassembly-build-and-npm-package.md) WebAssembly build and npm package <sup>feature · p1 · core</sup>
-- [ ] [`0086`](https://github.com/oddurs/sprig/blob/main/cairn/items/0086-python-bindings.md) Python bindings <sup>feature · p3 · core</sup>
-- [ ] [`0087`](https://github.com/oddurs/sprig/blob/main/cairn/items/0087-web-viewer-with-shareable-read-only-links.md) Web viewer with shareable read-only links <sup>feature · p2 · editors</sup>
-- [ ] [`0088`](https://github.com/oddurs/sprig/blob/main/cairn/items/0088-browser-extension-that-renders-sprig-on-github-com.md) Browser extension that renders .sprig on github.com <sup>feature · p2 · editors</sup>
-- [ ] [`0089`](https://github.com/oddurs/sprig/blob/main/cairn/items/0089-obsidian-plugin.md) Obsidian plugin <sup>feature · p2 · editors</sup>
-- [ ] [`0090`](https://github.com/oddurs/sprig/blob/main/cairn/items/0090-sprig-publish-static-sites-for-public-plans.md) sprig publish: static sites for public plans <sup>feature · p2 · interop</sup>
-- [ ] [`0091`](https://github.com/oddurs/sprig/blob/main/cairn/items/0091-two-way-sync-with-github-issues.md) Two-way sync with GitHub Issues <sup>feature · p2 · interop</sup>
-- [ ] [`0092`](https://github.com/oddurs/sprig/blob/main/cairn/items/0092-linear-and-jira-sync.md) Linear and Jira sync <sup>feature · p3 · interop</sup>
-- [ ] [`0093`](https://github.com/oddurs/sprig/blob/main/cairn/items/0093-submit-sprig-to-github-linguist.md) Submit Sprig to GitHub Linguist <sup>chore · p1 · editors</sup>
-- [ ] [`0094`](https://github.com/oddurs/sprig/blob/main/cairn/items/0094-a-fiscal-host-that-holds-the-name.md) A fiscal host that holds the name <sup>chore · p2 · community</sup>
-- [ ] [`0095`](https://github.com/oddurs/sprig/blob/main/cairn/items/0095-conformance-badge-for-compatible-tools.md) Conformance badge for compatible tools <sup>feature · p3 · community</sup>
-- [ ] [`0096`](https://github.com/oddurs/sprig/blob/main/cairn/items/0096-template-gallery.md) Template gallery <sup>docs · p2 · docs</sup>
-- [ ] [`0097`](https://github.com/oddurs/sprig/blob/main/cairn/items/0097-invite-a-second-independent-parser.md) Invite a second, independent parser <sup>chore · p1 · community</sup>
-- [ ] [`0146`](https://github.com/oddurs/sprig/blob/main/cairn/items/0146-map-people-s-handles-to-identities-outside-plan-files.md) Map people's handles to identities outside plan files <sup>feature · p3 · spec</sup>
-- [ ] [`0147`](https://github.com/oddurs/sprig/blob/main/cairn/items/0147-zed-extension-grammar-and-language-server.md) Zed extension: grammar and language server <sup>feature · p2 · editors</sup>
+- [ ] [`0083`](https://github.com/oddurs/chea/blob/main/cairn/items/0083-live-co-editing-or-last-write-wins.md) Live co-editing, or last write wins? <sup>spike · p1 · interop</sup>
+- [ ] [`0084`](https://github.com/oddurs/chea/blob/main/cairn/items/0084-phone-app-for-shared-lists.md) Phone app for shared lists <sup>feature · p1 · editors</sup>
+- [ ] [`0085`](https://github.com/oddurs/chea/blob/main/cairn/items/0085-webassembly-build-and-npm-package.md) WebAssembly build and npm package <sup>feature · p1 · core</sup>
+- [ ] [`0086`](https://github.com/oddurs/chea/blob/main/cairn/items/0086-python-bindings.md) Python bindings <sup>feature · p3 · core</sup>
+- [ ] [`0087`](https://github.com/oddurs/chea/blob/main/cairn/items/0087-web-viewer-with-shareable-read-only-links.md) Web viewer with shareable read-only links <sup>feature · p2 · editors</sup>
+- [ ] [`0088`](https://github.com/oddurs/chea/blob/main/cairn/items/0088-browser-extension-that-renders-chea-on-github-com.md) Browser extension that renders .chea on github.com <sup>feature · p2 · editors</sup>
+- [ ] [`0089`](https://github.com/oddurs/chea/blob/main/cairn/items/0089-obsidian-plugin.md) Obsidian plugin <sup>feature · p2 · editors</sup>
+- [ ] [`0090`](https://github.com/oddurs/chea/blob/main/cairn/items/0090-chea-publish-static-sites-for-public-plans.md) chea publish: static sites for public plans <sup>feature · p2 · interop</sup>
+- [ ] [`0091`](https://github.com/oddurs/chea/blob/main/cairn/items/0091-two-way-sync-with-github-issues.md) Two-way sync with GitHub Issues <sup>feature · p2 · interop</sup>
+- [ ] [`0092`](https://github.com/oddurs/chea/blob/main/cairn/items/0092-linear-and-jira-sync.md) Linear and Jira sync <sup>feature · p3 · interop</sup>
+- [ ] [`0093`](https://github.com/oddurs/chea/blob/main/cairn/items/0093-submit-chea-to-github-linguist.md) Submit Chea to GitHub Linguist <sup>chore · p1 · editors</sup>
+- [ ] [`0094`](https://github.com/oddurs/chea/blob/main/cairn/items/0094-a-fiscal-host-that-holds-the-name.md) A fiscal host that holds the name <sup>chore · p2 · community</sup>
+- [ ] [`0095`](https://github.com/oddurs/chea/blob/main/cairn/items/0095-conformance-badge-for-compatible-tools.md) Conformance badge for compatible tools <sup>feature · p3 · community</sup>
+- [ ] [`0096`](https://github.com/oddurs/chea/blob/main/cairn/items/0096-template-gallery.md) Template gallery <sup>docs · p2 · docs</sup>
+- [ ] [`0097`](https://github.com/oddurs/chea/blob/main/cairn/items/0097-invite-a-second-independent-parser.md) Invite a second, independent parser <sup>chore · p1 · community</sup>
+- [ ] [`0146`](https://github.com/oddurs/chea/blob/main/cairn/items/0146-map-people-s-handles-to-identities-outside-plan-files.md) Map people's handles to identities outside plan files <sup>feature · p3 · spec</sup>
+- [ ] [`0147`](https://github.com/oddurs/chea/blob/main/cairn/items/0147-zed-extension-grammar-and-language-server.md) Zed extension: grammar and language server <sup>feature · p2 · editors</sup>
 

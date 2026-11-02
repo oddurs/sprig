@@ -14,7 +14,7 @@ const dark = themes.dark;
 
 // The mark: an ink tile with a stem and two branches, the nodes coloured as
 // done and doing, the two marks a plan is mostly made of.
-const mark = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Sprig">
+const mark = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Chea">
   <rect width="32" height="32" rx="7" fill="${light.text}"/>
   <path d="M11 7.5V24.5M11 13.5H18.5M11 21.5H18.5" fill="none" stroke="${light.surface}" stroke-width="2.6" stroke-linecap="round"/>
   <circle cx="22" cy="13.5" r="2.6" fill="${dark['mark-done']}"/>
@@ -49,8 +49,8 @@ const dividers = markGroups
 const og = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="640" viewBox="0 0 ${W} 640">
   <rect width="${W}" height="640" fill="${light.surface}"/>
   <g transform="translate(${pad} 96) scale(1.5)">${mark.replace(/<\/?svg[^>]*>/g, '').trim()}</g>
-  <text x="${pad + 64}" y="131" font-family="${sans}" font-size="44" font-weight="700" fill="${light.text}">Sprig</text>
-  <text x="${pad}" y="250" font-family="${sans}" font-size="56" font-weight="700" letter-spacing="-1.5" fill="${light.text}">Write the plan. Sprig works out the rest.</text>
+  <text x="${pad + 64}" y="131" font-family="${sans}" font-size="44" font-weight="700" fill="${light.text}">Chea</text>
+  <text x="${pad}" y="250" font-family="${sans}" font-size="56" font-weight="700" letter-spacing="-1.5" fill="${light.text}">Write the plan. Chea works out the rest.</text>
   <text x="${pad}" y="300" font-family="${sans}" font-size="26" fill="${light['text-muted']}">A plain-text format for plans. The whole language is nine marks.</text>
 ${dividers}
 ${glyphs}

@@ -10,7 +10,7 @@
 
 Does `@dana@example.org` name a person?
 
-```sprig
+```chea
 Lease
 
 - Send the deposit  @dana@example.org

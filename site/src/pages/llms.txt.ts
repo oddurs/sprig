@@ -1,19 +1,19 @@
 import type { APIRoute } from 'astro';
 
 // A plain-text map of the site for coding agents, following the llms.txt
-// convention: what Sprig is, and where the authoritative text lives.
+// convention: what Chea is, and where the authoritative text lives.
 export const GET: APIRoute = ({ site }) => {
 	const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 	const at = (path: string) => new URL(`${base}${path}`, site).href;
-	const body = `# Sprig
+	const body = `# Chea
 
 > A plain-text format for plans. Each line starts with a mark (- ~ x / > ? = # +), indentation is structure, and progress, blocking and ownership are computed from the text, never written into it.
 
-The specification is the authority. Read it before writing or editing a .sprig file.
+The specification is the authority. Read it before writing or editing a .chea file.
 
 ## Specification
 
-- [Sprig specification, raw Markdown](${at('/spec.md')}): the format on one card, then every rule, numbered, with examples
+- [Chea specification, raw Markdown](${at('/spec.md')}): the format on one card, then every rule, numbered, with examples
 - [Specification annex, raw Markdown](${at('/spec-annex.md')}): the rulings on edge cases, the grammar and the tree format
 - [Specification, rendered](${at('/spec/')})
 
@@ -21,8 +21,8 @@ The specification is the authority. Read it before writing or editing a .sprig f
 
 - [Your first plan](${at('/docs/first-plan/')}): a five-minute tutorial
 - [Settled arguments](${at('/decisions/')}): why each rule is the way it is
-- [The toolchain](${at('/tools/')}): the planned sprig commands, their output contract and when each lands
-- [How Sprig compares](${at('/compare/')})
+- [The toolchain](${at('/tools/')}): the planned chea commands, their output contract and when each lands
+- [How Chea compares](${at('/compare/')})
 - [Roadmap](${at('/roadmap/')})
 `;
 	return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });

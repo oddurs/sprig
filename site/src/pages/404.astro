@@ -8,7 +8,7 @@ import Stack from '../components/primitives/Stack.astro';
 import Text from '../components/primitives/Text.astro';
 import Base from '../layouts/Base.astro';
 
-// A 404 written in Sprig, rendered by the same parser as everything else: the
+// A 404 written in Chea, rendered by the same parser as everything else: the
 // page you wanted is blocked on a link that doesn't exist.
 const plan = `Page not found  @you
 
@@ -19,7 +19,7 @@ const plan = `Page not found  @you
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
-<Base title="Page not found · Sprig" description="This page doesn't exist.">
+<Base title="Page not found · Chea" description="This page doesn't exist.">
 	<section class="lost" aria-labelledby="lost-h">
 		<Grid cols={2} gap={8} rowGap={7}>
 			<Stack gap={5}>
@@ -32,8 +32,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 				</Inline>
 			</Stack>
 			<Stack gap={4}>
-				<Code code={plan} file="404.sprig" />
-				<Plan files={{ '404.sprig': plan }} active="404.sprig" caption="as Sprig reads it" />
+				<Code code={plan} file="404.chea" />
+				<Plan files={{ '404.chea': plan }} active="404.chea" caption="as Chea reads it" />
 			</Stack>
 		</Grid>
 	</section>

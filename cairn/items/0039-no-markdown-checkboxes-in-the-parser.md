@@ -20,7 +20,7 @@ Accepting them means two spellings for every status, in every tool, forever.
 
 ## Decision
 
-Rejected. `sprig import` converts them once.
+Rejected. `chea import` converts them once.
 
 ## Revisit when
 

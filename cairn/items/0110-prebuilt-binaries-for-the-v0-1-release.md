@@ -25,7 +25,7 @@ Extend the release workflow to build and attach binaries for macOS (arm64 and x6
 ## Acceptance criteria
 
 - [ ] A tagged release attaches a binary for each target, with SHA256SUMS.
-- [ ] Each binary that can run on its build runner prints `sprig --version` in CI.
+- [ ] Each binary that can run on its build runner prints `chea --version` in CI.
 
 ## 2026-10-29
 

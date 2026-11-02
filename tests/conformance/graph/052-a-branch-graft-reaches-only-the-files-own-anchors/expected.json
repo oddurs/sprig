@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Week",
     "status": "empty",
@@ -12,15 +12,15 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "+",
-        "label": "house.sprig",
+        "label": "house.chea",
         "status": "empty",
         "graft": {
-          "path": "house.sprig",
+          "path": "house.chea",
           "anchor": "signed",
-          "title": "house.sprig",
+          "title": "house.chea",
           "mounted": false
         },
         "progress": {
@@ -33,9 +33,9 @@
   },
   "diagnostics": [
     {
-      "code": "S0102",
+      "code": "C0102",
       "severity": "error",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 3,
       "span": [8, 24]

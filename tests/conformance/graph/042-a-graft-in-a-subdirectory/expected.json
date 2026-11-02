@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Resolution",
     "status": "todo",
@@ -12,13 +12,13 @@
     },
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "+",
         "label": "Kitchen",
         "status": "todo",
         "graft": {
-          "path": "rooms/kitchen.sprig",
+          "path": "rooms/kitchen.chea",
           "title": "Kitchen",
           "mounted": true
         },
@@ -29,14 +29,14 @@
         },
         "children": [
           {
-            "file": "rooms/kitchen.sprig",
+            "file": "rooms/kitchen.chea",
             "line": 3,
             "mark": "+",
             "label": "Hall",
             "status": "todo",
             "grafted": true,
             "graft": {
-              "path": "rooms/hall.sprig",
+              "path": "rooms/hall.chea",
               "title": "Hall",
               "mounted": true
             },
@@ -47,7 +47,7 @@
             },
             "children": [
               {
-                "file": "rooms/hall.sprig",
+                "file": "rooms/hall.chea",
                 "line": 3,
                 "mark": "-",
                 "label": "Paint",
@@ -62,7 +62,7 @@
             ]
           },
           {
-            "file": "rooms/kitchen.sprig",
+            "file": "rooms/kitchen.chea",
             "line": 4,
             "mark": "-",
             "label": "Tile",

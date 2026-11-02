@@ -1,9 +1,9 @@
-// A scripted session with `sprig mcp`, through the official TypeScript MCP
+// A scripted session with `chea mcp`, through the official TypeScript MCP
 // client rather than this repository's own: what an agent's client sees.
 // It reads, picks the next item, ticks it, adds steps, answers a question,
-// and then holds the result to `sprig check --strict`.
+// and then holds the result to `chea check --strict`.
 //
-//   node session.mjs [path/to/sprig]
+//   node session.mjs [path/to/chea]
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import assert from 'node:assert/strict';
@@ -13,13 +13,13 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '../..');
-const sprig = resolve(process.argv[2] ?? join(root, 'target/debug/sprig'));
-const dir = mkdtempSync(join(tmpdir(), 'sprig-mcp-'));
+const chea = resolve(process.argv[2] ?? join(root, 'target/debug/chea'));
+const dir = mkdtempSync(join(tmpdir(), 'chea-mcp-'));
 cpSync(join(root, 'examples/bakery'), dir, { recursive: true });
-const env = { ...process.env, SPRIG_TODAY: '2026-10-01' };
+const env = { ...process.env, CHEA_TODAY: '2026-10-01' };
 
-const client = new Client({ name: 'sprig-ci', version: '0' });
-await client.connect(new StdioClientTransport({ command: sprig, args: ['mcp', '--in', dir], env }));
+const client = new Client({ name: 'chea-ci', version: '0' });
+await client.connect(new StdioClientTransport({ command: chea, args: ['mcp', '--in', dir], env }));
 
 const call = async (name, args = {}) => {
   const r = await client.callTool({ name, arguments: args });
@@ -37,11 +37,11 @@ assert.deepEqual(
 step(`${tools.length} tools listed`);
 
 const plans = (await call('list_plans')).items;
-assert.ok(plans.some((p) => p.file === 'bakery.sprig' && p.done === 9 && p.total === 40));
+assert.ok(plans.some((p) => p.file === 'bakery.chea' && p.done === 9 && p.total === 40));
 step('read: list_plans');
 
 const tree = await call('show_tree', { file: 'lease' });
-assert.equal(tree.file, 'lease.sprig');
+assert.equal(tree.file, 'lease.chea');
 step('read: show_tree');
 
 const next = (await call('next_items', { who: 'dana', limit: 3 })).items;
@@ -63,13 +63,13 @@ step('answer: ^name');
 
 const refused = await client.callTool({ name: 'set_field', arguments: { ref: '^logo', key: 'after', value: '^nowhere' } });
 assert.equal(refused.isError, true);
-assert.match(refused.content[0].text, /error\[S0201\]/);
+assert.match(refused.content[0].text, /error\[C0201\]/);
 step('a write that breaks the plan is refused');
 
 assert.deepEqual((await call('check_plans')).items, []);
 await client.close();
 
 // The files, not the server's word for them.
-execFileSync(sprig, ['check', '--strict', dir], { env, stdio: 'inherit' });
-assert.match(readFileSync(join(dir, 'kitchen.sprig'), 'utf8'), /^ {2}- Pick tiles {2}@teo$/m);
-step('sprig check --strict passes on the result');
+execFileSync(chea, ['check', '--strict', dir], { env, stdio: 'inherit' });
+assert.match(readFileSync(join(dir, 'kitchen.chea'), 'utf8'), /^ {2}- Pick tiles {2}@teo$/m);
+step('chea check --strict passes on the result');

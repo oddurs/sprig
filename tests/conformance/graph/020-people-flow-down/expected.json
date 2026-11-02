@@ -1,7 +1,7 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "resolved": {
-    "file": "main.sprig",
+    "file": "main.chea",
     "line": 1,
     "label": "Owners",
     "status": "todo",
@@ -13,7 +13,7 @@
     "people": ["dana"],
     "children": [
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 3,
         "mark": "-",
         "label": "Money",
@@ -26,7 +26,7 @@
         "people": ["dana"],
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 4,
             "mark": "-",
             "label": "Loan paperwork",
@@ -39,7 +39,7 @@
             "people": ["dana"]
           },
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 5,
             "mark": "-",
             "label": "Supplier credit",
@@ -52,7 +52,7 @@
             "people": ["teo"],
             "children": [
               {
-                "file": "main.sprig",
+                "file": "main.chea",
                 "line": 6,
                 "mark": "-",
                 "label": "Call the bank",
@@ -69,7 +69,7 @@
         ]
       },
       {
-        "file": "main.sprig",
+        "file": "main.chea",
         "line": 7,
         "mark": "-",
         "label": "Shared",
@@ -82,7 +82,7 @@
         "people": ["dana", "jo"],
         "children": [
           {
-            "file": "main.sprig",
+            "file": "main.chea",
             "line": 8,
             "mark": "-",
             "label": "Sign",

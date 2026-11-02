@@ -16,13 +16,13 @@ const until = async (what, test, ms = 20000) => {
 };
 
 async function run() {
-	const root = process.env.SPRIG_TEST_WORKSPACE;
+	const root = process.env.CHEA_TEST_WORKSPACE;
 	const uri = (name) => vscode.Uri.file(path.join(root, name));
 
-	const lease = await vscode.workspace.openTextDocument(uri('lease.sprig'));
-	assert.strictEqual(lease.languageId, 'sprig', '.sprig files are Sprig');
+	const lease = await vscode.workspace.openTextDocument(uri('lease.chea'));
+	assert.strictEqual(lease.languageId, 'chea', '.chea files are Chea');
 	await vscode.window.showTextDocument(lease);
-	const ext = vscode.extensions.all.find((e) => e.packageJSON.name === 'sprig');
+	const ext = vscode.extensions.all.find((e) => e.packageJSON.name === 'chea');
 	await ext.activate();
 
 	// The language server has read the folder; nothing in it is wrong.
@@ -30,7 +30,7 @@ async function run() {
 	const problems = () => vscode.languages.getDiagnostics().flatMap(([u, ds]) => ds.map((d) => [path.basename(u.fsPath), d]));
 	assert.deepStrictEqual(problems(), [], 'examples/bakery checks clean');
 
-	// Delete ^signed in lease.sprig: bakery.sprig and kitchen.sprig, which
+	// Delete ^signed in lease.chea: bakery.chea and kitchen.chea, which
 	// name it, gain a problem each, without being opened.
 	const at = lease.getText().indexOf('  ^signed');
 	const edit = new vscode.WorkspaceEdit();
@@ -41,7 +41,7 @@ async function run() {
 		return p.length === 2 ? p : null;
 	});
 	const where = found.map(([file, d]) => `${file}:${d.range.start.line + 1} ${d.code}`).sort();
-	assert.deepStrictEqual(where, ['bakery.sprig:15 S0203', 'kitchen.sprig:18 S0203']);
+	assert.deepStrictEqual(where, ['bakery.chea:15 C0203', 'kitchen.chea:18 C0203']);
 	console.log(`vscode: ${where.join(', ')}`);
 }
 

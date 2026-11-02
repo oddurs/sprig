@@ -26,7 +26,7 @@ Hovering an item shows done/total for its branch, estimated work left, effective
 
 ## Acceptance criteria
 
-- [x] Hover over `+ [[kitchen]]` in `bakery.sprig` shows the kitchen file's totals.
+- [x] Hover over `+ [[kitchen]]` in `bakery.chea` shows the kitchen file's totals.
 - [x] A blocked item's hover names every target it waits on.
 
 ## 2026-10-28
@@ -41,7 +41,7 @@ Hover on an item or the title shows:
 - each unfinished `after:` target with its file and line, or the start date it waits for;
 - ready to close.
 
-On a graft it also names what it mounts. The tests are `hovering_a_graft_shows_the_grafted_files_totals`, which checks against the core's own totals for `kitchen.sprig`, and `hovering_a_blocked_item_names_everything_it_waits_on`.
+On a graft it also names what it mounts. The tests are `hovering_a_graft_shows_the_grafted_files_totals`, which checks against the core's own totals for `kitchen.chea`, and `hovering_a_blocked_item_names_everything_it_waits_on`.
 
 ## Result
 

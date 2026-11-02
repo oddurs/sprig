@@ -20,7 +20,7 @@ Teams keep their tracker, and the plan file has to stay true to it.
 
 ## Proposal
 
-Mirror issues into a `.sprig` file and push ticks and new items back. Split before scheduling.
+Mirror issues into a `.chea` file and push ticks and new items back. Split before scheduling.
 
 ## Acceptance criteria
 

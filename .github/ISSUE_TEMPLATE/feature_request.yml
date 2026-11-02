@@ -1,11 +1,11 @@
 name: Feature request
-description: Something Sprig should do, or a change to the format
+description: Something Chea should do, or a change to the format
 labels: [enhancement]
 body:
   - type: markdown
     attributes:
       value: |
-        Anything that becomes work becomes a [cairn item](https://github.com/oddurs/sprig/tree/main/cairn/items).
+        Anything that becomes work becomes a [cairn item](https://github.com/oddurs/chea/tree/main/cairn/items).
         Changes to the format are argued both ways first: read the settled
         arguments (`cairn list --view decisions`) before proposing one.
 
@@ -21,7 +21,7 @@ body:
     id: proposal
     attributes:
       label: Proposal
-      description: What should happen. For a format change, show a before-and-after `.sprig` snippet.
+      description: What should happen. For a format change, show a before-and-after `.chea` snippet.
     validations:
       required: false
 
@@ -39,7 +39,7 @@ body:
       label: Area
       options:
         - spec: the format itself
-        - cli: the sprig command
+        - cli: the chea command
         - editors: grammars, language server, extensions
         - agents: MCP server and agent conventions
         - interop: import, export, calendars, CI

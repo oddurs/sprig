@@ -14,7 +14,7 @@ export const GET: APIRoute = ({ site }) => {
 	const entries = releases
 		.map(
 			(r) => `  <entry>
-    <title>Sprig ${escape(r.version)}</title>
+    <title>Chea ${escape(r.version)}</title>
     <id>${changelog}#${escape(r.version)}</id>
     <link href="${changelog}"/>
     <updated>${r.date}T00:00:00Z</updated>
@@ -24,7 +24,7 @@ export const GET: APIRoute = ({ site }) => {
 		.join('\n');
 	const xml = `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Sprig releases</title>
+  <title>Chea releases</title>
   <id>${self}</id>
   <link rel="self" href="${self}"/>
   <link href="${home}"/>

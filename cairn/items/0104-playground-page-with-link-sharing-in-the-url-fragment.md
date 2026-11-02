@@ -31,7 +31,7 @@ Readers want to try their own plan across several files, and share it, without a
 
 ## 2026-09-28
 
-/play/ is the design page's playground on the shared parser module, with tabs, new files, tree and next-up views, people filter, hide done and a two-step reset. Share compresses the workspace into #plan= with CompressionStream deflate-raw; build-time links use the same format via node:zlib. Verified in Chrome: a tutorial link opens move.sprig and packing.sprig with the graft resolved; Share then reload restores the same files; an edit survives a reload through localStorage. Examples come from examples/bakery/, shifted by whole weeks so weekdays stay put. Byte-for-byte restoration follows from the JSON round trip; the test compared file names and content, not every byte of every file.
+/play/ is the design page's playground on the shared parser module, with tabs, new files, tree and next-up views, people filter, hide done and a two-step reset. Share compresses the workspace into #plan= with CompressionStream deflate-raw; build-time links use the same format via node:zlib. Verified in Chrome: a tutorial link opens move.chea and packing.chea with the graft resolved; Share then reload restores the same files; an edit survives a reload through localStorage. Examples come from examples/bakery/, shifted by whole weeks so weekdays stay put. Byte-for-byte restoration follows from the JSON round trip; the test compared file names and content, not every byte of every file.
 
 ## Result
 

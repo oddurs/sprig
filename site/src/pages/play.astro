@@ -12,14 +12,14 @@ await ready;
 // The page is an app, but it still arrives complete: the example workspace is
 // rendered at build time, so a reader without JavaScript sees the plan and its
 // computed view before being told the editor needs a script.
-const order = ['bakery.sprig', 'lease.sprig', 'kitchen.sprig', 'launch.sprig', 'groceries.sprig', 'dana.sprig'];
+const order = ['bakery.chea', 'lease.chea', 'kitchen.chea', 'launch.chea', 'groceries.chea', 'dana.chea'];
 const files = shiftExamples(examples as Record<string, string>, new Date());
 const view = render(files, order[0]);
 ---
 
 <Base
-	title="Playground · Sprig"
-	description="Write a Sprig plan across several files and see what is done, blocked and next, computed as you type. Share it as a link; nothing is uploaded."
+	title="Playground · Chea"
+	description="Write a Chea plan across several files and see what is done, blocked and next, computed as you type. Share it as a link; nothing is uploaded."
 	current="play"
 >
 	<div class="intro">
@@ -28,7 +28,7 @@ const view = render(files, order[0]);
 			<Text size="md" tone="muted" measure>Six linked files for opening a bakery. Edit any of them, tick a mark in the plan, or start a file of your own. Share makes a link that holds the whole workspace; nothing is uploaded.</Text>
 		</Stack>
 	</div>
-	<noscript><Plan files={files} active={order[0]} caption="bakery.sprig, as Sprig reads it. The editor needs JavaScript." /></noscript>
+	<noscript><Plan files={files} active={order[0]} caption="bakery.chea, as Chea reads it. The editor needs JavaScript." /></noscript>
 	<div class="pg" id="pg" data-panel="src">
 		{/* Below the md breakpoint there is room for one panel at a time. */}
 		<div class="switch" role="tablist" aria-label="Panels">
@@ -61,7 +61,7 @@ const view = render(files, order[0]);
 			</div>
 			<div class="ed" id="ed">
 				<pre class="sc" id="hl" aria-hidden="true" set:html={linesHTML(files[order[0]]) + '<span class="ln">​</span>'} />
-				<textarea id="src" spellcheck="false" wrap="off" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Sprig source" aria-describedby="pcount">{files[order[0]]}</textarea>
+				<textarea id="src" spellcheck="false" wrap="off" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Chea source" aria-describedby="pcount">{files[order[0]]}</textarea>
 			</div>
 			<div class="edfoot">
 				<span class="keys"><kbd>Tab</kbd> indent · <kbd>⇧Tab</kbd> outdent · <kbd id="modkey">⌘</kbd><kbd>↵</kbd> cycle - ~ x · type <kbd>due:fri</kbd>, then <kbd>↵</kbd></span>
@@ -92,7 +92,7 @@ const view = render(files, order[0]);
 			<div class="rv-body sv" id="rvBody" set:html={view.html} />
 		</div>
 	</div>
-	<Text size="sm" tone="muted">Runs sprig-core, the parser in the <code>sprig</code> command, compiled to WebAssembly. What <code>sprig check</code> would say appears under Problems, each with its code.</Text>
+	<Text size="sm" tone="muted">Runs chea-core, the parser in the <code>chea</code> command, compiled to WebAssembly. What <code>chea check</code> would say appears under Problems, each with its code.</Text>
 	<script type="application/json" id="examples" set:html={JSON.stringify({ files: examples, order })} />
 	<script>
 		import '../scripts/play.js';

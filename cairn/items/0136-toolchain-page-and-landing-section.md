@@ -34,7 +34,7 @@ A `/tools/` page, linked from the header and the docs sidebar, that presents the
 
 ## 2026-09-29
 
-Terminal screens come from site/src/lib/terminal.js, pinned to 2026-10-01 with sprig.withToday; the TUI model in lib/tui.js renders the first frame at build time and loads in the browser on the first key (857 bytes of script up front). Colour on screens is limited to the marks, per decision 0117's output rule. Found on the way: the landing page hard-coded 'fourteen' settled arguments after 0117 made fifteen; the count now comes from sync's facts.json.
+Terminal screens come from site/src/lib/terminal.js, pinned to 2026-10-01 with chea.withToday; the TUI model in lib/tui.js renders the first frame at build time and loads in the browser on the first key (857 bytes of script up front). Colour on screens is limited to the marks, per decision 0117's output rule. Found on the way: the landing page hard-coded 'fourteen' settled arguments after 0117 made fifteen; the count now comes from sync's facts.json.
 
 ## Result
 

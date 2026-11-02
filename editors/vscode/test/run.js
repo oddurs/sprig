@@ -8,7 +8,7 @@ const { runTests } = require('@vscode/test-electron');
 
 async function main() {
 	const here = path.join(__dirname, '..');
-	const workspace = fs.mkdtempSync(path.join(os.tmpdir(), 'sprig-vscode-'));
+	const workspace = fs.mkdtempSync(path.join(os.tmpdir(), 'chea-vscode-'));
 	fs.cpSync(path.join(here, '..', '..', 'examples', 'bakery'), workspace, { recursive: true });
 	try {
 		await runTests({
@@ -16,7 +16,7 @@ async function main() {
 			extensionDevelopmentPath: here,
 			extensionTestsPath: path.join(__dirname, 'suite.js'),
 			launchArgs: [workspace, '--disable-extensions', '--skip-welcome', '--skip-release-notes'],
-			extensionTestsEnv: { SPRIG_TEST_WORKSPACE: workspace },
+			extensionTestsEnv: { CHEA_TEST_WORKSPACE: workspace },
 		});
 	} catch (e) {
 		console.error('vscode: tests failed', e);

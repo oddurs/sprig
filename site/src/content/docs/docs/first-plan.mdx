@@ -1,22 +1,22 @@
 ---
 title: Your first plan
-description: Write a real plan in Sprig in five minutes, in the playground, with nothing to install.
+description: Write a real plan in Chea in five minutes, in the playground, with nothing to install.
 ---
 
 import PlayLink from '../../../components/PlayLink.astro';
 
 This takes about five minutes and needs nothing installed. Each step is a
-complete Sprig file; open it in the playground to see what Sprig computes from
+complete Chea file; open it in the playground to see what Chea computes from
 it, then change it and watch the result move.
 
-The last step takes the same plan to the terminal with the `sprig` command.
+The last step takes the same plan to the terminal with the `chea` command.
 
 ## 1. A list
 
 Every item is a line that starts with a mark and a space. `-` is something to do
 and `x` is done. The first line is the title.
 
-```sprig
+```chea
 Move flats
 
 - Pack
@@ -24,7 +24,7 @@ Move flats
 x Tell the landlord
 ```
 
-<PlayLink files={{ 'move.sprig': `Move flats
+<PlayLink files={{ 'move.chea': `Move flats
 
 - Pack
 - Book a van
@@ -38,7 +38,7 @@ too: the file is always the truth.
 Indent to put items inside another. There's no limit to how deep, and each
 parent adds up what's beneath it.
 
-```sprig
+```chea
 Move flats
 
 - Pack
@@ -49,7 +49,7 @@ Move flats
 x Tell the landlord
 ```
 
-<PlayLink files={{ 'move.sprig': `Move flats
+<PlayLink files={{ 'move.chea': `Move flats
 
 - Pack
   x Books
@@ -66,7 +66,7 @@ children are done, the view suggests ticking it rather than doing it for you.
 Give an item an anchor with `^name`, and make another wait on it with
 `after:^name`. Anything waiting is blocked until what it waits on is done.
 
-```sprig
+```chea
 Move flats
 
 - Pack  ^pack
@@ -76,7 +76,7 @@ Move flats
 - Move everything  after:^van  after:^pack
 ```
 
-<PlayLink files={{ 'move.sprig': `Move flats
+<PlayLink files={{ 'move.chea': `Move flats
 
 - Pack  ^pack
   x Books
@@ -93,7 +93,7 @@ A line starting with `?` is a question. Write the answer underneath with `=`, an
 the question counts as done. The decision stays in the file, next to what it
 decided.
 
-```sprig
+```chea
 Move flats
 
 ? Keep the old sofa?
@@ -101,7 +101,7 @@ Move flats
 - Sell the sofa
 ```
 
-<PlayLink files={{ 'move.sprig': `Move flats
+<PlayLink files={{ 'move.chea': `Move flats
 
 ? Keep the old sofa?
   = No. It won't fit in the lift.
@@ -114,14 +114,14 @@ an item names someone else. Dates are written `due:2026-10-17`; in the
 playground you can type `due:fri` and it becomes a real date when you press
 Enter.
 
-```sprig
+```chea
 Move flats  @me
 
 - Book a van  due:2026-10-16
 - Carry the heavy boxes  @jo
 ```
 
-<PlayLink files={{ 'move.sprig': `Move flats  @me
+<PlayLink files={{ 'move.chea': `Move flats  @me
 
 - Book a van  due:2026-10-16
 - Carry the heavy boxes  @jo` }} />
@@ -131,16 +131,16 @@ Move flats  @me
 When a plan grows, move a branch into its own file and graft it back with
 `+ [[name]]`. Progress and blockers carry across.
 
-{/* file: move.sprig */}
-```sprig
+{/* file: move.chea */}
+```chea
 Move flats
 
 + [[packing]]
 - Book a van
 ```
 
-{/* file: packing.sprig */}
-```sprig
+{/* file: packing.chea */}
+```chea
 Packing
 
 x Books
@@ -148,10 +148,10 @@ x Books
 - Bathroom
 ```
 
-<PlayLink files={{ 'move.sprig': `Move flats
+<PlayLink files={{ 'move.chea': `Move flats
 
 + [[packing]]
-- Book a van`, 'packing.sprig': `Packing
+- Book a van`, 'packing.chea': `Packing
 
 x Books
 - Kitchen
@@ -159,17 +159,17 @@ x Books
 
 ## 7. In the terminal
 
-Install the `sprig` command, with Rust installed ([rustup.rs](https://rustup.rs)):
+Install the `chea` command, with Rust installed ([rustup.rs](https://rustup.rs)):
 
 ```sh
-cargo install --locked --git https://github.com/oddurs/sprig sprig-cli
+cargo install --locked --git https://github.com/oddurs/chea chea-cli
 ```
 
-Save the two files from step 6 as `move.sprig` and `packing.sprig` in one
+Save the two files from step 6 as `move.chea` and `packing.chea` in one
 folder, and ask what can be done now. Grafted items come with their file:
 
 ```console
-$ sprig next move.sprig
+$ chea next move.chea
 - Kitchen     Packing
 - Bathroom    Packing
 - Book a van  Move flats
@@ -177,50 +177,50 @@ $ sprig next move.sprig
 3 ready
 ```
 
-`sprig check` reads the same files and prints nothing when the plan holds
+`chea check` reads the same files and prints nothing when the plan holds
 together. Misspell the graft and it says where:
 
 ```console
-$ sprig check move.sprig
+$ chea check move.chea
 ```
 
-{/* edit: move.sprig: [[packing]] => [[pakcing]] */}
+{/* edit: move.chea: [[packing]] => [[pakcing]] */}
 ```console
-$ sprig check move.sprig
-move.sprig:3:3: error[S0101]: no file named pakcing.sprig
+$ chea check move.chea
+move.chea:3:3: error[C0101]: no file named pakcing.chea
 ```
 
 It exits 1 on an error, so it can guard a repository. In GitHub Actions, the
-[Sprig action](https://github.com/oddurs/sprig/tree/main/action) checks every
+[Chea action](https://github.com/oddurs/chea/tree/main/action) checks every
 plan and summarises what each pull request did to them:
 
 ```yaml
-- uses: oddurs/sprig/action@main
+- uses: oddurs/chea/action@main
 ```
 
 ## 8. Work it from your editor, and hand it to an agent
 
 Fix the graft again, and tick the van as booked:
 
-{/* edit: move.sprig: [[pakcing]] => [[packing]] */}
+{/* edit: move.chea: [[pakcing]] => [[packing]] */}
 ```console
-$ sprig tick van
-move.sprig:4  x Book a van
+$ chea tick van
+move.chea:4  x Book a van
 ```
 
 A ref is any words that match one item, an `^anchor`, or `file:line`. In VS Code,
 Neovim or any editor with a language server, the same tick is one action on the
 line, and problems show as you type: [set up your editor](/docs/editors/).
 
-For a project, the plan lives at the root as `PLAN.sprig`. To have a coding
+For a project, the plan lives at the root as `PLAN.chea`. To have a coding
 agent read it before it starts and keep it up to date as it works, add the
 instructions to the file the agent reads:
 
 ```console
-$ sprig mcp --instructions --write AGENTS.md
+$ chea mcp --instructions --write AGENTS.md
 ```
 
-Then register the MCP server with the agent. `sprig mcp --config` prints the
+Then register the MCP server with the agent. `chea mcp --config` prints the
 snippet for `.mcp.json`. The agent can then ask what is next, tick what it
 finishes and add the steps it plans, and every change it makes shows up as a
 diff: [plans for coding agents](/docs/agents/).

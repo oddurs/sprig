@@ -1,0 +1,30 @@
+ chea  1 tree 2 next up 3 agenda
+  Fri 2 Oct · tomorrow                                             │ Weekly numbers to the bank
+›   - Weekly numbers to the bank  bakery.chea            every:fri │ bakery.chea:16
+    - Get a third quote  kitchen.chea                              │
+  Sat 3 Oct                                                        │ status   to do
+    - Call the insurer about public liability  dana.chea           │ owner    @dana
+  Mon 5 Oct                                                        │ due      2026-10-02 (in 1d)
+    ~ Negotiate terms  lease.chea                                  │ every    fri
+  Wed 7 Oct                                                        │
+    ~ Equipment loan paperwork  bakery.chea                        │
+  Mon 12 Oct                                                       │
+    ~ Ventilation plan with the engineer  kitchen.chea             │
+  Wed 14 Oct                                                       │
+    ~ Logo, second round  launch.chea                              │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+                                                                   │
+ 10/46 done · 21 ready · 12 waiting                                                          ? help

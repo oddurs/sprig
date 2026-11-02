@@ -19,7 +19,7 @@ area: core
 
 ## Problem
 
-Everything else in Sprig, from rollups to editing, starts from a correct tree.
+Everything else in Chea, from rollups to editing, starts from a correct tree.
 
 ## Proposal
 
@@ -33,7 +33,7 @@ Classify each line (title, item by mark, answer, note, comment, escape), build t
 
 ## 2026-10-28
 
-`sprig-core/src/syntax.rs`. Lines are classified as in §2.1. The tree is built from an arena by relative indentation. Notes and answers attach to the nearest shallower item. Every item, title and answer records the byte span of its line after indentation; note lines keep theirs too, for v0.2's edits. (1) All 55 lines examples pass. (2) `every_span_slices_back_to_its_line` checks that every node's span equals its source line, trimmed, in every lines example. (3) Unit tests and examples 001 to 009 cover the title becoming the root, a file whose first line is an item having no title, and an indented, group or answer first line having none.
+`chea-core/src/syntax.rs`. Lines are classified as in §2.1. The tree is built from an arena by relative indentation. Notes and answers attach to the nearest shallower item. Every item, title and answer records the byte span of its line after indentation; note lines keep theirs too, for v0.2's edits. (1) All 55 lines examples pass. (2) `every_span_slices_back_to_its_line` checks that every node's span equals its source line, trimmed, in every lines example. (3) Unit tests and examples 001 to 009 cover the title becoming the root, a file whose first line is an item having no title, and an indented, group or answer first line having none.
 
 ## Result
 

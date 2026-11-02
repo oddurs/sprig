@@ -1,0 +1,6 @@
+examples/bakery/bakery.chea	9	40	20	12	0	0
+examples/bakery/dana.chea	1	6	4	1	0	0
+examples/bakery/groceries.chea	3	10	7	0	0	0
+examples/bakery/kitchen.chea	1	10	3	6	0	0
+examples/bakery/launch.chea	4	19	11	4	0	0
+examples/bakery/lease.chea	2	6	3	1	0	0

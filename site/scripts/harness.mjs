@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 
 export const site = join(dirname(fileURLToPath(import.meta.url)), '..');
 export const dist = join(site, 'dist');
-export const base = (process.env.SITE_BASE ?? '/sprig').replace(/\/$/, '');
+export const base = (process.env.SITE_BASE ?? '/chea').replace(/\/$/, '');
 
 function chrome() {
 	if (process.env.CHROME_PATH) return process.env.CHROME_PATH;

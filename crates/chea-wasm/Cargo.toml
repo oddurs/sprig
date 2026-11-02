@@ -1,0 +1,21 @@
+[package]
+name = "chea-wasm"
+description = "chea-core for the browser: the website's parser, compiled to WebAssembly"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme = "README.md"
+keywords = ["chea", "plans", "wasm"]
+categories = ["wasm"]
+authors.workspace = true
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+serde_json = { version = "1", features = ["preserve_order"] }
+chea-core = { path = "../chea-core", version = "0.0.0" }

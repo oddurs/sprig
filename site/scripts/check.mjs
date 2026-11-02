@@ -6,7 +6,7 @@
 // 2. The site loads nothing from another host: no external scripts, styles,
 //    images or fonts. Links out to other sites are fine; requests are not.
 //
-// 3. sprig-core ships as exactly one WebAssembly module, the site has no parser
+// 3. chea-core ships as exactly one WebAssembly module, the site has no parser
 //    of its own, and the module stays under 300 KB compressed (cairn 0109).
 //
 // Links in playground fragments (#plan=...) are data, not anchors, and skipped.
@@ -17,7 +17,7 @@ import { fileURLToPath } from 'node:url';
 
 const site = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(site, 'dist');
-const base = (process.env.SITE_BASE ?? '/sprig').replace(/\/$/, '');
+const base = (process.env.SITE_BASE ?? '/chea').replace(/\/$/, '');
 
 function walk(dir) {
 	return readdirSync(dir).flatMap((name) => {
@@ -95,7 +95,7 @@ for (const f of wasm) {
 }
 // The old reference parser's tell-tale pattern; the site must not grow one back.
 for (const f of all.filter((x) => x.endsWith('.js'))) {
-	if (readFileSync(f, 'utf8').includes('[-~x\\/>?+#=]')) problems.push(`${relative(dist, f)}: looks like a Sprig line parser; ask sprig-core instead`);
+	if (readFileSync(f, 'utf8').includes('[-~x\\/>?+#=]')) problems.push(`${relative(dist, f)}: looks like a Chea line parser; ask chea-core instead`);
 }
 
 if (problems.length) {
@@ -103,5 +103,5 @@ if (problems.length) {
 	process.exit(1);
 }
 console.log(
-	`check: ${pages.length} pages, ${checked} internal links and assets resolve, no third-party requests, no font files, sprig-core ${Math.round(wasmSize / 1024)} KB compressed`,
+	`check: ${pages.length} pages, ${checked} internal links and assets resolve, no third-party requests, no font files, chea-core ${Math.round(wasmSize / 1024)} KB compressed`,
 );

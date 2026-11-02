@@ -29,21 +29,21 @@ An edit that needs to move or reindent a subtree (adding a child under a deeply 
 
 ## Answer
 
-**Splicing by spans is enough. sprig-core does not need a lossless tree with trivia.** Decided 2026-10-28.
+**Splicing by spans is enough. chea-core does not need a lossless tree with trivia.** Decided 2026-10-28.
 
-The evidence is in the format. In TOML, whitespace and comments sit between tokens of one logical structure, which is why toml_edit hangs a prefix and suffix of trivia off every value. Rowan, rust-analyzer's tree, likewise keeps trivia as tokens in the tree so nothing is lost. Sprig has no such trivia: every byte belongs to exactly one line, and every line is one item, note, answer, comment or blank. The source text is therefore already the lossless layer. An edit is a replacement located by the parser's spans, and everything it does not name is copied through. Indentation style, CRLF, a BOM, comments and blank lines survive by construction, with no tree to keep them in.
+The evidence is in the format. In TOML, whitespace and comments sit between tokens of one logical structure, which is why toml_edit hangs a prefix and suffix of trivia off every value. Rowan, rust-analyzer's tree, likewise keeps trivia as tokens in the tree so nothing is lost. Chea has no such trivia: every byte belongs to exactly one line, and every line is one item, note, answer, comment or blank. The source text is therefore already the lossless layer. An edit is a replacement located by the parser's spans, and everything it does not name is copied through. Indentation style, CRLF, a BOM, comments and blank lines survive by construction, with no tree to keep them in.
 
 The worry in the question was edits that move or reindent a subtree. Neither needs a tree: adding a child inserts one line after the parent's branch, which the line indentations already bound, and `fmt` rewrites each line's leading whitespace from the depth the parser gives it.
 
-Prototype, now `sprig_core::edit`, on `examples/bakery/`, as byte ranges in the original file:
+Prototype, now `chea_core::edit`, on `examples/bakery/`, as byte ranges in the original file:
 
-- tick `lease.sprig:13`: bytes 498..499, `-` → `x`.
-- tick `bakery.sprig:16` (`every:fri`, on 2026-10-02): bytes 630..631, `2` → `9`; the due date moves and the mark stays.
-- add a child under `kitchen.sprig:9` (Deck oven): bytes 467..467, insert `    - Book the delivery  @teo
+- tick `lease.chea:13`: bytes 498..499, `-` → `x`.
+- tick `bakery.chea:16` (`every:fri`, on 2026-10-02): bytes 630..631, `2` → `9`; the due date moves and the mark stays.
+- add a child under `kitchen.chea:9` (Deck oven): bytes 467..467, insert `    - Book the delivery  @teo
 `, after the oven's last child, at its indentation.
-- fmt on `kitchen.sprig` with a typed date, trailing spaces and a stray indent: bytes 58..64 `fri   ` → `2026-10-02`, and bytes 732..733 ` ` → ``. The result equals the original file with the date written out.
+- fmt on `kitchen.chea` with a typed date, trailing spaces and a stray indent: bytes 58..64 `fri   ` → `2026-10-02`, and bytes 732..733 ` ` → ``. The result equals the original file with the date written out.
 
-Property tests back the decision, in `crates/sprig-core/tests/editing.rs`. Random sequences of mark, tick, field, child, sibling and answer edits over every conformance input and example (run to 20,000 cases) leave every untouched line byte-identical. `fmt` is idempotent and keeps the tree on every input and on 50,000 generated plans. Those tests found two bugs in the prototype, both fixed: a child copying the wrong sibling's indentation, and a comment's level changing on a second format.
+Property tests back the decision, in `crates/chea-core/tests/editing.rs`. Random sequences of mark, tick, field, child, sibling and answer edits over every conformance input and example (run to 20,000 cases) leave every untouched line byte-identical. `fmt` is idempotent and keeps the tree on every input and on 50,000 generated plans. Those tests found two bugs in the prototype, both fixed: a child copying the wrong sibling's indentation, and a comment's level changing on a second format.
 
 ## Acceptance criteria
 
@@ -57,4 +57,4 @@ Follow-ups: the edit API itself (0043), `fmt` (0044) and `tick` (0046) are done 
 
 ## Result
 
-Span splicing, not a lossless tree: Sprig is line-oriented, so the source is its own trivia store. Prototype and property tests on the bakery.
+Span splicing, not a lossless tree: Chea is line-oriented, so the source is its own trivia store. Prototype and property tests on the bakery.

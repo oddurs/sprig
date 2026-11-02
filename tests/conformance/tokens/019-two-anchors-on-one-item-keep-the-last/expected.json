@@ -1,5 +1,5 @@
 {
-  "sprig_tree": 1,
+  "chea_tree": 1,
   "syntax": {
     "title": "Anchors",
     "root": {
@@ -19,9 +19,9 @@
   },
   "diagnostics": [
     {
-      "code": "S0003",
+      "code": "C0003",
       "severity": "warning",
-      "file": "main.sprig",
+      "file": "main.chea",
       "line": 3,
       "col": 20,
       "span": [28, 34]

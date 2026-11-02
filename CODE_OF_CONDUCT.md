@@ -61,7 +61,7 @@ representative at an online or offline event.
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the maintainer, [@oddurs](https://github.com/oddurs), by opening a
 private report at
-<https://github.com/oddurs/sprig/security/advisories/new> — private
+<https://github.com/oddurs/chea/security/advisories/new> — private
 advisories are visible only to the maintainer, which makes them a working
 private channel for conduct reports as well as for vulnerabilities.
 

@@ -1,6 +1,6 @@
 // The landing page's live example. The page arrives with the example and its
 // computed view already rendered; this script only listens, and fetches
-// sprig-core the first time someone touches the demo. Until then no parser
+// chea-core the first time someone touches the demo. Until then no parser
 // code has loaded at all.
 
 const demo = document.getElementById('demo');
@@ -17,27 +17,27 @@ const parser = () => (loading ??= import('../lib/view.js').then(async (m) => (aw
 const state = { vm: 'next', refs: [], collapsed: new Set() };
 
 async function render() {
-	const sprig = await parser();
-	sprig.useWorkspace({ 'plan.sprig': src.value });
-	sprig.setView({ vm: state.vm, collapsed: [...state.collapsed] });
-	sprig.beginRender();
-	const doc = sprig.buildDoc('plan.sprig');
+	const chea = await parser();
+	chea.useWorkspace({ 'plan.chea': src.value });
+	chea.setView({ vm: state.vm, collapsed: [...state.collapsed] });
+	chea.beginRender();
+	const doc = chea.buildDoc('plan.chea');
 	let ready = 0;
 	let waiting = 0;
-	sprig.walkLeaves(doc.root, (n, _p, blocked) => {
-		if (sprig.OPEN.has(n.view)) blocked ? waiting++ : ready++;
+	chea.walkLeaves(doc.root, (n, _p, blocked) => {
+		if (chea.OPEN.has(n.view)) blocked ? waiting++ : ready++;
 	});
 	body.innerHTML =
 		state.vm === 'next'
-			? sprig.nextHTML(doc)
-			: `<ul class="tree">${doc.root.children.map((c) => sprig.nodeHTML(c, null)).join('')}</ul>`;
-	state.refs = sprig.endRender();
+			? chea.nextHTML(doc)
+			: `<ul class="tree">${doc.root.children.map((c) => chea.nodeHTML(c, null)).join('')}</ul>`;
+	state.refs = chea.endRender();
 	stats.textContent = `${doc.root.stats.done}/${doc.root.stats.total} done · ${ready} ready · ${waiting} waiting`;
 }
 
 async function paint() {
-	const sprig = await parser();
-	hl.innerHTML = sprig.highlight(src.value) + '\n\n';
+	const chea = await parser();
+	hl.innerHTML = chea.highlight(src.value) + '\n\n';
 	hl.scrollTop = src.scrollTop;
 	hl.scrollLeft = src.scrollLeft;
 }
@@ -90,13 +90,13 @@ demo.addEventListener('click', async (e) => {
 	}
 	const act = target.closest('[data-act]');
 	if (!act) return;
-	const sprig = await parser();
+	const chea = await parser();
 	// The prerendered view has no refs yet; build them once, then act.
 	if (!state.refs.length) await render();
 	const node = state.refs[Number(act.dataset.k)];
 	if (act.dataset.act === 'toggle' && node) {
 		const lines = src.value.split('\n');
-		const ticked = sprig.tickLine(lines[node.line]);
+		const ticked = chea.tickLine(lines[node.line]);
 		if (!ticked) return;
 		lines[node.line] = ticked.line;
 		src.value = lines.join('\n');
