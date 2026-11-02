@@ -3,12 +3,12 @@ id: 156
 uid: c4c1b3eb-cb7d-42b1-acee-368447e17d8b
 title: No tool-named files in the tree, and a green audit
 type: chore
-status: doing
+status: done
 milestone: v1.0
 assignee: Oddur Sigurdsson
-claimed: 2026-11-02
 created: 2026-11-02
 updated: 2026-11-02
+closed_at: 2026-11-02
 priority: p1
 effort: s
 area: release
@@ -27,8 +27,16 @@ Move the contract to AGENTS.md, which every coding agent reads, and keep any too
 - [x] AGENTS.md carries the contract, and no tracked path is named after a coding tool; `scripts/task lint` fails if one is added.
 - [x] `scripts/agent start` links each path listed in .git/info/exclude that exists in the primary checkout into the new worktree.
 - [x] `scripts/task audit` passes on every lockfile.
-- [ ] `scripts/task editors` passes with the override in place.
+- [x] `scripts/task editors` passes with the override in place.
 
 ## 2026-11-02
 
 GHSA-g3hv-75wg-m249 has no fix in any consumer, so both editor lockfiles pin minimatch 11.0.4 through overrides. vscode-languageclient and @vscode/vsce only construct Minimatch and work unchanged. glob 7, under vscode-tmgrammar-test, does not: its pattern walk reads a field minimatch 11 removed, and the snapshot run crashed. glob 14 would fix that but has no default export, which is how vscode-tmgrammar-test imports it. So test:textmate now lets the shell expand tests/textmate/*.sprig, and glob only ever sees literal paths, which take the branch that never reads the field. A corrupted snapshot still exits 255. The link_local test found that a directory listed with a trailing slash in .git/info/exclude does not match the link that stands in for it in a worktree; the comment and AGENTS.md say to list directories without one.
+
+## 2026-11-02
+
+Windows CI failed agent-links-local-files: Git Bash's ln -s copies unless MSYS asks for native links, and a copy silently goes stale. link_local now asks for winsymlinks:nativestrict and warns when it cannot link rather than copying. The editors job, which runs the VS Code extension test under xvfb, passed on Linux CI with the minimatch override.
+
+## Result
+
+The agent contract is AGENTS.md, and lint refuses a tracked path named after a coding tool. scripts/agent start links whatever .git/info/exclude lists into each new worktree, as a real link on every platform or a warning. Both editor lockfiles pin minimatch 11.0.4, so the audit is green, and the grammar snapshots pass with the shell expanding their paths.

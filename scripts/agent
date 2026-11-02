@@ -160,8 +160,13 @@ link_local() {
     path=${path%/}
     [ -e "$main/$path" ] && [ ! -e "$1/$path" ] || continue
     mkdir -p "$(dirname "$1/$path")"
-    ln -s "$main/$path" "$1/$path"
-    say "linked $path"
+    # Git Bash on Windows copies instead of linking unless told otherwise, and a
+    # copy goes stale without a word. Ask for a real link, and say so if not.
+    if MSYS=winsymlinks:nativestrict ln -s "$main/$path" "$1/$path" 2>/dev/null; then
+      say "linked $path"
+    else
+      printf 'scripts/agent: could not link %s into the worktree\n' "$path" >&2
+    fi
   done
 }
 

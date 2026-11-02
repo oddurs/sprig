@@ -57,7 +57,7 @@ VS Code highlights `.sprig` files, completes people, anchors and file links, sho
 
 ## v1.0 — Sprig 1.0
 
-`··········` 0% · 0 of 6 done · due 2027-07-02
+`··········` 0% · 0 of 5 done · due 2027-07-02
 
 A frozen spec under CC0, a conformance suite that covers every rule, and packaged tools a stranger installs in one command on macOS, Linux and Windows. No new surface: this milestone makes promises about what already exists.
 
@@ -66,7 +66,6 @@ A frozen spec under CC0, a conformance suite that covers every rule, and package
 - [ ] [`0078`](https://github.com/oddurs/sprig/blob/main/cairn/items/0078-prebuilt-binaries-and-one-command-install-on-three-platforms.md) Prebuilt binaries and one-command install on three platforms <sup>chore · p0 · release</sup>
 - [ ] [`0082`](https://github.com/oddurs/sprig/blob/main/cairn/items/0082-release-1-0.md) Release 1.0 <sup>chore · p0 · release</sup>
 - [ ] [`0081`](https://github.com/oddurs/sprig/blob/main/cairn/items/0081-five-minute-tutorial-and-reference-site.md) Five-minute tutorial and reference site <sup>docs · p0 · docs</sup>
-- [ ] [`0156`](https://github.com/oddurs/sprig/blob/main/cairn/items/0156-no-tool-named-files-in-the-tree-and-a-green-audit.md) No tool-named files in the tree, and a green audit <sup>chore · p1 · release</sup>
 
 ## later — Later
 
