@@ -72,6 +72,19 @@ tracked() {
   fi
 }
 
+# The work is published under its author's name. A tool's own instructions
+# file is personal, kept in .git/info/exclude, and the tool-neutral contract is
+# AGENTS.md, which scripts/agent start links alongside it into every worktree.
+untooled() {
+  bad=$(git ls-files | awk 'tolower($0) ~ /(^|\/)(claude(\.local)?\.md|\.claude|gemini\.md|\.gemini|\.cursor|\.cursorrules|\.windsurfrules|copilot-instructions\.md)(\/|$)/')
+  if [ -n "$bad" ]; then
+    printf '%s\n' "$bad"
+    printf '\nlint: these are named after a coding tool. Keep them in .git/info/exclude;\n' >&2
+    printf '      the contract every agent reads is AGENTS.md.\n' >&2
+    exit 1
+  fi
+}
+
 case "${1:-}" in
   fmt)
     cargo fmt --all
@@ -82,6 +95,7 @@ case "${1:-}" in
   lint)
     purity
     tracked
+    untooled
     cargo clippy --all-targets --all-features -- -D warnings
     # The core's documentation is part of its API: complete, and with links
     # that resolve (docs/stability.md).

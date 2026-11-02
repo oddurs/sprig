@@ -14,6 +14,11 @@ The `commit-msg` hook rejects a message that breaks this, and `scripts/agent pr`
 strips it from a pull request body. Do not rely on either; write it correctly
 the first time.
 
+No tracked path is named after a tool. A tool that wants its own instructions
+file gets one locally: list it in `.git/info/exclude` (a directory without a
+trailing slash) and have it import this file. `scripts/agent start` links it
+into each new worktree, and `scripts/task lint` refuses one that is committed.
+
 ## Setup
 
 ```sh
